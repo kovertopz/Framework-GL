@@ -91,6 +91,7 @@ public class Window {
     }
 
     public void setTitle(String title) {
+        config.windowTitle = title;
         Display.setTitle(title);
     }
 
