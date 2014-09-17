@@ -16,6 +16,10 @@ public class FpsTimer {
         fpsTimeSpan = new TimeSpan();
     }
 
+    public int getDisplayFps() {
+        return displayFps;
+    }
+
     public void update() {
         currentFps++;
 
