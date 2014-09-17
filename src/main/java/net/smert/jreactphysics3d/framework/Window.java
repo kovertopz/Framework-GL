@@ -42,9 +42,10 @@ public class Window {
     }
 
     public void create() {
+        config.inFullscreen = fullscreen;
+        config.inVSync = vSync;
         try {
             DisplayMode displayMode = null;
-
             if (fullscreen) {
                 displayMode = findDisplayMode(config.fullscreenWidth, config.fullscreenHeight,
                         config.fullscreenDepth, config.fullscreenFreq);
@@ -57,6 +58,12 @@ public class Window {
             Display.setTitle(config.windowTitle);
             if (Display.isCreated() == false) {
                 Display.create(config.pixelFormat, config.contextAttribs);
+            }
+            if ((config.desktopLocationX != -1) && (config.desktopLocationY != -1)) {
+                Display.setLocation(config.desktopLocationX, config.desktopLocationY);
+            }
+            if (!fullscreen) {
+                Display.setResizable(config.desktopResizable);
             }
             Display.setFullscreen(fullscreen);
             Display.setVSyncEnabled(vSync);

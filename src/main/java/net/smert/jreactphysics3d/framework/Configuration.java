@@ -12,6 +12,8 @@ public class Configuration {
     boolean desktopResizable;
     boolean fullscreen;
     boolean inFocus;
+    boolean inFullscreen;
+    boolean inVSync;
     boolean pauseNotInFocus;
     boolean vSync;
     float mouseMoveSensitivity;
@@ -20,6 +22,8 @@ public class Configuration {
     int currentHeight;
     int currentWidth;
     int desktopHeight;
+    int desktopLocationX;
+    int desktopLocationY;
     int desktopWidth;
     int foregroundFrameRate;
     int fullscreenDepth;
@@ -35,6 +39,8 @@ public class Configuration {
         desktopResizable = true;
         fullscreen = false;
         inFocus = false;
+        inFullscreen = false;
+        inVSync = false;
         pauseNotInFocus = true;
         vSync = false;
         mouseMoveSensitivity = 1.0f;
@@ -43,6 +49,8 @@ public class Configuration {
         currentHeight = 0;
         currentWidth = 0;
         desktopHeight = 480;
+        desktopLocationX = -1;
+        desktopLocationY = -1;
         desktopWidth = 854;
         foregroundFrameRate = 3000;
         fullscreenDepth = 32;
@@ -71,6 +79,14 @@ public class Configuration {
 
     public boolean isInFocus() {
         return inFocus;
+    }
+
+    public boolean isInFullscreen() {
+        return inFullscreen;
+    }
+
+    public boolean isInVSync() {
+        return inVSync;
     }
 
     public boolean isPauseNotInFocus() {
@@ -103,6 +119,14 @@ public class Configuration {
 
     public int getDesktopHeight() {
         return desktopHeight;
+    }
+
+    public int getDesktopLocationX() {
+        return desktopLocationX;
+    }
+
+    public int getDesktopLocationY() {
+        return desktopLocationY;
     }
 
     public int getDesktopWidth() {
