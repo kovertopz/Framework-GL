@@ -22,6 +22,10 @@ public class MathHelper {
         return (float) StrictMath.asin(radians);
     }
 
+    public static float ArcTan(float a) {
+        return (float) StrictMath.atan(a);
+    }
+
     public static float ArcTan2(float a, float b) {
         return (float) StrictMath.atan2(a, b);
     }

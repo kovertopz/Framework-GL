@@ -147,6 +147,26 @@ public class Camera {
         updateRotationMatrix();
     }
 
+    public void setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
+        float invdeltay = 1.0f / (top - bottom);
+        float h = 2.0f * znear * invdeltay;
+        aspectRatio = 1.0f;
+        fieldOfView = MathHelper.ArcTan(1.0f / h) / MathHelper.PI_OVER_360;
+        zFar = zfar;
+        zNear = znear;
+        projectionMatrix.setFrustum(left, right, bottom, top, znear, zfar);
+    }
+
+    public void setOrthogonalProjection(float left, float right, float bottom, float top, float znear, float zfar) {
+        float invdeltay = 1.0f / (top - bottom);
+        float h = 2.0f * invdeltay;
+        aspectRatio = 1.0f;
+        fieldOfView = MathHelper.ArcTan(1.0f / h) / MathHelper.PI_OVER_360;
+        zFar = zfar;
+        zNear = znear;
+        projectionMatrix.setOrthogonal(left, right, bottom, top, znear, zfar);
+    }
+
     public void setPerspectiveProjection(float fieldofviewy, float aspectratio, float znear, float zfar) {
         aspectRatio = aspectratio;
         fieldOfView = fieldofviewy;

@@ -64,6 +64,34 @@ public class Matrix4f {
         return this;
     }
 
+    public Matrix4f setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
+        float invdeltax = 1.0f / (right - left);
+        float invdeltay = 1.0f / (top - bottom);
+        float invdeltaz = 1.0f / (zfar - znear);
+        float h = 2.0f * znear * invdeltay;
+
+        setRow(0, 2.0f * znear * invdeltax, 0.0f, (right + left) * invdeltax, 0.0f);
+        setRow(1, 0.0f, h, (top + bottom) * invdeltay, 0.0f);
+        setRow(2, 0.0f, 0.0f, -(zfar + znear) * invdeltaz, -2.0f * zfar * znear * invdeltaz);
+        setRow(3, 0.0f, 0.0f, -1.0f, 0.0f);
+
+        return this;
+    }
+
+    public Matrix4f setOrthogonal(float left, float right, float bottom, float top, float znear, float zfar) {
+        float invdeltax = 1.0f / (right - left);
+        float invdeltay = 1.0f / (top - bottom);
+        float invdeltaz = 1.0f / (zfar - znear);
+        float h = 2.0f * invdeltay;
+
+        setRow(0, 2.0f * invdeltax, 0.0f, 0.0f, -(right + left) * invdeltax);
+        setRow(1, 0.0f, h, 0.0f, -(top + bottom) * invdeltay);
+        setRow(2, 0.0f, 0.0f, -2.0f * invdeltaz, -(zfar + znear) * invdeltaz);
+        setRow(3, 0.0f, 0.0f, 0.0f, 1.0f);
+
+        return this;
+    }
+
     public Matrix4f setPerspective(float fieldofviewy, float aspectratio, float znear, float zfar) {
         float cotangent = 1.0f / MathHelper.Tan(fieldofviewy * MathHelper.PI_OVER_360);
         float invdeltaz = 1.0f / (zfar - znear);
