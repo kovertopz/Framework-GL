@@ -44,9 +44,6 @@ public class MouseHelper {
     }
 
     private int mapLwglToArray(int button) {
-        if (button == -1) {
-            return 0;
-        }
         return button + 1;
     }
 
