@@ -66,7 +66,7 @@ public class Configuration {
                 .withForwardCompatible(true)
                 .withProfileCompatibility(false)
                 .withProfileCore(true);
-        windowTitle = "Title From Configuration";
+        windowTitle = "Title Not Set";
     }
 
     public boolean isDesktopResizable() {
@@ -159,6 +159,10 @@ public class Configuration {
 
     public String getWindowTitle() {
         return windowTitle;
+    }
+
+    public void setWindowTitle(String windowTitle) {
+        this.windowTitle = windowTitle;
     }
 
 }
