@@ -31,7 +31,7 @@ public class FpsTimer {
             displayFps = currentFps;
             currentFps = 0;
             fpsTimeSpan.addToCurrentTime(1000000000L);
-            Fgl.graphics.setWindowTitle(Fgl.config.getWindowTitle() + " | FPS: " + displayFps);
+            Fgl.window.setTitle(Fgl.config.getWindowTitle() + " | FPS: " + displayFps);
         }
     }
 
