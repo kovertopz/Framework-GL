@@ -1,5 +1,8 @@
 package net.smert.jreactphysics3d.framework;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.smert.jreactphysics3d.framework.helpers.InputProcessor;
 import net.smert.jreactphysics3d.framework.helpers.Keyboard;
 import net.smert.jreactphysics3d.framework.helpers.KeyboardHelper;
 import net.smert.jreactphysics3d.framework.helpers.Mouse;
@@ -16,14 +19,27 @@ public class Input {
     private final KeyboardHelper keyboardHelper;
     private final HashMapStringInt actionToKey;
     private final HashMapStringInt actionToMouse;
+    private final List<InputProcessor> inputProcessors;
     private final MouseHelper mouseHelper;
+    public final float MOUSE_POLL = 1.0f / 125.0f;
 
     public Input(Configuration config) {
         this.config = config;
         this.keyboardHelper = new KeyboardHelper();
         actionToKey = new HashMapStringInt();
         actionToMouse = new HashMapStringInt();
+        inputProcessors = new ArrayList<>();
         this.mouseHelper = new MouseHelper(config);
+    }
+
+    public void addInputProcessor(InputProcessor inputProcessor) {
+        if (inputProcessors.contains(inputProcessor) == false) {
+            inputProcessor.registerActions();
+            inputProcessors.add(inputProcessor);
+        } else {
+            throw new RuntimeException("Tried to add an InputProcessor that already exists: "
+                    + inputProcessor.getClass().getSimpleName());
+        }
     }
 
     public void clearActions() {
@@ -113,6 +129,15 @@ public class Input {
         int key = actionToKey.remove(action);
         if (key == HashMapStringInt.NOT_FOUND) {
             throw new IllegalArgumentException("Action was not found: " + action);
+        }
+    }
+
+    public void removeInputProcessor(InputProcessor inputProcessor) {
+        if (inputProcessors.remove(inputProcessor)) {
+            inputProcessor.unregisterActions();
+        } else {
+            throw new RuntimeException("Did not find an instance of the InputProcessor: "
+                    + inputProcessor.getClass().getSimpleName());
         }
     }
 
