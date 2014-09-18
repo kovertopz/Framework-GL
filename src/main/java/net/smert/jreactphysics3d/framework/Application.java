@@ -1,5 +1,6 @@
 package net.smert.jreactphysics3d.framework;
 
+import net.smert.jreactphysics3d.framework.opengl.Legacy;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class Application {
         Fw.audio = new Audio();
         Fw.config = config;
         Fw.files = new Files();
+        Fw.gl = new Legacy();
         Fw.graphics = new Graphics();
         Fw.input = new Input(config);
         Fw.net = new Network();
