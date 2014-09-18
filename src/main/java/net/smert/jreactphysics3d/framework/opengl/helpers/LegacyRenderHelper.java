@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RenderHelper {
+public class LegacyRenderHelper {
 
     public void begin(int primitive) {
         GL11.glBegin(primitive);
