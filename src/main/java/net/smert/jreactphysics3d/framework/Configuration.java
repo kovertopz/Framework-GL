@@ -67,14 +67,9 @@ public class Configuration {
         fullscreenWidth = 1280;
         gameTicksPerSecond = 60;
 
-        contextAttribs = new ContextAttribs(3, 2)
-                .withForwardCompatible(false)
-                .withProfileCompatibility(true)
-                .withProfileCore(false);
+        withOpenGL33ProfileCore();
         logLevel = Level.INFO;
-        pixelFormat = new PixelFormat()
-                .withDepthBits(24)
-                .withStencilBits(8);
+        withDefaultPixelFormat();
         logFilename = "framework.log";
         logProperties = null;
         windowTitle = "OpenGL Framework";
@@ -206,6 +201,91 @@ public class Configuration {
 
     public void setWindowTitle(String windowTitle) {
         this.windowTitle = windowTitle;
+    }
+
+    public final void withDefaultPixelFormat() {
+        pixelFormat = new PixelFormat()
+                .withDepthBits(24)
+                .withStencilBits(8);
+    }
+
+    public final void withOpenGL32ProfileCore() {
+        contextAttribs = new ContextAttribs(3, 2)
+                .withForwardCompatible(true)
+                .withProfileCompatibility(false)
+                .withProfileCore(true);
+    }
+
+    public final void withOpenGL33ProfileCompatibility() {
+        contextAttribs = new ContextAttribs(3, 3)
+                .withProfileCompatibility(true)
+                .withProfileCore(false);
+    }
+
+    public final void withOpenGL33ProfileCore() {
+        contextAttribs = new ContextAttribs(3, 3)
+                .withProfileCompatibility(false)
+                .withProfileCore(true);
+    }
+
+    public final void withNewPixelFormat() {
+        pixelFormat = new PixelFormat();
+    }
+
+    public final void withPixelFormatAlphaBits(int alpha) {
+        pixelFormat = pixelFormat.withAlphaBits(alpha);
+    }
+
+    public final void withPixelFormatAccumulationAlpha(int accum_alpha) {
+        pixelFormat = pixelFormat.withAccumulationAlpha(accum_alpha);
+    }
+
+    public final void withPixelFormatAccumulationBitsPerPixel(int accum_bpp) {
+        pixelFormat = pixelFormat.withAccumulationBitsPerPixel(accum_bpp);
+    }
+
+    public final void withPixelFormatAuxBuffers(int num_aux_buffers) {
+        pixelFormat = pixelFormat.withAuxBuffers(num_aux_buffers);
+    }
+
+    public final void withPixelFormatBitsPerPixel(int bpp) {
+        pixelFormat = pixelFormat.withBitsPerPixel(bpp);
+    }
+
+    public final void withPixelFormatCoverageSamples(int colorSamples) {
+        pixelFormat = pixelFormat.withCoverageSamples(colorSamples);
+    }
+
+    public final void withPixelFormatCoverageSamples(int colorSamples, int coverageSamples) {
+        pixelFormat = pixelFormat.withCoverageSamples(colorSamples, coverageSamples);
+    }
+
+    public final void withPixelFormatDepthBits(int depth) {
+        pixelFormat = pixelFormat.withDepthBits(depth);
+    }
+
+    public final void withPixelFormatFloatingPoint(boolean floating_point) {
+        pixelFormat = pixelFormat.withFloatingPoint(floating_point);
+    }
+
+    public final void withPixelFormatFloatingPointPacked(boolean floating_point_packed) {
+        pixelFormat = pixelFormat.withFloatingPointPacked(floating_point_packed);
+    }
+
+    public final void withPixelFormatSamples(int samples) {
+        pixelFormat = pixelFormat.withSamples(samples);
+    }
+
+    public final void withPixelFormatSRGB(boolean sRGB) {
+        pixelFormat = pixelFormat.withSRGB(sRGB);
+    }
+
+    public final void withPixelFormatStencilBits(int stencil) {
+        pixelFormat = pixelFormat.withStencilBits(stencil);
+    }
+
+    public final void withPixelFormatStereo(boolean stereo) {
+        pixelFormat = pixelFormat.withStereo(stereo);
     }
 
 }
