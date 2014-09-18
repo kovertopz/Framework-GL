@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL13;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class TextureTargets {
+public class TextureTargets {
 
     public final static int TEXTURE_2D = GL11.GL_TEXTURE_2D;
     public final static int TEXTURE_3D = GL12.GL_TEXTURE_3D;

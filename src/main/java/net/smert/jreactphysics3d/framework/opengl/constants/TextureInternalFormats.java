@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL30;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class TextureInternalFormats {
+public class TextureInternalFormats {
 
     public final static int DEPTH_COMPONENT16 = GL14.GL_DEPTH_COMPONENT16;
     public final static int DEPTH_COMPONENT24 = GL14.GL_DEPTH_COMPONENT24;

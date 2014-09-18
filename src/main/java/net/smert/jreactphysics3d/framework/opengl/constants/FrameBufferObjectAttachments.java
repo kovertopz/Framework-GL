@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL30;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class FrameBufferObjectAttachments {
+public class FrameBufferObjectAttachments {
 
     public final static int COLOR_ATTACHMENT0 = GL30.GL_COLOR_ATTACHMENT0;
     public final static int COLOR_ATTACHMENT1 = GL30.GL_COLOR_ATTACHMENT1;

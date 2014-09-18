@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL43;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class ShaderTypes {
+public class ShaderTypes {
 
     public final static int COMPUTE_SHADER = GL43.GL_COMPUTE_SHADER;
     public final static int FRAGMENT_SHADER = GL20.GL_FRAGMENT_SHADER;

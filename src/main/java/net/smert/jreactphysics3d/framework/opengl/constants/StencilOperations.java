@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL14;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class StencilOperations {
+public class StencilOperations {
 
     public final static int BACK = GL11.GL_BACK;
     public final static int FRONT = GL11.GL_FRONT;

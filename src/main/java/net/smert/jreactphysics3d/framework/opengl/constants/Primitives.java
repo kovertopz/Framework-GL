@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class Primitives {
+public class Primitives {
 
     public final static int LINES = GL11.GL_LINES;
     public final static int LINE_LOOP = GL11.GL_LINE_LOOP;

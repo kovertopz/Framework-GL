@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL30;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class TextureTypes {
+public class TextureTypes {
 
     public final static int FLOAT = GL11.GL_FLOAT;
     public final static int UNSIGNED_BYTE = GL11.GL_UNSIGNED_BYTE;

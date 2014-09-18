@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL13;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class TextureUnit {
+public class TextureUnit {
 
     public final static int TEXTURE0 = GL13.GL_TEXTURE0;
     public final static int TEXTURE1 = GL13.GL_TEXTURE1;

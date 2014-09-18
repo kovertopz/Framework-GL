@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class TextureFilters {
+public class TextureFilters {
 
     public final static int LINEAR = GL11.GL_LINEAR;
     public final static int LINEAR_MIPMAP_LINEAR = GL11.GL_LINEAR_MIPMAP_LINEAR;

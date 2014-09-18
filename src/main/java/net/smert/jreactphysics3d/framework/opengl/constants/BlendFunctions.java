@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class BlendFunctions {
+public class BlendFunctions {
 
     public final static int CONSTANT_ALPHA = GL11.GL_CONSTANT_ALPHA;
     public final static int CONSTANT_COLOR = GL11.GL_CONSTANT_COLOR;

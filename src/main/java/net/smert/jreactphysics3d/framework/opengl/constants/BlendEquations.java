@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL14;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class BlendEquations {
+public class BlendEquations {
 
     public final static int ADD = GL14.GL_FUNC_ADD;
     public final static int MAX = GL14.GL_MAX;

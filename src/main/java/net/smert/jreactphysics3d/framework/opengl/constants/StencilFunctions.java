@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class StencilFunctions {
+public class StencilFunctions {
 
     public final static int ALWAYS = GL11.GL_ALWAYS;
     public final static int EQUAL = GL11.GL_EQUAL;
