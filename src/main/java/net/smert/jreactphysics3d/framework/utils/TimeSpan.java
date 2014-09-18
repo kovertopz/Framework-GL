@@ -1,4 +1,4 @@
-package net.smert.jreactphysics3d.framework;
+package net.smert.jreactphysics3d.framework.utils;
 
 /**
  *
