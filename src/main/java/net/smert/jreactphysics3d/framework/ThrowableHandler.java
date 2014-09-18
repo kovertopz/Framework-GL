@@ -7,7 +7,6 @@ package net.smert.jreactphysics3d.framework;
 public class ThrowableHandler {
 
     public void process(Throwable t) {
-        t.printStackTrace();
     }
 
 }
