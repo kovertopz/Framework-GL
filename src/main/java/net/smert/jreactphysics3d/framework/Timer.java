@@ -1,5 +1,7 @@
 package net.smert.jreactphysics3d.framework;
 
+import net.smert.jreactphysics3d.framework.utils.TimeSpan;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
