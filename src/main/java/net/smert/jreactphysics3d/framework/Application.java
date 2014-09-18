@@ -11,6 +11,7 @@ public class Application {
 
     private boolean isRunning;
     private Configuration config;
+    private Logging logging;
     private Screen screen;
     private Thread mainLoopThread;
     private ThrowableHandler throwableHandler;
@@ -19,19 +20,9 @@ public class Application {
         throwableHandler = new ThrowableHandler();
     }
 
-    private void createMainLoopThread() {
-        mainLoopThread = new Thread("LWJGL Application - Main Loop") {
-            @Override
-            public void run() {
-                try {
-                    Application.this.mainLoop();
-                } catch (Throwable t) {
-                    Application.this.handleThrowable(t);
-                    System.exit(-1);
-                }
-            }
-        };
-        mainLoopThread.start();
+    private void configureLogging() {
+        logging = new Logging(config);
+        logging.reset();
     }
 
     private void createStaticClass() {
@@ -52,6 +43,23 @@ public class Application {
 
     protected void setConfig(Configuration config) {
         this.config = config;
+    }
+
+    private void startMainLoopThread() {
+        mainLoopThread = new Thread("LWJGL Application - Main Loop") {
+            @Override
+            public void run() {
+                try {
+                    Application.this.mainLoop();
+                } catch (Throwable t) {
+                    Fgl.log.error("Main Loop Exception", t);
+                    Application.this.handleThrowable(t);
+                    System.exit(-1);
+                }
+            }
+        };
+        mainLoopThread.start();
+        Fgl.log.info("Thread Started");
     }
 
     void handleThrowable(Throwable t) {
@@ -122,13 +130,14 @@ public class Application {
     public void run(Configuration config, Screen screen) {
         setConfig(config);
         setScreen(screen);
-        startRunning();
+        configureLogging();
         createStaticClass();
-        createMainLoopThread();
+        startRunning();
+        startMainLoopThread();
     }
 
-    public void setExceptionHandler(ThrowableHandler exceptionHandler) {
-        this.throwableHandler = exceptionHandler;
+    public void setThrowableHandler(ThrowableHandler throwableHandler) {
+        this.throwableHandler = throwableHandler;
     }
 
     public void startRunning() {

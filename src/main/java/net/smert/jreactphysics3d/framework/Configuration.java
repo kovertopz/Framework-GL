@@ -1,5 +1,6 @@
 package net.smert.jreactphysics3d.framework;
 
+import java.util.logging.Level;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.PixelFormat;
 
@@ -14,6 +15,8 @@ public class Configuration {
     boolean inFocus;
     boolean inFullscreen;
     boolean inVSync;
+    boolean logConsole;
+    boolean logFile;
     boolean pauseNotInFocus;
     boolean vSync;
     float mouseMoveSensitivity;
@@ -32,7 +35,10 @@ public class Configuration {
     int fullscreenWidth;
     int gameTicksPerSecond;
     ContextAttribs contextAttribs;
+    Level logLevel;
     PixelFormat pixelFormat;
+    String logFilename;
+    String logProperties;
     String windowTitle;
 
     public Configuration(String[] args) {
@@ -41,6 +47,8 @@ public class Configuration {
         inFocus = false;
         inFullscreen = false;
         inVSync = false;
+        logConsole = true;
+        logFile = true;
         pauseNotInFocus = true;
         vSync = false;
         mouseMoveSensitivity = 1.0f;
@@ -59,14 +67,17 @@ public class Configuration {
         fullscreenWidth = 1280;
         gameTicksPerSecond = 60;
 
+        contextAttribs = new ContextAttribs(3, 2)
+                .withForwardCompatible(false)
+                .withProfileCompatibility(true)
+                .withProfileCore(false);
+        logLevel = Level.INFO;
         pixelFormat = new PixelFormat()
                 .withDepthBits(24)
                 .withStencilBits(8);
-        contextAttribs = new ContextAttribs(3, 2)
-                .withForwardCompatible(true)
-                .withProfileCompatibility(false)
-                .withProfileCore(true);
-        windowTitle = "Title Not Set";
+        logFilename = "framework.log";
+        logProperties = null;
+        windowTitle = "OpenGL Framework";
     }
 
     public boolean isDesktopResizable() {
@@ -87,6 +98,14 @@ public class Configuration {
 
     public boolean isInVSync() {
         return inVSync;
+    }
+
+    public boolean isLogConsole() {
+        return logConsole;
+    }
+
+    public boolean isLogFile() {
+        return logFile;
     }
 
     public boolean isPauseNotInFocus() {
@@ -155,6 +174,30 @@ public class Configuration {
 
     public int getGameTicksPerSecond() {
         return gameTicksPerSecond;
+    }
+
+    public Level getLogLevel() {
+        return logLevel;
+    }
+
+    public void setLogLevel(Level logLevel) {
+        this.logLevel = logLevel;
+    }
+
+    public String getLogFilename() {
+        return logFilename;
+    }
+
+    public void setLogFilename(String logFilename) {
+        this.logFilename = logFilename;
+    }
+
+    public String getLogProperties() {
+        return logProperties;
+    }
+
+    public void setLogProperties(String logProperties) {
+        this.logProperties = logProperties;
     }
 
     public String getWindowTitle() {

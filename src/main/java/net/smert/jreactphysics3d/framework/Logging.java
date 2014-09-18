@@ -1,0 +1,66 @@
+package net.smert.jreactphysics3d.framework;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+/**
+ *
+ * @author Jason Sorensen <sorensenj@smert.net>
+ */
+public class Logging {
+
+    private final static int MAX_LOG_COUNT = 4;
+    private final static int MAX_LOG_SIZE = 131072;
+
+    private final Configuration config;
+
+    public Logging(Configuration config) {
+        this.config = config;
+    }
+
+    private void addFileHandler(Logger logger) {
+        try {
+            Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
+            file.setFormatter(new SimpleFormatter());
+            logger.addHandler(file);
+        } catch (IOException | SecurityException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+    private void readLogginProperties() {
+        try {
+            LogManager.getLogManager().readConfiguration(new FileInputStream(config.logProperties));
+        } catch (IOException | SecurityException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+    public void reset() {
+        LogManager.getLogManager().reset();
+
+        if (config.logProperties != null) {
+            readLogginProperties();
+        } else {
+            Logger logger = Logger.getLogger("");
+            logger.setLevel(config.logLevel);
+            if (config.logConsole) {
+                Handler console = new ConsoleHandler();
+                console.setFormatter(new SimpleFormatter());
+                logger.addHandler(console);
+            }
+            if (config.logFile) {
+                addFileHandler(logger);
+            }
+        }
+    }
+
+}
