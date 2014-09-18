@@ -39,10 +39,11 @@ public class Application {
         Fgl.audio = new Audio();
         Fgl.config = config;
         Fgl.files = new Files();
-        Fgl.graphics = new Graphics(config);
+        Fgl.graphics = new Graphics();
         Fgl.input = new Input(config);
         Fgl.net = new Network();
         Fgl.timer = new Timer(config);
+        Fgl.window = new Window(config);
     }
 
     protected void setScreen(Screen screen) {
@@ -58,7 +59,7 @@ public class Application {
     }
 
     void mainLoop() {
-        Fgl.graphics.createWindow();
+        Fgl.window.create();
         Fgl.input.init();
         screen.init();
         Fgl.timer.reset();

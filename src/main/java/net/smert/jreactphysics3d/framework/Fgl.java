@@ -14,5 +14,6 @@ public class Fgl {
     public static Input input;
     public static Network net;
     public static Timer timer;
+    public static Window window;
 
 }
