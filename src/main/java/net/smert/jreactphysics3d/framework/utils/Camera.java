@@ -1,4 +1,4 @@
-package net.smert.jreactphysics3d.framework.opengl;
+package net.smert.jreactphysics3d.framework.utils;
 
 import net.smert.jreactphysics3d.framework.math.MathHelper;
 import net.smert.jreactphysics3d.framework.math.Matrix3f;
