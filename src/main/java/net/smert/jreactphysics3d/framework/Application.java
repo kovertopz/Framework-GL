@@ -2,12 +2,16 @@ package net.smert.jreactphysics3d.framework;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class Application {
+
+    public final static Logger log = LoggerFactory.getLogger(Application.class);
 
     private boolean isRunning;
     private Configuration config;
@@ -52,14 +56,14 @@ public class Application {
                 try {
                     Application.this.mainLoop();
                 } catch (Throwable t) {
-                    Fgl.log.error("Main Loop Exception", t);
+                    log.error("Main Loop Exception", t);
                     Application.this.handleThrowable(t);
                     System.exit(-1);
                 }
             }
         };
         mainLoopThread.start();
-        Fgl.log.info("Thread Started");
+        log.info("Thread Started");
     }
 
     void handleThrowable(Throwable t) {
