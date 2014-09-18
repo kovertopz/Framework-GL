@@ -96,6 +96,8 @@ public class Window {
         } catch (LWJGLException e) {
             throw new RuntimeException(e);
         }
+        config.currentHeight = Display.getHeight();
+        config.currentWidth = Display.getWidth();
     }
 
     public void printDisplayModes() {
