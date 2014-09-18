@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Window {
 
-    public final static Logger log = LoggerFactory.getLogger(Window.class);
+    private final static Logger log = LoggerFactory.getLogger(Window.class);
 
     private boolean fullscreen;
     private boolean vSync;

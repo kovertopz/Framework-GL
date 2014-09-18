@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Application {
 
-    public final static Logger log = LoggerFactory.getLogger(Application.class);
+    private final static Logger log = LoggerFactory.getLogger(Application.class);
 
     private boolean isRunning;
     private Configuration config;
