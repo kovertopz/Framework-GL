@@ -4,7 +4,7 @@ package net.smert.jreactphysics3d.framework;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Fgl {
+public class Fw {
 
     public static Application app;
     public static Audio audio;

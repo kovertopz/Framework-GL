@@ -30,15 +30,15 @@ public class Application {
     }
 
     private void createStaticClass() {
-        Fgl.app = this;
-        Fgl.audio = new Audio();
-        Fgl.config = config;
-        Fgl.files = new Files();
-        Fgl.graphics = new Graphics();
-        Fgl.input = new Input(config);
-        Fgl.net = new Network();
-        Fgl.timer = new Timer(config);
-        Fgl.window = new Window(config);
+        Fw.app = this;
+        Fw.audio = new Audio();
+        Fw.config = config;
+        Fw.files = new Files();
+        Fw.graphics = new Graphics();
+        Fw.input = new Input(config);
+        Fw.net = new Network();
+        Fw.timer = new Timer(config);
+        Fw.window = new Window(config);
     }
 
     protected void setScreen(Screen screen) {
@@ -71,10 +71,10 @@ public class Application {
     }
 
     void mainLoop() {
-        Fgl.window.create();
-        Fgl.input.init();
+        Fw.window.create();
+        Fw.input.init();
         screen.init();
-        Fgl.timer.reset();
+        Fw.timer.reset();
 
         boolean wasActive = true;
 
@@ -107,8 +107,8 @@ public class Application {
                 screen.resize(x, y);
             }
 
-            Fgl.input.update();
-            Fgl.timer.update();
+            Fw.input.update();
+            Fw.timer.update();
             screen.render();
             Display.update(false);
             Util.checkGLError();

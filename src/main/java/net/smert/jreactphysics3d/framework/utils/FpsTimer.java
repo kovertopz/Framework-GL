@@ -1,6 +1,6 @@
 package net.smert.jreactphysics3d.framework.utils;
 
-import net.smert.jreactphysics3d.framework.Fgl;
+import net.smert.jreactphysics3d.framework.Fw;
 
 /**
  *
@@ -31,7 +31,7 @@ public class FpsTimer {
             displayFps = currentFps;
             currentFps = 0;
             fpsTimeSpan.addToCurrentTime(1000000000L);
-            Fgl.window.setTitle(Fgl.config.getWindowTitle() + " | FPS: " + displayFps);
+            Fw.window.setTitle(Fw.config.getWindowTitle() + " | FPS: " + displayFps);
         }
     }
 
