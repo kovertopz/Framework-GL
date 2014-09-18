@@ -28,6 +28,7 @@ public class Logging {
         try {
             Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
             file.setFormatter(new SimpleFormatter());
+            file.setLevel(config.logLevel);
             logger.addHandler(file);
         } catch (IOException | SecurityException ex) {
             ex.printStackTrace();
@@ -55,6 +56,7 @@ public class Logging {
             if (config.logConsole) {
                 Handler console = new ConsoleHandler();
                 console.setFormatter(new SimpleFormatter());
+                console.setLevel(config.logLevel);
                 logger.addHandler(console);
             }
             if (config.logFile) {
