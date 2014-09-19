@@ -34,6 +34,8 @@ public class Configuration {
     int fullscreenHeight;
     int fullscreenWidth;
     int gameTicksPerSecond;
+    int openglMajorVersion;
+    int openglMinorVersion;
     ContextAttribs contextAttribs;
     Level logLevel;
     PixelFormat pixelFormat;
@@ -171,6 +173,14 @@ public class Configuration {
         return gameTicksPerSecond;
     }
 
+    public int getOpenglMajorVersion() {
+        return openglMajorVersion;
+    }
+
+    public int getOpenglMinorVersion() {
+        return openglMinorVersion;
+    }
+
     public Level getLogLevel() {
         return logLevel;
     }
@@ -210,19 +220,25 @@ public class Configuration {
     }
 
     public final void withOpenGL32ProfileCore() {
-        contextAttribs = new ContextAttribs(3, 2)
+        openglMajorVersion = 3;
+        openglMinorVersion = 2;
+        contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
                 .withForwardCompatible(true)
                 .withProfileCompatibility(false)
                 .withProfileCore(true);
     }
 
     public final void withOpenGL33ProfileCompatibility() {
+        openglMajorVersion = 2;
+        openglMinorVersion = 1;
         contextAttribs = new ContextAttribs(3, 3)
                 .withProfileCompatibility(true)
                 .withProfileCore(false);
     }
 
     public final void withOpenGL33ProfileCore() {
+        openglMajorVersion = 3;
+        openglMinorVersion = 3;
         contextAttribs = new ContextAttribs(3, 3)
                 .withProfileCompatibility(false)
                 .withProfileCore(true);
