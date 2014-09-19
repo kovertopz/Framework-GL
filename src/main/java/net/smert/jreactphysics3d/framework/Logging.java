@@ -36,7 +36,7 @@ public class Logging {
         }
     }
 
-    private void readLogginProperties() {
+    private void readLoggingProperties() {
         try {
             LogManager.getLogManager().readConfiguration(new FileInputStream(config.logProperties));
         } catch (IOException | SecurityException ex) {
@@ -49,7 +49,7 @@ public class Logging {
         LogManager.getLogManager().reset();
 
         if (config.logProperties != null) {
-            readLogginProperties();
+            readLoggingProperties();
         } else {
             Logger logger = Logger.getLogger("");
             logger.setLevel(config.logLevel);
