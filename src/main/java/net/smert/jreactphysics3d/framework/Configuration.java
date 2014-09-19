@@ -19,6 +19,7 @@ public class Configuration {
     boolean logFile;
     boolean pauseNotInFocus;
     boolean vSync;
+    float glslVersion;
     float mouseMoveSensitivity;
     float mouseWheelSensitivity;
     int backgroundFrameRate;
@@ -111,6 +112,10 @@ public class Configuration {
 
     public boolean isvSync() {
         return vSync;
+    }
+
+    public float getGlslVersion() {
+        return glslVersion;
     }
 
     public float getMouseMoveSensitivity() {
@@ -220,6 +225,7 @@ public class Configuration {
     }
 
     public final void withOpenGL32ProfileCore() {
+        glslVersion = 1.5f;
         openglMajorVersion = 3;
         openglMinorVersion = 2;
         contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
@@ -229,6 +235,7 @@ public class Configuration {
     }
 
     public final void withOpenGL33ProfileCompatibility() {
+        glslVersion = 1.2f;
         openglMajorVersion = 2;
         openglMinorVersion = 1;
         contextAttribs = new ContextAttribs(3, 3)
@@ -237,6 +244,7 @@ public class Configuration {
     }
 
     public final void withOpenGL33ProfileCore() {
+        glslVersion = 3.3f;
         openglMajorVersion = 3;
         openglMinorVersion = 3;
         contextAttribs = new ContextAttribs(3, 3)
