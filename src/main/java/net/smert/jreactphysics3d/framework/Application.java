@@ -3,6 +3,7 @@ package net.smert.jreactphysics3d.framework;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL1;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL2;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL3;
+import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
@@ -33,11 +34,12 @@ public class Application {
     }
 
     private void createStaticClass() {
+        LegacyRenderHelper lrh = new LegacyRenderHelper();
         Fw.app = this;
         Fw.audio = new Audio();
         Fw.config = config;
         Fw.files = new Files();
-        Fw.gl = new OpenGL1();
+        Fw.gl = new OpenGL1(lrh);
         Fw.gl2 = new OpenGL2();
         Fw.gl3 = new OpenGL3();
         Fw.graphics = new Graphics();
