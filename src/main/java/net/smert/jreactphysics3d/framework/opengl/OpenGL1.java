@@ -14,263 +14,263 @@ import org.lwjgl.util.glu.GLU;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Legacy {
+public class OpenGL1 {
 
     private boolean wireframeMode = false;
     private float defaultLineWidth = 1.0f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
 
-    public Legacy begin(int primitive) {
+    public OpenGL1 begin(int primitive) {
         GL11.glBegin(primitive);
         return this;
     }
 
-    public Legacy clear() {
+    public OpenGL1 clear() {
         GL11.glClear(clearBits);
         return this;
     }
 
-    public Legacy clearColorBuffer() {
+    public OpenGL1 clearColorBuffer() {
         GL11.glClear(ClearBits.COLOR_BUFFER_BIT);
         return this;
     }
 
-    public Legacy clearDepthBuffer() {
+    public OpenGL1 clearDepthBuffer() {
         GL11.glClear(ClearBits.DEPTH_BUFFER_BIT);
         return this;
     }
 
-    public Legacy clearStencilBuffer() {
+    public OpenGL1 clearStencilBuffer() {
         GL11.glClear(ClearBits.STENCIL_BUFFER_BIT);
         return this;
     }
 
-    public Legacy color(float r, float g, float b, float a) {
+    public OpenGL1 color(float r, float g, float b, float a) {
         GL11.glColor4f(r, g, b, a);
         return this;
     }
 
-    public Legacy cullBackFaces() {
+    public OpenGL1 cullBackFaces() {
         GL11.glCullFace(GL11.GL_BACK);
         return this;
     }
 
-    public Legacy cullFrontFaces() {
+    public OpenGL1 cullFrontFaces() {
         GL11.glCullFace(GL11.GL_FRONT);
         return this;
     }
 
-    public Legacy disableBlending() {
+    public OpenGL1 disableBlending() {
         GL11.glDisable(GL11.GL_BLEND);
         return this;
     }
 
-    public Legacy disableColorMask() {
+    public OpenGL1 disableColorMask() {
         GL11.glColorMask(false, false, false, false);
         return this;
     }
 
-    public Legacy disableColorMaterial() {
+    public OpenGL1 disableColorMaterial() {
         GL11.glDisable(GL11.GL_COLOR_MATERIAL);
         return this;
     }
 
-    public Legacy disableCulling() {
+    public OpenGL1 disableCulling() {
         GL11.glDisable(GL11.GL_CULL_FACE);
         return this;
     }
 
-    public Legacy disableDepthMask() {
+    public OpenGL1 disableDepthMask() {
         GL11.glDepthMask(false);
         return this;
     }
 
-    public Legacy disableDepthTest() {
+    public OpenGL1 disableDepthTest() {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         return this;
     }
 
-    public Legacy disableLight0() {
+    public OpenGL1 disableLight0() {
         GL11.glDisable(GL11.GL_LIGHT0);
         return this;
     }
 
-    public Legacy disableLight1() {
+    public OpenGL1 disableLight1() {
         GL11.glDisable(GL11.GL_LIGHT1);
         return this;
     }
 
-    public Legacy disableLight2() {
+    public OpenGL1 disableLight2() {
         GL11.glDisable(GL11.GL_LIGHT2);
         return this;
     }
 
-    public Legacy disableLight3() {
+    public OpenGL1 disableLight3() {
         GL11.glDisable(GL11.GL_LIGHT3);
         return this;
     }
 
-    public Legacy disableLight4() {
+    public OpenGL1 disableLight4() {
         GL11.glDisable(GL11.GL_LIGHT4);
         return this;
     }
 
-    public Legacy disableLight5() {
+    public OpenGL1 disableLight5() {
         GL11.glDisable(GL11.GL_LIGHT5);
         return this;
     }
 
-    public Legacy disableLight6() {
+    public OpenGL1 disableLight6() {
         GL11.glDisable(GL11.GL_LIGHT6);
         return this;
     }
 
-    public Legacy disableLight7() {
+    public OpenGL1 disableLight7() {
         GL11.glDisable(GL11.GL_LIGHT7);
         return this;
     }
 
-    public Legacy disableLighting() {
+    public OpenGL1 disableLighting() {
         GL11.glDisable(GL11.GL_LIGHTING);
         return this;
     }
 
-    public Legacy disableLinePolygonFillMode() {
+    public OpenGL1 disableLinePolygonFillMode() {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
         return this;
     }
 
-    public Legacy disableStencilTest() {
+    public OpenGL1 disableStencilTest() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
         return this;
     }
 
-    public Legacy disableTexture2D() {
+    public OpenGL1 disableTexture2D() {
         GL11.glDisable(TextureTargets.TEXTURE_2D);
         return this;
     }
 
-    public Legacy disableTexture3D() {
+    public OpenGL1 disableTexture3D() {
         GL11.glDisable(TextureTargets.TEXTURE_3D);
         return this;
     }
 
-    public Legacy disableTextureCubeMap() {
+    public OpenGL1 disableTextureCubeMap() {
         GL11.glDisable(TextureTargets.TEXTURE_CUBE_MAP);
         return this;
     }
 
-    public Legacy disableWireframe() {
+    public OpenGL1 disableWireframe() {
         wireframeMode = false;
         return this;
     }
 
-    public Legacy enableBlending() {
+    public OpenGL1 enableBlending() {
         GL11.glEnable(GL11.GL_BLEND);
         return this;
     }
 
-    public Legacy enableColorMask() {
+    public OpenGL1 enableColorMask() {
         GL11.glColorMask(true, true, true, true);
         return this;
     }
 
-    public Legacy enableColorMaterial() {
+    public OpenGL1 enableColorMaterial() {
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         return this;
     }
 
-    public Legacy enableCulling() {
+    public OpenGL1 enableCulling() {
         GL11.glEnable(GL11.GL_CULL_FACE);
         return this;
     }
 
-    public Legacy enableDepthMask() {
+    public OpenGL1 enableDepthMask() {
         GL11.glDepthMask(true);
         return this;
     }
 
-    public Legacy enableDepthTest() {
+    public OpenGL1 enableDepthTest() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         return this;
     }
 
-    public Legacy enableLight0() {
+    public OpenGL1 enableLight0() {
         GL11.glEnable(GL11.GL_LIGHT0);
         return this;
     }
 
-    public Legacy enableLight1() {
+    public OpenGL1 enableLight1() {
         GL11.glEnable(GL11.GL_LIGHT1);
         return this;
     }
 
-    public Legacy enableLight2() {
+    public OpenGL1 enableLight2() {
         GL11.glEnable(GL11.GL_LIGHT2);
         return this;
     }
 
-    public Legacy enableLight3() {
+    public OpenGL1 enableLight3() {
         GL11.glEnable(GL11.GL_LIGHT3);
         return this;
     }
 
-    public Legacy enableLight4() {
+    public OpenGL1 enableLight4() {
         GL11.glEnable(GL11.GL_LIGHT4);
         return this;
     }
 
-    public Legacy enableLight5() {
+    public OpenGL1 enableLight5() {
         GL11.glEnable(GL11.GL_LIGHT5);
         return this;
     }
 
-    public Legacy enableLight6() {
+    public OpenGL1 enableLight6() {
         GL11.glEnable(GL11.GL_LIGHT6);
         return this;
     }
 
-    public Legacy enableLight7() {
+    public OpenGL1 enableLight7() {
         GL11.glEnable(GL11.GL_LIGHT7);
         return this;
     }
 
-    public Legacy enableLighting() {
+    public OpenGL1 enableLighting() {
         GL11.glEnable(GL11.GL_LIGHTING);
         return this;
     }
 
-    public Legacy enableLinePolygonFillMode() {
+    public OpenGL1 enableLinePolygonFillMode() {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         return this;
     }
 
-    public Legacy enableStencilTest() {
+    public OpenGL1 enableStencilTest() {
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         return this;
     }
 
-    public Legacy enableTexture2D() {
+    public OpenGL1 enableTexture2D() {
         GL11.glEnable(TextureTargets.TEXTURE_2D);
         return this;
     }
 
-    public Legacy enableTexture3D() {
+    public OpenGL1 enableTexture3D() {
         GL11.glEnable(TextureTargets.TEXTURE_3D);
         return this;
     }
 
-    public Legacy enableTextureCubeMap() {
+    public OpenGL1 enableTextureCubeMap() {
         GL11.glEnable(TextureTargets.TEXTURE_CUBE_MAP);
         return this;
     }
 
-    public Legacy enableWireframe() {
+    public OpenGL1 enableWireframe() {
         wireframeMode = true;
         return this;
     }
 
-    public Legacy end() {
+    public OpenGL1 end() {
         GL11.glEnd();
         return this;
     }
@@ -295,200 +295,200 @@ public class Legacy {
         return GL11.glGetString(getstring);
     }
 
-    public Legacy normal(float x, float y, float z) {
+    public OpenGL1 normal(float x, float y, float z) {
         GL11.glNormal3f(x, y, z);
         return this;
     }
 
-    public Legacy popMatrix() {
+    public OpenGL1 popMatrix() {
         GL11.glPopMatrix();
         return this;
     }
 
-    public Legacy pushMatrix() {
+    public OpenGL1 pushMatrix() {
         GL11.glPushMatrix();
         return this;
     }
 
-    public Legacy rotate(float angle, float x, float y, float z) {
+    public OpenGL1 rotate(float angle, float x, float y, float z) {
         GL11.glRotatef(angle, x, y, z);
         return this;
     }
 
-    public Legacy setBlendingFunctionOneAndOne() {
+    public OpenGL1 setBlendingFunctionOneAndOne() {
         GL11.glBlendFunc(BlendFunctions.ONE, BlendFunctions.ONE);
         return this;
     }
 
-    public Legacy setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha() {
+    public OpenGL1 setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha() {
         GL11.glBlendFunc(BlendFunctions.SRC_ALPHA, BlendFunctions.ONE_MINUS_SRC_ALPHA);
         return this;
     }
 
-    public Legacy setBlendingEquationAdd() {
+    public OpenGL1 setBlendingEquationAdd() {
         GL14.glBlendEquation(BlendEquations.ADD);
         return this;
     }
 
-    public Legacy setBlendingEquationMax() {
+    public OpenGL1 setBlendingEquationMax() {
         GL14.glBlendEquation(BlendEquations.MAX);
         return this;
     }
 
-    public Legacy setBlendingEquationMin() {
+    public OpenGL1 setBlendingEquationMin() {
         GL14.glBlendEquation(BlendEquations.MIN);
         return this;
     }
 
-    public Legacy setBlendingEquationReverseSubtract() {
+    public OpenGL1 setBlendingEquationReverseSubtract() {
         GL14.glBlendEquation(BlendEquations.REVERSE_SUBTRACT);
         return this;
     }
 
-    public Legacy setBlendingEquationSubtract() {
+    public OpenGL1 setBlendingEquationSubtract() {
         GL14.glBlendEquation(BlendEquations.SUBTRACT);
         return this;
     }
 
-    public Legacy setClearBits(int clearbits) {
+    public OpenGL1 setClearBits(int clearbits) {
         clearBits = clearbits;
         return this;
     }
 
-    public Legacy setClearColor(float red, float green, float blue, float alpha) {
+    public OpenGL1 setClearColor(float red, float green, float blue, float alpha) {
         GL11.glClearColor(red, green, blue, alpha);
         return this;
     }
 
-    public Legacy setClearDepth(double depth) {
+    public OpenGL1 setClearDepth(double depth) {
         GL11.glClearDepth(depth);
         return this;
     }
 
-    public Legacy setClearStencil(int s) {
+    public OpenGL1 setClearStencil(int s) {
         GL11.glClearStencil(s);
         return this;
     }
 
-    public Legacy setColorMask(boolean red, boolean green, boolean blue, boolean alpha) {
+    public OpenGL1 setColorMask(boolean red, boolean green, boolean blue, boolean alpha) {
         GL11.glColorMask(red, green, blue, alpha);
         return this;
     }
 
-    public Legacy setCullBackFace() {
+    public OpenGL1 setCullBackFace() {
         GL11.glCullFace(GL11.GL_BACK);
         return this;
     }
 
-    public Legacy setCullFrontFace() {
+    public OpenGL1 setCullFrontFace() {
         GL11.glCullFace(GL11.GL_FRONT);
         return this;
     }
 
-    public Legacy setDefaultLineWidth(float linewidth) {
+    public OpenGL1 setDefaultLineWidth(float linewidth) {
         defaultLineWidth = linewidth;
         return this;
     }
 
-    public Legacy setDepthFuncAlways() {
+    public OpenGL1 setDepthFuncAlways() {
         GL11.glDepthFunc(DepthFunctions.ALWAYS);
         return this;
     }
 
-    public Legacy setDepthFuncEqual() {
+    public OpenGL1 setDepthFuncEqual() {
         GL11.glDepthFunc(DepthFunctions.EQUAL);
         return this;
     }
 
-    public Legacy setDepthFuncGreater() {
+    public OpenGL1 setDepthFuncGreater() {
         GL11.glDepthFunc(DepthFunctions.GREATER);
         return this;
     }
 
-    public Legacy setDepthFuncGreaterEqual() {
+    public OpenGL1 setDepthFuncGreaterEqual() {
         GL11.glDepthFunc(DepthFunctions.GEQUAL);
         return this;
     }
 
-    public Legacy setDepthFuncLess() {
+    public OpenGL1 setDepthFuncLess() {
         GL11.glDepthFunc(DepthFunctions.LESS);
         return this;
     }
 
-    public Legacy setDepthFuncLessEqual() {
+    public OpenGL1 setDepthFuncLessEqual() {
         GL11.glDepthFunc(DepthFunctions.LEQUAL);
         return this;
     }
 
-    public Legacy setDepthFuncNever() {
+    public OpenGL1 setDepthFuncNever() {
         GL11.glDepthFunc(DepthFunctions.NEVER);
         return this;
     }
 
-    public Legacy setDepthFuncNotEqual() {
+    public OpenGL1 setDepthFuncNotEqual() {
         GL11.glDepthFunc(DepthFunctions.NOTEQUAL);
         return this;
     }
 
-    public Legacy setFrontFaceCCW() {
+    public OpenGL1 setFrontFaceCCW() {
         GL11.glFrontFace(GL11.GL_CCW);
         return this;
     }
 
-    public Legacy setFrontFaceCW() {
+    public OpenGL1 setFrontFaceCW() {
         GL11.glFrontFace(GL11.GL_CW);
         return this;
     }
 
-    public Legacy setLineWidth(float linewidth) {
+    public OpenGL1 setLineWidth(float linewidth) {
         GL11.glLineWidth(linewidth);
         return this;
     }
 
-    public Legacy setModelViewIdentity() {
+    public OpenGL1 setModelViewIdentity() {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
         return this;
     }
 
-    public Legacy setPolygonModeBackFill() {
+    public OpenGL1 setPolygonModeBackFill() {
         GL11.glPolygonMode(GL11.GL_BACK, GL11.GL_FILL);
         return this;
     }
 
-    public Legacy setPolygonModeBackLine() {
+    public OpenGL1 setPolygonModeBackLine() {
         GL11.glPolygonMode(GL11.GL_BACK, GL11.GL_LINE);
         return this;
     }
 
-    public Legacy setPolygonModeFrontAndBackFill() {
+    public OpenGL1 setPolygonModeFrontAndBackFill() {
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         return this;
     }
 
-    public Legacy setPolygonModeFrontAndBackLine() {
+    public OpenGL1 setPolygonModeFrontAndBackLine() {
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         return this;
     }
 
-    public Legacy setPolygonModeFrontFill() {
+    public OpenGL1 setPolygonModeFrontFill() {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
         return this;
     }
 
-    public Legacy setPolygonModeFrontLine() {
+    public OpenGL1 setPolygonModeFrontLine() {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         return this;
     }
 
-    public Legacy setProjectionOrtho(double left, double right, double bottom, double top, double znear, double zfar) {
+    public OpenGL1 setProjectionOrtho(double left, double right, double bottom, double top, double znear, double zfar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glOrtho(left, right, bottom, top, znear, zfar);
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
         return this;
     }
 
-    public Legacy setProjectionPerspective(float fovy, float aspectratio, float znear, float zfar) {
+    public OpenGL1 setProjectionPerspective(float fovy, float aspectratio, float znear, float zfar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GLU.gluPerspective(
@@ -500,7 +500,7 @@ public class Legacy {
         return this;
     }
 
-    public Legacy setSmoothLighting(boolean isSmooth) {
+    public OpenGL1 setSmoothLighting(boolean isSmooth) {
         if (isSmooth) {
             GL11.glShadeModel(GL11.GL_SMOOTH);
         } else {
@@ -509,57 +509,57 @@ public class Legacy {
         return this;
     }
 
-    public Legacy setStencilFuncAlways(int ref, int mask) {
+    public OpenGL1 setStencilFuncAlways(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.ALWAYS, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncEqual(int ref, int mask) {
+    public OpenGL1 setStencilFuncEqual(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.EQUAL, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncGreater(int ref, int mask) {
+    public OpenGL1 setStencilFuncGreater(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.GREATER, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncGreaterEqual(int ref, int mask) {
+    public OpenGL1 setStencilFuncGreaterEqual(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.GEQUAL, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncLess(int ref, int mask) {
+    public OpenGL1 setStencilFuncLess(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.LESS, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncLessEqual(int ref, int mask) {
+    public OpenGL1 setStencilFuncLessEqual(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.LEQUAL, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncNever(int ref, int mask) {
+    public OpenGL1 setStencilFuncNever(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.NEVER, ref, mask);
         return this;
     }
 
-    public Legacy setStencilFuncNotEqual(int ref, int mask) {
+    public OpenGL1 setStencilFuncNotEqual(int ref, int mask) {
         GL11.glStencilFunc(StencilFunctions.NOTEQUAL, ref, mask);
         return this;
     }
 
-    public Legacy setViewport(int x, int y, int width, int height) {
+    public OpenGL1 setViewport(int x, int y, int width, int height) {
         GL11.glViewport(x, y, width, height);
         return this;
     }
 
-    public Legacy switchModelView() {
+    public OpenGL1 switchModelView() {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         return this;
     }
 
-    public Legacy switchPolygonFillMode() {
+    public OpenGL1 switchPolygonFillMode() {
         if (wireframeMode == true) {
             GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         } else {
@@ -568,22 +568,22 @@ public class Legacy {
         return this;
     }
 
-    public Legacy switchProjection() {
+    public OpenGL1 switchProjection() {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         return this;
     }
 
-    public Legacy texCoord(float s, float t) {
+    public OpenGL1 texCoord(float s, float t) {
         GL11.glTexCoord2f(s, t);
         return this;
     }
 
-    public Legacy translate(float x, float y, float z) {
+    public OpenGL1 translate(float x, float y, float z) {
         GL11.glTranslatef(x, y, z);
         return this;
     }
 
-    public Legacy vertex(float x, float y, float z) {
+    public OpenGL1 vertex(float x, float y, float z) {
         GL11.glVertex3f(x, y, z);
         return this;
     }
