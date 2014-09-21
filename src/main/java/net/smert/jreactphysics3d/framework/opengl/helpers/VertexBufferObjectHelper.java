@@ -54,24 +54,24 @@ public class VertexBufferObjectHelper {
         GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void disableVertices() {
-        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-    }
-
     public void disableTextureCoordinates() {
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
     }
 
+    public void disableVertices() {
+        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+    }
+
     public void drawArrays(int mode, int first, int count) {
-        GL11.glDrawArrays(mode, first, count); // Slow
+        GL11.glDrawArrays(mode, first, count);
     }
 
     public void drawElements(int mode, int count, int type) {
-        GL11.glDrawElements(mode, count, type, 0); // Fastest
+        GL11.glDrawElements(mode, count, type, 0);
     }
 
     public void drawRangeElements(int mode, int start, int end, int count, int type) {
-        GL12.glDrawRangeElements(mode, start, end, count, type, 0); // Fast as a display list
+        GL12.glDrawRangeElements(mode, start, end, count, type, 0);
     }
 
     public void enableColors() {
@@ -82,12 +82,12 @@ public class VertexBufferObjectHelper {
         GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void enableVertices() {
-        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-    }
-
     public void enableTextureCoordinates() {
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+    }
+
+    public void enableVertices() {
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
     }
 
     public void setBufferData(int vboid, ByteBuffer bytebuffer, int usage) {
