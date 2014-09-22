@@ -15,6 +15,7 @@ public class Configuration {
     private boolean isImmutable;
     private int colorSize;
     private int colorType;
+    private int indexType;
     private final int normalType;
     private int texCoordSize;
     private final int texCoordType;
@@ -25,6 +26,7 @@ public class Configuration {
         isImmutable = false;
         colorSize = 4;
         colorType = GLTypes.FLOAT;
+        indexType = GLTypes.UNSIGNED_INT;
         normalType = GLTypes.FLOAT;
         texCoordSize = 2;
         texCoordType = GLTypes.FLOAT;
@@ -32,14 +34,18 @@ public class Configuration {
         vertexType = GLTypes.FLOAT;
     }
 
+    private void checkImmutable() {
+        if (isImmutable) {
+            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
+        }
+    }
+
     public int getColorSize() {
         return colorSize;
     }
 
     public void setColorSize(int colorSize) {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         if ((colorSize != 3) && (colorSize != 4)) {
             throw new IllegalArgumentException("The color size must be 3 or 4. Was given: " + colorSize);
         }
@@ -51,24 +57,32 @@ public class Configuration {
     }
 
     public void setColorTypeByte() {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         this.colorType = GLTypes.BYTE;
     }
 
     public void setColorTypeFloat() {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         this.colorType = GLTypes.FLOAT;
     }
 
     public void setColorTypeUnsignedByte() {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         this.colorType = GLTypes.UNSIGNED_BYTE;
+    }
+
+    public int getIndexType() {
+        return indexType;
+    }
+
+    public void setIndexTypeUnsignedInt() {
+        checkImmutable();
+        this.indexType = GLTypes.UNSIGNED_INT;
+    }
+
+    public void setIndexTypeUnsignedShort() {
+        checkImmutable();
+        this.indexType = GLTypes.UNSIGNED_SHORT;
     }
 
     public int getNormalType() {
@@ -80,9 +94,7 @@ public class Configuration {
     }
 
     public void setTexCoordSize(int texCoordSize) {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         if ((texCoordSize != 2) && (texCoordSize != 3)) {
             throw new IllegalArgumentException("The texture coordinate size must be 2 or 3. Was given: " + texCoordSize);
         }
@@ -98,9 +110,7 @@ public class Configuration {
     }
 
     public void setVertexSize(int vertexSize) {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+        checkImmutable();
         if ((vertexSize < 2) || (vertexSize > 4)) {
             throw new IllegalArgumentException("The vertex size must be 2, 3 or 4. Was given: " + vertexSize);
         }
