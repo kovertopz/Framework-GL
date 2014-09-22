@@ -1,14 +1,13 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import java.util.List;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
-import net.smert.jreactphysics3d.framework.utils.ListUtils;
 import org.lwjgl.BufferUtils;
 
 /**
@@ -172,6 +171,42 @@ public class Builder {
         }
     }
 
+    private void createBufferData(Mesh mesh, Configuration vboConfiguration, ByteBuffers byteBuffers) {
+
+        // For each segment in the mesh
+        for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
+            Segment segment = mesh.getSegment(i);
+
+            // For each vertex in the segment
+            for (int j = 0, max2 = segment.getVertices().size(); j < max2; j++) {
+
+                // For each type convert the data and add to the byte buffer
+                if (mesh.hasColors()) {
+                    int colorSize = vboConfiguration.getColorSize();
+                    int colorType = vboConfiguration.getColorType();
+                    Vector4f color = segment.getColors().get(j);
+                    convertColorToByteBuffer(color, colorSize, colorType, byteBuffers.color);
+                }
+                if (mesh.hasNormals()) {
+                    Vector3f normal = segment.getNormals().get(j);
+                    convertNormalToByteBuffer(normal, max, byteBuffers.normal);
+                }
+                if (mesh.hasTexCoords()) {
+                    int texCoordSize = vboConfiguration.getTexCoordSize();
+                    int texCoordType = vboConfiguration.getTexCoordType();
+                    Vector3f texCoord = segment.getTexCoords().get(j);
+                    convertTexCoordToByteBuffer(texCoord, texCoordSize, texCoordType, byteBuffers.texCoord);
+                }
+                if (mesh.hasVertices()) {
+                    int vertexSize = vboConfiguration.getVertexSize();
+                    int vertexType = vboConfiguration.getVertexType();
+                    Vector4f vertex = segment.getVertices().get(j);
+                    convertVertexToByteBuffer(vertex, vertexSize, vertexType, byteBuffers.vertex);
+                }
+            }
+        }
+    }
+
     public void calculateOffsetsAndStride(
             Mesh mesh, Configuration vboConfiguration, VertexBufferObjectInterleaved vboInterleaved) {
 
@@ -196,71 +231,11 @@ public class Builder {
         }
         if (mesh.hasVertices()) {
             vboInterleaved.setVertexOffsetBytes(total);
-            int byteSize = convertGLTypeToByteSize(vboConfiguration.getTexCoordType());
+            int byteSize = convertGLTypeToByteSize(vboConfiguration.getVertexType());
             total += vboConfiguration.getTexCoordSize() * byteSize;
         }
 
         vboInterleaved.setStrideBytes(total);
-    }
-
-    public ByteBuffer createInterleavedBufferData(
-            Mesh mesh, Configuration vboConfiguration, VertexBufferObjectInterleaved vboInterleaved) {
-
-        // Create byte buffer to hold color, normal, texture coordinates and vertex data
-        int bufferSize = vboInterleaved.getStrideBytes() * mesh.getTotalVerticies();
-        ByteBuffer byteBuffer = BufferUtils.createByteBuffer(bufferSize);
-
-        // For each segment in the mesh
-        for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
-            Segment segment = mesh.getSegment(i);
-
-            // For each vertex in the segment
-            for (int j = 0, max2 = segment.getVertices().size(); j < max2; j++) {
-
-                // For each type convert the data and add to the byte buffer
-                if (mesh.hasColors()) {
-                    int colorSize = vboConfiguration.getColorSize();
-                    int colorType = vboConfiguration.getColorType();
-                    Vector4f color = segment.getColors().get(j);
-                    convertColorToByteBuffer(color, colorSize, colorType, byteBuffer);
-                }
-                if (mesh.hasNormals()) {
-                    Vector3f normal = segment.getNormals().get(j);
-                    convertNormalToByteBuffer(normal, max, byteBuffer);
-                }
-                if (mesh.hasTexCoords()) {
-                    int texCoordSize = vboConfiguration.getTexCoordSize();
-                    int texCoordType = vboConfiguration.getTexCoordType();
-                    Vector3f texCoord = segment.getTexCoords().get(j);
-                    convertTexCoordToByteBuffer(texCoord, texCoordSize, texCoordType, byteBuffer);
-                }
-                if (mesh.hasVertices()) {
-                    int vertexSize = vboConfiguration.getVertexSize();
-                    int vertexType = vboConfiguration.getVertexType();
-                    Vector4f vertex = segment.getVertices().get(j);
-                    convertVertexToByteBuffer(vertex, vertexSize, vertexType, byteBuffer);
-                }
-            }
-        }
-
-        // Missy Elliott that shit
-        byteBuffer.flip();
-
-        return byteBuffer;
-    }
-
-    public IntBuffer createBufferElementData(Mesh mesh) {
-
-        // Create int buffer
-        int bufferSize = mesh.getIndexes().size();
-        IntBuffer intBuffer = BufferUtils.createIntBuffer(bufferSize);
-
-        // Convert list to primitive array
-        int[] intArray = ListUtils.ToPrimitiveIntArray(mesh.getIndexes());
-        intBuffer.put(intArray);
-        intBuffer.flip();
-
-        return intBuffer;
     }
 
     public AbstractDrawCall createDrawCall(Mesh mesh) {
@@ -277,6 +252,85 @@ public class Builder {
         }
 
         return drawCall;
+    }
+
+    public void createIndexBufferData(Mesh mesh, Configuration vboConfiguration, ByteBuffers byteBuffers) {
+
+        // Index byte buffer
+        int byteSize = convertGLTypeToByteSize(vboConfiguration.getIndexType());
+        int bufferSize = byteSize * mesh.getIndexes().size();
+        byteBuffers.index = BufferUtils.createByteBuffer(bufferSize);
+
+        // Convert list to primitive array
+        List<Integer> indexes = mesh.getIndexes();
+        for (Integer integer : indexes) {
+            byteBuffers.index.putInt(integer);
+        }
+        byteBuffers.index.flip();
+    }
+
+    public void createInterleavedBufferData(Mesh mesh, Configuration vboConfiguration,
+            VertexBufferObjectInterleaved vboInterleaved, ByteBuffers byteBuffers) {
+
+        // Create byte buffer to hold color, normal, texture coordinates and vertex data
+        int bufferSize = vboInterleaved.getStrideBytes() * mesh.getTotalVerticies();
+        byteBuffers.interleaved = BufferUtils.createByteBuffer(bufferSize);
+
+        // Set all other buffers to point to the interleaved buffer
+        byteBuffers.color = byteBuffers.normal = byteBuffers.texCoord = byteBuffers.vertex = byteBuffers.interleaved;
+
+        createBufferData(mesh, vboConfiguration, byteBuffers);
+
+        // Missy Elliott that shit
+        byteBuffers.interleaved.flip();
+    }
+
+    public void createNonInterleavedBufferData(Mesh mesh, Configuration vboConfiguration, ByteBuffers byteBuffers) {
+
+        int bufferSize, byteSize;
+
+        // Color byte buffer
+        if (mesh.hasColors()) {
+            byteSize = convertGLTypeToByteSize(vboConfiguration.getColorType());
+            bufferSize = byteSize * mesh.getTotalVerticies();
+            byteBuffers.color = BufferUtils.createByteBuffer(bufferSize);
+        }
+
+        // Normal byte buffer
+        if (mesh.hasNormals()) {
+            byteSize = convertGLTypeToByteSize(vboConfiguration.getNormalType());
+            bufferSize = byteSize * mesh.getTotalVerticies();
+            byteBuffers.normal = BufferUtils.createByteBuffer(bufferSize);
+        }
+
+        // Texture coordinate byte buffer
+        if (mesh.hasTexCoords()) {
+            byteSize = convertGLTypeToByteSize(vboConfiguration.getTexCoordType());
+            bufferSize = byteSize * mesh.getTotalVerticies();
+            byteBuffers.texCoord = BufferUtils.createByteBuffer(bufferSize);
+        }
+
+        // Vertex byte buffer
+        if (mesh.hasVertices()) {
+            byteSize = convertGLTypeToByteSize(vboConfiguration.getVertexType());
+            bufferSize = byteSize * mesh.getTotalVerticies();
+            byteBuffers.vertex = BufferUtils.createByteBuffer(bufferSize);
+        }
+
+        createBufferData(mesh, vboConfiguration, byteBuffers);
+
+        if (mesh.hasColors()) {
+            byteBuffers.color.flip();
+        }
+        if (mesh.hasNormals()) {
+            byteBuffers.normal.flip();
+        }
+        if (mesh.hasTexCoords()) {
+            byteBuffers.texCoord.flip();
+        }
+        if (mesh.hasVertices()) {
+            byteBuffers.vertex.flip();
+        }
     }
 
 }

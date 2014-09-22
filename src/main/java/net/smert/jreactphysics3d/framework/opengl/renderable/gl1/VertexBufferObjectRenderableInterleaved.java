@@ -1,16 +1,16 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.gl1;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObject;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTypes;
-import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Configuration;
 
 /**
@@ -22,9 +22,8 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
     private static BindState vboBindState;
     private static Builder vboBuilder;
     private static Configuration vboConfiguration;
-    private static VertexBufferObjectHelper vboHelper;
     private AbstractDrawCall drawCall;
-    private VertexBufferObject vboIndex;
+    private VertexBufferObject vboVertexIndex;
     private VertexBufferObjectInterleaved vboInterleaved;
 
     public VertexBufferObjectRenderableInterleaved(Mesh mesh) {
@@ -37,21 +36,23 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         // Destroy existing VBOs
         destroy();
 
+        ByteBuffers byteBuffers = new ByteBuffers();
+
         // Create VBO
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             vboInterleaved = new VertexBufferObjectInterleaved();
             vboInterleaved.create();
             vboBuilder.calculateOffsetsAndStride(mesh, vboConfiguration, vboInterleaved);
-            ByteBuffer byteBuffer = vboBuilder.createInterleavedBufferData(mesh, vboConfiguration, vboInterleaved);
-            vboHelper.setBufferData(vboInterleaved.getVboID(), byteBuffer, VertexBufferObjectTypes.STATIC_DRAW);
+            vboBuilder.createInterleavedBufferData(mesh, vboConfiguration, vboInterleaved, byteBuffers);
+            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), byteBuffers.interleaved, VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Create VBO for indexes
         if (mesh.hasIndexes()) {
-            vboIndex = new VertexBufferObject();
-            vboIndex.create();
-            IntBuffer intBuffer = vboBuilder.createBufferElementData(mesh);
-            vboHelper.setBufferElementData(vboIndex.getVboID(), intBuffer, VertexBufferObjectTypes.STATIC_DRAW);
+            vboVertexIndex = new VertexBufferObject();
+            vboVertexIndex.create();
+            vboBuilder.createIndexBufferData(mesh, vboConfiguration, byteBuffers);
+            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), byteBuffers.index, VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Create draw call
@@ -64,9 +65,9 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
             vboInterleaved.destroy();
             vboInterleaved = null;
         }
-        if (vboIndex != null) {
-            vboIndex.destroy();
-            vboIndex = null;
+        if (vboVertexIndex != null) {
+            vboVertexIndex.destroy();
+            vboVertexIndex = null;
         }
     }
 
@@ -105,10 +106,6 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         if (vboConfiguration.isImmutable() == false) {
             throw new RuntimeException("VBO configuration must be made immutable");
         }
-    }
-
-    public static void SetVboHelper(VertexBufferObjectHelper vboHelper) {
-        VertexBufferObjectRenderableInterleaved.vboHelper = vboHelper;
     }
 
 }

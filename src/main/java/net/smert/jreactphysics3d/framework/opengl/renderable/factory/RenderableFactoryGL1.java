@@ -54,6 +54,7 @@ public class RenderableFactoryGL1 {
             // Statically initialize all classes
             VertexBufferObjectRenderable.SetVboBindState(vboBindState);
             VertexBufferObjectRenderable.SetVboBuilder(vboBuilder);
+            VertexBufferObjectRenderable.SetVboConfiguration(vboConfiguration);
             VertexBufferObjectRenderableInterleaved.SetVboBindState(vboBindState);
             VertexBufferObjectRenderableInterleaved.SetVboBuilder(vboBuilder);
             VertexBufferObjectRenderableInterleaved.SetVboConfiguration(vboConfiguration);
