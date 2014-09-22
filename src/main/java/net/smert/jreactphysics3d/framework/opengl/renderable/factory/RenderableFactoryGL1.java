@@ -4,6 +4,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Configuration;
@@ -52,6 +53,7 @@ public class RenderableFactoryGL1 {
             }
 
             // Statically initialize all classes
+            AbstractDrawCall.SetVboConfiguration(vboConfiguration);
             VertexBufferObjectRenderable.SetVboBindState(vboBindState);
             VertexBufferObjectRenderable.SetVboBuilder(vboBuilder);
             VertexBufferObjectRenderable.SetVboConfiguration(vboConfiguration);
