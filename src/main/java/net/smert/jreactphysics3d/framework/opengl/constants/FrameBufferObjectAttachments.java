@@ -27,14 +27,10 @@ public class FrameBufferObjectAttachments {
     public final static int COLOR_ATTACHMENT15 = GL30.GL_COLOR_ATTACHMENT15;
     public final static int DEPTH_ATTACHMENT = GL30.GL_DEPTH_ATTACHMENT;
     public final static int FRAMEBUFFER_COMPLETE = GL30.GL_FRAMEBUFFER_COMPLETE;
-    public final static int MAX_COLOR_ATTACHMENTS = 4;
-    public final static int MAX_DEPTH_ATTACHMENTS = 1;
-    public final static int MAX_STENCIL_ATTACHMENTS = 1;
     public final static int NONE = GL11.GL_NONE;
     public final static int STENCIL_ATTACHMENT = GL30.GL_STENCIL_ATTACHMENT;
 
     private FrameBufferObjectAttachments() {
-        //MAX_COLOR_ATTACHMENTS = GL11.glGetInteger(GL30.GL_MAX_COLOR_ATTACHMENTS);
     }
 
 }
