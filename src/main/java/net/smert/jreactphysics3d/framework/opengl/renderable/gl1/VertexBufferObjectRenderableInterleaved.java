@@ -1,6 +1,5 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.gl1;
 
-import java.nio.IntBuffer;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObject;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
