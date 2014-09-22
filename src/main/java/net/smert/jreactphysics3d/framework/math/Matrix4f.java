@@ -135,7 +135,7 @@ public class Matrix4f {
                 break;
 
             default:
-                throw new IllegalArgumentException("Invalid Row!");
+                throw new IllegalArgumentException("Invalid Row");
         }
 
         return this;

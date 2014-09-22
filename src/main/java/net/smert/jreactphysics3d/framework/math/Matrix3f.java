@@ -94,7 +94,7 @@ public class Matrix3f {
             case 2:
                 return xAxis.z * v.x + yAxis.z * v.y + zAxis.z * v.z;
             default:
-                throw new IllegalArgumentException("Invalid Row!");
+                throw new IllegalArgumentException("Invalid Row");
         }
     }
 
@@ -109,7 +109,7 @@ public class Matrix3f {
                     case 2:
                         return xAxis.z;
                     default:
-                        throw new IllegalArgumentException("Invalid Row!");
+                        throw new IllegalArgumentException("Invalid Row");
                 }
 
             case 1:
@@ -121,7 +121,7 @@ public class Matrix3f {
                     case 2:
                         return yAxis.z;
                     default:
-                        throw new IllegalArgumentException("Invalid Row!");
+                        throw new IllegalArgumentException("Invalid Row");
                 }
 
             case 2:
@@ -133,11 +133,11 @@ public class Matrix3f {
                     case 2:
                         return zAxis.z;
                     default:
-                        throw new IllegalArgumentException("Invalid Row!");
+                        throw new IllegalArgumentException("Invalid Row");
                 }
 
             default:
-                throw new IllegalArgumentException("Invalid Column!");
+                throw new IllegalArgumentException("Invalid Column");
         }
     }
 

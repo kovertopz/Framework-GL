@@ -93,10 +93,10 @@ public class Vector2f {
         float mag = magnitude();
 
         if (mag < MathHelper.ZERO_EPSILON) {
-            System.err.println("Vector3f Normalize - Divide By Zero!");
+            System.err.println("Vector3f Normalize - Divide By Zero");
 
-            x = 0.0f;
-            y = 1.0f;
+            x = 1.0f;
+            y = 0.0f;
 
             return this;
         }
