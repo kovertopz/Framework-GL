@@ -37,7 +37,7 @@ public class Input {
             inputProcessor.registerActions();
             inputProcessors.add(inputProcessor);
         } else {
-            throw new RuntimeException("Tried to add an InputProcessor that already exists: "
+            throw new IllegalArgumentException("Tried to add an InputProcessor that already exists: "
                     + inputProcessor.getClass().getSimpleName());
         }
     }
@@ -136,7 +136,7 @@ public class Input {
         if (inputProcessors.remove(inputProcessor)) {
             inputProcessor.unregisterActions();
         } else {
-            throw new RuntimeException("Did not find an instance of the InputProcessor: "
+            throw new IllegalArgumentException("Did not find an instance of the InputProcessor: "
                     + inputProcessor.getClass().getSimpleName());
         }
     }
