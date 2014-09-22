@@ -110,6 +110,11 @@ public class VertexBufferObjectHelper {
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, shortbuffer, usage);
     }
 
+    public void setBufferElementData(int vboid, ByteBuffer byteBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, byteBuffer, usage);
+    }
+
     public void setBufferElementData(int vboid, IntBuffer intbuffer, int usage) {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, intbuffer, usage);
