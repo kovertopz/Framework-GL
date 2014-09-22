@@ -48,7 +48,7 @@ public class Builder {
     private void convertColorToByteBuffer(Vector4f vector, int size, int glType, ByteBuffer byteBuffer) {
 
         if ((size != 3) && (size != 4)) {
-            throw new RuntimeException("Color size must be 3 or 4. Was given: " + size);
+            throw new IllegalArgumentException("Color size must be 3 or 4. Was given: " + size);
         }
 
         float x = vector.getX();
@@ -113,7 +113,7 @@ public class Builder {
     private void convertTexCoordToByteBuffer(Vector3f vector, int size, int glType, ByteBuffer byteBuffer) {
 
         if ((size != 2) && (size != 3)) {
-            throw new RuntimeException("Texture coordinate size must be 2 or 3. Was given: " + size);
+            throw new IllegalArgumentException("Texture coordinate size must be 2 or 3. Was given: " + size);
         }
 
         float x = vector.getX();
@@ -142,7 +142,7 @@ public class Builder {
     private void convertVertexToByteBuffer(Vector4f vector, int size, int glType, ByteBuffer byteBuffer) {
 
         if ((size != 3) && (size != 4)) {
-            throw new RuntimeException("Vertex size must be 3 or 4. Was given: " + size);
+            throw new IllegalArgumentException("Vertex size must be 3 or 4. Was given: " + size);
         }
 
         float x = vector.getX();
@@ -222,7 +222,7 @@ public class Builder {
         if (mesh.hasNormals()) {
             vboInterleaved.setNormalOffsetBytes(total);
             int byteSize = convertGLTypeToByteSize(vboConfiguration.getNormalType());
-            total += 3 * byteSize;
+            total += vboConfiguration.getNormalSize() * byteSize;
         }
         if (mesh.hasTexCoords()) {
             vboInterleaved.setTexCoordOffsetBytes(total);
@@ -241,15 +241,64 @@ public class Builder {
     public AbstractDrawCall createDrawCall(Mesh mesh) {
         AbstractDrawCall drawCall;
 
+        int totalSegments = mesh.getTotalSegments();
+
         if (mesh.hasIndexes()) {
             if (mesh.canRenderRanged()) {
-                drawCall = new DrawRangeElements();
+
+                // Convert max indexes from each segment
+                int[] maxIndexes = new int[totalSegments];
+                for (int i = 0, max = maxIndexes.length; i < max; i++) {
+                    maxIndexes[i] = mesh.getSegment(i).getMaxIndex();
+                }
+
+                // Convert min indexes from each segment
+                int[] minIndexes = new int[totalSegments];
+                for (int i = 0, max = minIndexes.length; i < max; i++) {
+                    minIndexes[i] = mesh.getSegment(i).getMinIndex();
+                }
+
+                // Create concrete class and set specific data
+                DrawRangeElements drawRangedElements = new DrawRangeElements();
+                drawRangedElements.setMaxIndexes(maxIndexes);
+                drawRangedElements.setMinIndexes(minIndexes);
+
+                // Make sure we set the abstract class
+                drawCall = drawRangedElements;
             } else {
                 drawCall = new DrawElements();
             }
         } else {
-            drawCall = new DrawArrays();
+
+            // Convert first indexes
+            int[] firstElements = new int[totalSegments];
+            List<Integer> firstIndexes = mesh.getFirstIndexes();
+            for (int i = 0, max = firstElements.length; i < max; i++) {
+                firstElements[i] = firstIndexes.get(i);
+            }
+
+            // Create concrete class and set specific data
+            DrawArrays drawArrays = new DrawArrays();
+            drawArrays.setFirstElements(firstElements);
+
+            // Make sure we set the abstract class
+            drawCall = drawArrays;
         }
+
+        // Convert element counts from each segment
+        int[] elementCounts = new int[totalSegments];
+        for (int i = 0, max = elementCounts.length; i < max; i++) {
+            elementCounts[i] = mesh.getSegment(i).getVertices().size();
+        }
+
+        // Convert primitive modes from each segment
+        int[] primitiveModes = new int[totalSegments];
+        for (int i = 0, max = primitiveModes.length; i < max; i++) {
+            primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
+        }
+
+        drawCall.setElementCounts(elementCounts);
+        drawCall.setPrimitiveModes(primitiveModes);
 
         return drawCall;
     }
@@ -292,28 +341,28 @@ public class Builder {
         // Color byte buffer
         if (mesh.hasColors()) {
             byteSize = convertGLTypeToByteSize(vboConfiguration.getColorType());
-            bufferSize = byteSize * mesh.getTotalVerticies();
+            bufferSize = byteSize * vboConfiguration.getColorSize() * mesh.getTotalVerticies();
             byteBuffers.color = BufferUtils.createByteBuffer(bufferSize);
         }
 
         // Normal byte buffer
         if (mesh.hasNormals()) {
             byteSize = convertGLTypeToByteSize(vboConfiguration.getNormalType());
-            bufferSize = byteSize * mesh.getTotalVerticies();
+            bufferSize = byteSize * vboConfiguration.getNormalSize() * mesh.getTotalVerticies();
             byteBuffers.normal = BufferUtils.createByteBuffer(bufferSize);
         }
 
         // Texture coordinate byte buffer
         if (mesh.hasTexCoords()) {
             byteSize = convertGLTypeToByteSize(vboConfiguration.getTexCoordType());
-            bufferSize = byteSize * mesh.getTotalVerticies();
+            bufferSize = byteSize * vboConfiguration.getTexCoordSize() * mesh.getTotalVerticies();
             byteBuffers.texCoord = BufferUtils.createByteBuffer(bufferSize);
         }
 
         // Vertex byte buffer
         if (mesh.hasVertices()) {
             byteSize = convertGLTypeToByteSize(vboConfiguration.getVertexType());
-            bufferSize = byteSize * mesh.getTotalVerticies();
+            bufferSize = byteSize * vboConfiguration.getVertexSize() * mesh.getTotalVerticies();
             byteBuffers.vertex = BufferUtils.createByteBuffer(bufferSize);
         }
 
