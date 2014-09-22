@@ -1,12 +1,18 @@
 package net.smert.jreactphysics3d.framework.math;
 
 import java.nio.FloatBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class Vector2f {
+
+    private final static Logger log = LoggerFactory.getLogger(Vector3f.class);
+    public final static Vector2f WORLD_X_AXIS = new Vector2f(1.0f, 0.0f);
+    public final static Vector2f WORLD_Y_AXIS = new Vector2f(0.0f, 1.0f);
 
     float x;
     float y;
@@ -93,7 +99,7 @@ public class Vector2f {
         float mag = magnitude();
 
         if (mag < MathHelper.ZERO_EPSILON) {
-            System.err.println("Vector3f Normalize - Divide By Zero");
+            log.warn("Divide By Zero. Magnitude: {} x: {} y: {}", mag, x, y);
 
             x = 1.0f;
             y = 0.0f;
