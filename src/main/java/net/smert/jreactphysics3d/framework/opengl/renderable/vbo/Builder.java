@@ -232,7 +232,7 @@ public class Builder {
         if (mesh.hasVertices()) {
             vboInterleaved.setVertexOffsetBytes(total);
             int byteSize = convertGLTypeToByteSize(vboConfiguration.getVertexType());
-            total += vboConfiguration.getTexCoordSize() * byteSize;
+            total += vboConfiguration.getVertexSize() * byteSize;
         }
 
         vboInterleaved.setStrideBytes(total);
