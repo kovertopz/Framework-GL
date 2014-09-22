@@ -99,6 +99,7 @@ public class Timer {
     }
 
     public void update() {
+
         elapsedTimeSpan.update();
         frameCounter++;
 

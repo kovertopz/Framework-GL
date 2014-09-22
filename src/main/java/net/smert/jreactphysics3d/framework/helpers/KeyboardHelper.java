@@ -15,6 +15,7 @@ public class KeyboardHelper {
     private int[] lwjglToKeyboard;
 
     private void mapLwglToKeyboard() {
+
         lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NONE] = Keyboard.NONE.ordinal();
         lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_ESCAPE] = Keyboard.ESCAPE.ordinal();
         lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F1] = Keyboard.F1.ordinal();

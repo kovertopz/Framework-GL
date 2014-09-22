@@ -79,6 +79,7 @@ public class Application {
     }
 
     void mainLoop() {
+
         Fw.window.create();
         Fw.input.init();
         screen.init();

@@ -25,6 +25,7 @@ public class Window {
     }
 
     private DisplayMode findDisplayMode(int width, int height, int bpp, int freq) {
+
         DisplayMode displayMode = null;
 
         try {
@@ -52,8 +53,10 @@ public class Window {
     }
 
     public void create() {
+
         config.inFullscreen = fullscreen;
         config.inVSync = vSync;
+
         try {
             DisplayMode displayMode = null;
             if (fullscreen) {
@@ -96,6 +99,7 @@ public class Window {
         } catch (LWJGLException e) {
             throw new RuntimeException(e);
         }
+
         config.currentHeight = Display.getHeight();
         config.currentWidth = Display.getWidth();
     }

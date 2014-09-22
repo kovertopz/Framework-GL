@@ -67,6 +67,7 @@ public class LegacyCameraController implements InputProcessor {
     }
 
     public void update() {
+
         float delta = Fw.timer.getDelta();
         Vector3f camPosition = camera.getPosition();
         Vector3f camRotation = camera.getRotation();

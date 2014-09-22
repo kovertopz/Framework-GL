@@ -101,6 +101,7 @@ public class Camera {
     }
 
     public void rotate(float pitch, float heading, float roll) {
+
         if (invert == true) {
             pitch = -pitch;
         }
