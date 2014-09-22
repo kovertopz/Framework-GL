@@ -6,7 +6,6 @@ import net.smert.jreactphysics3d.framework.opengl.constants.ClearBits;
 import net.smert.jreactphysics3d.framework.opengl.constants.DepthFunctions;
 import net.smert.jreactphysics3d.framework.opengl.constants.StencilFunctions;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
-import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
@@ -20,14 +19,9 @@ public class OpenGL1 {
     private boolean wireframeMode = false;
     private float defaultLineWidth = 1.0f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
-    private final LegacyRenderHelper legacyRenderHelper;
-
-    public OpenGL1(LegacyRenderHelper legacyRenderHelper) {
-        this.legacyRenderHelper = legacyRenderHelper;
-    }
 
     public OpenGL1 begin(int primitive) {
-        legacyRenderHelper.begin(primitive);
+        GL.renderHelper.begin(primitive);
         return this;
     }
 
@@ -52,7 +46,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 color(float r, float g, float b, float a) {
-        legacyRenderHelper.color(r, g, b, a);
+        GL.renderHelper.color(r, g, b, a);
         return this;
     }
 
@@ -277,7 +271,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 end() {
-        legacyRenderHelper.end();
+        GL.renderHelper.end();
         return this;
     }
 
@@ -302,7 +296,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 normal(float x, float y, float z) {
-        legacyRenderHelper.normal(x, y, z);
+        GL.renderHelper.normal(x, y, z);
         return this;
     }
 
@@ -580,7 +574,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 texCoord(float s, float t) {
-        legacyRenderHelper.texCoord(s, t);
+        GL.renderHelper.texCoord(s, t);
         return this;
     }
 
@@ -590,7 +584,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 vertex(float x, float y, float z) {
-        legacyRenderHelper.vertex(x, y, z);
+        GL.renderHelper.vertex(x, y, z);
         return this;
     }
 

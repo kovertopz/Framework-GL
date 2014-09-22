@@ -1,9 +1,16 @@
 package net.smert.jreactphysics3d.framework;
 
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL1;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL2;
 import net.smert.jreactphysics3d.framework.opengl.OpenGL3;
+import net.smert.jreactphysics3d.framework.opengl.helpers.DisplayListHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.FrameBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.RenderBufferObjectHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.ShaderHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
@@ -34,19 +41,25 @@ public class Application {
     }
 
     private void createStaticClass() {
-        LegacyRenderHelper lrh = new LegacyRenderHelper();
         Fw.app = this;
         Fw.audio = new Audio();
         Fw.config = config;
         Fw.files = new Files();
-        Fw.gl = new OpenGL1(lrh);
-        Fw.gl2 = new OpenGL2();
-        Fw.gl3 = new OpenGL3();
         Fw.graphics = new Graphics();
         Fw.input = new Input(config);
         Fw.net = new Network();
         Fw.timer = new Timer(config);
         Fw.window = new Window(config);
+        GL.displayListHelper = new DisplayListHelper();
+        GL.fboHelper = new FrameBufferObjectHelper();
+        GL.o1 = new OpenGL1();
+        GL.o2 = new OpenGL2();
+        GL.o3 = new OpenGL3();
+        GL.rboHelper = new RenderBufferObjectHelper();
+        GL.renderHelper = new LegacyRenderHelper();
+        GL.shaderHelper = new ShaderHelper();
+        GL.textureHelper = new TextureHelper();
+        GL.vboHelper = new VertexBufferObjectHelper();
     }
 
     protected void setScreen(Screen screen) {

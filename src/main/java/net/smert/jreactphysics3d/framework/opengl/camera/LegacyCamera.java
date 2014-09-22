@@ -1,7 +1,7 @@
 package net.smert.jreactphysics3d.framework.opengl.camera;
 
-import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 
 /**
  *
@@ -58,10 +58,10 @@ public class LegacyCamera {
     }
 
     public void updateOpenGL() {
-        Fw.gl.rotate(rotation.getX(), 1.0f, 0, 0);
-        Fw.gl.rotate(360.0f - rotation.getY(), 0, 1.0f, 0);
-        Fw.gl.rotate(rotation.getZ(), 0, 0, 1.0f);
-        Fw.gl.translate(-position.getX(), position.getY(), -position.getZ());
+        GL.o1.rotate(rotation.getX(), 1.0f, 0, 0);
+        GL.o1.rotate(360.0f - rotation.getY(), 0, 1.0f, 0);
+        GL.o1.rotate(rotation.getZ(), 0, 0, 1.0f);
+        GL.o1.translate(-position.getX(), position.getY(), -position.getZ());
     }
 
 }
