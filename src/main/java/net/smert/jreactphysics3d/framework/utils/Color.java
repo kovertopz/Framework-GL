@@ -6,23 +6,22 @@ package net.smert.jreactphysics3d.framework.utils;
  */
 public class Color {
 
-    // RGBA color components
-    float r, g, b, a;
+    private float r;
+    private float g;
+    private float b;
+    private float a;
 
-    // Constructor
     public Color() {
-        this(1, 1, 1, 1);
+        this.r = 1.0f;
+        this.g = 1.0f;
+        this.b = 1.0f;
+        this.a = 1.0f;
     }
 
-    // Constructor
     public Color(float r, float g, float b, float a) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+        set(r, g, b, a);
     }
 
-    // Copy-constructor
     public Color(Color color) {
         r = color.r;
         g = color.g;
@@ -60,6 +59,13 @@ public class Color {
 
     public void setR(float r) {
         this.r = r;
+    }
+
+    public final void set(float r, float g, float b, float a) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
     }
 
 }

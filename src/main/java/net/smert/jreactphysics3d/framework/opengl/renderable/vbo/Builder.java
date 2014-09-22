@@ -8,6 +8,7 @@ import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.utils.Color;
 import org.lwjgl.BufferUtils;
 
 /**
@@ -45,40 +46,40 @@ public class Builder {
         return byteSize;
     }
 
-    private void convertColorToByteBuffer(Vector4f vector, int size, int glType, ByteBuffer byteBuffer) {
+    private void convertColorToByteBuffer(Color color, int size, int glType, ByteBuffer byteBuffer) {
 
         if ((size != 3) && (size != 4)) {
             throw new IllegalArgumentException("Color size must be 3 or 4. Was given: " + size);
         }
 
-        float x = vector.getX();
-        float y = vector.getY();
-        float z = vector.getZ();
-        float w = vector.getW();
+        float r = color.getR();
+        float g = color.getG();
+        float b = color.getB();
+        float a = color.getA();
 
-        assert (x >= 0.0f && x <= 1.0f);
-        assert (y >= 0.0f && y <= 1.0f);
-        assert (z >= 0.0f && z <= 1.0f);
-        assert (w >= 0.0f && w <= 1.0f);
+        assert (r >= 0.0f && r <= 1.0f);
+        assert (g >= 0.0f && g <= 1.0f);
+        assert (b >= 0.0f && b <= 1.0f);
+        assert (a >= 0.0f && a <= 1.0f);
 
         // Depending on the GL type and size convert the data and put it into the byte buffer
         switch (glType) {
             case GLTypes.BYTE:
             case GLTypes.UNSIGNED_BYTE:
-                byteBuffer.put((byte) ((x / 1.0f) * 255));
-                byteBuffer.put((byte) ((y / 1.0f) * 255));
-                byteBuffer.put((byte) ((z / 1.0f) * 255));
+                byteBuffer.put((byte) ((r / 1.0f) * 255));
+                byteBuffer.put((byte) ((g / 1.0f) * 255));
+                byteBuffer.put((byte) ((b / 1.0f) * 255));
                 if (size == 4) {
-                    byteBuffer.put((byte) ((w / 1.0f) * 255));
+                    byteBuffer.put((byte) ((a / 1.0f) * 255));
                 }
                 break;
 
             case GLTypes.FLOAT:
-                byteBuffer.putFloat(x);
-                byteBuffer.putFloat(y);
-                byteBuffer.putFloat(z);
+                byteBuffer.putFloat(r);
+                byteBuffer.putFloat(g);
+                byteBuffer.putFloat(b);
                 if (size == 4) {
-                    byteBuffer.putFloat(w);
+                    byteBuffer.putFloat(a);
                 }
                 break;
 
@@ -184,7 +185,7 @@ public class Builder {
                 if (mesh.hasColors()) {
                     int colorSize = vboConfiguration.getColorSize();
                     int colorType = vboConfiguration.getColorType();
-                    Vector4f color = segment.getColors().get(j);
+                    Color color = segment.getColors().get(j);
                     convertColorToByteBuffer(color, colorSize, colorType, byteBuffers.color);
                 }
                 if (mesh.hasNormals()) {

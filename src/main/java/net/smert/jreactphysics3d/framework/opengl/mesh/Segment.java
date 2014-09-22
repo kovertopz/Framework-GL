@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
  *
@@ -14,7 +15,7 @@ public class Segment {
     private int maxIndex;
     private int minIndex;
     private final int primitiveMode;
-    private final List<Vector4f> colors;
+    private final List<Color> colors;
     private final List<Vector3f> normals;
     private final List<Vector3f> texCoords;
     private final List<Vector4f> vertices;
@@ -29,16 +30,16 @@ public class Segment {
         vertices = new ArrayList<>();
     }
 
-    public void addColor(float x, float y, float z) {
-        colors.add(new Vector4f(x, y, z, 1.0f));
+    public void addColor(float r, float g, float b) {
+        colors.add(new Color(r, g, b, 1.0f));
     }
 
-    public void addColor(float x, float y, float z, float w) {
-        colors.add(new Vector4f(x, y, z, w));
+    public void addColor(float r, float g, float b, float a) {
+        colors.add(new Color(r, g, b, a));
     }
 
-    public void addColor(Vector4f vector) {
-        colors.add(vector);
+    public void addColor(Color color) {
+        colors.add(color);
     }
 
     public void addNormal(float x, float y, float z) {
@@ -93,7 +94,7 @@ public class Segment {
         return primitiveMode;
     }
 
-    public List<Vector4f> getColors() {
+    public List<Color> getColors() {
         return colors;
     }
 
