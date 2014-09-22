@@ -35,13 +35,34 @@ public class Mesh {
     }
 
     public void addSegment(Segment segment) {
+
+        // Check arguments
         if (segments.contains(segment)) {
             throw new IllegalArgumentException("The segment already exists");
         }
+        if (segment.getVertices().isEmpty()) {
+            throw new RuntimeException("The segment must contain at least 1 vertex");
+        }
+        if (!segment.getColors().isEmpty()
+                && (segment.getColors().size() != segment.getVertices().size())) {
+            throw new RuntimeException("The total number of colors for the segment must match the number of vertices");
+        }
+        if (!segment.getNormals().isEmpty()
+                && (segment.getNormals().size() != segment.getVertices().size())) {
+            throw new RuntimeException("The total number of normals for the segment must match the number of vertices");
+        }
+        if (!segment.getTexCoords().isEmpty()
+                && (segment.getTexCoords().size() != segment.getVertices().size())) {
+            throw new RuntimeException("The total number of texture coordinates for the segment must match the number of vertices");
+        }
+
+        // Add segment and update totals
         firstIndexes.add(totalVertices);
         segments.add(segment);
         totalVertices += segment.getVertices().size();
-        canRenderRanged |= ((segment.getMaxIndex() - segment.getMinIndex()) > 1);
+
+        // Update booleans
+        canRenderRanged |= ((segment.getMaxIndex() - segment.getMinIndex()) > 0);
         hasColors |= (segment.getColors().size() > 0);
         hasNormals |= (segment.getNormals().size() > 0);
         hasTexCoords |= (segment.getTexCoords().size() > 0);
@@ -59,6 +80,10 @@ public class Mesh {
 
     public int getTotalVerticies() {
         return totalVertices;
+    }
+
+    public List<Integer> getFirstIndexes() {
+        return firstIndexes;
     }
 
     public List<Integer> getIndexes() {
@@ -101,10 +126,14 @@ public class Mesh {
     }
 
     public void removeSegment(Segment segment) {
+
+        // Check arguments
         int index = segments.indexOf(segment);
         if (index == -1) {
-            throw new RuntimeException("The segment was not found");
+            throw new IllegalArgumentException("The segment was not found");
         }
+
+        // Remove segments and update totals
         firstIndexes.remove(index);
         segments.remove(segment);
         totalVertices -= segment.getVertices().size();
