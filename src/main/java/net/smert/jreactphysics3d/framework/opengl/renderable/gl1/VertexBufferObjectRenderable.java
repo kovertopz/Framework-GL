@@ -100,7 +100,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         VertexBufferObject vboColor = vbos[VBO_COLOR];
         VertexBufferObject vboNormal = vbos[VBO_NORMAL];
         VertexBufferObject vboTexCoord = vbos[VBO_TEXCOORD];
-        VertexBufferObject vboVertex = vbos[VBO_TEXCOORD];
+        VertexBufferObject vboVertex = vbos[VBO_VERTEX];
         VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
 
         if (vboColor != null) {
