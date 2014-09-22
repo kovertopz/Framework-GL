@@ -1,16 +1,12 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 
 import net.smert.jreactphysics3d.framework.opengl.GL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class BindState {
-
-    private final static Logger log = LoggerFactory.getLogger(BindState.class);
 
     private boolean colorEnabled;
     private boolean normalEnabled;
@@ -26,15 +22,8 @@ public class BindState {
     public BindState(Configuration vboConfiguration) {
         this.vboConfiguration = vboConfiguration;
 
-        if (log.isInfoEnabled()) {
-            log.info("Creating BindState:"
-                    + " Color Size: " + vboConfiguration.getColorSize()
-                    + " Color Type: " + vboConfiguration.getColorType()
-                    + " Normal Type: " + vboConfiguration.getNormalType()
-                    + " Texture Coordinate Size: " + vboConfiguration.getTexCoordSize()
-                    + " Texture Coordinate Type: " + vboConfiguration.getTexCoordType()
-                    + " Vertex Size: " + vboConfiguration.getVertexSize()
-                    + " Vertex Type: " + vboConfiguration.getVertexType());
+        if (vboConfiguration.isImmutable() == false) {
+            throw new RuntimeException("VBO configuration must be made immutable");
         }
     }
 
