@@ -42,7 +42,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
             vboInterleaved = new VertexBufferObjectInterleaved();
             vboInterleaved.create();
             vboBuilder.calculateOffsetsAndStride(mesh, vboConfiguration, vboInterleaved);
-            ByteBuffer byteBuffer = vboBuilder.createBufferData(mesh, vboConfiguration, vboInterleaved);
+            ByteBuffer byteBuffer = vboBuilder.createInterleavedBufferData(mesh, vboConfiguration, vboInterleaved);
             vboHelper.setBufferData(vboInterleaved.getVboID(), byteBuffer, VertexBufferObjectTypes.STATIC_DRAW);
         }
 

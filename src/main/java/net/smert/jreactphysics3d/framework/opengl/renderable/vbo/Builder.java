@@ -203,7 +203,7 @@ public class Builder {
         vboInterleaved.setStrideBytes(total);
     }
 
-    public ByteBuffer createBufferData(
+    public ByteBuffer createInterleavedBufferData(
             Mesh mesh, Configuration vboConfiguration, VertexBufferObjectInterleaved vboInterleaved) {
 
         // Create byte buffer to hold color, normal, texture coordinates and vertex data
