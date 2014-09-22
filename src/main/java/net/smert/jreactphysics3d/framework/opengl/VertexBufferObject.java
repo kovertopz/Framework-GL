@@ -13,7 +13,7 @@ public class VertexBufferObject {
     private final static Logger log = LoggerFactory.getLogger(VertexBufferObject.class);
 
     private int vboID;
-    private static VertexBufferObjectHelper vertexBufferObjectHelper;
+    private static VertexBufferObjectHelper vboHelper;
 
     public VertexBufferObject() {
         vboID = 0;
@@ -21,13 +21,13 @@ public class VertexBufferObject {
 
     public void create() {
         destroy();
-        vboID = vertexBufferObjectHelper.create();
+        vboID = vboHelper.create();
         log.debug("Created a new VBO with ID: {}", vboID);
     }
 
     public void destroy() {
         if (vboID != 0) {
-            vertexBufferObjectHelper.delete(vboID);
+            vboHelper.delete(vboID);
             log.debug("Deleted a VBO with ID: {}", vboID);
         }
     }
@@ -36,8 +36,8 @@ public class VertexBufferObject {
         return vboID;
     }
 
-    public static void SetVertexBufferObjectHelper(VertexBufferObjectHelper vertexBufferObjectHelper) {
-        VertexBufferObject.vertexBufferObjectHelper = vertexBufferObjectHelper;
+    public static void SetVertexBufferObjectHelper(VertexBufferObjectHelper vboHelper) {
+        VertexBufferObject.vboHelper = vboHelper;
     }
 
 }
