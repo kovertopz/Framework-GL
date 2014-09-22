@@ -6,18 +6,9 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
  */
 public abstract class AbstractDrawCall implements DrawCall {
 
-    protected int elementType;
     protected int[] elementCounts;
-    protected int[] firstElements;
-    protected int[] renderModes;
-
-    public int getElementType() {
-        return elementType;
-    }
-
-    public void setElementType(int elementType) {
-        this.elementType = elementType;
-    }
+    protected int[] primitiveModes;
+    protected static Configuration vboConfiguration;
 
     public int[] getElementCounts() {
         return elementCounts;
@@ -27,20 +18,19 @@ public abstract class AbstractDrawCall implements DrawCall {
         this.elementCounts = elementCounts;
     }
 
-    public int[] getFirstElements() {
-        return firstElements;
+    public int[] getPrimitiveModes() {
+        return primitiveModes;
     }
 
-    public void setFirstElements(int[] firstElements) {
-        this.firstElements = firstElements;
+    public void setPrimitiveModes(int[] primitiveModes) {
+        this.primitiveModes = primitiveModes;
     }
 
-    public int[] getRenderModes() {
-        return renderModes;
-    }
-
-    public void setRenderModes(int[] renderModes) {
-        this.renderModes = renderModes;
+    public static void SetVboConfiguration(Configuration vboConfiguration) {
+        AbstractDrawCall.vboConfiguration = vboConfiguration;
+        if (vboConfiguration.isImmutable() == false) {
+            throw new RuntimeException("VBO configuration must be made immutable");
+        }
     }
 
 }
