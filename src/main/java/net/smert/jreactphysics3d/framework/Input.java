@@ -55,8 +55,8 @@ public class Input {
         actionToMouse.clear();
     }
 
-    public boolean getGrabbed() {
-        return mouseHelper.getGrabbed();
+    public boolean isGrabbed() {
+        return mouseHelper.isGrabbed();
     }
 
     public float getDeltaWheel() {

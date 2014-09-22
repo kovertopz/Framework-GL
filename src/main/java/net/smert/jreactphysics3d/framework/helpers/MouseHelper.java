@@ -17,7 +17,7 @@ public class MouseHelper {
     private final static int LWJGL_MOUSE_WHEEL_UP = 5;
     private final static int LWJGL_MOUSE_WHEEL_DOWN = 6;
 
-    private boolean grabbed = false;
+    private boolean isGrabbed = false;
     private boolean[] isDown;
     private boolean[] nextState;
     private boolean[] wasDown;
@@ -34,7 +34,7 @@ public class MouseHelper {
 
     private void centerCursor() {
         org.lwjgl.input.Mouse.setCursorPosition(config.getCurrentWidth() / 2, config.getCurrentHeight() / 2);
-        org.lwjgl.input.Mouse.setGrabbed(grabbed);
+        org.lwjgl.input.Mouse.setGrabbed(isGrabbed);
     }
 
     private void clearDelta() {
@@ -88,10 +88,6 @@ public class MouseHelper {
         nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0);
     }
 
-    public boolean getGrabbed() {
-        return grabbed;
-    }
-
     public float getDeltaWheel() {
         return deltaWheel;
     }
@@ -110,7 +106,7 @@ public class MouseHelper {
 
     public void grabMouseCursor() {
         clearDelta();
-        grabbed = true;
+        isGrabbed = true;
         centerCursor();
     }
 
@@ -143,9 +139,13 @@ public class MouseHelper {
         return isDown[mouse.ordinal()];
     }
 
+    public boolean isGrabbed() {
+        return isGrabbed;
+    }
+
     public void releaseMouseCursor() {
         clearDelta();
-        grabbed = false;
+        isGrabbed = false;
         centerCursor();
     }
 
