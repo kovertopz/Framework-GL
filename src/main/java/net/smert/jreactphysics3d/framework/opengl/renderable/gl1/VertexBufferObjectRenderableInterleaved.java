@@ -102,6 +102,9 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
     public static void SetVboConfiguration(Configuration vboConfiguration) {
         VertexBufferObjectRenderableInterleaved.vboConfiguration = vboConfiguration;
+        if (vboConfiguration.isImmutable() == false) {
+            throw new RuntimeException("VBO configuration must be made immutable");
+        }
     }
 
     public static void SetVboHelper(VertexBufferObjectHelper vboHelper) {
