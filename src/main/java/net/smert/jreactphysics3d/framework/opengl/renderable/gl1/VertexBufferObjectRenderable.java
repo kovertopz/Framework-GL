@@ -88,6 +88,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), byteBuffers.index, VertexBufferObjectTypes.STATIC_DRAW);
         }
 
+        GL.vboHelper.unbind();
+
         // Create draw call
         drawCall = vboBuilder.createDrawCall(mesh);
     }
@@ -127,7 +129,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         VertexBufferObject vboColor = vbos[VBO_COLOR];
         VertexBufferObject vboNormal = vbos[VBO_NORMAL];
         VertexBufferObject vboTexCoord = vbos[VBO_TEXCOORD];
-        VertexBufferObject vboVertex = vbos[VBO_TEXCOORD];
+        VertexBufferObject vboVertex = vbos[VBO_VERTEX];
         VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
 
         if (vboColor != null) {
@@ -145,6 +147,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         if (vboVertexIndex != null) {
             vboBindState.bindVertexIndex(vboVertexIndex.getVboID());
         }
+
+        drawCall.render();
     }
 
     public static void SetVboBindState(BindState vboBindState) {

@@ -54,6 +54,8 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), byteBuffers.index, VertexBufferObjectTypes.STATIC_DRAW);
         }
 
+        GL.vboHelper.unbind();
+
         // Create draw call
         drawCall = vboBuilder.createDrawCall(mesh);
     }
@@ -90,6 +92,8 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         if (mesh.hasIndexes()) {
             vboBindState.bindVertexIndex(vboInterleaved.getVboID());
         }
+
+        drawCall.render();
     }
 
     public static void SetVboBindState(BindState vboBindState) {
