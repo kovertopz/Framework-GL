@@ -51,7 +51,7 @@ public class GLTypes {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown GL type: " + glType);
+                throw new IllegalArgumentException("Unknown GL type constant: " + glType);
         }
 
         return string;
