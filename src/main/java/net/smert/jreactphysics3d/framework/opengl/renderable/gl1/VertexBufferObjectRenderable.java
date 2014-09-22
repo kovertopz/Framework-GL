@@ -74,7 +74,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         // Send byte buffer data for vertices
         if (mesh.hasVertices()) {
             vbos[VBO_VERTEX] = new VertexBufferObject();
-            VertexBufferObject vboVertex = vbos[VBO_TEXCOORD];
+            VertexBufferObject vboVertex = vbos[VBO_VERTEX];
             vboVertex.create();
             GL.vboHelper.setBufferData(vboVertex.getVboID(), byteBuffers.vertex, VertexBufferObjectTypes.STATIC_DRAW);
         }
