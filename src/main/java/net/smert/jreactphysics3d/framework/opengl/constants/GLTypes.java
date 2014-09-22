@@ -20,4 +20,41 @@ public class GLTypes {
     private GLTypes() {
     }
 
+    public static String ConvertToString(int glType) {
+
+        String string;
+
+        switch (glType) {
+            case BYTE:
+                string = "BYTE";
+                break;
+            case UNSIGNED_BYTE:
+                string = "UNSIGNED_BYTE";
+                break;
+            case DOUBLE:
+                string = "DOUBLE";
+                break;
+            case FLOAT:
+                string = "FLOAT";
+                break;
+            case INT:
+                string = "INT";
+                break;
+            case UNSIGNED_INT:
+                string = "UNSIGNED_INT";
+                break;
+            case SHORT:
+                string = "SHORT";
+                break;
+            case UNSIGNED_SHORT:
+                string = "UNSIGNED_SHORT";
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown GL type: " + glType);
+        }
+
+        return string;
+    }
+
 }
