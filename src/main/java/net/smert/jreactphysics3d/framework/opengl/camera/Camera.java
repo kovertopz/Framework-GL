@@ -33,13 +33,13 @@ public class Camera {
 
     public Camera() {
         invert = false;
-        aspectRatio = 0.0f;
-        fieldOfView = 0.0f;
-        totalHeading = 0.0f;
-        totalPitch = 0.0f;
-        totalRoll = 0.0f;
-        zFar = 0.0f;
-        zNear = 0.0f;
+        aspectRatio = 0;
+        fieldOfView = 0;
+        totalHeading = 0;
+        totalPitch = 0;
+        totalRoll = 0;
+        zFar = 0;
+        zNear = 0;
         movementMatrix = new Matrix3f();
         rotationMatrix = new Matrix3f();
         tempMatrix = new Matrix3f();
@@ -124,17 +124,17 @@ public class Camera {
             roll = -MAX_SAFE_ROLL - (totalRoll - roll);
         }
 
-        if (heading != 0.0f) {
+        if (heading != 0) {
             tempMatrix.fromAxisAngle(Vector3f.WORLD_Y_AXIS, heading);
             tempMatrix.multiplyOut(rotationMatrix.getXAxis(), rotationMatrix.getXAxis());
             tempMatrix.multiplyOut(rotationMatrix.getZAxis(), rotationMatrix.getZAxis());
         }
-        if (roll != 0.0f) {
+        if (roll != 0) {
             tempMatrix.fromAxisAngle(rotationMatrix.getZAxis(), roll);
             tempMatrix.multiplyOut(rotationMatrix.getYAxis(), rotationMatrix.getYAxis());
             tempMatrix.multiplyOut(rotationMatrix.getXAxis(), rotationMatrix.getXAxis());
         }
-        if (pitch != 0.0f) {
+        if (pitch != 0) {
             tempMatrix.fromAxisAngle(rotationMatrix.getXAxis(), pitch);
             tempMatrix.multiplyOut(rotationMatrix.getYAxis(), rotationMatrix.getYAxis());
             tempMatrix.multiplyOut(rotationMatrix.getZAxis(), rotationMatrix.getZAxis());

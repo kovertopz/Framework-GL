@@ -157,7 +157,7 @@ public class Matrix3f {
         float p, t = xAxis.y;
 
         if ((t >= MathHelper.TOLERANCE_EULER_CONVERSION) || (t <= -MathHelper.TOLERANCE_EULER_CONVERSION)) {
-            p = 0.0f;
+            p = 0;
         } else {
             p = MathHelper.ArcTan2(-zAxis.y, yAxis.y);
         }

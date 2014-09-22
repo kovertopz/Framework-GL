@@ -17,18 +17,20 @@ public class MouseHelper {
     private final static int LWJGL_MOUSE_WHEEL_UP = 5;
     private final static int LWJGL_MOUSE_WHEEL_DOWN = 6;
 
-    private boolean isGrabbed = false;
+    private boolean isGrabbed;
     private boolean[] isDown;
     private boolean[] nextState;
     private boolean[] wasDown;
-    private float deltaWheel = 0.0f;
-    private float deltaX = 0.0f;
-    private float deltaY = 0.0f;
+    private float deltaWheel;
+    private float deltaX;
+    private float deltaY;
     private int buttonCount;
     private int[] lwjglToMouse;
     private final Configuration config;
 
     public MouseHelper(Configuration config) {
+        isGrabbed = false;
+        clearDelta();
         this.config = config;
     }
 
@@ -38,9 +40,9 @@ public class MouseHelper {
     }
 
     private void clearDelta() {
-        deltaWheel = 0.0f;
-        deltaX = 0.0f;
-        deltaY = 0.0f;
+        deltaWheel = 0;
+        deltaX = 0;
+        deltaY = 0;
     }
 
     private int mapLwglToArray(int button) {

@@ -24,15 +24,15 @@ public class Transform4f {
         fbout.put(rotation.xAxis.x);
         fbout.put(rotation.xAxis.y);
         fbout.put(rotation.xAxis.z);
-        fbout.put(0.0f);
+        fbout.put(0);
         fbout.put(rotation.yAxis.x);
         fbout.put(rotation.yAxis.y);
         fbout.put(rotation.yAxis.z);
-        fbout.put(0.0f);
+        fbout.put(0);
         fbout.put(rotation.zAxis.x);
         fbout.put(rotation.zAxis.y);
         fbout.put(rotation.zAxis.z);
-        fbout.put(0.0f);
+        fbout.put(0);
         fbout.put(position.x);
         fbout.put(position.y);
         fbout.put(position.z);

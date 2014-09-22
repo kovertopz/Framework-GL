@@ -14,10 +14,10 @@ public class Vector4f {
     float z;
 
     public Vector4f() {
-        w = 0.0f;
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
+        w = 0;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     public Vector4f(float x, float y, float z, float w) {

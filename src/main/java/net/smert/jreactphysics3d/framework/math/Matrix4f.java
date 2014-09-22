@@ -27,20 +27,20 @@ public class Matrix4f {
 
     public Matrix4f() {
         d0 = 1.0f;
-        d1 = 0.0f;
-        d2 = 0.0f;
-        d3 = 0.0f;
-        d4 = 0.0f;
+        d1 = 0;
+        d2 = 0;
+        d3 = 0;
+        d4 = 0;
         d5 = 1.0f;
-        d6 = 0.0f;
-        d7 = 0.0f;
-        d8 = 0.0f;
-        d9 = 0.0f;
+        d6 = 0;
+        d7 = 0;
+        d8 = 0;
+        d9 = 0;
         d10 = 1.0f;
-        d11 = 0.0f;
-        d12 = 0.0f;
-        d13 = 0.0f;
-        d14 = 0.0f;
+        d11 = 0;
+        d12 = 0;
+        d13 = 0;
+        d14 = 0;
         d15 = 1.0f;
     }
 
@@ -48,15 +48,15 @@ public class Matrix4f {
         d0 = r.xAxis.x;
         d1 = r.yAxis.x;
         d2 = r.zAxis.x;
-        d3 = 0.0f;
+        d3 = 0;
         d4 = r.xAxis.y;
         d5 = r.yAxis.y;
         d6 = r.zAxis.y;
-        d7 = 0.0f;
+        d7 = 0;
         d8 = r.xAxis.z;
         d9 = r.yAxis.z;
         d10 = r.zAxis.z;
-        d11 = 0.0f;
+        d11 = 0;
         d12 = -r.xAxis.dot(p);
         d13 = -r.yAxis.dot(p);
         d14 = -r.zAxis.dot(p);

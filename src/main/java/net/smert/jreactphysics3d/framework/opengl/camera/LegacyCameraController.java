@@ -72,9 +72,9 @@ public class LegacyCameraController implements InputProcessor {
         Vector3f camPosition = camera.getPosition();
         Vector3f camRotation = camera.getRotation();
 
-        float xPositionDelta = 0.0f;
-        float yPositionDelta = 0.0f;
-        float zPositionDelta = 0.0f;
+        float xPositionDelta = 0;
+        float yPositionDelta = 0;
+        float zPositionDelta = 0;
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_BACK) == true) {
             xPositionDelta += Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
@@ -103,8 +103,8 @@ public class LegacyCameraController implements InputProcessor {
         camera.setPositionY(camPosition.getY() + yPositionDelta * delta * moveSpeed);
         camera.setPositionZ(camPosition.getZ() + zPositionDelta * delta * moveSpeed);
 
-        float xRotationDelta = 0.0f;
-        float yRotationDelta = 0.0f;
+        float xRotationDelta = 0;
+        float yRotationDelta = 0;
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_DOWN) == true) {
             xRotationDelta -= 5.0f;
