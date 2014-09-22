@@ -43,8 +43,8 @@ public class RenderableFactoryGL1 {
             if (vboConfiguration == null) {
                 vboConfiguration = new Configuration();
             }
+            vboConfiguration.makeImmutable();
             if (vboBindState == null) {
-                vboConfiguration.makeImmutable();
                 vboBindState = new BindState(vboConfiguration);
             }
             if (vboBuilder == null) {
