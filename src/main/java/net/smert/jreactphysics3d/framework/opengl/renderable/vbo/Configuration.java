@@ -16,6 +16,7 @@ public class Configuration {
     private int colorSize;
     private int colorType;
     private int indexType;
+    private final int normalSize;
     private final int normalType;
     private int texCoordSize;
     private final int texCoordType;
@@ -27,6 +28,7 @@ public class Configuration {
         colorSize = 4;
         colorType = GLTypes.FLOAT;
         indexType = GLTypes.UNSIGNED_INT;
+        normalSize = 3;
         normalType = GLTypes.FLOAT;
         texCoordSize = 2;
         texCoordType = GLTypes.FLOAT;
@@ -83,6 +85,10 @@ public class Configuration {
     public void setIndexTypeUnsignedShort() {
         checkImmutable();
         this.indexType = GLTypes.UNSIGNED_SHORT;
+    }
+
+    public int getNormalSize() {
+        return normalSize;
     }
 
     public int getNormalType() {
