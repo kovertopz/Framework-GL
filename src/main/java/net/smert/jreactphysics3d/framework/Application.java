@@ -10,6 +10,7 @@ import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.RenderBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.ShaderHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.VertexArrayHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
@@ -59,6 +60,7 @@ public class Application {
         GL.renderHelper = new LegacyRenderHelper();
         GL.shaderHelper = new ShaderHelper();
         GL.textureHelper = new TextureHelper();
+        GL.vaHelper = new VertexArrayHelper();
         GL.vboHelper = new VertexBufferObjectHelper();
     }
 
