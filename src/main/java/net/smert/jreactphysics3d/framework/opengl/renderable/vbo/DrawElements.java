@@ -11,7 +11,7 @@ public class DrawElements extends AbstractDrawCall {
     @Override
     public void render() {
         for (int i = 0, max = primitiveModes.length; i < max; i++) {
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], vboConfiguration.getIndexType());
+            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], renderableConfig.getIndexType());
         }
     }
 

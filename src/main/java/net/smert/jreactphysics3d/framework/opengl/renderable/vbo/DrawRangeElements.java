@@ -31,7 +31,7 @@ public class DrawRangeElements extends AbstractDrawCall {
     public void render() {
         for (int i = 0, max = primitiveModes.length; i < max; i++) {
             GL.vboHelper.drawRangeElements(
-                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], vboConfiguration.getIndexType());
+                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], renderableConfig.getIndexType());
         }
     }
 

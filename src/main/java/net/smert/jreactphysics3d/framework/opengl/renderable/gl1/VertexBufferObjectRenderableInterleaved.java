@@ -6,11 +6,11 @@ import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Configuration;
 
 /**
  *
@@ -20,7 +20,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
     private static BindState vboBindState;
     private static Builder vboBuilder;
-    private static Configuration vboConfiguration;
+    private static Configuration renderableConfig;
     private AbstractDrawCall drawCall;
     private VertexBufferObject vboVertexIndex;
     private VertexBufferObjectInterleaved vboInterleaved;
@@ -41,17 +41,19 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             vboInterleaved = new VertexBufferObjectInterleaved();
             vboInterleaved.create();
-            vboBuilder.calculateOffsetsAndStride(mesh, vboConfiguration, vboInterleaved);
-            vboBuilder.createInterleavedBufferData(mesh, vboConfiguration, vboInterleaved, byteBuffers);
-            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), byteBuffers.interleaved, VertexBufferObjectTypes.STATIC_DRAW);
+            vboBuilder.calculateOffsetsAndStride(mesh, renderableConfig, vboInterleaved);
+            vboBuilder.createInterleavedBufferData(mesh, renderableConfig, vboInterleaved.getStrideBytes(), byteBuffers);
+            GL.vboHelper.setBufferData(
+                    vboInterleaved.getVboID(), byteBuffers.getInterleaved(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Create VBO for indexes
         if (mesh.hasIndexes()) {
             vboVertexIndex = new VertexBufferObject();
             vboVertexIndex.create();
-            vboBuilder.createIndexBufferData(mesh, vboConfiguration, byteBuffers);
-            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), byteBuffers.index, VertexBufferObjectTypes.STATIC_DRAW);
+            vboBuilder.createIndexBufferData(mesh, renderableConfig, byteBuffers);
+            GL.vboHelper.setBufferElementData(
+                    vboVertexIndex.getVboID(), byteBuffers.getVertexIndex(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         GL.vboHelper.unbind();
@@ -85,7 +87,8 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
             vboBindState.bindNormal(vboInterleaved.getVboID(), strideBytes, vboInterleaved.getNormalOffsetBytes());
         }
         if (mesh.hasTexCoords()) {
-            vboBindState.bindTextureCoordinate(vboInterleaved.getVboID(), strideBytes, vboInterleaved.getTexCoordOffsetBytes());
+            vboBindState.bindTextureCoordinate(
+                    vboInterleaved.getVboID(), strideBytes, vboInterleaved.getTexCoordOffsetBytes());
         }
         if (mesh.hasVertices()) {
             vboBindState.bindVertex(vboInterleaved.getVboID(), strideBytes, vboInterleaved.getVertexOffsetBytes());
@@ -97,19 +100,19 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         drawCall.render();
     }
 
+    public static void SetRenderableConfiguration(Configuration renderableConfig) {
+        VertexBufferObjectRenderableInterleaved.renderableConfig = renderableConfig;
+        if (renderableConfig.isImmutable() == false) {
+            throw new RuntimeException("Renderable configuration must be made immutable");
+        }
+    }
+
     public static void SetVboBindState(BindState vboBindState) {
         VertexBufferObjectRenderableInterleaved.vboBindState = vboBindState;
     }
 
     public static void SetVboBuilder(Builder vboBuilder) {
         VertexBufferObjectRenderableInterleaved.vboBuilder = vboBuilder;
-    }
-
-    public static void SetVboConfiguration(Configuration vboConfiguration) {
-        VertexBufferObjectRenderableInterleaved.vboConfiguration = vboConfiguration;
-        if (vboConfiguration.isImmutable() == false) {
-            throw new RuntimeException("VBO configuration must be made immutable");
-        }
     }
 
 }

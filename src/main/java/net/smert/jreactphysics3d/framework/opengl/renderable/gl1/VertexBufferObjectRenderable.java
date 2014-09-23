@@ -5,11 +5,11 @@ import net.smert.jreactphysics3d.framework.opengl.VertexBufferObject;
 import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Configuration;
 
 /**
  *
@@ -25,7 +25,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
 
     private static BindState vboBindState;
     private static Builder vboBuilder;
-    private static Configuration vboConfiguration;
+    private static Configuration renderableConfig;
     private AbstractDrawCall drawCall;
     private final VertexBufferObject[] vbos;
 
@@ -44,7 +44,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
 
         // Create VBOs
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            vboBuilder.createNonInterleavedBufferData(mesh, vboConfiguration, byteBuffers);
+            vboBuilder.createNonInterleavedBufferData(mesh, renderableConfig, byteBuffers);
         }
 
         // Send byte buffer data for colors
@@ -52,7 +52,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_COLOR] = new VertexBufferObject();
             VertexBufferObject vboColor = vbos[VBO_COLOR];
             vboColor.create();
-            GL.vboHelper.setBufferData(vboColor.getVboID(), byteBuffers.color, VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(
+                    vboColor.getVboID(), byteBuffers.getColor(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Send byte buffer data for normals
@@ -60,7 +61,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_NORMAL] = new VertexBufferObject();
             VertexBufferObject vboNormal = vbos[VBO_NORMAL];
             vboNormal.create();
-            GL.vboHelper.setBufferData(vboNormal.getVboID(), byteBuffers.normal, VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(
+                    vboNormal.getVboID(), byteBuffers.getNormal(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Send byte buffer data for texture coordinates
@@ -68,7 +70,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_TEXCOORD] = new VertexBufferObject();
             VertexBufferObject vboTexCoord = vbos[VBO_TEXCOORD];
             vboTexCoord.create();
-            GL.vboHelper.setBufferData(vboTexCoord.getVboID(), byteBuffers.texCoord, VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(
+                    vboTexCoord.getVboID(), byteBuffers.getTexCoord(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Send byte buffer data for vertices
@@ -76,7 +79,8 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_VERTEX] = new VertexBufferObject();
             VertexBufferObject vboVertex = vbos[VBO_VERTEX];
             vboVertex.create();
-            GL.vboHelper.setBufferData(vboVertex.getVboID(), byteBuffers.vertex, VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(
+                    vboVertex.getVboID(), byteBuffers.getVertex(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         // Create VBO for indexes
@@ -84,8 +88,9 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_VERTEX_INDEX] = new VertexBufferObject();
             VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
             vboVertexIndex.create();
-            vboBuilder.createIndexBufferData(mesh, vboConfiguration, byteBuffers);
-            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), byteBuffers.index, VertexBufferObjectTypes.STATIC_DRAW);
+            vboBuilder.createIndexBufferData(mesh, renderableConfig, byteBuffers);
+            GL.vboHelper.setBufferElementData(
+                    vboVertexIndex.getVboID(), byteBuffers.getVertexIndex(), VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         GL.vboHelper.unbind();
@@ -152,19 +157,19 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         drawCall.render();
     }
 
+    public static void SetRenderableConfiguration(Configuration renderableConfig) {
+        VertexBufferObjectRenderable.renderableConfig = renderableConfig;
+        if (renderableConfig.isImmutable() == false) {
+            throw new RuntimeException("Renderable configuration must be made immutable");
+        }
+    }
+
     public static void SetVboBindState(BindState vboBindState) {
         VertexBufferObjectRenderable.vboBindState = vboBindState;
     }
 
     public static void SetVboBuilder(Builder vboBuilder) {
         VertexBufferObjectRenderable.vboBuilder = vboBuilder;
-    }
-
-    public static void SetVboConfiguration(Configuration vboConfiguration) {
-        VertexBufferObjectRenderable.vboConfiguration = vboConfiguration;
-        if (vboConfiguration.isImmutable() == false) {
-            throw new RuntimeException("VBO configuration must be made immutable");
-        }
     }
 
 }

@@ -7,7 +7,6 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObj
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Configuration;
 
 /**
  *
@@ -20,7 +19,7 @@ public class RenderableFactoryGL1 {
     private static BindState vboBindState;
     private static Builder vboBuilder;
     private static ClassProvider classProvider;
-    private static Configuration vboConfiguration;
+    private static Configuration renderableConfig;
 
     private void initializeClassProvider() {
         if (initialized == false) {
@@ -37,12 +36,12 @@ public class RenderableFactoryGL1 {
         if (vboInitialized == false) {
 
             // Create classes
-            if (vboConfiguration == null) {
-                vboConfiguration = new Configuration();
+            if (renderableConfig == null) {
+                renderableConfig = new Configuration();
             }
-            vboConfiguration.makeImmutable();
+            renderableConfig.makeImmutable();
             if (vboBindState == null) {
-                vboBindState = new BindState(vboConfiguration);
+                vboBindState = new BindState(renderableConfig);
             }
             if (vboBuilder == null) {
                 vboBuilder = new Builder();
@@ -52,13 +51,13 @@ public class RenderableFactoryGL1 {
             vboBindState.reset();
 
             // Statically initialize all classes
-            AbstractDrawCall.SetVboConfiguration(vboConfiguration);
+            AbstractDrawCall.SetRenderableConfiguration(renderableConfig);
+            VertexBufferObjectRenderable.SetRenderableConfiguration(renderableConfig);
             VertexBufferObjectRenderable.SetVboBindState(vboBindState);
             VertexBufferObjectRenderable.SetVboBuilder(vboBuilder);
-            VertexBufferObjectRenderable.SetVboConfiguration(vboConfiguration);
+            VertexBufferObjectRenderableInterleaved.SetRenderableConfiguration(renderableConfig);
             VertexBufferObjectRenderableInterleaved.SetVboBindState(vboBindState);
             VertexBufferObjectRenderableInterleaved.SetVboBuilder(vboBuilder);
-            VertexBufferObjectRenderableInterleaved.SetVboConfiguration(vboConfiguration);
 
             vboInitialized = true;
         }
@@ -92,7 +91,7 @@ public class RenderableFactoryGL1 {
         vboBindState = null;
         vboBuilder = null;
         classProvider = null;
-        vboConfiguration = null;
+        renderableConfig = null;
     }
 
     public static void SetClassProvider(ClassProvider classProvider) {
@@ -100,6 +99,13 @@ public class RenderableFactoryGL1 {
             throw new RuntimeException("The class provider can only be set before initialization");
         }
         RenderableFactoryGL1.classProvider = classProvider;
+    }
+
+    public static void SetRenderableConfiguration(Configuration renderableConfig) {
+        RenderableFactoryGL1.renderableConfig = renderableConfig;
+        if (renderableConfig.isImmutable() == false) {
+            throw new RuntimeException("Renderable configuration must be made immutable");
+        }
     }
 
     public static void SetVboBindState(BindState vboBindState) {
@@ -114,13 +120,6 @@ public class RenderableFactoryGL1 {
             throw new RuntimeException("The builder can only be set before vbo initialization");
         }
         RenderableFactoryGL1.vboBuilder = vboBuilder;
-    }
-
-    public static void SetVboConfiguration(Configuration vboConfiguration) {
-        if (vboInitialized) {
-            throw new RuntimeException("The configuration can only be set before vbo initialization");
-        }
-        RenderableFactoryGL1.vboConfiguration = vboConfiguration;
     }
 
 }
