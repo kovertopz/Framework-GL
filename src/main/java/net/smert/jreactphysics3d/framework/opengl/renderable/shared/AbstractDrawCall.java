@@ -1,4 +1,4 @@
-package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
+package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
 

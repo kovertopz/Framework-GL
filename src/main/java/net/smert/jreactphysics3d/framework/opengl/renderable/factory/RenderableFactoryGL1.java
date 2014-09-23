@@ -4,7 +4,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
 

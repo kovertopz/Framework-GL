@@ -6,7 +6,7 @@ import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTy
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.AbstractDrawCall;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
