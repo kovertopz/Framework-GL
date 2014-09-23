@@ -6,6 +6,7 @@ import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.RenderBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.ShaderHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
+import net.smert.jreactphysics3d.framework.opengl.helpers.VertexArrayHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
 
 /**
@@ -23,6 +24,7 @@ public class GL {
     public static RenderBufferObjectHelper rboHelper;
     public static ShaderHelper shaderHelper;
     public static TextureHelper textureHelper;
+    public static VertexArrayHelper vaHelper;
     public static VertexBufferObjectHelper vboHelper;
 
 }
