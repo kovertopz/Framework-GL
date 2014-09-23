@@ -45,6 +45,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 color(float r, float g, float b) {
+        GL.renderHelper.color(r, g, b);
+        return this;
+    }
+
     public OpenGL1 color(float r, float g, float b, float a) {
         GL.renderHelper.color(r, g, b, a);
         return this;
@@ -578,6 +583,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 texCoord(float s, float t, float r) {
+        GL.renderHelper.texCoord(s, t, r);
+        return this;
+    }
+
     public OpenGL1 translate(float x, float y, float z) {
         GL11.glTranslatef(x, y, z);
         return this;
@@ -585,6 +595,11 @@ public class OpenGL1 {
 
     public OpenGL1 vertex(float x, float y, float z) {
         GL.renderHelper.vertex(x, y, z);
+        return this;
+    }
+
+    public OpenGL1 vertex(float x, float y, float z, float w) {
+        GL.renderHelper.vertex(x, y, z, w);
         return this;
     }
 
