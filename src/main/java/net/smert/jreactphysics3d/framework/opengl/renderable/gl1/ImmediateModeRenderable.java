@@ -9,15 +9,12 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
  */
 public class ImmediateModeRenderable extends AbstractRenderable {
 
-    private DrawCommands drawCommands;
-
     public ImmediateModeRenderable(Mesh mesh) {
         super(mesh);
     }
 
     @Override
     public void create() {
-        drawCommands = mesh.getDrawCommands();
     }
 
     @Override
@@ -26,7 +23,8 @@ public class ImmediateModeRenderable extends AbstractRenderable {
 
     @Override
     public void render() {
-        drawCommands.execCommands();
+        DrawCommands drawCommands = mesh.getDrawCommands();
+        drawCommands.execCommands(mesh);
     }
 
 }

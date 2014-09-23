@@ -32,7 +32,7 @@ public class DisplayListRenderable extends AbstractRenderable {
         assert (displayListID != 0);
         GL.displayListHelper.begin(displayListID);
         DrawCommands drawCommands = mesh.getDrawCommands();
-        drawCommands.execCommands();
+        drawCommands.execCommands(mesh);
         GL.displayListHelper.end();
     }
 

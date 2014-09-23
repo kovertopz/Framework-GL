@@ -10,6 +10,8 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
  */
 public class Mesh {
 
+    private final static DrawCommandsConversion DRAW_COMMANDS_CONVERSION = new DrawCommandsConversion();
+
     private boolean canRenderRanged;
     private boolean hasColors;
     private boolean hasIndexes;
@@ -115,6 +117,9 @@ public class Mesh {
     }
 
     public DrawCommands getDrawCommands() {
+        if (drawCommands == null) {
+            drawCommands = DRAW_COMMANDS_CONVERSION;
+        }
         return drawCommands;
     }
 
