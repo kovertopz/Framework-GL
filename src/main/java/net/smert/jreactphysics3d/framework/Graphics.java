@@ -33,6 +33,11 @@ public class Graphics {
         return renderableFactoryGL1.createVertexBufferObjectInterleaved(mesh);
     }
 
+    public void destroy() {
+        RenderableFactoryGL1.Destroy();
+        GL.vboHelper.unbind();
+    }
+
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);

@@ -20,6 +20,15 @@ public class BindState {
     private final Configuration vboConfiguration;
 
     public BindState(Configuration vboConfiguration) {
+        colorEnabled = false;
+        normalEnabled = false;
+        texCoordEnabled = false;
+        vertexEnabled = false;
+        vboColorID = 0;
+        vboNormalID = 0;
+        vboTexCoordID = 0;
+        vboVertexID = 0;
+        vboVertexIndexID = 0;
         this.vboConfiguration = vboConfiguration;
 
         if (vboConfiguration.isImmutable() == false) {

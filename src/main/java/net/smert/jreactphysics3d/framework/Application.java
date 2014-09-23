@@ -146,6 +146,7 @@ public class Application {
 
         screen.pause();
         screen.destroy();
+        Fw.graphics.destroy();
         Display.destroy();
     }
 

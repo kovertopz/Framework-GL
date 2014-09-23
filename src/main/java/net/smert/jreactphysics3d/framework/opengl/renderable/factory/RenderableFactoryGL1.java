@@ -22,10 +22,6 @@ public class RenderableFactoryGL1 {
     private static ClassProvider classProvider;
     private static Configuration vboConfiguration;
 
-    public RenderableFactoryGL1() {
-        vboInitialized = false;
-    }
-
     private void initializeClassProvider() {
         if (initialized == false) {
             if (classProvider == null) {
@@ -85,6 +81,15 @@ public class RenderableFactoryGL1 {
         initializeClassProvider();
         initializeVBORenderables();
         return classProvider.createVertexBufferObjectInterleaved(mesh);
+    }
+
+    public static void Destroy() {
+        initialized = false;
+        vboInitialized = false;
+        vboBindState = null;
+        vboBuilder = null;
+        classProvider = null;
+        vboConfiguration = null;
     }
 
     public static void SetClassProvider(ClassProvider classProvider) {
