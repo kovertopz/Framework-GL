@@ -145,4 +145,13 @@ public class BindState {
         }
     }
 
+    public void unbind() {
+        bindColor(0, 0, 0);
+        bindNormal(0, 0, 0);
+        bindTextureCoordinate(0, 0, 0);
+        bindVertex(0, 0, 0);
+        bindVertexIndex(0);
+        GL.vboHelper.unbind();
+    }
+
 }
