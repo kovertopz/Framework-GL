@@ -77,6 +77,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
         int strideBytes = vboInterleaved.getStrideBytes();
 
+        // Bind VBO for each type
         if (mesh.hasColors()) {
             vboBindState.bindColor(vboInterleaved.getVboID(), strideBytes, vboInterleaved.getColorOffsetBytes());
         }

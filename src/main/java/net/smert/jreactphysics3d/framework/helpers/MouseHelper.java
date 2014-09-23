@@ -62,8 +62,8 @@ public class MouseHelper {
 
     private void updateButtonState() {
         for (int i = 0; i < buttonCount; i++) {
-            wasDown[i] = isDown[i];
-            isDown[i] = nextState[i];
+            wasDown[i] = isDown[i]; // Save last frame
+            isDown[i] = nextState[i]; // Set current frame
         }
     }
 
@@ -120,6 +120,7 @@ public class MouseHelper {
         wasDown = new boolean[maxButtons];
         lwjglToMouse = new int[maxButtons];
 
+        // Set defaults
         for (int i = 0; i < maxButtons; i++) {
             isDown[i] = false;
             nextState[i] = false;
@@ -152,6 +153,8 @@ public class MouseHelper {
     }
 
     public void update() {
+
+        // Handle queued events
         while (org.lwjgl.input.Mouse.next() == true) {
             int eventButton = org.lwjgl.input.Mouse.getEventButton();
             if (eventButton != LWJGL_MOUSE_MOVE) {

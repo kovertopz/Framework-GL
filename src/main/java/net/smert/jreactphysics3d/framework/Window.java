@@ -20,8 +20,8 @@ public class Window {
 
     public Window(Configuration config) {
         this.config = config;
-        fullscreen = config.fullscreen;
-        vSync = config.vSync;
+        fullscreen = config.fullscreenRequested;
+        vSync = config.vSyncRequested;
     }
 
     private DisplayMode findDisplayMode(int width, int height, int bpp, int freq) {
@@ -32,11 +32,13 @@ public class Window {
             DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 
             for (int i = 0, max = displayModes.length; i < max; i++) {
+
+                // If the display mode matches save it
                 if ((displayModes[i].getWidth() == width)
                         && (displayModes[i].getHeight() == height)
                         && (displayModes[i].getBitsPerPixel() == bpp)
                         && (displayModes[i].getFrequency() == freq)) {
-                    displayMode = displayModes[i];
+                    displayMode = displayModes[i]; // Don't break in case of logging
                 }
 
                 log.debug("Found fullscreen compatible mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
@@ -54,12 +56,16 @@ public class Window {
 
     public void create() {
 
-        config.inFullscreen = fullscreen;
-        config.inVSync = vSync;
+        // Update the configuration
+        config.fullscreenEnabled = fullscreen;
+        config.vSyncEnabled = vSync;
 
         try {
             DisplayMode displayMode = null;
+
             if (fullscreen) {
+
+                // Attempt to find a matching full screen compatible mode
                 displayMode = findDisplayMode(config.fullscreenWidth, config.fullscreenHeight,
                         config.fullscreenDepth, config.fullscreenFreq);
 
@@ -72,12 +78,18 @@ public class Window {
                             config.fullscreenFreq);
                 }
             }
+
+            // Either a full screen mode wasn't requested or we couldn't find one that matched our settings
             if (displayMode == null) {
                 displayMode = new DisplayMode(config.desktopWidth, config.desktopHeight);
             }
 
+            // Set display mode and title
             Display.setDisplayMode(displayMode);
             Display.setTitle(config.windowTitle);
+
+            // Only create the display when it hasn't already done so. We would get an error when switching from
+            // windowed to full screen otherwise.
             if (Display.isCreated() == false) {
                 Display.create(config.pixelFormat, config.contextAttribs);
 
@@ -87,25 +99,35 @@ public class Window {
                         displayMode.getBitsPerPixel(),
                         displayMode.getFrequency());
             }
+
+            // Set the window location
             if ((config.desktopLocationX != -1) && (config.desktopLocationY != -1)) {
                 Display.setLocation(config.desktopLocationX, config.desktopLocationY);
             }
+
+            // Set resizeable
             if (!fullscreen) {
                 Display.setResizable(config.desktopResizable);
             }
+
+            // Set to full screen and vSync
             Display.setFullscreen(fullscreen);
             Display.setVSyncEnabled(vSync);
-            Display.sync(3000); // Create "LWJGL Timer" thread
+
+            // Create "LWJGL Timer" thread so Thread.sleep() is more accurate.
+            Display.sync(3000);
         } catch (LWJGLException e) {
             throw new RuntimeException(e);
         }
 
+        // Save the current window width and height
         config.currentHeight = Display.getHeight();
         config.currentWidth = Display.getWidth();
     }
 
     public void printDisplayModes() {
         try {
+
             // These modes should always be fullscreen compatible
             DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 

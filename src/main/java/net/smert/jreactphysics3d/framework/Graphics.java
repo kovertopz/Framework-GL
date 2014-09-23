@@ -33,6 +33,10 @@ public class Graphics {
         return renderableFactoryGL1.createVertexBufferObjectInterleaved(mesh);
     }
 
+    /**
+     * This method should be called just before the Display is destroyed. This is automatically called in Application
+     * during the normal shutdown process.
+     */
     public void destroy() {
         RenderableFactoryGL1.Destroy();
         GL.vboHelper.unbind();

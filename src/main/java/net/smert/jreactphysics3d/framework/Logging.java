@@ -51,14 +51,20 @@ public class Logging {
         if (config.logProperties != null) {
             readLoggingProperties();
         } else {
+
+            // Default logger is not "global" for some reason
             Logger logger = Logger.getLogger("");
             logger.setLevel(config.logLevel);
+
+            // Setup console logging
             if (config.logConsole) {
                 Handler console = new ConsoleHandler();
                 console.setFormatter(new SimpleFormatter());
                 console.setLevel(config.logLevel);
                 logger.addHandler(console);
             }
+
+            // Setup a log file
             if (config.logFile) {
                 addFileHandler(logger);
             }

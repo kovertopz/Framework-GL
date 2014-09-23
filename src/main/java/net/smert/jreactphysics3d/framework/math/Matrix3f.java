@@ -6,6 +6,17 @@ package net.smert.jreactphysics3d.framework.math;
  */
 public class Matrix3f {
 
+    /**
+     * Layout of the matrix as follows:
+     *
+     * Column 1 | Column 2 | Column 3
+     *
+     * xAxis.x | yAxis.x | zAxis.x
+     *
+     * xAxis.y | yAxis.y | zAxis.y
+     *
+     * xAxis.z | yAxis.z | zAxis.z
+     */
     final Vector3f xAxis = new Vector3f();
     final Vector3f yAxis = new Vector3f();
     final Vector3f zAxis = new Vector3f();

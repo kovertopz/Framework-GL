@@ -132,6 +132,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         VertexBufferObject vboVertex = vbos[VBO_VERTEX];
         VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
 
+        // Bind each VBO
         if (vboColor != null) {
             vboBindState.bindColor(vboColor.getVboID(), 0, 0);
         }

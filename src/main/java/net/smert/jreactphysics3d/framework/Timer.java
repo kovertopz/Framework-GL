@@ -100,29 +100,39 @@ public class Timer {
 
     public void update() {
 
+        // Update the elapsed time since the last frame and increase the counter
         elapsedTimeSpan.update();
         frameCounter++;
 
+        // The number of nanoseconds since the last update. Save the difference for computing the average.
         currentElapsedTimeDifference = elapsedTimeSpan.diffLastUpdateToLastTime();
         delta = (float) elapsedTimeSpan.diffLastUpdateToLastTimeDouble();
-        totalTime = (float) totalTimeSpan.diffNowToLastUpdateDouble();
         frameAve.add(currentElapsedTimeDifference);
 
+        // Get the total time since we started
+        totalTime = (float) totalTimeSpan.diffNowToLastUpdateDouble();
+
+        // Get the number of game ticks per second and render ticks based on the frame rate average
         gameTicksPerSecond = config.gameTicksPerSecond;
         renderTicksPerSecond = (int) (ONE_NANO_SECOND / frameAve.avg());
 
         assert (gameTicksPerSecond > 0);
         assert (renderTicksPerSecond > 0);
 
+        // We want the total time for each type of tick in the number of nanoseconds per tick
         double gameTick = ONE_NANO_SECOND / gameTicksPerSecond;
         double renderTick = ONE_NANO_SECOND / renderTicksPerSecond;
 
+        // The current time difference in nanoseconds is used to compute a percent of a tick that
+        // has elapsed since the last frame. 
         remainingGameTicks += currentElapsedTimeDifference / gameTick;
         remainingRenderTicks += currentElapsedTimeDifference / renderTick;
 
+        // Check to see if we have enough remaining time to take a tick
         isGameTick = (remainingGameTicks >= 1.0D);
         isRenderTick = (remainingRenderTicks >= 1.0D);
 
+        // We are only allowed to take 1 tick per frame
         if (isGameTick) {
             remainingGameTicks -= 1.0D;
         }
@@ -130,6 +140,9 @@ public class Timer {
             remainingRenderTicks -= 1.0D;
         }
 
+        // If we have any more than two ticks remaining then it is lost. If things are going well the tiny fraction
+        // that will be added to the remaining ticks next frame shouldn't keep us from losing time. Render ticks are
+        // going to be much more sensitive to this.
         while (remainingGameTicks > 2.0D) {
             lostGameTicks += 1.0D;
             remainingGameTicks -= 1.0D;

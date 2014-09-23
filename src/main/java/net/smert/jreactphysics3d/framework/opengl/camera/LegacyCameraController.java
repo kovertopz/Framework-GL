@@ -124,7 +124,7 @@ public class LegacyCameraController implements InputProcessor {
 
         // LWJGL will return 0 for mouse movement if the frame rate is higher than 125fps. If we just used the delta
         // amount then the mouse speed would be reduced. MOUSE_POLL is set for 125fps to compensate for this issue.
-        // If the framerate is lower than 125fps then we want the larger delta.
+        // If the frame rate is lower than 125fps then we want the larger delta.
         float mousePoll = Math.max(delta, Fw.input.MOUSE_POLL);
 
         camera.setRotationX(camRotation.getX() - xRotationDelta * mousePoll * lookSpeed);

@@ -9,7 +9,7 @@ import net.smert.jreactphysics3d.framework.opengl.GL;
  */
 public class LegacyCamera {
 
-    private final Vector3f rotation;
+    private final Vector3f rotation; // Euler angles
     private final Vector3f position;
 
     public LegacyCamera() {

@@ -93,6 +93,7 @@ public class Application {
 
     void mainLoop() {
 
+        // Initialization of OpenGL must happen here since we are in a new thread
         Fw.window.create();
         Fw.input.init();
         screen.init();
@@ -101,6 +102,8 @@ public class Application {
         boolean wasActive = true;
 
         while (isRunning()) {
+
+            // Process operating system events
             Display.processMessages();
 
             config.inFocus = Display.isActive();
@@ -116,11 +119,13 @@ public class Application {
                 screen.resume();
             }
 
+            // Was the window closed?
             if (Display.isCloseRequested()) {
                 stopRunning();
                 break;
             }
 
+            // Was the window resized?
             if (Display.wasResized()) {
                 int x = Display.getWidth();
                 int y = Display.getHeight();
@@ -129,12 +134,14 @@ public class Application {
                 screen.resize(x, y);
             }
 
+            // Update and render
             Fw.input.update();
             Fw.timer.update();
             screen.render();
-            Display.update(false);
+            Display.update(false); // Do not process operating system events again
             Util.checkGLError();
 
+            // Limit frame rate
             int frameRateLimit;
             if (config.inFocus) {
                 frameRateLimit = config.foregroundFrameRate;
@@ -144,6 +151,7 @@ public class Application {
             Display.sync(frameRateLimit);
         }
 
+        // Shutdown
         screen.pause();
         screen.destroy();
         Fw.graphics.destroy();

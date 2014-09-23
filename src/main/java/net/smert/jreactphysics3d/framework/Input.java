@@ -15,7 +15,6 @@ import net.smert.jreactphysics3d.framework.utils.HashMapStringInt;
  */
 public class Input {
 
-    private final Configuration config;
     private final KeyboardHelper keyboardHelper;
     private final HashMapStringInt actionToKey;
     private final HashMapStringInt actionToMouse;
@@ -24,7 +23,6 @@ public class Input {
     public final float MOUSE_POLL = 1.0f / 125.0f;
 
     public Input(Configuration config) {
-        this.config = config;
         this.keyboardHelper = new KeyboardHelper();
         actionToKey = new HashMapStringInt();
         actionToMouse = new HashMapStringInt();
@@ -32,6 +30,12 @@ public class Input {
         this.mouseHelper = new MouseHelper(config);
     }
 
+    /**
+     * The purpose of an InputProcessor is to provide a managed way to register actions and to remove those actions when
+     * we remove the input processor.
+     *
+     * @param inputProcessor
+     */
     public void addInputProcessor(InputProcessor inputProcessor) {
         if (inputProcessors.contains(inputProcessor) == false) {
             inputProcessor.registerActions();
@@ -79,11 +83,20 @@ public class Input {
         mouseHelper.grabMouseCursor();
     }
 
+    /**
+     * This method must be called before Input is used.
+     */
     public void init() {
         keyboardHelper.init();
         mouseHelper.init();
     }
 
+    /**
+     * Check to see if the action associated with a mouse button is down.
+     *
+     * @param action
+     * @return
+     */
     public boolean isActionButtonDown(String action) {
         int button = actionToMouse.get(action);
         if (button == HashMapStringInt.NOT_FOUND) {
@@ -92,6 +105,12 @@ public class Input {
         return mouseHelper.isButtonDown(button);
     }
 
+    /**
+     * Check to see if the action associated with a key on the keyboard is down.
+     *
+     * @param action
+     * @return
+     */
     public boolean isActionKeyDown(String action) {
         int key = actionToKey.get(action);
         if (key == HashMapStringInt.NOT_FOUND) {
@@ -100,10 +119,22 @@ public class Input {
         return keyboardHelper.isKeyDown(key);
     }
 
+    /**
+     * Check to see if the mouse button is down.
+     *
+     * @param mouse
+     * @return
+     */
     public boolean isButtonDown(Mouse mouse) {
         return mouseHelper.isButtonDown(mouse);
     }
 
+    /**
+     * Check to see if the keyboard key is down.
+     *
+     * @param keyboard
+     * @return
+     */
     public boolean isKeyDown(Keyboard keyboard) {
         return keyboardHelper.isKeyDown(keyboard);
     }
@@ -112,6 +143,11 @@ public class Input {
         mouseHelper.releaseMouseCursor();
     }
 
+    /**
+     * Remove an action associated with a mouse button.
+     *
+     * @param action
+     */
     public void removeActionButton(String action) {
         if (action == null) {
             throw new IllegalArgumentException("Action cannot be null");
@@ -122,6 +158,11 @@ public class Input {
         }
     }
 
+    /**
+     * Remove an action associated with a key on the keyboard.
+     *
+     * @param action
+     */
     public void removeActionKey(String action) {
         if (action == null) {
             throw new IllegalArgumentException("Action cannot be null");
@@ -132,6 +173,11 @@ public class Input {
         }
     }
 
+    /**
+     * Removes an input processor and unregisters the actions associated with it.
+     *
+     * @param inputProcessor
+     */
     public void removeInputProcessor(InputProcessor inputProcessor) {
         if (inputProcessors.remove(inputProcessor)) {
             inputProcessor.unregisterActions();
@@ -141,6 +187,12 @@ public class Input {
         }
     }
 
+    /**
+     * Associates a key press with an action.
+     *
+     * @param action
+     * @param keyboard
+     */
     public void setAction(String action, Keyboard keyboard) {
         if (action == null) {
             throw new IllegalArgumentException("Action cannot be null");
@@ -148,6 +200,12 @@ public class Input {
         actionToKey.put(action, keyboard.ordinal());
     }
 
+    /**
+     * Associates a mouse button with an action.
+     *
+     * @param action
+     * @param mouse
+     */
     public void setAction(String action, Mouse mouse) {
         if (action == null) {
             throw new IllegalArgumentException("Action cannot be null");
@@ -155,11 +213,20 @@ public class Input {
         actionToKey.put(action, mouse.ordinal());
     }
 
+    /**
+     * This method must be called once per frame.
+     */
     public void update() {
         keyboardHelper.update();
         mouseHelper.update();
     }
 
+    /**
+     * Was the action associated with the mouse button down in the last frame?
+     *
+     * @param action
+     * @return
+     */
     public boolean wasActionButtonDown(String action) {
         int button = actionToMouse.get(action);
         if (button == HashMapStringInt.NOT_FOUND) {
@@ -168,6 +235,12 @@ public class Input {
         return mouseHelper.wasButtonDown(button);
     }
 
+    /**
+     * Was the action associated with a key on the keyboard down in the last frame?
+     *
+     * @param action
+     * @return
+     */
     public boolean wasActionKeyDown(String action) {
         int key = actionToKey.get(action);
         if (key == HashMapStringInt.NOT_FOUND) {
@@ -176,10 +249,22 @@ public class Input {
         return keyboardHelper.wasKeyDown(key);
     }
 
+    /**
+     * Was the mouse button down in the last frame?
+     *
+     * @param mouse
+     * @return
+     */
     public boolean wasButtonDown(Mouse mouse) {
         return mouseHelper.wasButtonDown(mouse);
     }
 
+    /**
+     * Was the key on the keyboard down in the last frame?
+     *
+     * @param keyboard
+     * @return
+     */
     public boolean wasKeyDown(Keyboard keyboard) {
         return keyboardHelper.wasKeyDown(keyboard);
     }

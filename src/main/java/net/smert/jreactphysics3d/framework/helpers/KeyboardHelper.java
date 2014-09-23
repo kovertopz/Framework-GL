@@ -1,7 +1,5 @@
 package net.smert.jreactphysics3d.framework.helpers;
 
-import net.smert.jreactphysics3d.framework.utils.HashMapStringInt;
-
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -124,8 +122,8 @@ public class KeyboardHelper {
 
     private void updateButtonState() {
         for (int i = 0; i < KEYBOARD_SIZE; i++) {
-            wasDown[i] = isDown[i];
-            isDown[i] = nextState[i];
+            wasDown[i] = isDown[i]; // Save last frame
+            isDown[i] = nextState[i]; // Set current frame
         }
     }
 
@@ -135,6 +133,7 @@ public class KeyboardHelper {
         wasDown = new boolean[KEYBOARD_SIZE];
         lwjglToKeyboard = new int[KEYBOARD_SIZE];
 
+        // Set defaults
         for (int i = 0; i < KEYBOARD_SIZE; i++) {
             isDown[i] = false;
             nextState[i] = false;
@@ -157,6 +156,8 @@ public class KeyboardHelper {
     }
 
     public void update() {
+
+        // Handle queued events
         while (org.lwjgl.input.Keyboard.next() == true) {
             int key = lwjglToKeyboard[org.lwjgl.input.Keyboard.getEventKey()];
             nextState[key] = org.lwjgl.input.Keyboard.getEventKeyState();

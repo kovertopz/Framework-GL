@@ -8,6 +8,19 @@ import java.nio.FloatBuffer;
  */
 public class Matrix4f {
 
+    /**
+     * Layout of the matrix as follows:
+     *
+     * Column 1 | Column 2 | Column 3 | Column 4
+     *
+     * d0 | d4 | d8 | d12
+     *
+     * d1 | d5 | d9 | d13
+     *
+     * d2 | d6 | d10 | d14
+     *
+     * d3 | d7 | d11 | d15
+     */
     float d0;
     float d1;
     float d2;

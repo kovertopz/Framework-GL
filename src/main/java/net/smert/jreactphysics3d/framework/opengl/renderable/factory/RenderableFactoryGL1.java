@@ -48,6 +48,9 @@ public class RenderableFactoryGL1 {
                 vboBuilder = new Builder();
             }
 
+            // Reset bind state
+            vboBindState.reset();
+
             // Statically initialize all classes
             AbstractDrawCall.SetVboConfiguration(vboConfiguration);
             VertexBufferObjectRenderable.SetVboBindState(vboBindState);
