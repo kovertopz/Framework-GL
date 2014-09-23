@@ -10,7 +10,7 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Builder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.Builder {
+public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.Builder {
 
     public void calculateOffsetsAndStride(
             Mesh mesh, Configuration renderableConfig, VertexBufferObjectInterleaved vboInterleaved) {

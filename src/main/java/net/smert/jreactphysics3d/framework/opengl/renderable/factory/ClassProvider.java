@@ -4,6 +4,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DisplayListRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.ImmediateModeRenderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
 
@@ -19,6 +20,10 @@ public class ClassProvider {
 
     public AbstractRenderable createImmediateMode(Mesh mesh) {
         return new ImmediateModeRenderable(mesh);
+    }
+
+    public AbstractRenderable createVertexArray(Mesh mesh) {
+        return new VertexArrayRenderable(mesh);
     }
 
     public AbstractRenderable createVertexBufferObject(Mesh mesh) {

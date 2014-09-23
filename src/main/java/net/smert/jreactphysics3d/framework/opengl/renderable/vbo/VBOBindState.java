@@ -7,7 +7,7 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configurati
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BindState {
+public class VBOBindState {
 
     private boolean colorEnabled;
     private boolean normalEnabled;
@@ -20,7 +20,7 @@ public class BindState {
     private int vboVertexIndexID;
     private final Configuration renderableConfig;
 
-    public BindState(Configuration renderableConfig) {
+    public VBOBindState(Configuration renderableConfig) {
         this.renderableConfig = renderableConfig;
 
         if (renderableConfig.isImmutable() == false) {

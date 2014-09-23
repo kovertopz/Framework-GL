@@ -25,6 +25,10 @@ public class Graphics {
         return renderableFactoryGL1.createImmediateMode(mesh);
     }
 
+    public AbstractRenderable createVertexArrayRenderable(Mesh mesh) {
+        return renderableFactoryGL1.createVertexArray(mesh);
+    }
+
     public AbstractRenderable createVertexBufferObjectRenderable(Mesh mesh) {
         return renderableFactoryGL1.createVertexBufferObject(mesh);
     }

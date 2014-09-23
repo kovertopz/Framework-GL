@@ -8,8 +8,8 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.VBOBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.VBOBuilder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
 
 /**
@@ -18,9 +18,9 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
  */
 public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable {
 
-    private static BindState vboBindState;
-    private static Builder vboBuilder;
     private static Configuration renderableConfig;
+    private static VBOBindState vboBindState;
+    private static VBOBuilder vboBuilder;
     private AbstractDrawCall drawCall;
     private VertexBufferObject vboVertexIndex;
     private VertexBufferObjectInterleaved vboInterleaved;
@@ -107,11 +107,11 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         }
     }
 
-    public static void SetVboBindState(BindState vboBindState) {
+    public static void SetVboBindState(VBOBindState vboBindState) {
         VertexBufferObjectRenderableInterleaved.vboBindState = vboBindState;
     }
 
-    public static void SetVboBuilder(Builder vboBuilder) {
+    public static void SetVboBuilder(VBOBuilder vboBuilder) {
         VertexBufferObjectRenderableInterleaved.vboBuilder = vboBuilder;
     }
 

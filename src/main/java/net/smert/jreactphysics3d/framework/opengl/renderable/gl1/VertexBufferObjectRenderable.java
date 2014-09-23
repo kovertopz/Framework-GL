@@ -7,8 +7,8 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.BindState;
-import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.Builder;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.VBOBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.VBOBuilder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.ByteBuffers;
 
 /**
@@ -23,9 +23,9 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
     private final static int VBO_VERTEX = 3;
     private final static int VBO_VERTEX_INDEX = 4;
 
-    private static BindState vboBindState;
-    private static Builder vboBuilder;
     private static Configuration renderableConfig;
+    private static VBOBindState vboBindState;
+    private static VBOBuilder vboBuilder;
     private AbstractDrawCall drawCall;
     private final VertexBufferObject[] vbos;
 
@@ -164,11 +164,11 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         }
     }
 
-    public static void SetVboBindState(BindState vboBindState) {
+    public static void SetVboBindState(VBOBindState vboBindState) {
         VertexBufferObjectRenderable.vboBindState = vboBindState;
     }
 
-    public static void SetVboBuilder(Builder vboBuilder) {
+    public static void SetVboBuilder(VBOBuilder vboBuilder) {
         VertexBufferObjectRenderable.vboBuilder = vboBuilder;
     }
 
