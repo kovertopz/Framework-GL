@@ -45,7 +45,7 @@ public class Application {
         Fw.app = this;
         Fw.audio = new Audio();
         Fw.config = config;
-        Fw.files = new Files();
+        Fw.files = new Files(config);
         Fw.graphics = new Graphics();
         Fw.input = new Input(config);
         Fw.net = new Network();
