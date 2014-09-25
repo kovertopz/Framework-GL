@@ -50,6 +50,13 @@ public class Vector4f {
         this.z = z;
     }
 
+    public void set(Vector4f vector) {
+        w = vector.w;
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+    }
+
     public void setW(float w) {
         this.w = w;
     }
