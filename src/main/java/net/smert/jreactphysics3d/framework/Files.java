@@ -31,7 +31,7 @@ public class Files {
     private final static String MESH_LOCATION = "meshes";
     private final static String SHADER_LOCATION = "shaders";
     private final static String TEXTURE_LOCATION = "textures";
-    public final static String DEFAULT_ASSETS_LOCATION = "net/smert/jreactphysics3d/framework/assets";
+    public final static String DEFAULT_ASSETS_LOCATION = "/net/smert/jreactphysics3d/framework/assets";
 
     private boolean foundAsset;
     private boolean isInternal;
@@ -45,7 +45,7 @@ public class Files {
         this.config = config;
         assets = new HashMap<>();
         try {
-            registerAssets(DEFAULT_ASSETS_LOCATION, false);
+            registerAssets(DEFAULT_ASSETS_LOCATION, true);
         } catch (IOException | URISyntaxException ex) {
             log.error("There was an problem loading the default assets location: " + DEFAULT_ASSETS_LOCATION, ex);
             System.exit(-1);
@@ -425,11 +425,8 @@ public class Files {
 
         @Override
         public String toString() {
-            return "File Asset:"
-                    + " fileType: " + fileType
-                    + " fullPathToFile: " + fullPathToFile
-                    + " registeredFullPath: " + registeredFullPath
-                    + " relativePath: " + relativePath;
+            return "(fileType: " + fileType + " fullPathToFile: " + fullPathToFile
+                    + " registeredFullPath: " + registeredFullPath + " relativePath: " + relativePath + ")";
         }
 
     }
