@@ -191,7 +191,7 @@ public class Vector3f {
 
     @Override
     public String toString() {
-        return "Vector3f: {x: " + x + " y: " + y + " z: " + z + "}";
+        return "(x: " + x + " y: " + y + " z: " + z + ")";
     }
 
 }

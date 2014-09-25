@@ -155,45 +155,13 @@ public class Timer {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("isGameTick=");
-        sb.append(isGameTick);
-        sb.append(", ");
-        sb.append("isRenderTick=");
-        sb.append(isRenderTick);
-        sb.append(", ");
-        sb.append("lostGameTicks=");
-        sb.append(lostGameTicks);
-        sb.append(", ");
-        sb.append("lostRenderTicks=");
-        sb.append(lostRenderTicks);
-        sb.append(", ");
-        sb.append("remainingGameTicks=");
-        sb.append(remainingGameTicks);
-        sb.append(", ");
-        sb.append("remainingRenderTicks=");
-        sb.append(remainingRenderTicks);
-        sb.append(", ");
-        sb.append("delta=");
-        sb.append(delta);
-        sb.append(", ");
-        sb.append("totalTime=");
-        sb.append(totalTime);
-        sb.append(", ");
-        sb.append("frameCounter=");
-        sb.append(frameCounter);
-        sb.append(", ");
-        sb.append("gameTicksPerSecond=");
-        sb.append(gameTicksPerSecond);
-        sb.append(", ");
-        sb.append("renderTicksPerSecond=");
-        sb.append(renderTicksPerSecond);
-        sb.append(", ");
-        sb.append("currentElapsedTimeDifference=");
-        sb.append(currentElapsedTimeDifference);
-        sb.append("}");
-        return sb.toString();
+        return "(isGameTick= " + isGameTick + " isRenderTick= " + isRenderTick
+                + " lostGameTicks= " + lostGameTicks + " lostRenderTicks= " + lostRenderTicks
+                + " remainingGameTicks= " + remainingGameTicks + " remainingRenderTicks= " + remainingRenderTicks
+                + " delta= " + delta + " totalTime= " + totalTime
+                + " frameCounter= " + frameCounter + " gameTicksPerSecond= " + gameTicksPerSecond
+                + " renderTicksPerSecond= " + renderTicksPerSecond
+                + " currentElapsedTimeDifference= " + currentElapsedTimeDifference + ")";
     }
 
     private static class FrameAve {

@@ -41,7 +41,7 @@ public class Transform4f {
 
     @Override
     public String toString() {
-        return "Transform4f:\n" + rotation.toString() + "\n" + position.toString();
+        return "(position: " + position + " rotation: " + rotation + ")";
     }
 
 }

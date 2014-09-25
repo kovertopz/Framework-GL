@@ -213,10 +213,7 @@ public class Matrix3f {
 
     @Override
     public String toString() {
-        return "Matrix3f:\n"
-                + "X-Axis: " + xAxis.toString() + "\n"
-                + "Y-Axis: " + yAxis.toString() + "\n"
-                + "Z-Axis: " + zAxis.toString();
+        return "(X-Axis: " + xAxis + "\nY-Axis: " + yAxis + "\nZ-Axis: " + zAxis + ")";
     }
 
 }

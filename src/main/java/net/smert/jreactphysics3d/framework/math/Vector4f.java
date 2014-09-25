@@ -75,7 +75,7 @@ public class Vector4f {
 
     @Override
     public String toString() {
-        return "X: " + x + " Y: " + y + " Z: " + z;
+        return "(x: " + x + " y: " + y + " z: " + z + " w: " + w + ")";
     }
 
 }
