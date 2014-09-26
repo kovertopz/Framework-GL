@@ -12,10 +12,12 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import net.smert.jreactphysics3d.framework.Files.FileAsset;
 import net.smert.jreactphysics3d.framework.Fw;
+import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.constants.Primitives;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
+import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -317,9 +319,56 @@ public class ObjReader implements ModelReader {
         Iterator<Segment> segments = materialNameToSegments.values().iterator();
         while (segments.hasNext()) {
             Segment segment = segments.next();
-            if (segment.getVertices().size() > 0) {
-                mesh.addSegment(segment);
+            String name = segment.getName();
+
+            if (name != null) {
+                Material material = materialNameToMaterial.get(name);
+                convertToMeshMaterial(segment, material);
             }
+
+            assert (segment.getVertices().size() > 0);
+            mesh.addSegment(segment);
+        }
+    }
+
+    private void convertToMeshMaterial(Segment segment, Material material) {
+        Color ambient = material.getAmbient();
+        Color diffuse = material.getDiffuse();
+        Color specular = material.getSpecular();
+
+        // Lighting
+        if (ambient.hasBeenSet()) {
+            segment.getMaterial().setLighting(
+                    "ambient", new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
+        }
+        if (diffuse.hasBeenSet()) {
+            segment.getMaterial().setLighting(
+                    "diffuse", new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
+        }
+        if (specular.hasBeenSet()) {
+            segment.getMaterial().setLighting(
+                    "specular", new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
+        }
+        segment.getMaterial().setShininess(material.convertSpecularExponent());
+
+        // Textures
+        String filename;
+
+        filename = material.getAmbientMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            segment.getMaterial().setTexture("ambient", filename);
+        }
+        filename = material.getDiffuseMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            segment.getMaterial().setTexture("diffuse", filename);
+        }
+        filename = material.getSpecularMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            segment.getMaterial().setTexture("specular", filename);
+        }
+        filename = material.getSpecularExponentMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            segment.getMaterial().setTexture("shininess", filename);
         }
     }
 

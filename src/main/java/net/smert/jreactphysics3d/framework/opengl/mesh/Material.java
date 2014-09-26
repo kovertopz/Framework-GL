@@ -1,5 +1,7 @@
 package net.smert.jreactphysics3d.framework.opengl.mesh;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
 
 /**
@@ -10,20 +12,14 @@ public class Material {
 
     private boolean isOpaque;
     private int shininess;
-    private final Vector4f ambient;
-    private final Vector4f diffuse;
-    private final Vector4f emissive;
-    private final Vector4f specular;
+    private final Map<String, String> textures;
+    private final Map<String, Vector4f> lighting;
 
     public Material() {
-
-        // Same as glMaterial defaults
         isOpaque = true;
         shininess = 0;
-        ambient = new Vector4f(0.2f, 0.2f, 0.2f, 1.0f);
-        diffuse = new Vector4f(0.8f, 0.8f, 0.8f, 1.0f);
-        emissive = new Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
-        specular = new Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
+        textures = new HashMap<>();
+        lighting = new HashMap<>();
     }
 
     public boolean isIsOpaque() {
@@ -42,36 +38,20 @@ public class Material {
         this.shininess = shininess;
     }
 
-    public Vector4f getAmbient() {
-        return ambient;
+    public String getTexture(String textureType) {
+        return textures.get(textureType);
     }
 
-    public void setAmbient(Vector4f ambient) {
-        this.ambient.set(ambient);
+    public String setTexture(String textureType, String filename) {
+        return textures.put(textureType, filename);
     }
 
-    public Vector4f getDiffuse() {
-        return diffuse;
+    public Vector4f getLighting(String lightingType) {
+        return lighting.get(lightingType);
     }
 
-    public void setDiffuse(Vector4f diffuse) {
-        this.diffuse.set(diffuse);
-    }
-
-    public Vector4f getEmissive() {
-        return emissive;
-    }
-
-    public void setEmissive(Vector4f emissive) {
-        this.emissive.set(emissive);
-    }
-
-    public Vector4f getSpecular() {
-        return specular;
-    }
-
-    public void setSpecular(Vector4f specular) {
-        this.specular.set(specular);
+    public Vector4f setLighting(String lightingType, Vector4f value) {
+        return lighting.put(lightingType, value);
     }
 
 }

@@ -355,17 +355,36 @@ public class MaterialReader implements ModelReader {
 
     public static class Color {
 
+        private boolean hasBeenSet;
         private float r;
         private float g;
         private float b;
 
         private Color() {
+            hasBeenSet = false;
             r = 0;
             g = 0;
             b = 0;
         }
 
+        public float getR() {
+            return r;
+        }
+
+        public float getG() {
+            return g;
+        }
+
+        public float getB() {
+            return b;
+        }
+
+        public boolean hasBeenSet() {
+            return hasBeenSet;
+        }
+
         public void set(int index, float value) {
+            hasBeenSet = true;
             if (index == 0) {
                 r = value;
             } else if (index == 1) {
@@ -378,6 +397,7 @@ public class MaterialReader implements ModelReader {
         }
 
         public void set(Color color) {
+            hasBeenSet = true;
             r = color.r;
             g = color.g;
             b = color.b;
@@ -413,6 +433,11 @@ public class MaterialReader implements ModelReader {
             this.materialName = materialName;
             specularMapFilename = "";
             specularExponentMapFilename = "";
+        }
+
+        public int convertSpecularExponent() {
+            float percent = specularExponent / 1000.0f; // Max is 1000
+            return (int) (128.0f * percent); // OpenGL max shininess 128
         }
 
         public float getDissolve() {
