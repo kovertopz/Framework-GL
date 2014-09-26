@@ -1,7 +1,10 @@
 package net.smert.jreactphysics3d.framework;
 
+import java.io.IOException;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
+import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
+import net.smert.jreactphysics3d.framework.opengl.model.obj.ObjReader;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 
@@ -11,9 +14,12 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableF
  */
 public class Graphics {
 
+    public final MeshReader meshReader;
     public final RenderableFactoryGL1 renderableFactoryGL1;
 
     public Graphics() {
+        meshReader = new MeshReader();
+        meshReader.registerExtension("obj", new ObjReader());
         renderableFactoryGL1 = new RenderableFactoryGL1();
     }
 
@@ -44,6 +50,10 @@ public class Graphics {
     public void destroy() {
         RenderableFactoryGL1.Destroy();
         GL.vboHelper.unbind();
+    }
+
+    public void loadMesh(String filename, Mesh mesh) throws IOException {
+        meshReader.load(filename, mesh);
     }
 
     public void render(AbstractRenderable renderable, float x, float y, float z) {

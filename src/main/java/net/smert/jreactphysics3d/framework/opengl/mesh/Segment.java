@@ -12,22 +12,30 @@ import net.smert.jreactphysics3d.framework.utils.Color;
  */
 public class Segment {
 
+    private boolean textureIs3d;
     private int maxIndex;
     private int minIndex;
-    private final int primitiveMode;
+    private int primitiveMode;
     private final List<Color> colors;
     private final List<Vector3f> normals;
     private final List<Vector3f> texCoords;
     private final List<Vector4f> vertices;
+    private String name;
 
-    public Segment(int primitiveMode) {
+    public Segment() {
+        textureIs3d = false;
         maxIndex = 0;
         minIndex = 0;
-        this.primitiveMode = primitiveMode;
+        primitiveMode = -1; // GL_POINTS = 0 :(
         colors = new ArrayList<>();
         normals = new ArrayList<>();
         texCoords = new ArrayList<>();
         vertices = new ArrayList<>();
+    }
+
+    public Segment(int primitiveMode) {
+        this();
+        this.primitiveMode = primitiveMode;
     }
 
     public void addColor(float r, float g, float b) {
@@ -55,10 +63,12 @@ public class Segment {
     }
 
     public void addTexCoord(float x, float y, float z) {
+        textureIs3d = true;
         texCoords.add(new Vector3f(x, y, z));
     }
 
     public void addTexCoord(Vector3f vector) {
+        textureIs3d = true;
         texCoords.add(vector);
     }
 
@@ -94,6 +104,10 @@ public class Segment {
         return primitiveMode;
     }
 
+    public void setPrimitiveMode(int primitiveMode) {
+        this.primitiveMode = primitiveMode;
+    }
+
     public List<Color> getColors() {
         return colors;
     }
@@ -108,6 +122,18 @@ public class Segment {
 
     public List<Vector4f> getVertices() {
         return vertices;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isTextureIs3d() {
+        return textureIs3d;
     }
 
 }
