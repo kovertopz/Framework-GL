@@ -26,12 +26,12 @@ public class Files {
 
     private final static Logger log = LoggerFactory.getLogger(Files.class);
     private final static String AUDIO_LOCATION = "audio";
-    private final static String INTERNAL_FILE_SEPARATOR = "/";
     private final static String MATERIAL_LOCATION = "materials";
     private final static String MESH_LOCATION = "meshes";
     private final static String SHADER_LOCATION = "shaders";
     private final static String TEXTURE_LOCATION = "textures";
-    public final static String DEFAULT_ASSETS_LOCATION = "/net/smert/jreactphysics3d/framework/assets";
+    public final String DEFAULT_ASSETS_LOCATION = "/net/smert/jreactphysics3d/framework/assets";
+    public final String INTERNAL_FILE_SEPARATOR = "/";
 
     private boolean foundAsset;
     private boolean isInternal;
