@@ -6,6 +6,7 @@
     <groupId>net.smert</groupId>
     <artifactId>jReactPhysics3D-OpenGLFramework</artifactId>
     <version>0.4.0</version>
+    <inceptionYear>2012</inceptionYear>
     <packaging>jar</packaging>
 
     <developers>
@@ -19,7 +20,9 @@
 
     <properties>
         <junit.version>4.11</junit.version>
+        <licensemaven.version>2.6</licensemaven.version>
         <lwjgl.version>2.9.1</lwjgl.version>
+        <mavencompiler.version>2.5.1</mavencompiler.version>
         <mavennatives.version>0.0.7</mavennatives.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -60,10 +63,52 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mavencompiler.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${licensemaven.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>APACHE-2.txt</exclude>
+                        <exclude>LICENSE.txt</exclude>
+                        <exclude>nbactions.xml</exclude>
+                        <exclude>pom.xml</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                    </excludes>
+                    <header>HEADER.txt</header>
+                    <keywords>
+                        <keyword>Licensed under the Apache License</keyword>
+                    </keywords>
+                    <properties>
+                        <owner>Jason Sorensen</owner>
+                        <email>sorensenj@smert.net</email>
+                    </properties>
+                    <useDefaultExcludes>true</useDefaultExcludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.googlecode.mavennatives</groupId>
                 <artifactId>maven-nativedependencies-plugin</artifactId>
                 <version>${mavennatives.version}</version>
-
                 <executions>
                     <execution>
                         <id>unpacknatives</id>
