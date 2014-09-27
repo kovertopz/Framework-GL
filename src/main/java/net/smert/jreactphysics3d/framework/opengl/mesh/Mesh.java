@@ -1,7 +1,9 @@
 package net.smert.jreactphysics3d.framework.opengl.mesh;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**
@@ -92,8 +94,40 @@ public class Mesh {
         return indexes;
     }
 
+    /**
+     * Get the unique list of textures found in all segments.
+     *
+     * @return
+     */
+    public List<String> getTextures() {
+        List<String> textures = new ArrayList<>();
+        for (int i = 0, max = segments.size(); i < max; i++) {
+            Segment segment = segments.get(i);
+            Material material = segment.getMaterial();
+
+            Map<String, String> matTextures = material.getTextures();
+            Iterator<String> iterator = matTextures.values().iterator();
+            while (iterator.hasNext()) {
+                String texture = iterator.next();
+                if (!textures.contains(texture)) {
+                    textures.add(texture);
+                }
+            }
+        }
+        return textures;
+    }
+
     public Segment getSegment(int index) {
         return segments.get(index);
+    }
+
+    public Segment getSegmentByName(String name) {
+        for (Segment segment : segments) {
+            if (segment.getName().equals(name)) {
+                return segment;
+            }
+        }
+        return null;
     }
 
     public boolean hasColors() {
