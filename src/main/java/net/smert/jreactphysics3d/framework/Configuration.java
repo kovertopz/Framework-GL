@@ -473,7 +473,7 @@ public class Configuration {
     /**
      * Creates a new pixel format object.
      */
-    public final void withNewPixelFormat() {
+    public void withNewPixelFormat() {
         pixelFormat = new PixelFormat();
     }
 
@@ -482,7 +482,7 @@ public class Configuration {
      *
      * @param alpha
      */
-    public final void withPixelFormatAlphaBits(int alpha) {
+    public void withPixelFormatAlphaBits(int alpha) {
         pixelFormat = pixelFormat.withAlphaBits(alpha);
     }
 
@@ -491,7 +491,7 @@ public class Configuration {
      *
      * @param accum_alpha
      */
-    public final void withPixelFormatAccumulationAlpha(int accum_alpha) {
+    public void withPixelFormatAccumulationAlpha(int accum_alpha) {
         pixelFormat = pixelFormat.withAccumulationAlpha(accum_alpha);
     }
 
@@ -500,7 +500,7 @@ public class Configuration {
      *
      * @param accum_bpp
      */
-    public final void withPixelFormatAccumulationBitsPerPixel(int accum_bpp) {
+    public void withPixelFormatAccumulationBitsPerPixel(int accum_bpp) {
         pixelFormat = pixelFormat.withAccumulationBitsPerPixel(accum_bpp);
     }
 
@@ -509,7 +509,7 @@ public class Configuration {
      *
      * @param num_aux_buffers
      */
-    public final void withPixelFormatAuxBuffers(int num_aux_buffers) {
+    public void withPixelFormatAuxBuffers(int num_aux_buffers) {
         pixelFormat = pixelFormat.withAuxBuffers(num_aux_buffers);
     }
 
@@ -518,7 +518,7 @@ public class Configuration {
      *
      * @param bpp
      */
-    public final void withPixelFormatBitsPerPixel(int bpp) {
+    public void withPixelFormatBitsPerPixel(int bpp) {
         pixelFormat = pixelFormat.withBitsPerPixel(bpp);
     }
 
@@ -527,7 +527,7 @@ public class Configuration {
      *
      * @param colorSamples
      */
-    public final void withPixelFormatCoverageSamples(int colorSamples) {
+    public void withPixelFormatCoverageSamples(int colorSamples) {
         pixelFormat = pixelFormat.withCoverageSamples(colorSamples);
     }
 
@@ -537,7 +537,7 @@ public class Configuration {
      * @param colorSamples
      * @param coverageSamples
      */
-    public final void withPixelFormatCoverageSamples(int colorSamples, int coverageSamples) {
+    public void withPixelFormatCoverageSamples(int colorSamples, int coverageSamples) {
         pixelFormat = pixelFormat.withCoverageSamples(colorSamples, coverageSamples);
     }
 
@@ -547,7 +547,7 @@ public class Configuration {
      *
      * @param depth
      */
-    public final void withPixelFormatDepthBits(int depth) {
+    public void withPixelFormatDepthBits(int depth) {
         pixelFormat = pixelFormat.withDepthBits(depth);
     }
 
@@ -556,7 +556,7 @@ public class Configuration {
      *
      * @param floating_point
      */
-    public final void withPixelFormatFloatingPoint(boolean floating_point) {
+    public void withPixelFormatFloatingPoint(boolean floating_point) {
         pixelFormat = pixelFormat.withFloatingPoint(floating_point);
     }
 
@@ -565,7 +565,7 @@ public class Configuration {
      *
      * @param floating_point_packed
      */
-    public final void withPixelFormatFloatingPointPacked(boolean floating_point_packed) {
+    public void withPixelFormatFloatingPointPacked(boolean floating_point_packed) {
         pixelFormat = pixelFormat.withFloatingPointPacked(floating_point_packed);
     }
 
@@ -574,7 +574,7 @@ public class Configuration {
      *
      * @param samples
      */
-    public final void withPixelFormatSamples(int samples) {
+    public void withPixelFormatSamples(int samples) {
         pixelFormat = pixelFormat.withSamples(samples);
     }
 
@@ -583,7 +583,7 @@ public class Configuration {
      *
      * @param sRGB
      */
-    public final void withPixelFormatSRGB(boolean sRGB) {
+    public void withPixelFormatSRGB(boolean sRGB) {
         pixelFormat = pixelFormat.withSRGB(sRGB);
     }
 
@@ -592,7 +592,7 @@ public class Configuration {
      *
      * @param stencil
      */
-    public final void withPixelFormatStencilBits(int stencil) {
+    public void withPixelFormatStencilBits(int stencil) {
         pixelFormat = pixelFormat.withStencilBits(stencil);
     }
 
@@ -601,7 +601,7 @@ public class Configuration {
      *
      * @param stereo
      */
-    public final void withPixelFormatStereo(boolean stereo) {
+    public void withPixelFormatStereo(boolean stereo) {
         pixelFormat = pixelFormat.withStereo(stereo);
     }
 
