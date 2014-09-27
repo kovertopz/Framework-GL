@@ -12,12 +12,24 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.image.png;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import net.smert.jreactphysics3d.framework.opengl.image.DefaultImageReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class PNGReader extends DefaultImageReader {
+
+    private final static Logger log = LoggerFactory.getLogger(PNGReader.class);
+
+    @Override
+    public BufferedImage load(String filename) throws IOException {
+        log.info("Loading PNG image: {}", filename);
+        return super.load(filename);
+    }
 
 }

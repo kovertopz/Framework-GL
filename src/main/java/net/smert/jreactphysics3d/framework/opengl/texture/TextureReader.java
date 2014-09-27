@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import net.smert.jreactphysics3d.framework.Fw;
+import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.image.ImageReader;
 
 /**
@@ -25,33 +26,25 @@ import net.smert.jreactphysics3d.framework.opengl.image.ImageReader;
  */
 public class TextureReader {
 
-    private boolean flipHorizontally;
-    private boolean flipVertically;
+    private boolean useFlipDefaults;
     private final Map<String, ImageReader> imageReaders;
+    private final TextureBuilder textureBuilder;
 
     public TextureReader() {
-        flipHorizontally = false;
-        flipVertically = true;
+        useFlipDefaults = true;
         imageReaders = new HashMap<>();
+        textureBuilder = new TextureBuilder();
     }
 
-    public boolean isFlipHorizontally() {
-        return flipHorizontally;
+    public boolean isUseFlipDefaults() {
+        return useFlipDefaults;
     }
 
-    public void setFlipHorizontally(boolean flipHorizontally) {
-        this.flipHorizontally = flipHorizontally;
+    public void setUseFlipDefaults(boolean useFlipDefaults) {
+        this.useFlipDefaults = useFlipDefaults;
     }
 
-    public boolean isFlipVertically() {
-        return flipVertically;
-    }
-
-    public void setFlipVertically(boolean flipVertically) {
-        this.flipVertically = flipVertically;
-    }
-
-    public BufferedImage load(String filename) throws IOException {
+    public Texture load(String filename) throws IOException {
 
         // Trim slashes
         filename = Fw.files.trimLeftSlashes(filename);
@@ -70,7 +63,17 @@ public class TextureReader {
 
         // Load the filename using the image reader
         ImageReader imageReader = imageReaders.get(extension);
-        return imageReader.load(filename);
+        BufferedImage bufferedImage = imageReader.load(filename);
+
+        // Flip image if the format requires it
+        if (useFlipDefaults) {
+            textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
+            textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
+        }
+
+        // Build the texture
+        textureBuilder.load2D(bufferedImage).buildTexture();
+        return textureBuilder.build(true); // Reset to defaults
     }
 
     public void registerExtension(String extension, ImageReader imageReader) {

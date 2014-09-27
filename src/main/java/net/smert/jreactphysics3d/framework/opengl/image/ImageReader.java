@@ -21,6 +21,10 @@ import java.io.IOException;
  */
 public interface ImageReader {
 
+    public boolean defaultFlipHorizontally();
+
+    public boolean defaultFlipVertically();
+
     public BufferedImage load(String filename) throws IOException;
 
 }

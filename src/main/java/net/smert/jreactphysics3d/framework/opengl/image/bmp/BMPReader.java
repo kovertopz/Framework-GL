@@ -12,12 +12,24 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.image.bmp;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import net.smert.jreactphysics3d.framework.opengl.image.DefaultImageReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class BMPReader extends DefaultImageReader {
+
+    private final static Logger log = LoggerFactory.getLogger(BMPReader.class);
+
+    @Override
+    public BufferedImage load(String filename) throws IOException {
+        log.info("Loading BMP image: {}", filename);
+        return super.load(filename);
+    }
 
 }

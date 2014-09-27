@@ -26,6 +26,18 @@ import net.smert.jreactphysics3d.framework.Fw;
 public class DefaultImageReader implements ImageReader {
 
     @Override
+    public boolean defaultFlipHorizontally() {
+        return false;
+    }
+
+    @Override
+    public boolean defaultFlipVertically() {
+        // By default many image formats have the origin in the upper
+        // left corner. We want a bottom left origin for OpenGL.
+        return true;
+    }
+
+    @Override
     public BufferedImage load(String filename) throws IOException {
         Files.FileAsset fileAsset = Fw.files.getTexture(filename);
         InputStream is = fileAsset.openStream();
