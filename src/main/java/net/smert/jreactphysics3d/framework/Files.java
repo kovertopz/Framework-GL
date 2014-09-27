@@ -310,6 +310,14 @@ public class Files {
         }
     }
 
+    public String trimLeftSlashes(String stringToTrim) {
+        // I don't like this function here but since it is a one off thing I'll leave it for now.
+        while (stringToTrim.startsWith(INTERNAL_FILE_SEPARATOR)) {
+            stringToTrim = stringToTrim.substring(1);
+        }
+        return stringToTrim;
+    }
+
     public void unregisterAssets(String fullPath) {
         Iterator<FileAsset> fileAssetIterator = assets.values().iterator();
 
