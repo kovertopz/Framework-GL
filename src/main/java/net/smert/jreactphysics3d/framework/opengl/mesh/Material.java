@@ -46,6 +46,14 @@ public class Material {
         return textures.put(textureType, filename);
     }
 
+    public Map<String, String> getTextures() {
+        return textures;
+    }
+
+    public Map<String, Vector4f> getLighting() {
+        return lighting;
+    }
+
     public Vector4f getLighting(String lightingType) {
         return lighting.get(lightingType);
     }
