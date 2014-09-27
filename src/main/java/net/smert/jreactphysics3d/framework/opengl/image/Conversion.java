@@ -21,28 +21,62 @@ import java.awt.image.BufferedImage;
  */
 public class Conversion {
 
-    public byte[] convertImageARGBToRGBAByteArray(BufferedImage image) {
+    public static int[] ConvertByteArrayRGBAToARGBIntArray(byte[] RGBA, int width, int height) {
+        int[] intARGB = new int[width * height];
+
+        for (int i = 0, max = intARGB.length; i < max; i++) {
+            int stride = i * 4;
+
+            intARGB[i]
+                    = (RGBA[stride + 3] << 24) & 0xff000000
+                    | (RGBA[stride + 0] << 16) & 0x00ff0000
+                    | (RGBA[stride + 1] << 8) & 0x0000ff00
+                    | (RGBA[stride + 2]) & 0x000000ff;
+        }
+
+        return intARGB;
+    }
+
+    public static int[] ConvertByteArrayRGBToARGBIntArray(byte[] RGB, int width, int height) {
+        int[] intARGB = new int[width * height];
+
+        for (int i = 0, max = intARGB.length; i < max; i++) {
+            int stride = i * 3;
+
+            intARGB[i]
+                    = (0x000000ff << 24) & 0xff000000
+                    | (RGB[stride + 0] << 16) & 0x00ff0000
+                    | (RGB[stride + 1] << 8) & 0x0000ff00
+                    | (RGB[stride + 2]) & 0x000000ff;
+        }
+
+        return intARGB;
+    }
+
+    public static byte[] ConvertImageARGBToRGBAByteArray(BufferedImage image) {
         int ARGB[] = new int[image.getHeight() * image.getWidth()];
         byte RGBA[] = new byte[image.getHeight() * image.getWidth() * 4];
 
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), ARGB, 0, image.getWidth());
 
         for (int i = 0, max = ARGB.length; i < max; i++) {
-            int alpha = ARGB[i] >> 24 & 0xff;
-            int red = ARGB[i] >> 16 & 0xff;
-            int green = ARGB[i] >> 8 & 0xff;
-            int blue = ARGB[i] & 0xff;
+            int cur = ARGB[i];
+            int alpha = cur >> 24 & 0xff;
+            int red = cur >> 16 & 0xff;
+            int green = cur >> 8 & 0xff;
+            int blue = cur & 0xff;
+            int stride = i * 4;
 
-            RGBA[i * 4 + 0] = (byte) red;
-            RGBA[i * 4 + 1] = (byte) green;
-            RGBA[i * 4 + 2] = (byte) blue;
-            RGBA[i * 4 + 3] = (byte) alpha;
+            RGBA[stride + 0] = (byte) red;
+            RGBA[stride + 1] = (byte) green;
+            RGBA[stride + 2] = (byte) blue;
+            RGBA[stride + 3] = (byte) alpha;
         }
 
         return RGBA;
     }
 
-    public BufferedImage flipHorizontally(BufferedImage image) {
+    public static BufferedImage FlipHorizontally(BufferedImage image) {
         int w = image.getWidth();
         int h = image.getHeight();
 
@@ -55,7 +89,7 @@ public class Conversion {
         return flippedimage;
     }
 
-    public BufferedImage flipVertically(BufferedImage image) {
+    public static BufferedImage FlipVertically(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
 
