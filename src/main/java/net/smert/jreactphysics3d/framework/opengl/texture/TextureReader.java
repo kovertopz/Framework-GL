@@ -12,7 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.texture;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class TextureReader {
         this.flipVertically = flipVertically;
     }
 
-    public Image load(String filename) throws IOException {
+    public BufferedImage load(String filename) throws IOException {
 
         // Trim slashes
         filename = Fw.files.trimLeftSlashes(filename);

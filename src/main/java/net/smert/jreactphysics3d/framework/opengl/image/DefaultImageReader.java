@@ -12,7 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.image;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
@@ -26,7 +26,7 @@ import net.smert.jreactphysics3d.framework.Fw;
 public class DefaultImageReader implements ImageReader {
 
     @Override
-    public Image load(String filename) throws IOException {
+    public BufferedImage load(String filename) throws IOException {
         Files.FileAsset fileAsset = Fw.files.getTexture(filename);
         InputStream is = fileAsset.openStream();
         return ImageIO.read(is);

@@ -12,7 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.image;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
@@ -21,6 +21,6 @@ import java.io.IOException;
  */
 public interface ImageReader {
 
-    public Image load(String filename) throws IOException;
+    public BufferedImage load(String filename) throws IOException;
 
 }
