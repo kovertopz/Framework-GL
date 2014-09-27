@@ -12,13 +12,20 @@
  */
 package net.smert.jreactphysics3d.framework;
 
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import net.smert.jreactphysics3d.framework.opengl.GL;
+import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.image.bmp.BMPReader;
 import net.smert.jreactphysics3d.framework.opengl.image.gif.GIFReader;
 import net.smert.jreactphysics3d.framework.opengl.image.jpg.JPGReader;
 import net.smert.jreactphysics3d.framework.opengl.image.png.PNGReader;
+import net.smert.jreactphysics3d.framework.opengl.image.tga.TGAReader;
 import net.smert.jreactphysics3d.framework.opengl.image.tiff.TIFFReader;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
@@ -47,6 +54,8 @@ public class Graphics {
         textureReader.registerExtension("jpeg", new JPGReader());
         textureReader.registerExtension("jpg", new JPGReader());
         textureReader.registerExtension("png", new PNGReader());
+        textureReader.registerExtension("tga", new TGAReader());
+        textureReader.registerExtension("tif", new TIFFReader());
         textureReader.registerExtension("tiff", new TIFFReader());
     }
 
@@ -83,10 +92,14 @@ public class Graphics {
         meshReader.load(filename, mesh);
     }
 
+    public void loadTexture(String filename) throws IOException {
+        Texture texture = textureReader.load(filename);
+    }
+
     public void loadTextures(Mesh mesh) throws IOException {
         List<String> textures = mesh.getTextures();
-        for (String texture : textures) {
-            textureReader.load(texture);
+        for (String filename : textures) {
+            Texture texture = textureReader.load(filename);
         }
     }
 
