@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**
@@ -163,7 +163,7 @@ public class Mesh {
 
     public DrawCommands getDrawCommands() {
         if (drawCommands == null) {
-            drawCommands = RenderableFactory.drawCommandsConversion;
+            drawCommands = Renderable.drawCommandsConversion;
         }
         return drawCommands;
     }

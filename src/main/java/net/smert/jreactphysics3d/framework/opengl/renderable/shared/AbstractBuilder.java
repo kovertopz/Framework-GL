@@ -17,8 +17,8 @@ import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
@@ -29,7 +29,7 @@ public abstract class AbstractBuilder {
 
     private void createBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
 
-        RenderableConfiguration config = RenderableFactory.config;
+        RenderableConfiguration config = Renderable.config;
 
         // For each segment in the mesh
         for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
@@ -61,7 +61,7 @@ public abstract class AbstractBuilder {
 
     public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
 
-        RenderableConfiguration config = RenderableFactory.config;
+        RenderableConfiguration config = Renderable.config;
 
         // Index byte buffer
         int byteSize = config.convertGLTypeToByteSize(config.getIndexType());
@@ -94,7 +94,7 @@ public abstract class AbstractBuilder {
     public void createNonInterleavedBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
 
         int bufferSize, byteSize;
-        RenderableConfiguration config = RenderableFactory.config;
+        RenderableConfiguration config = Renderable.config;
 
         // Color byte buffer
         if (mesh.hasColors()) {

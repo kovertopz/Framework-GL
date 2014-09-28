@@ -17,7 +17,7 @@ import net.smert.jreactphysics3d.framework.opengl.VertexBufferObject;
 import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -45,11 +45,11 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         // Destroy existing VBOs
         destroy();
 
-        RenderableFactory.byteBuffers.reset();
+        Renderable.byteBuffers.reset();
 
         // Create VBOs
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            RenderableFactory.vboBuilder.createNonInterleavedBufferData(mesh, RenderableFactory.byteBuffers);
+            Renderable.vboBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers);
         }
 
         // Send byte buffer data for colors
@@ -57,7 +57,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_COLOR] = GL.glf.createVertexBufferObject();
             VertexBufferObject vboColor = vbos[VBO_COLOR];
             vboColor.create();
-            GL.vboHelper.setBufferData(vboColor.getVboID(), RenderableFactory.byteBuffers.getColor(),
+            GL.vboHelper.setBufferData(vboColor.getVboID(), Renderable.byteBuffers.getColor(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
@@ -66,7 +66,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_NORMAL] = GL.glf.createVertexBufferObject();
             VertexBufferObject vboNormal = vbos[VBO_NORMAL];
             vboNormal.create();
-            GL.vboHelper.setBufferData(vboNormal.getVboID(), RenderableFactory.byteBuffers.getNormal(),
+            GL.vboHelper.setBufferData(vboNormal.getVboID(), Renderable.byteBuffers.getNormal(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
@@ -75,7 +75,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_TEXCOORD] = GL.glf.createVertexBufferObject();
             VertexBufferObject vboTexCoord = vbos[VBO_TEXCOORD];
             vboTexCoord.create();
-            GL.vboHelper.setBufferData(vboTexCoord.getVboID(), RenderableFactory.byteBuffers.getTexCoord(),
+            GL.vboHelper.setBufferData(vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
@@ -84,7 +84,7 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_VERTEX] = GL.glf.createVertexBufferObject();
             VertexBufferObject vboVertex = vbos[VBO_VERTEX];
             vboVertex.create();
-            GL.vboHelper.setBufferData(vboVertex.getVboID(), RenderableFactory.byteBuffers.getVertex(),
+            GL.vboHelper.setBufferData(vboVertex.getVboID(), Renderable.byteBuffers.getVertex(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
@@ -93,15 +93,15 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
             vbos[VBO_VERTEX_INDEX] = GL.glf.createVertexBufferObject();
             VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
             vboVertexIndex.create();
-            RenderableFactory.vboBuilder.createIndexBufferData(mesh, RenderableFactory.byteBuffers);
-            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), RenderableFactory.byteBuffers.getVertexIndex(),
+            Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers);
+            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
         GL.vboHelper.unbind();
 
         // Create draw call
-        drawCall = RenderableFactory.vboBuilder.createDrawCall(mesh);
+        drawCall = Renderable.vboBuilder.createDrawCall(mesh);
     }
 
     @Override
@@ -144,19 +144,19 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
 
         // Bind each VBO
         if (vboColor != null) {
-            RenderableFactory.vboBindState.bindColor(vboColor.getVboID(), 0, 0);
+            Renderable.vboBindState.bindColor(vboColor.getVboID(), 0, 0);
         }
         if (vboNormal != null) {
-            RenderableFactory.vboBindState.bindNormal(vboNormal.getVboID(), 0, 0);
+            Renderable.vboBindState.bindNormal(vboNormal.getVboID(), 0, 0);
         }
         if (vboTexCoord != null) {
-            RenderableFactory.vboBindState.bindTextureCoordinate(vboTexCoord.getVboID(), 0, 0);
+            Renderable.vboBindState.bindTextureCoordinate(vboTexCoord.getVboID(), 0, 0);
         }
         if (vboVertex != null) {
-            RenderableFactory.vboBindState.bindVertex(vboVertex.getVboID(), 0, 0);
+            Renderable.vboBindState.bindVertex(vboVertex.getVboID(), 0, 0);
         }
         if (vboVertexIndex != null) {
-            RenderableFactory.vboBindState.bindVertexIndex(vboVertexIndex.getVboID());
+            Renderable.vboBindState.bindVertexIndex(vboVertexIndex.getVboID());
         }
 
         drawCall.render();

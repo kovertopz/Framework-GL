@@ -14,7 +14,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.opengl.GL;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -37,7 +37,7 @@ public class VADrawElements extends AbstractDrawCall {
     public void render() {
         for (int i = 0, max = primitiveModes.length; i < max; i++) {
             GL.vaHelper.drawElements(
-                    primitiveModes[i], elementCounts[i], RenderableFactory.config.getIndexType(), vertexIndexBuffer);
+                    primitiveModes[i], elementCounts[i], Renderable.config.getIndexType(), vertexIndexBuffer);
         }
     }
 

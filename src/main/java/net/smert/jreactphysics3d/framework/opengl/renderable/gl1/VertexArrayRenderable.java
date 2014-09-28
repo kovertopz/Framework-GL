@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.opengl.VertexArray;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -44,35 +44,35 @@ public class VertexArrayRenderable extends AbstractRenderable {
         // Destroy existing vertex array
         destroy();
 
-        RenderableFactory.vertexArrays.reset();
+        Renderable.vertexArrays.reset();
 
         // Create vertex arrays
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            RenderableFactory.vaBuilder.createNonInterleavedBufferData(mesh, RenderableFactory.vertexArrays);
+            Renderable.vaBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays);
         }
 
         ByteBuffer vertexIndexBuffer = null;
 
         // Save vertex arrays
         if (mesh.hasColors()) {
-            vas[VA_COLOR] = RenderableFactory.vertexArrays.getColorVertexArray();
+            vas[VA_COLOR] = Renderable.vertexArrays.getColorVertexArray();
         }
         if (mesh.hasNormals()) {
-            vas[VA_NORMAL] = RenderableFactory.vertexArrays.getNormalVertexArray();
+            vas[VA_NORMAL] = Renderable.vertexArrays.getNormalVertexArray();
         }
         if (mesh.hasTexCoords()) {
-            vas[VA_TEXCOORD] = RenderableFactory.vertexArrays.getTexCoordVertexArray();
+            vas[VA_TEXCOORD] = Renderable.vertexArrays.getTexCoordVertexArray();
         }
         if (mesh.hasVertices()) {
-            vas[VA_VERTEX] = RenderableFactory.vertexArrays.getVertexVertexArray();
+            vas[VA_VERTEX] = Renderable.vertexArrays.getVertexVertexArray();
         }
         if (mesh.hasIndexes()) {
-            vas[VA_VERTEX_INDEX] = RenderableFactory.vertexArrays.getVertexIndexVertexArray();
+            vas[VA_VERTEX_INDEX] = Renderable.vertexArrays.getVertexIndexVertexArray();
             vertexIndexBuffer = vas[VA_VERTEX_INDEX].getByteBuffer();
         }
 
         // Create draw call
-        drawCall = RenderableFactory.vaBuilder.createDrawCall(mesh, vertexIndexBuffer);
+        drawCall = Renderable.vaBuilder.createDrawCall(mesh, vertexIndexBuffer);
     }
 
     @Override
@@ -114,16 +114,16 @@ public class VertexArrayRenderable extends AbstractRenderable {
 
         // Bind each vertex array
         if (vaColor != null) {
-            RenderableFactory.vaBindState.bindColor(vaColor.getByteBuffer());
+            Renderable.vaBindState.bindColor(vaColor.getByteBuffer());
         }
         if (vaNormal != null) {
-            RenderableFactory.vaBindState.bindNormal(vaNormal.getByteBuffer());
+            Renderable.vaBindState.bindNormal(vaNormal.getByteBuffer());
         }
         if (vaTexCoord != null) {
-            RenderableFactory.vaBindState.bindTextureCoordinate(vaTexCoord.getByteBuffer());
+            Renderable.vaBindState.bindTextureCoordinate(vaTexCoord.getByteBuffer());
         }
         if (vaVertex != null) {
-            RenderableFactory.vaBindState.bindVertex(vaVertex.getByteBuffer());
+            Renderable.vaBindState.bindVertex(vaVertex.getByteBuffer());
         }
 
         drawCall.render();

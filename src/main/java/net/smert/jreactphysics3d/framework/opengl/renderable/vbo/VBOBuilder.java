@@ -15,8 +15,8 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.factory.VBODrawCallFactory;
 
@@ -35,7 +35,7 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
     public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved) {
 
         int total = 0;
-        RenderableConfiguration config = RenderableFactory.config;
+        RenderableConfiguration config = Renderable.config;
 
         // Calculate byte size of each type and add to the total. Save the total as
         // the current offset before increasing it.

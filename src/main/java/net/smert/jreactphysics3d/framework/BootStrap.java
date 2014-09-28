@@ -63,8 +63,8 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.ObjReader;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DisplayListRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.ImmediateModeRenderable;
@@ -342,15 +342,15 @@ public class BootStrap {
         GL.vboHelper = container.getComponent(VertexBufferObjectHelper.class);
     }
 
-    protected void createStaticRenderableFactory(MutablePicoContainer container) {
-        RenderableFactory.byteBuffers = container.getComponent(ByteBuffers.class);
-        RenderableFactory.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
-        RenderableFactory.config = container.getComponent(RenderableConfiguration.class);
-        RenderableFactory.vaBindState = container.getComponent(VABindState.class);
-        RenderableFactory.vaBuilder = container.getComponent(VABuilder.class);
-        RenderableFactory.vboBindState = container.getComponent(VBOBindState.class);
-        RenderableFactory.vboBuilder = container.getComponent(VBOBuilder.class);
-        RenderableFactory.vertexArrays = container.getComponent(VertexArrays.class);
+    protected void createStaticRenderable(MutablePicoContainer container) {
+        Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
+        Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
+        Renderable.config = container.getComponent(RenderableConfiguration.class);
+        Renderable.vaBindState = container.getComponent(VABindState.class);
+        Renderable.vaBuilder = container.getComponent(VABuilder.class);
+        Renderable.vboBindState = container.getComponent(VBOBindState.class);
+        Renderable.vboBuilder = container.getComponent(VBOBuilder.class);
+        Renderable.vertexArrays = container.getComponent(VertexArrays.class);
     }
 
     protected void initialize(MutablePicoContainer container) {
@@ -393,7 +393,7 @@ public class BootStrap {
         initialize(container);
         createStaticFramework(container);
         createStaticOpenGL(container);
-        createStaticRenderableFactory(container);
+        createStaticRenderable(container);
 
         // Start the application
         try {

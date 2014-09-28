@@ -24,7 +24,7 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.VBOBuilder;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RenderableFactory {
+public class Renderable {
 
     public static ByteBuffers byteBuffers;
     public static DrawCommands drawCommandsConversion;

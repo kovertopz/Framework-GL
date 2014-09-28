@@ -18,7 +18,7 @@ import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.constants.VertexBufferObjectTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -42,16 +42,15 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         // Destroy existing VBOs
         destroy();
 
-        RenderableFactory.byteBuffers.reset();
+        Renderable.byteBuffers.reset();
 
         // Create VBO
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             vboInterleaved = GL.glf.createVertexBufferObjectInterleaved();
             vboInterleaved.create();
-            RenderableFactory.vboBuilder.calculateOffsetsAndStride(mesh, vboInterleaved);
-            RenderableFactory.vboBuilder.createInterleavedBufferData(
-                    mesh, vboInterleaved.getStrideBytes(), RenderableFactory.byteBuffers);
-            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), RenderableFactory.byteBuffers.getInterleaved(),
+            Renderable.vboBuilder.calculateOffsetsAndStride(mesh, vboInterleaved);
+            Renderable.vboBuilder.createInterleavedBufferData(mesh, vboInterleaved.getStrideBytes(), Renderable.byteBuffers);
+            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), Renderable.byteBuffers.getInterleaved(),
                     VertexBufferObjectTypes.STATIC_DRAW);
         }
 
@@ -72,8 +71,8 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         if (mesh.hasIndexes()) {
             vboVertexIndex = GL.glf.createVertexBufferObject();
             vboVertexIndex.create();
-            RenderableFactory.vboBuilder.createIndexBufferData(mesh, RenderableFactory.byteBuffers);
-            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), RenderableFactory.byteBuffers.getVertexIndex(),
+            Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers);
+            GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
                     VertexBufferObjectTypes.STATIC_DRAW);
             hasIndexes = true;
         }
@@ -81,7 +80,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         GL.vboHelper.unbind();
 
         // Create draw call
-        drawCall = RenderableFactory.vboBuilder.createDrawCall(mesh);
+        drawCall = Renderable.vboBuilder.createDrawCall(mesh);
     }
 
     @Override
@@ -108,23 +107,23 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
         // Bind VBO for each type
         if (hasColors) {
-            RenderableFactory.vboBindState.bindColor(
+            Renderable.vboBindState.bindColor(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getColorOffsetBytes());
         }
         if (hasNormals) {
-            RenderableFactory.vboBindState.bindNormal(
+            Renderable.vboBindState.bindNormal(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getNormalOffsetBytes());
         }
         if (hasTexCoords) {
-            RenderableFactory.vboBindState.bindTextureCoordinate(
+            Renderable.vboBindState.bindTextureCoordinate(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getTexCoordOffsetBytes());
         }
         if (hasVertices) {
-            RenderableFactory.vboBindState.bindVertex(
+            Renderable.vboBindState.bindVertex(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getVertexOffsetBytes());
         }
         if (hasIndexes) {
-            RenderableFactory.vboBindState.bindVertexIndex(vboInterleaved.getVboID());
+            Renderable.vboBindState.bindVertexIndex(vboInterleaved.getVboID());
         }
 
         drawCall.render();
