@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Configuration {
+public class RenderableConfiguration {
 
-    private final static Logger log = LoggerFactory.getLogger(Configuration.class);
+    private final static Logger log = LoggerFactory.getLogger(RenderableConfiguration.class);
 
     private boolean isImmutable;
     private int colorSize;
@@ -39,7 +39,7 @@ public class Configuration {
     private int vertexSize;
     private final int vertexType;
 
-    public Configuration() {
+    public RenderableConfiguration() {
         isImmutable = false;
         colorSize = 4;
         colorType = GLTypes.FLOAT;
