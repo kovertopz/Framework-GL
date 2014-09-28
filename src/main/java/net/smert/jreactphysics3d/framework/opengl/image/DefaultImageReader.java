@@ -39,9 +39,14 @@ public class DefaultImageReader implements ImageReader {
 
     @Override
     public BufferedImage load(String filename) throws IOException {
+        BufferedImage bufferedImage;
         Files.FileAsset fileAsset = Fw.files.getTexture(filename);
-        InputStream is = fileAsset.openStream();
-        return ImageIO.read(is);
+
+        // Try to read the stream (without crossing it)
+        try (InputStream is = fileAsset.openStream()) {
+            bufferedImage = ImageIO.read(is);
+        }
+        return bufferedImage;
     }
 
 }
