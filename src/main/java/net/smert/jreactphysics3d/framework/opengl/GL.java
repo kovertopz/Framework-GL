@@ -12,6 +12,9 @@
  */
 package net.smert.jreactphysics3d.framework.opengl;
 
+import net.smert.jreactphysics3d.framework.opengl.camera.factory.CameraFactory;
+import net.smert.jreactphysics3d.framework.opengl.factory.GLFactory;
+import net.smert.jreactphysics3d.framework.opengl.helpers.BufferHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.DisplayListHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.FrameBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
@@ -20,6 +23,11 @@ import net.smert.jreactphysics3d.framework.opengl.helpers.ShaderHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexArrayHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
+import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
+import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureBuilder;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
 
 /**
  *
@@ -27,15 +35,23 @@ import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelp
  */
 public class GL {
 
+    public static CameraFactory cf;
+    public static BufferHelper bufferHelper;
     public static DisplayListHelper displayListHelper;
     public static FrameBufferObjectHelper fboHelper;
+    public static GLFactory glf;
+    public static MeshFactory mf;
     public static OpenGL1 o1;
     public static OpenGL2 o2;
     public static OpenGL3 o3;
     public static LegacyRenderHelper renderHelper;
+    public static MeshReader meshReader;
+    public static RenderableFactoryGL1 rf1;
     public static RenderBufferObjectHelper rboHelper;
     public static ShaderHelper shaderHelper;
+    public static TextureBuilder textureBuilder;
     public static TextureHelper textureHelper;
+    public static TextureReader textureReader;
     public static VertexArrayHelper vaHelper;
     public static VertexBufferObjectHelper vboHelper;
 
