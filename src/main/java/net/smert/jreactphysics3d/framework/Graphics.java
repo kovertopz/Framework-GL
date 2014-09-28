@@ -19,6 +19,7 @@ import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
 
@@ -63,6 +64,8 @@ public class Graphics {
      * during the normal shutdown process.
      */
     public void destroy() {
+        RenderableFactory.vaBindState.reset();
+        RenderableFactory.vboBindState.reset();
         GL.vboHelper.unbind();
     }
 
