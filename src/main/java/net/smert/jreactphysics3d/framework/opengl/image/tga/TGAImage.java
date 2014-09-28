@@ -48,7 +48,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import net.smert.jreactphysics3d.framework.opengl.helpers.BufferHelper;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -403,7 +403,7 @@ public class TGAImage {
         if (format == GL11.GL_RGB || format == GL11.GL_RGBA) {
             swapBGR(tmpData, rawWidth, header.height(), bpp);
         }
-        ByteBuffer byteBuffer = BufferHelper.createByteBuffer(tmpData.length);
+        ByteBuffer byteBuffer = GL.bufferHelper.createByteBuffer(tmpData.length);
         byteBuffer.put(tmpData);
         byteBuffer.flip();
         data = byteBuffer;
@@ -437,7 +437,7 @@ public class TGAImage {
         if (format == GL11.GL_RGB || format == GL11.GL_RGBA) {
             swapBGR(tmpData, rawWidth, header.height(), bpp);
         }
-        ByteBuffer byteBuffer = BufferHelper.createByteBuffer(tmpData.length);
+        ByteBuffer byteBuffer = GL.bufferHelper.createByteBuffer(tmpData.length);
         byteBuffer.put(tmpData);
         byteBuffer.flip();
         data = byteBuffer;
@@ -524,7 +524,11 @@ public class TGAImage {
      * @throws java.io.IOException
      */
     public static TGAImage read(final String filename) throws IOException {
-        return read(new FileInputStream(filename));
+        TGAImage image;
+        try (FileInputStream fis = new FileInputStream(filename)) {
+            image = read(fis);
+        }
+        return image;
     }
 
     /**
@@ -535,12 +539,14 @@ public class TGAImage {
      * @throws java.io.IOException
      */
     public static TGAImage read(final InputStream in) throws IOException {
-        final LEDataInputStream dIn = new LEDataInputStream(new BufferedInputStream(in));
-
-        final Header header = new Header(dIn);
-        final TGAImage res = new TGAImage(header);
-        res.decodeImage(dIn);
-        return res;
+        final TGAImage image;
+        try (BufferedInputStream bis = new BufferedInputStream(in);
+                LEDataInputStream dIn = new LEDataInputStream(bis)) {
+            final Header header = new Header(dIn);
+            image = new TGAImage(header);
+            image.decodeImage(dIn);
+        }
+        return image;
     }
 
     /**
@@ -560,17 +566,16 @@ public class TGAImage {
      * @throws java.io.IOException
      */
     public void write(final File file) throws IOException {
-        final FileOutputStream stream = new FileOutputStream(file);
-        final FileChannel chan = stream.getChannel();
-        final ByteBuffer buf = BufferHelper.createByteBuffer(header.size());
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        header.write(buf);
-        buf.rewind();
-        chan.write(buf);
-        chan.write(data);
-        chan.force(true);
-        chan.close();
-        stream.close();
+        try (FileOutputStream stream = new FileOutputStream(file);
+                FileChannel chan = stream.getChannel()) {
+            final ByteBuffer buf = GL.bufferHelper.createByteBuffer(header.size());
+            buf.order(ByteOrder.LITTLE_ENDIAN);
+            header.write(buf);
+            buf.rewind();
+            chan.write(buf);
+            chan.write(data);
+            chan.force(true);
+        }
         data.rewind();
     }
 

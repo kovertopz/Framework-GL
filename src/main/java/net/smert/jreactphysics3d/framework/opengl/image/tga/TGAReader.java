@@ -44,35 +44,35 @@ public class TGAReader implements ImageReader {
 
     @Override
     public BufferedImage load(String filename) throws IOException {
+        BufferedImage image;
         log.info("Loading TGA image: {}", filename);
         Files.FileAsset fileAsset = Fw.files.getTexture(filename);
-        InputStream is = fileAsset.openStream();
 
-        // Read TGA
-        TGAImage tgaImage = TGAImage.read(is);
-        int height = tgaImage.getHeight();
-        int width = tgaImage.getWidth();
+        // Try to read the stream
+        try (InputStream is = fileAsset.openStream()) {
 
-        // Close stream
-        is.close();
+            // Read TGA
+            TGAImage tgaImage = TGAImage.read(is);
+            int height = tgaImage.getHeight();
+            int width = tgaImage.getWidth();
 
-        // Create new BufferedImage
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        ByteBuffer tgaImageByteBuffer = tgaImage.getData();
+            // Create new BufferedImage
+            image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            ByteBuffer tgaImageByteBuffer = tgaImage.getData();
 
-        // Convert to byte array
-        byte[] byteArray = new byte[tgaImageByteBuffer.limit()];
-        tgaImageByteBuffer.get(byteArray);
+            // Convert to byte array
+            byte[] byteArray = new byte[tgaImageByteBuffer.limit()];
+            tgaImageByteBuffer.get(byteArray);
 
-        // Convert to int array
-        int[] intArray;
-        if (tgaImage.getGLFormat() == GL11.GL_RGB) {
-            intArray = Conversion.ConvertByteArrayRGBToARGBIntArray(byteArray, width, height);
-        } else {
-            intArray = Conversion.ConvertByteArrayRGBAToARGBIntArray(byteArray, width, height);
+            // Convert to int array
+            int[] intArray;
+            if (tgaImage.getGLFormat() == GL11.GL_RGB) {
+                intArray = Conversion.ConvertByteArrayRGBToARGBIntArray(byteArray, width, height);
+            } else {
+                intArray = Conversion.ConvertByteArrayRGBAToARGBIntArray(byteArray, width, height);
+            }
+            image.setRGB(0, 0, width, height, intArray, 0, width);
         }
-        image.setRGB(0, 0, width, height, intArray, 0, width);
-
         return image;
     }
 
