@@ -25,18 +25,14 @@ public class DisplayListRenderable extends AbstractRenderable {
 
     private DisplayList displayList;
 
-    public DisplayListRenderable(Mesh mesh) {
-        super(mesh);
-    }
-
     @Override
-    public void create() {
+    public void create(Mesh mesh) {
 
         // Destroy existing display list
         destroy();
 
         // Create display list
-        displayList = new DisplayList();
+        displayList = GL.glf.createDisplayList();
         displayList.create();
         int displayListID = displayList.getDisplayListID();
 

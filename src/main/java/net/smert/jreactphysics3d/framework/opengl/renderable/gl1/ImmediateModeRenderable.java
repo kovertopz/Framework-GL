@@ -21,12 +21,11 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
  */
 public class ImmediateModeRenderable extends AbstractRenderable {
 
-    public ImmediateModeRenderable(Mesh mesh) {
-        super(mesh);
-    }
+    private Mesh mesh;
 
     @Override
-    public void create() {
+    public void create(Mesh mesh) {
+        this.mesh = mesh;
     }
 
     @Override
