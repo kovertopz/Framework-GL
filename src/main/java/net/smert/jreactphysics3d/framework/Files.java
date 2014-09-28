@@ -190,49 +190,47 @@ public class Files {
         }
 
         // Try to open the JAR file.
-        boolean firstEntry = true;
-        JarFile jar = new JarFile(jarPath);
-        Enumeration<JarEntry> entries = jar.entries();
+        try (JarFile jar = new JarFile(jarPath)) {
+            boolean firstEntry = true;
+            Enumeration<JarEntry> entries = jar.entries();
 
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName(); // Name should never start with a forward slash
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String name = entry.getName(); // Name should never start with a forward slash
 
-            // If the path or file matches the curent entry
-            if (name.startsWith(relativeFullPath)) {
-                if (firstEntry) {
+                // If the path or file matches the curent entry
+                if (name.startsWith(relativeFullPath)) {
+                    if (firstEntry) {
 
-                    // If the first entry is not a directory then we have a problem and won't be able to
-                    // register assets
-                    if (entry.isDirectory() == false) {
-                        throw new RuntimeException(
-                                "The full path was found inside a JAR file and must be a directory: "
-                                + fullPath);
+                        // If the first entry is not a directory then we have a problem and won't be able to
+                        // register assets
+                        if (entry.isDirectory() == false) {
+                            throw new RuntimeException(
+                                    "The full path was found inside a JAR file and must be a directory: "
+                                    + fullPath);
+                        }
+                        firstEntry = false;
+                    } else {
+
+                        // Skip entries that are just directories
+                        if (entry.isDirectory()) {
+                            continue;
+                        }
+
+                        // Strip relativeFullPath from beginning of entry name
+                        String relativePathToBaseDirectory = name.replace(relativeFullPathWithTrailingSlash, "");
+
+                        // If we are to register an asset then it must be inside a directory. We need the directory
+                        // name to determine what type of asset it belongs to.
+                        if (relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR) == false) {
+                            continue;
+                        }
+
+                        register(fullPath, relativePathToBaseDirectory, INTERNAL_FILE_SEPARATOR);
                     }
-                    firstEntry = false;
-                } else {
-
-                    // Skip entries that are just directories
-                    if (entry.isDirectory()) {
-                        continue;
-                    }
-
-                    // Strip relativeFullPath from beginning of entry name
-                    String relativePathToBaseDirectory = name.replace(relativeFullPathWithTrailingSlash, "");
-
-                    // If we are to register an asset then it must be inside a directory. We need the directory
-                    // name to determine what type of asset it belongs to.
-                    if (relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR) == false) {
-                        continue;
-                    }
-
-                    register(fullPath, relativePathToBaseDirectory, INTERNAL_FILE_SEPARATOR);
                 }
             }
         }
-
-        // Close input stream
-        jar.close();
     }
 
     private void registerZipFileAssets(File file, String fullPath) throws IOException {
@@ -240,35 +238,34 @@ public class Files {
         // Set the file type
         fileType = FileType.ZIP;
 
-        FileInputStream fis = new FileInputStream(file);
-        ZipInputStream zip = new ZipInputStream(fis);
+        // Try to open the file
+        try (FileInputStream fis = new FileInputStream(file);
+                ZipInputStream zip = new ZipInputStream(fis)) {
 
-        while (true) {
-            ZipEntry entry = zip.getNextEntry();
+            while (true) {
+                ZipEntry entry = zip.getNextEntry();
 
-            // If there are no more entries
-            if (entry == null) {
-                break;
+                // If there are no more entries
+                if (entry == null) {
+                    break;
+                }
+
+                // We don't do anything with directories
+                if (entry.isDirectory()) {
+                    continue;
+                }
+
+                String name = entry.getName(); // Name should never start with a forward slash
+
+                // If we are to register an asset then it must be inside a directory. We need the directory
+                // name to determine what type of asset it belongs to.
+                if (name.contains(INTERNAL_FILE_SEPARATOR) == false) {
+                    continue;
+                }
+
+                register(fullPath, name, INTERNAL_FILE_SEPARATOR);
             }
-
-            // We don't do anything with directories
-            if (entry.isDirectory()) {
-                continue;
-            }
-
-            String name = entry.getName(); // Name should never start with a forward slash
-
-            // If we are to register an asset then it must be inside a directory. We need the directory
-            // name to determine what type of asset it belongs to.
-            if (name.contains(INTERNAL_FILE_SEPARATOR) == false) {
-                continue;
-            }
-
-            register(fullPath, name, INTERNAL_FILE_SEPARATOR);
         }
-
-        // Close input stream
-        zip.close();
     }
 
     public FileAsset get(String resourceType, String filename) {
