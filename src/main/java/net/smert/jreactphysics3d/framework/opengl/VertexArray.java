@@ -13,7 +13,6 @@
 package net.smert.jreactphysics3d.framework.opengl;
 
 import java.nio.ByteBuffer;
-import net.smert.jreactphysics3d.framework.opengl.helpers.BufferHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +26,13 @@ public class VertexArray {
 
     private ByteBuffer byteBuffer;
 
+    public VertexArray() {
+        byteBuffer = null;
+    }
+
     public void create(int bufferSize) {
         destroy();
-        byteBuffer = BufferHelper.createByteBuffer(bufferSize);
+        byteBuffer = GL.bufferHelper.createByteBuffer(bufferSize);
         log.debug("Created a new vertex array with a size: {}", bufferSize);
     }
 
