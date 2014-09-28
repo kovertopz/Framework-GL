@@ -27,31 +27,31 @@ import java.nio.ShortBuffer;
  */
 public class BufferHelper {
 
-    public static ByteBuffer createByteBuffer(int size) {
+    public ByteBuffer createByteBuffer(int size) {
         return ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
     }
 
-    public static CharBuffer createCharBuffer(int size) {
+    public CharBuffer createCharBuffer(int size) {
         return createByteBuffer(size).asCharBuffer();
     }
 
-    public static DoubleBuffer createDoubleBuffer(int size) {
+    public DoubleBuffer createDoubleBuffer(int size) {
         return createByteBuffer(size * 8).asDoubleBuffer();
     }
 
-    public static FloatBuffer createFloatBuffer(int size) {
+    public FloatBuffer createFloatBuffer(int size) {
         return createByteBuffer(size * 4).asFloatBuffer();
     }
 
-    public static IntBuffer createIntBuffer(int size) {
+    public IntBuffer createIntBuffer(int size) {
         return createByteBuffer(size * 4).asIntBuffer();
     }
 
-    public static LongBuffer createLongBuffer(int size) {
+    public LongBuffer createLongBuffer(int size) {
         return createByteBuffer(size * 8).asLongBuffer();
     }
 
-    public static ShortBuffer createShortBuffer(int size) {
+    public ShortBuffer createShortBuffer(int size) {
         return createByteBuffer(size * 2).asShortBuffer();
     }
 
