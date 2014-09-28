@@ -96,7 +96,7 @@ public class Window {
 
         // Only create the display when it hasn't already done so. We would get an error when switching from
         // windowed to full screen otherwise.
-        if (Display.isCreated() == false) {
+        if (!Display.isCreated()) {
             Display.create(config.pixelFormat, config.contextAttribs);
 
             log.info("Created window with display mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",

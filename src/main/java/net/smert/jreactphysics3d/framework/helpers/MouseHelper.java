@@ -167,7 +167,7 @@ public class MouseHelper {
     public void update() {
 
         // Handle queued events
-        while (org.lwjgl.input.Mouse.next() == true) {
+        while (org.lwjgl.input.Mouse.next()) {
             int eventButton = org.lwjgl.input.Mouse.getEventButton();
             if (eventButton != LWJGL_MOUSE_MOVE) {
                 int button = lwjglToMouse[mapLwglToArray(eventButton)];

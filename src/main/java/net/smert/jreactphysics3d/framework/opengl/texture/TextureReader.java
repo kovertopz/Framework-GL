@@ -57,7 +57,7 @@ public class TextureReader {
         String extension = filename.substring(posOfLastPeriod + 1);
 
         // Does the image reader for this extension exist?
-        if (imageReaders.containsKey(extension) == false) {
+        if (!imageReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
 
@@ -84,7 +84,7 @@ public class TextureReader {
     }
 
     public void unregisterExtension(String extension) {
-        if (imageReaders.containsKey(extension) == false) {
+        if (!imageReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
         imageReaders.remove(extension);

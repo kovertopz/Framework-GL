@@ -583,7 +583,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 switchPolygonFillMode() {
-        if (wireframeMode == true) {
+        if (wireframeMode) {
             GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         } else {
             GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);

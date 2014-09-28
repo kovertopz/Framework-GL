@@ -32,7 +32,7 @@ public class VBOBindState {
     private int vboVertexIndexID;
 
     public VBOBindState() {
-        if (Renderable.config.isImmutable() == false) {
+        if (!Renderable.config.isImmutable()) {
             throw new RuntimeException("Renderable configuration must be made immutable");
         }
         reset();
@@ -42,7 +42,7 @@ public class VBOBindState {
         if (colorEnabled != enabled) {
             colorEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vboHelper.enableColors();
             } else {
                 GL.vboHelper.disableColors();
@@ -54,7 +54,7 @@ public class VBOBindState {
         if (normalEnabled != enabled) {
             normalEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vboHelper.enableNormals();
             } else {
                 GL.vboHelper.disableNormals();
@@ -66,7 +66,7 @@ public class VBOBindState {
         if (texCoordEnabled != enabled) {
             texCoordEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vboHelper.enableTextureCoordinates();
             } else {
                 GL.vboHelper.disableTextureCoordinates();
@@ -78,7 +78,7 @@ public class VBOBindState {
         if (vertexEnabled != enabled) {
             vertexEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vboHelper.enableVertices();
             } else {
                 GL.vboHelper.disableVertices();

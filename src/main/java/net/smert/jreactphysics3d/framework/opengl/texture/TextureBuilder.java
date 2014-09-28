@@ -137,7 +137,7 @@ public class TextureBuilder {
                 throw new IllegalArgumentException("Unsupported texture primitive for pixel data: " + texturePrimitive);
         }
 
-        if (useMipmap == true) {
+        if (useMipmap) {
             switch (texturePrimitive) {
                 case TextureTypes.UNSIGNED_BYTE:
                     GL.textureHelper.setByteMipmaps(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
@@ -181,7 +181,7 @@ public class TextureBuilder {
                 break;
         }
 
-        if (useMipmap == true) {
+        if (useMipmap) {
             switch (texturePrimitive) {
                 case TextureTypes.UNSIGNED_BYTE:
                 case TextureTypes.FLOAT:
@@ -199,7 +199,7 @@ public class TextureBuilder {
     }
 
     private void buildTextureCubeMap() {
-        if (nullData == true) {
+        if (nullData) {
             buildTextureCubeMapNullData();
         } else {
             buildTextureCubeMapByteBuffer();
@@ -233,7 +233,7 @@ public class TextureBuilder {
                 throw new IllegalArgumentException("Unknown texture primitive for pixel data: " + texturePrimitive);
         }
 
-        if (useMipmap == true) {
+        if (useMipmap) {
             switch (texturePrimitive) {
                 case TextureTypes.FLOAT:
                 case TextureTypes.UNSIGNED_BYTE:
@@ -340,7 +340,7 @@ public class TextureBuilder {
                 break;
         }
 
-        if (useMipmap == true) {
+        if (useMipmap) {
             switch (texturePrimitive) {
                 case TextureTypes.UNSIGNED_BYTE:
                 case TextureTypes.FLOAT:
@@ -370,7 +370,7 @@ public class TextureBuilder {
 
     public Texture build(boolean reset) {
         Texture temp = texture;
-        if (reset == true) {
+        if (reset) {
             reset();
         }
         return temp;
@@ -506,10 +506,10 @@ public class TextureBuilder {
 
     public TextureBuilder load2D(BufferedImage textureImage) {
 
-        if (flipHorizontally == true) {
+        if (flipHorizontally) {
             textureImage = Conversion.FlipHorizontally(textureImage);
         }
-        if (flipVertically == true) {
+        if (flipVertically) {
             textureImage = Conversion.FlipVertically(textureImage);
         }
         setImage(textureImage);
@@ -522,10 +522,10 @@ public class TextureBuilder {
 
     public TextureBuilder loadCube(BufferedImage textureImage, int cubeSize) {
 
-        if (flipHorizontally == true) {
+        if (flipHorizontally) {
             textureImage = Conversion.FlipHorizontally(textureImage);
         }
-        if (flipVertically == true) {
+        if (flipVertically) {
             textureImage = Conversion.FlipVertically(textureImage);
         }
         setImage(textureImage);

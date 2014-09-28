@@ -88,26 +88,26 @@ public class LegacyCameraController implements InputProcessor {
         float yPositionDelta = 0;
         float zPositionDelta = 0;
 
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_BACK) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_BACK)) {
             xPositionDelta += Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
             zPositionDelta += Math.cos(camRotation.getY() * MathHelper.PI_OVER_180);
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_FORWARD) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_FORWARD)) {
             xPositionDelta -= Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
             zPositionDelta -= Math.cos(camRotation.getY() * MathHelper.PI_OVER_180);
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_LEFT) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_LEFT)) {
             xPositionDelta += Math.sin((camRotation.getY() - 90) * MathHelper.PI_OVER_180);
             zPositionDelta += Math.cos((camRotation.getY() - 90) * MathHelper.PI_OVER_180);
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_RIGHT) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_RIGHT)) {
             xPositionDelta += Math.sin((camRotation.getY() + 90) * MathHelper.PI_OVER_180);
             zPositionDelta += Math.cos((camRotation.getY() + 90) * MathHelper.PI_OVER_180);
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_DOWN) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_DOWN)) {
             yPositionDelta += 0.5f;
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_UP) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_UP)) {
             yPositionDelta -= 0.5f;
         }
 
@@ -118,16 +118,16 @@ public class LegacyCameraController implements InputProcessor {
         float xRotationDelta = 0;
         float yRotationDelta = 0;
 
-        if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_DOWN) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_DOWN)) {
             xRotationDelta -= 5.0f;
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_UP) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_UP)) {
             xRotationDelta += 5.0f;
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_LEFT) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_LEFT)) {
             yRotationDelta -= 5.0f;
         }
-        if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_RIGHT) == true) {
+        if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_RIGHT)) {
             yRotationDelta += 5.0f;
         }
 

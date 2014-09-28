@@ -105,7 +105,7 @@ public class ObjReader implements ModelReader {
         }
 
         // Was the face valid?
-        if (face.isValid() == false) {
+        if (!face.isValid()) {
             log.warn("Invalid face: {}", face);
             return;
         }
@@ -160,7 +160,7 @@ public class ObjReader implements ModelReader {
         for (Face face : faces) {
 
             // Not sure how this would be even possible
-            if (face.hasVertices() == false) {
+            if (!face.hasVertices()) {
                 log.error("The face had no vertices: {}", face);
                 continue;
             }

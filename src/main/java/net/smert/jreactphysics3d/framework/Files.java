@@ -109,7 +109,7 @@ public class Files {
 
         // Add a trailing slash to this path
         String fullPathWithTrailingSlash = fullPath;
-        if (fullPath.endsWith(File.separator) == false) {
+        if (!fullPath.endsWith(File.separator)) {
             fullPathWithTrailingSlash = fullPath + File.separator;
         }
 
@@ -123,7 +123,7 @@ public class Files {
 
                 // If we are to register an asset then it must be inside a directory. We need the directory
                 // name to determine what type of asset it belongs to.
-                if (relativePathToBaseDirectory.contains(File.separator) == false) {
+                if (!relativePathToBaseDirectory.contains(File.separator)) {
                     continue;
                 }
 
@@ -185,7 +185,7 @@ public class Files {
 
         // Add a trailing slash to this path
         String relativeFullPathWithTrailingSlash = relativeFullPath;
-        if (relativeFullPath.endsWith(INTERNAL_FILE_SEPARATOR) == false) {
+        if (!relativeFullPath.endsWith(INTERNAL_FILE_SEPARATOR)) {
             relativeFullPathWithTrailingSlash = relativeFullPath + INTERNAL_FILE_SEPARATOR;
         }
 
@@ -204,7 +204,7 @@ public class Files {
 
                         // If the first entry is not a directory then we have a problem and won't be able to
                         // register assets
-                        if (entry.isDirectory() == false) {
+                        if (!entry.isDirectory()) {
                             throw new RuntimeException(
                                     "The full path was found inside a JAR file and must be a directory: "
                                     + fullPath);
@@ -222,7 +222,7 @@ public class Files {
 
                         // If we are to register an asset then it must be inside a directory. We need the directory
                         // name to determine what type of asset it belongs to.
-                        if (relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR) == false) {
+                        if (!relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR)) {
                             continue;
                         }
 
@@ -259,7 +259,7 @@ public class Files {
 
                 // If we are to register an asset then it must be inside a directory. We need the directory
                 // name to determine what type of asset it belongs to.
-                if (name.contains(INTERNAL_FILE_SEPARATOR) == false) {
+                if (!name.contains(INTERNAL_FILE_SEPARATOR)) {
                     continue;
                 }
 
@@ -271,7 +271,7 @@ public class Files {
     public FileAsset get(String resourceType, String filename) {
         String key = resourceType + INTERNAL_FILE_SEPARATOR + filename;
 
-        if (assets.containsKey(key) == false) {
+        if (!assets.containsKey(key)) {
             throw new IllegalArgumentException("Unable to find asset for type: " + resourceType + " and path: " + filename);
         }
 
@@ -314,7 +314,7 @@ public class Files {
             registerExternalAssets(fullPath);
         }
 
-        if (foundAsset == false) {
+        if (!foundAsset) {
             throw new RuntimeException("No assets were found for the given file or path: " + fullPath);
         }
     }
@@ -401,7 +401,7 @@ public class Files {
                 }
             }
 
-            if (entryFound == false) {
+            if (!entryFound) {
                 throw new FileNotFoundException("The path requested: " + path + " in the zip file: "
                         + this.fullPathToFile + " does not exist");
             }

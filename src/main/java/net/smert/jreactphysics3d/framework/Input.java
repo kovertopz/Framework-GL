@@ -49,7 +49,7 @@ public class Input {
      * @param inputProcessor
      */
     public void addInputProcessor(InputProcessor inputProcessor) {
-        if (inputProcessors.contains(inputProcessor) == false) {
+        if (!inputProcessors.contains(inputProcessor)) {
             inputProcessor.registerActions();
             inputProcessors.add(inputProcessor);
         } else {

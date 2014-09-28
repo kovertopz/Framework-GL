@@ -299,7 +299,7 @@ public class RenderableConfiguration {
     }
 
     public void makeImmutable() {
-        if ((log.isInfoEnabled()) && (isImmutable == false)) {
+        if ((log.isInfoEnabled()) && (!isImmutable)) {
             log.info("Making renderable configuration immutable:"
                     + " Color Size: " + colorSize
                     + " Color Type: " + GLTypes.ConvertToString(colorType)

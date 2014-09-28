@@ -43,7 +43,7 @@ public class MeshReader {
         String extension = filename.substring(posOfLastPeriod + 1);
 
         // Does the model reader for this extension exist?
-        if (modelReaders.containsKey(extension) == false) {
+        if (!modelReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
 
@@ -60,7 +60,7 @@ public class MeshReader {
     }
 
     public void unregisterExtension(String extension) {
-        if (modelReaders.containsKey(extension) == false) {
+        if (!modelReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
         modelReaders.remove(extension);

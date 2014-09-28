@@ -28,7 +28,7 @@ public class VABindState {
     private boolean vertexEnabled;
 
     public VABindState() {
-        if (Renderable.config.isImmutable() == false) {
+        if (!Renderable.config.isImmutable()) {
             throw new RuntimeException("Renderable configuration must be made immutable");
         }
         reset();
@@ -38,7 +38,7 @@ public class VABindState {
         if (colorEnabled != enabled) {
             colorEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vaHelper.enableColors();
             } else {
                 GL.vaHelper.disableColors();
@@ -50,7 +50,7 @@ public class VABindState {
         if (normalEnabled != enabled) {
             normalEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vaHelper.enableNormals();
             } else {
                 GL.vaHelper.disableNormals();
@@ -62,7 +62,7 @@ public class VABindState {
         if (texCoordEnabled != enabled) {
             texCoordEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vaHelper.enableTextureCoordinates();
             } else {
                 GL.vaHelper.disableTextureCoordinates();
@@ -74,7 +74,7 @@ public class VABindState {
         if (vertexEnabled != enabled) {
             vertexEnabled = enabled;
 
-            if (enabled == true) {
+            if (enabled) {
                 GL.vaHelper.enableVertices();
             } else {
                 GL.vaHelper.disableVertices();

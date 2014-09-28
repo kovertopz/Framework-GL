@@ -170,7 +170,7 @@ public class KeyboardHelper {
     public void update() {
 
         // Handle queued events
-        while (org.lwjgl.input.Keyboard.next() == true) {
+        while (org.lwjgl.input.Keyboard.next()) {
             int key = lwjglToKeyboard[org.lwjgl.input.Keyboard.getEventKey()];
             nextState[key] = org.lwjgl.input.Keyboard.getEventKeyState();
         }
