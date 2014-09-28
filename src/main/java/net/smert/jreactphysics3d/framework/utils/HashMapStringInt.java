@@ -12,8 +12,10 @@
  */
 package net.smert.jreactphysics3d.framework.utils;
 
+import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -39,6 +41,7 @@ public class HashMapStringInt {
     private int modCount;
     private int size;
     private int threshold;
+    private Collection<Integer> values;
     private Entry[] table;
     private EntrySet entrySet;
     private KeySet keySet;
@@ -136,7 +139,7 @@ public class HashMapStringInt {
         return hash & (length - 1);
     }
 
-    private Iterator< Entry> newEntryIterator() {
+    private Iterator<Entry> newEntryIterator() {
         return new EntryIterator();
     }
 
@@ -304,6 +307,11 @@ public class HashMapStringInt {
 
     public int size() {
         return size;
+    }
+
+    public Collection<Integer> values() {
+        Collection<Integer> vs = values;
+        return (vs != null ? vs : (values = new HashMapStringInt.Values()));
     }
 
     public static class Entry {
@@ -495,6 +503,33 @@ public class HashMapStringInt {
                 return false;
             }
             return HashMapStringInt.this.removeEntryForKey((String) o) != null;
+        }
+
+        @Override
+        public int size() {
+            return size;
+        }
+
+    }
+
+    private class Values extends AbstractCollection<Integer> {
+
+        @Override
+        public void clear() {
+            HashMapStringInt.this.clear();
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            if (!(o instanceof Integer)) {
+                return false;
+            }
+            return containsValue((Integer) o);
+        }
+
+        @Override
+        public Iterator<Integer> iterator() {
+            return newValueIterator();
         }
 
         @Override
