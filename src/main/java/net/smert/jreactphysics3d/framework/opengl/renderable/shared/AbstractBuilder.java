@@ -17,16 +17,19 @@ import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Builder {
+public abstract class AbstractBuilder {
 
-    private void createBufferData(Mesh mesh, Configuration renderableConfig, MultipleBuffers multipleBuffers) {
+    private void createBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
+
+        RenderableConfiguration config = RenderableFactory.config;
 
         // For each segment in the mesh
         for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
@@ -38,28 +41,30 @@ public class Builder {
                 // For each type convert the data and add to the byte buffer
                 if (mesh.hasColors()) {
                     Color color = segment.getColors().get(j);
-                    renderableConfig.convertColorToByteBuffer(color, multipleBuffers.getColor());
+                    config.convertColorToByteBuffer(color, multipleBuffers.getColor());
                 }
                 if (mesh.hasNormals()) {
                     Vector3f normal = segment.getNormals().get(j);
-                    renderableConfig.convertNormalToByteBuffer(normal, multipleBuffers.getNormal());
+                    config.convertNormalToByteBuffer(normal, multipleBuffers.getNormal());
                 }
                 if (mesh.hasTexCoords()) {
                     Vector3f texCoord = segment.getTexCoords().get(j);
-                    renderableConfig.convertTexCoordToByteBuffer(texCoord, multipleBuffers.getTexCoord());
+                    config.convertTexCoordToByteBuffer(texCoord, multipleBuffers.getTexCoord());
                 }
                 if (mesh.hasVertices()) {
                     Vector4f vertex = segment.getVertices().get(j);
-                    renderableConfig.convertVertexToByteBuffer(vertex, multipleBuffers.getVertex());
+                    config.convertVertexToByteBuffer(vertex, multipleBuffers.getVertex());
                 }
             }
         }
     }
 
-    public void createIndexBufferData(Mesh mesh, Configuration renderableConfig, MultipleBuffers multipleBuffers) {
+    public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
+
+        RenderableConfiguration config = RenderableFactory.config;
 
         // Index byte buffer
-        int byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getIndexType());
+        int byteSize = config.convertGLTypeToByteSize(config.getIndexType());
         int bufferSize = byteSize * mesh.getIndexes().size();
         multipleBuffers.createVertexIndex(bufferSize);
 
@@ -71,8 +76,7 @@ public class Builder {
         multipleBuffers.getVertexIndex().flip();
     }
 
-    public void createInterleavedBufferData(Mesh mesh, Configuration renderableConfig,
-            int strideBytes, MultipleBuffers multipleBuffers) {
+    public void createInterleavedBufferData(Mesh mesh, int strideBytes, MultipleBuffers multipleBuffers) {
 
         // Create byte buffer to hold color, normal, texture coordinates and vertex data
         int bufferSize = strideBytes * mesh.getTotalVerticies();
@@ -81,45 +85,46 @@ public class Builder {
         // Set all other buffers to point to the interleaved buffer
         multipleBuffers.setInterleavedBufferToOthers();
 
-        createBufferData(mesh, renderableConfig, multipleBuffers);
+        createBufferData(mesh, multipleBuffers);
 
         // Missy Elliott that shit
         multipleBuffers.getInterleaved().flip();
     }
 
-    public void createNonInterleavedBufferData(Mesh mesh, Configuration renderableConfig, MultipleBuffers multipleBuffers) {
+    public void createNonInterleavedBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
 
         int bufferSize, byteSize;
+        RenderableConfiguration config = RenderableFactory.config;
 
         // Color byte buffer
         if (mesh.hasColors()) {
-            byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getColorType());
-            bufferSize = byteSize * renderableConfig.getColorSize() * mesh.getTotalVerticies();
+            byteSize = config.convertGLTypeToByteSize(config.getColorType());
+            bufferSize = byteSize * config.getColorSize() * mesh.getTotalVerticies();
             multipleBuffers.createColor(bufferSize);
         }
 
         // Normal byte buffer
         if (mesh.hasNormals()) {
-            byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getNormalType());
-            bufferSize = byteSize * renderableConfig.getNormalSize() * mesh.getTotalVerticies();
+            byteSize = config.convertGLTypeToByteSize(config.getNormalType());
+            bufferSize = byteSize * config.getNormalSize() * mesh.getTotalVerticies();
             multipleBuffers.createNormal(bufferSize);
         }
 
         // Texture coordinate byte buffer
         if (mesh.hasTexCoords()) {
-            byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getTexCoordType());
-            bufferSize = byteSize * renderableConfig.getTexCoordSize() * mesh.getTotalVerticies();
+            byteSize = config.convertGLTypeToByteSize(config.getTexCoordType());
+            bufferSize = byteSize * config.getTexCoordSize() * mesh.getTotalVerticies();
             multipleBuffers.createTexCoord(bufferSize);
         }
 
         // Vertex byte buffer
         if (mesh.hasVertices()) {
-            byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getVertexType());
-            bufferSize = byteSize * renderableConfig.getVertexSize() * mesh.getTotalVerticies();
+            byteSize = config.convertGLTypeToByteSize(config.getVertexType());
+            bufferSize = byteSize * config.getVertexSize() * mesh.getTotalVerticies();
             multipleBuffers.createVertex(bufferSize);
         }
 
-        createBufferData(mesh, renderableConfig, multipleBuffers);
+        createBufferData(mesh, multipleBuffers);
 
         if (mesh.hasColors()) {
             multipleBuffers.getColor().flip();

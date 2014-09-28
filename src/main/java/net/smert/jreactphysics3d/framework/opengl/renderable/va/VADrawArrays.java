@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
+package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
@@ -19,32 +19,22 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DrawRangeElements extends AbstractDrawCall {
+public class VADrawArrays extends AbstractDrawCall {
 
-    private int[] maxIndexes;
-    private int[] minIndexes;
+    private int[] firstElements;
 
-    public int[] getMaxIndexes() {
-        return maxIndexes;
+    public int[] getFirstElements() {
+        return firstElements;
     }
 
-    public void setMaxIndexes(int[] maxIndexes) {
-        this.maxIndexes = maxIndexes;
-    }
-
-    public int[] getMinIndexes() {
-        return minIndexes;
-    }
-
-    public void setMinIndexes(int[] minIndexes) {
-        this.minIndexes = minIndexes;
+    public void setFirstElements(int[] firstElements) {
+        this.firstElements = firstElements;
     }
 
     @Override
     public void render() {
         for (int i = 0, max = primitiveModes.length; i < max; i++) {
-            GL.vboHelper.drawRangeElements(
-                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], renderableConfig.getIndexType());
+            GL.vboHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
         }
     }
 

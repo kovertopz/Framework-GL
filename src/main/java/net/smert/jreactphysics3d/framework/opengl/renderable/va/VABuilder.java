@@ -16,12 +16,19 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.jreactphysics3d.framework.opengl.renderable.va.factory.VADrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.Builder {
+public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractBuilder {
+
+    private final VADrawCallFactory vaDrawCallFactory;
+
+    public VABuilder(VADrawCallFactory vaDrawCallFactory) {
+        this.vaDrawCallFactory = vaDrawCallFactory;
+    }
 
     public AbstractDrawCall createDrawCall(Mesh mesh, ByteBuffer vertexIndexBuffer) {
         AbstractDrawCall drawCall;
@@ -33,7 +40,7 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
             assert (vertexIndexBuffer != null);
 
             // Create concrete class and set specific data
-            DrawElements drawElements = new DrawElements();
+            VADrawElements drawElements = vaDrawCallFactory.createDrawElements();
             drawElements.setVertexIndexBuffer(vertexIndexBuffer);
 
             // Make sure we set the abstract class
@@ -48,7 +55,7 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
             }
 
             // Create concrete class and set specific data
-            DrawArrays drawArrays = new DrawArrays();
+            VADrawArrays drawArrays = vaDrawCallFactory.createDrawArrays();
             drawArrays.setFirstElements(firstElements);
 
             // Make sure we set the abstract class

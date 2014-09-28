@@ -15,41 +15,49 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.factory.VBODrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.Builder {
+public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractBuilder {
 
-    public void calculateOffsetsAndStride(
-            Mesh mesh, Configuration renderableConfig, VertexBufferObjectInterleaved vboInterleaved) {
+    private final VBODrawCallFactory vboDrawCallFactory;
+
+    public VBOBuilder(VBODrawCallFactory vboDrawCallFactory) {
+        this.vboDrawCallFactory = vboDrawCallFactory;
+    }
+
+    public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved) {
 
         int total = 0;
+        RenderableConfiguration config = RenderableFactory.config;
 
         // Calculate byte size of each type and add to the total. Save the total as
         // the current offset before increasing it.
         if (mesh.hasColors()) {
             vboInterleaved.setColorOffsetBytes(total);
-            int byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getColorType());
-            total += renderableConfig.getColorSize() * byteSize;
+            int byteSize = config.convertGLTypeToByteSize(config.getColorType());
+            total += config.getColorSize() * byteSize;
         }
         if (mesh.hasNormals()) {
             vboInterleaved.setNormalOffsetBytes(total);
-            int byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getNormalType());
-            total += renderableConfig.getNormalSize() * byteSize;
+            int byteSize = config.convertGLTypeToByteSize(config.getNormalType());
+            total += config.getNormalSize() * byteSize;
         }
         if (mesh.hasTexCoords()) {
             vboInterleaved.setTexCoordOffsetBytes(total);
-            int byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getTexCoordType());
-            total += renderableConfig.getTexCoordSize() * byteSize;
+            int byteSize = config.convertGLTypeToByteSize(config.getTexCoordType());
+            total += config.getTexCoordSize() * byteSize;
         }
         if (mesh.hasVertices()) {
             vboInterleaved.setVertexOffsetBytes(total);
-            int byteSize = renderableConfig.convertGLTypeToByteSize(renderableConfig.getVertexType());
-            total += renderableConfig.getVertexSize() * byteSize;
+            int byteSize = config.convertGLTypeToByteSize(config.getVertexType());
+            total += config.getVertexSize() * byteSize;
         }
 
         vboInterleaved.setStrideBytes(total);
@@ -76,14 +84,14 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
                 }
 
                 // Create concrete class and set specific data
-                DrawRangeElements drawRangedElements = new DrawRangeElements();
+                VBODrawRangeElements drawRangedElements = vboDrawCallFactory.createDrawRangeElements();
                 drawRangedElements.setMaxIndexes(maxIndexes);
                 drawRangedElements.setMinIndexes(minIndexes);
 
                 // Make sure we set the abstract class
                 drawCall = drawRangedElements;
             } else {
-                drawCall = new DrawElements();
+                drawCall = vboDrawCallFactory.createDrawElements();
             }
         } else {
 
@@ -95,7 +103,7 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
             }
 
             // Create concrete class and set specific data
-            DrawArrays drawArrays = new DrawArrays();
+            VBODrawArrays drawArrays = vboDrawCallFactory.createDrawArrays();
             drawArrays.setFirstElements(firstElements);
 
             // Make sure we set the abstract class

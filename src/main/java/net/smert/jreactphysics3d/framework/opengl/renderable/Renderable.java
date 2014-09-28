@@ -10,31 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
+package net.smert.jreactphysics3d.framework.opengl.renderable;
+
+import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractDrawCall implements DrawCall {
+public interface Renderable {
 
-    protected int[] elementCounts;
-    protected int[] primitiveModes;
+    public void create(Mesh mesh);
 
-    public int[] getElementCounts() {
-        return elementCounts;
-    }
+    public void destroy();
 
-    public void setElementCounts(int[] elementCounts) {
-        this.elementCounts = elementCounts;
-    }
-
-    public int[] getPrimitiveModes() {
-        return primitiveModes;
-    }
-
-    public void setPrimitiveModes(int[] primitiveModes) {
-        this.primitiveModes = primitiveModes;
-    }
+    public void render();
 
 }

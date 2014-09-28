@@ -90,6 +90,16 @@ public class ByteBuffers implements MultipleBuffers {
     }
 
     @Override
+    public void reset() {
+        color = null;
+        interleaved = null;
+        normal = null;
+        texCoord = null;
+        vertex = null;
+        vertexIndex = null;
+    }
+
+    @Override
     public void setInterleavedBufferToOthers() {
         color = normal = texCoord = vertex = interleaved;
     }

@@ -13,6 +13,7 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.VertexArray;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.MultipleBuffers;
 
@@ -22,15 +23,15 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.MultipleBuff
  */
 public class VertexArrays implements MultipleBuffers {
 
-    public VertexArray color;
-    public VertexArray normal;
-    public VertexArray texCoord;
-    public VertexArray vertex;
-    public VertexArray vertexIndex;
+    private VertexArray color;
+    private VertexArray normal;
+    private VertexArray texCoord;
+    private VertexArray vertex;
+    private VertexArray vertexIndex;
 
     @Override
     public void createColor(int bufferSize) {
-        color = new VertexArray();
+        color = GL.glf.createVertexArray();
         color.create(bufferSize);
     }
 
@@ -41,25 +42,25 @@ public class VertexArrays implements MultipleBuffers {
 
     @Override
     public void createNormal(int bufferSize) {
-        normal = new VertexArray();
+        normal = GL.glf.createVertexArray();
         normal.create(bufferSize);
     }
 
     @Override
     public void createTexCoord(int bufferSize) {
-        texCoord = new VertexArray();
+        texCoord = GL.glf.createVertexArray();
         texCoord.create(bufferSize);
     }
 
     @Override
     public void createVertex(int bufferSize) {
-        vertex = new VertexArray();
+        vertex = GL.glf.createVertexArray();
         vertex.create(bufferSize);
     }
 
     @Override
     public void createVertexIndex(int bufferSize) {
-        vertexIndex = new VertexArray();
+        vertexIndex = GL.glf.createVertexArray();
         vertexIndex.create(bufferSize);
     }
 
@@ -91,6 +92,15 @@ public class VertexArrays implements MultipleBuffers {
     @Override
     public ByteBuffer getVertexIndex() {
         return vertexIndex.getByteBuffer();
+    }
+
+    @Override
+    public void reset() {
+        color = null;
+        normal = null;
+        texCoord = null;
+        vertex = null;
+        vertexIndex = null;
     }
 
     @Override

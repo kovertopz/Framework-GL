@@ -14,7 +14,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.opengl.GL;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Configuration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 
 /**
  *
@@ -26,15 +26,11 @@ public class VABindState {
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
-    private final Configuration renderableConfig;
 
-    public VABindState(Configuration renderableConfig) {
-        this.renderableConfig = renderableConfig;
-
-        if (renderableConfig.isImmutable() == false) {
+    public VABindState() {
+        if (RenderableFactory.config.isImmutable() == false) {
             throw new RuntimeException("Renderable configuration must be made immutable");
         }
-
         reset();
     }
 
@@ -88,8 +84,8 @@ public class VABindState {
 
     public void bindColor(ByteBuffer colorByteBuffer) {
         if (colorByteBuffer != null) {
-            int colorSize = renderableConfig.getColorSize();
-            int colorType = renderableConfig.getColorType();
+            int colorSize = RenderableFactory.config.getColorSize();
+            int colorType = RenderableFactory.config.getColorType();
             setColorEnabled(true);
             GL.vaHelper.bindColors(colorSize, colorType, colorByteBuffer);
         } else {
@@ -99,7 +95,7 @@ public class VABindState {
 
     public void bindNormal(ByteBuffer normalByteBuffer) {
         if (normalByteBuffer != null) {
-            int normalType = renderableConfig.getNormalType();
+            int normalType = RenderableFactory.config.getNormalType();
             setNormalEnabled(true);
             GL.vaHelper.bindNormals(normalType, normalByteBuffer);
         } else {
@@ -109,8 +105,8 @@ public class VABindState {
 
     public void bindTextureCoordinate(ByteBuffer texCoordByteBuffer) {
         if (texCoordByteBuffer != null) {
-            int texCoordSize = renderableConfig.getTexCoordSize();
-            int texCoordType = renderableConfig.getTexCoordType();
+            int texCoordSize = RenderableFactory.config.getTexCoordSize();
+            int texCoordType = RenderableFactory.config.getTexCoordType();
             setTextureCoordinateEnabled(true);
             GL.vaHelper.bindTextureCoordinates(texCoordSize, texCoordType, texCoordByteBuffer);
         } else {
@@ -120,8 +116,8 @@ public class VABindState {
 
     public void bindVertex(ByteBuffer vertexByteBuffer) {
         if (vertexByteBuffer != null) {
-            int vertexSize = renderableConfig.getVertexSize();
-            int vertexType = renderableConfig.getVertexType();
+            int vertexSize = RenderableFactory.config.getVertexSize();
+            int vertexType = RenderableFactory.config.getVertexType();
             setVertexEnabled(true);
             GL.vaHelper.bindVertices(vertexSize, vertexType, vertexByteBuffer);
         } else {

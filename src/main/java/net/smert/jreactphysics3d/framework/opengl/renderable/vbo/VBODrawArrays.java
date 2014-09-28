@@ -19,12 +19,22 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DrawElements extends AbstractDrawCall {
+public class VBODrawArrays extends AbstractDrawCall {
+
+    private int[] firstElements;
+
+    public int[] getFirstElements() {
+        return firstElements;
+    }
+
+    public void setFirstElements(int[] firstElements) {
+        this.firstElements = firstElements;
+    }
 
     @Override
     public void render() {
         for (int i = 0, max = primitiveModes.length; i < max; i++) {
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], renderableConfig.getIndexType());
+            GL.vboHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
         }
     }
 
