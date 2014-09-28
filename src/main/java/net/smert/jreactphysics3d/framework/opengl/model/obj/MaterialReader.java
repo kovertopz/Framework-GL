@@ -215,18 +215,15 @@ public class MaterialReader implements ModelReader {
     private void read(String filename) throws IOException {
         Files.FileAsset fileAsset = Fw.files.getMesh(filename);
 
-        InputStream is = fileAsset.openStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader reader = new BufferedReader(isr);
-        String line;
+        try (InputStream is = fileAsset.openStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader reader = new BufferedReader(isr)) {
+            String line;
 
-        while ((line = reader.readLine()) != null) {
-            parse(line);
+            while ((line = reader.readLine()) != null) {
+                parse(line);
+            }
         }
-
-        reader.close();
-        isr.close();
-        is.close();
     }
 
     private void setAmbient(StringTokenizer tokenizer) {

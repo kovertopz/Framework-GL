@@ -28,6 +28,7 @@ import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.constants.Primitives;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
@@ -52,20 +53,22 @@ public class ObjReader implements ModelReader {
     private final List<Vertex> normals;
     private final List<Vertex> vertices;
     private final MaterialReader materialReader;
+    private final MeshFactory meshFactory;
     private String groupName;
     private String materialLibrary;
     private String materialName;
     private String objectName;
     private String smoothingGroup;
 
-    public ObjReader() {
+    public ObjReader(MaterialReader materialReader, MeshFactory meshFactory) {
         resetOnFinish = true;
         faces = new ArrayList<>();
         comments = new ArrayList<>();
         texCoords = new ArrayList<>();
         normals = new ArrayList<>();
         vertices = new ArrayList<>();
-        materialReader = new MaterialReader();
+        this.materialReader = materialReader;
+        this.meshFactory = meshFactory;
         reset();
     }
 
@@ -169,7 +172,8 @@ public class ObjReader implements ModelReader {
 
             // Create segment if it doesn't exist
             if (segment == null) {
-                segment = new Segment(Primitives.TRIANGLES);
+                segment = meshFactory.createSegment();
+                segment.setPrimitiveMode(Primitives.TRIANGLES);
                 segment.setName(segmentKey);
                 materialNameToSegments.put(segmentKey, segment);
             }
@@ -348,40 +352,45 @@ public class ObjReader implements ModelReader {
         Color diffuse = material.getDiffuse();
         Color specular = material.getSpecular();
 
+        net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial = meshFactory.createMaterial();
+
         // Lighting
         if (ambient.hasBeenSet()) {
-            segment.getMaterial().setLighting(
+            meshMaterial.setLighting(
                     "ambient", new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
         }
         if (diffuse.hasBeenSet()) {
-            segment.getMaterial().setLighting(
+            meshMaterial.setLighting(
                     "diffuse", new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
         }
         if (specular.hasBeenSet()) {
-            segment.getMaterial().setLighting(
+            meshMaterial.setLighting(
                     "specular", new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
         }
-        segment.getMaterial().setShininess(material.convertSpecularExponent());
+        meshMaterial.setShininess(material.convertSpecularExponent());
 
         // Textures
         String filename;
 
         filename = material.getAmbientMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            segment.getMaterial().setTexture("ambient", filename);
+            meshMaterial.setTexture("ambient", filename);
         }
         filename = material.getDiffuseMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            segment.getMaterial().setTexture("diffuse", filename);
+            meshMaterial.setTexture("diffuse", filename);
         }
         filename = material.getSpecularMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            segment.getMaterial().setTexture("specular", filename);
+            meshMaterial.setTexture("specular", filename);
         }
         filename = material.getSpecularExponentMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            segment.getMaterial().setTexture("shininess", filename);
+            meshMaterial.setTexture("shininess", filename);
         }
+
+        // Add material to mesh
+        segment.setMaterial(meshMaterial);
     }
 
     private String getNextTokenOnly(StringTokenizer tokenizer) {
@@ -507,18 +516,15 @@ public class ObjReader implements ModelReader {
     private void read(String filename) throws IOException {
         FileAsset fileAsset = Fw.files.getMesh(filename);
 
-        InputStream is = fileAsset.openStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader reader = new BufferedReader(isr);
-        String line;
+        try (InputStream is = fileAsset.openStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader reader = new BufferedReader(isr)) {
+            String line;
 
-        while ((line = reader.readLine()) != null) {
-            parse(line);
+            while ((line = reader.readLine()) != null) {
+                parse(line);
+            }
         }
-
-        reader.close();
-        isr.close();
-        is.close();
     }
 
     private void readMaterial(String objFilename, Mesh mesh) throws IOException {

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**
@@ -23,8 +24,6 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class Mesh {
-
-    private final static DrawCommandsConversion DRAW_COMMANDS_CONVERSION = new DrawCommandsConversion();
 
     private boolean canRenderRanged;
     private boolean hasColors;
@@ -164,7 +163,7 @@ public class Mesh {
 
     public DrawCommands getDrawCommands() {
         if (drawCommands == null) {
-            drawCommands = DRAW_COMMANDS_CONVERSION;
+            drawCommands = RenderableFactory.drawCommandsConversion;
         }
         return drawCommands;
     }

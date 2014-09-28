@@ -32,7 +32,7 @@ public class Segment {
     private final List<Vector3f> normals;
     private final List<Vector3f> texCoords;
     private final List<Vector4f> vertices;
-    private final Material material;
+    private Material material;
     private String name;
 
     public Segment() {
@@ -44,7 +44,6 @@ public class Segment {
         normals = new ArrayList<>();
         texCoords = new ArrayList<>();
         vertices = new ArrayList<>();
-        material = new Material();
         name = "";
     }
 
@@ -141,6 +140,10 @@ public class Segment {
 
     public Material getMaterial() {
         return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     public String getName() {

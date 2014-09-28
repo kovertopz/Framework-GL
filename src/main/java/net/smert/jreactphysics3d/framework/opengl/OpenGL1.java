@@ -18,6 +18,7 @@ import net.smert.jreactphysics3d.framework.opengl.constants.ClearBits;
 import net.smert.jreactphysics3d.framework.opengl.constants.DepthFunctions;
 import net.smert.jreactphysics3d.framework.opengl.constants.StencilFunctions;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
+import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
@@ -31,9 +32,14 @@ public class OpenGL1 {
     private boolean wireframeMode = false;
     private float defaultLineWidth = 1.0f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
+    private final LegacyRenderHelper renderHelper;
+
+    public OpenGL1(LegacyRenderHelper renderHelper) {
+        this.renderHelper = renderHelper;
+    }
 
     public OpenGL1 begin(int primitive) {
-        GL.renderHelper.begin(primitive);
+        renderHelper.begin(primitive);
         return this;
     }
 
@@ -58,12 +64,12 @@ public class OpenGL1 {
     }
 
     public OpenGL1 color(float r, float g, float b) {
-        GL.renderHelper.color(r, g, b);
+        renderHelper.color(r, g, b);
         return this;
     }
 
     public OpenGL1 color(float r, float g, float b, float a) {
-        GL.renderHelper.color(r, g, b, a);
+        renderHelper.color(r, g, b, a);
         return this;
     }
 
@@ -288,7 +294,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 end() {
-        GL.renderHelper.end();
+        renderHelper.end();
         return this;
     }
 
@@ -313,7 +319,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 normal(float x, float y, float z) {
-        GL.renderHelper.normal(x, y, z);
+        renderHelper.normal(x, y, z);
         return this;
     }
 
@@ -591,12 +597,12 @@ public class OpenGL1 {
     }
 
     public OpenGL1 texCoord(float s, float t) {
-        GL.renderHelper.texCoord(s, t);
+        renderHelper.texCoord(s, t);
         return this;
     }
 
     public OpenGL1 texCoord(float s, float t, float r) {
-        GL.renderHelper.texCoord(s, t, r);
+        renderHelper.texCoord(s, t, r);
         return this;
     }
 
@@ -606,12 +612,12 @@ public class OpenGL1 {
     }
 
     public OpenGL1 vertex(float x, float y, float z) {
-        GL.renderHelper.vertex(x, y, z);
+        renderHelper.vertex(x, y, z);
         return this;
     }
 
     public OpenGL1 vertex(float x, float y, float z, float w) {
-        GL.renderHelper.vertex(x, y, z, w);
+        renderHelper.vertex(x, y, z, w);
         return this;
     }
 
