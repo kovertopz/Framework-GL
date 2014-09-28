@@ -12,6 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.opengl;
 
+import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +25,11 @@ public class Texture {
     private final static Logger log = LoggerFactory.getLogger(Texture.class);
 
     private int textureID;
+    private int textureTarget;
 
     public Texture() {
         textureID = 0;
+        textureTarget = TextureTargets.TEXTURE_2D;
     }
 
     public void create() {
@@ -44,6 +47,14 @@ public class Texture {
 
     public int getTextureID() {
         return textureID;
+    }
+
+    public int getTextureTarget() {
+        return textureTarget;
+    }
+
+    public void setTextureTarget(int textureTarget) {
+        this.textureTarget = textureTarget;
     }
 
 }
