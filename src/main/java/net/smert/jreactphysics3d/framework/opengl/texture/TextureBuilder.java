@@ -32,56 +32,6 @@ import net.smert.jreactphysics3d.framework.opengl.image.Conversion;
  */
 public class TextureBuilder {
 
-    private final static int ALWAYS = TextureCompareFunction.ALWAYS;
-    private final static int CLAMP = TextureClamping.CLAMP;
-    private final static int CLAMP_TO_EDGE = TextureClamping.CLAMP_TO_EDGE;
-    private final static int COMPARE_R_TO_TEXTURE = TextureCompareMode.COMPARE_R_TO_TEXTURE;
-    private final static int DEPTH_COMPONENT = TextureFormats.DEPTH_COMPONENT;
-    private final static int DEPTH_COMPONENT16 = TextureInternalFormats.DEPTH_COMPONENT16;
-    private final static int DEPTH_COMPONENT24 = TextureInternalFormats.DEPTH_COMPONENT24;
-    private final static int DEPTH_COMPONENT32 = TextureInternalFormats.DEPTH_COMPONENT32;
-    private final static int DEPTH_STENCIL = TextureFormats.DEPTH_STENCIL;
-    private final static int DEPTH24_STENCIL8 = TextureInternalFormats.DEPTH24_STENCIL8;
-    private final static int EQUAL = TextureCompareFunction.EQUAL;
-    private final static int GEQUAL = TextureCompareFunction.GEQUAL;
-    private final static int GREATER = TextureCompareFunction.GREATER;
-    private final static int LEQUAL = TextureCompareFunction.LEQUAL;
-    private final static int LESS = TextureCompareFunction.LESS;
-    private final static int LINEAR = TextureFilters.LINEAR;
-    private final static int LINEAR_MIPMAP_LINEAR = TextureFilters.LINEAR_MIPMAP_LINEAR;
-    private final static int LINEAR_MIPMAP_NEAREST = TextureFilters.LINEAR_MIPMAP_NEAREST;
-    private final static int NEAREST = TextureFilters.NEAREST;
-    private final static int NEAREST_MIPMAP_LINEAR = TextureFilters.NEAREST_MIPMAP_LINEAR;
-    private final static int NEAREST_MIPMAP_NEAREST = TextureFilters.NEAREST_MIPMAP_NEAREST;
-    private final static int NEVER = TextureCompareFunction.NEVER;
-    private final static int NONE = TextureCompareMode.NONE;
-    private final static int NOTEQUAL = TextureCompareFunction.NOTEQUAL;
-    private final static int REPEAT = TextureClamping.REPEAT;
-    private final static int R = TextureFormats.R;
-    private final static int R16F = TextureInternalFormats.R16F;
-    private final static int R32F = TextureInternalFormats.R32F;
-    private final static int RG = TextureFormats.RG;
-    private final static int RG16F = TextureInternalFormats.RG16F;
-    private final static int RG32F = TextureInternalFormats.RG32F;
-    private final static int RGB = TextureFormats.RGB;
-    private final static int RGB10_A2 = TextureInternalFormats.RGB10_A2;
-    private final static int RGB16F = TextureInternalFormats.RGB16F;
-    private final static int RGB32F = TextureInternalFormats.RGB32F;
-    private final static int RGB8 = TextureInternalFormats.RGB8;
-    private final static int RGBA = TextureFormats.RGBA;
-    private final static int RGBA16F = TextureInternalFormats.RGBA16F;
-    private final static int RGBA32F = TextureInternalFormats.RGBA32F;
-    private final static int RGBA8 = TextureInternalFormats.RGBA8;
-    private final static int TEXTURE_2D = TextureTargets.TEXTURE_2D;
-    private final static int TEXTURE_3D = TextureTargets.TEXTURE_3D;
-    private final static int TEXTURE_CUBE_MAP = TextureTargets.TEXTURE_CUBE_MAP;
-    private final static int TEXTURE_CUBE_MAP_NEGATIVE_X = TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_X;
-    private final static int TEXTURE_CUBE_MAP_POSITIVE_X = TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_X;
-    private final static int TEXTURE_CUBE_MAP_NEGATIVE_Y = TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Y;
-    private final static int TEXTURE_CUBE_MAP_POSITIVE_Y = TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Y;
-    private final static int TEXTURE_CUBE_MAP_NEGATIVE_Z = TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Z;
-    private final static int TEXTURE_CUBE_MAP_POSITIVE_Z = TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Z;
-
     private boolean flipHorizontally;
     private boolean flipVertically;
     private boolean nullData;
@@ -189,7 +139,7 @@ public class TextureBuilder {
                 case TextureTypes.UNSIGNED_INT:
                 case TextureTypes.UNSIGNED_SHORT:
                 case TextureTypes.UNSIGNED_INT_24_8:
-                    GL.fboHelper.generateMipmap(TEXTURE_2D);
+                    GL.fboHelper.generateMipmap(TextureTargets.TEXTURE_2D);
             }
         }
     }
@@ -382,15 +332,15 @@ public class TextureBuilder {
         texture.create();
 
         switch (textureType) {
-            case TEXTURE_2D:
+            case TextureTargets.TEXTURE_2D:
                 GL.textureHelper.setTextureTarget2D();
                 break;
 
-            case TEXTURE_3D:
+            case TextureTargets.TEXTURE_3D:
                 GL.textureHelper.setTextureTarget3D();
                 break;
 
-            case TEXTURE_CUBE_MAP:
+            case TextureTargets.TEXTURE_CUBE_MAP:
                 GL.textureHelper.setTextureTargetCubeMap();
                 break;
         }
@@ -402,15 +352,15 @@ public class TextureBuilder {
         GL.textureHelper.setFilters(textureFilterMag, textureFilterMin);
 
         switch (textureType) {
-            case TEXTURE_2D:
+            case TextureTargets.TEXTURE_2D:
                 buildTexture2D();
                 break;
 
-            case TEXTURE_3D:
+            case TextureTargets.TEXTURE_3D:
                 buildTexture3D();
                 break;
 
-            case TEXTURE_CUBE_MAP:
+            case TextureTargets.TEXTURE_CUBE_MAP:
                 buildTextureCubeMap();
                 break;
         }
@@ -533,27 +483,27 @@ public class TextureBuilder {
         convertImageARGBToRGBABytePixelArray();
 
         switch (cubeSize) {
-            case TEXTURE_CUBE_MAP_POSITIVE_X:
+            case TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_X:
                 createBytePixelDataBufferXPos();
                 break;
 
-            case TEXTURE_CUBE_MAP_NEGATIVE_X:
+            case TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_X:
                 createBytePixelDataBufferXNeg();
                 break;
 
-            case TEXTURE_CUBE_MAP_POSITIVE_Y:
+            case TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Y:
                 createBytePixelDataBufferYPos();
                 break;
 
-            case TEXTURE_CUBE_MAP_NEGATIVE_Y:
+            case TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Y:
                 createBytePixelDataBufferYNeg();
                 break;
 
-            case TEXTURE_CUBE_MAP_POSITIVE_Z:
+            case TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Z:
                 createBytePixelDataBufferZPos();
                 break;
 
-            case TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            case TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Z:
                 createBytePixelDataBufferZNeg();
                 break;
         }
@@ -599,167 +549,167 @@ public class TextureBuilder {
     }
 
     public TextureBuilder setClampingWrapRClamp() {
-        textureWrapR = CLAMP;
+        textureWrapR = TextureClamping.CLAMP;
         return this;
     }
 
     public TextureBuilder setClampingWrapRClampToEdge() {
-        textureWrapR = CLAMP_TO_EDGE;
+        textureWrapR = TextureClamping.CLAMP_TO_EDGE;
         return this;
     }
 
     public TextureBuilder setClampingWrapRRepeat() {
-        textureWrapR = REPEAT;
+        textureWrapR = TextureClamping.REPEAT;
         return this;
     }
 
     public TextureBuilder setClampingWrapSClamp() {
-        textureWrapS = CLAMP;
+        textureWrapS = TextureClamping.CLAMP;
         return this;
     }
 
     public TextureBuilder setClampingWrapSClampToEdge() {
-        textureWrapS = CLAMP_TO_EDGE;
+        textureWrapS = TextureClamping.CLAMP_TO_EDGE;
         return this;
     }
 
     public TextureBuilder setClampingWrapSRepeat() {
-        textureWrapS = REPEAT;
+        textureWrapS = TextureClamping.REPEAT;
         return this;
     }
 
     public TextureBuilder setClampingWrapTClamp() {
-        textureWrapT = CLAMP;
+        textureWrapT = TextureClamping.CLAMP;
         return this;
     }
 
     public TextureBuilder setClampingWrapTClampToEdge() {
-        textureWrapT = CLAMP_TO_EDGE;
+        textureWrapT = TextureClamping.CLAMP_TO_EDGE;
         return this;
     }
 
     public TextureBuilder setClampingWrapTRepeat() {
-        textureWrapT = REPEAT;
+        textureWrapT = TextureClamping.REPEAT;
         return this;
     }
 
     public TextureBuilder setCompareFunctionAlways() {
-        textureCompareFunction = ALWAYS;
+        textureCompareFunction = TextureCompareFunction.ALWAYS;
         return this;
     }
 
     public TextureBuilder setCompareFunctionEqual() {
-        textureCompareFunction = EQUAL;
+        textureCompareFunction = TextureCompareFunction.EQUAL;
         return this;
     }
 
     public TextureBuilder setCompareFunctionGreater() {
-        textureCompareFunction = GREATER;
+        textureCompareFunction = TextureCompareFunction.GREATER;
         return this;
     }
 
     public TextureBuilder setCompareFunctionGreaterEqual() {
-        textureCompareFunction = GEQUAL;
+        textureCompareFunction = TextureCompareFunction.GEQUAL;
         return this;
     }
 
     public TextureBuilder setCompareFunctionLess() {
-        textureCompareFunction = LESS;
+        textureCompareFunction = TextureCompareFunction.LESS;
         return this;
     }
 
     public TextureBuilder setCompareFunctionLessEqual() {
-        textureCompareFunction = LEQUAL;
+        textureCompareFunction = TextureCompareFunction.LEQUAL;
         return this;
     }
 
     public TextureBuilder setCompareFunctionNever() {
-        textureCompareFunction = NEVER;
+        textureCompareFunction = TextureCompareFunction.NEVER;
         return this;
     }
 
     public TextureBuilder setCompareFunctionNotEqual() {
-        textureCompareFunction = NOTEQUAL;
+        textureCompareFunction = TextureCompareFunction.NOTEQUAL;
         return this;
     }
 
     public TextureBuilder setCompareModeCompareRToTexture() {
-        textureCompareMode = COMPARE_R_TO_TEXTURE;
+        textureCompareMode = TextureCompareMode.COMPARE_R_TO_TEXTURE;
         return this;
     }
 
     public TextureBuilder setCompareModeNone() {
-        textureCompareMode = NONE;
+        textureCompareMode = TextureCompareMode.NONE;
         return this;
     }
 
     public TextureBuilder setFilterMagLinear() {
-        textureFilterMag = LINEAR;
+        textureFilterMag = TextureFilters.LINEAR;
         return this;
     }
 
     public TextureBuilder setFilterMagNearest() {
-        textureFilterMag = NEAREST;
+        textureFilterMag = TextureFilters.NEAREST;
         return this;
     }
 
     public TextureBuilder setFilterMinLinear() {
-        textureFilterMin = LINEAR;
+        textureFilterMin = TextureFilters.LINEAR;
         return this;
     }
 
     public TextureBuilder setFilterMinLinearMipmapLinear() {
-        textureFilterMin = LINEAR_MIPMAP_LINEAR;
+        textureFilterMin = TextureFilters.LINEAR_MIPMAP_LINEAR;
         return this;
     }
 
     public TextureBuilder setFilterMinLinearMipmapNearest() {
-        textureFilterMin = LINEAR_MIPMAP_NEAREST;
+        textureFilterMin = TextureFilters.LINEAR_MIPMAP_NEAREST;
         return this;
     }
 
     public TextureBuilder setFilterMinNearest() {
-        textureFilterMin = NEAREST;
+        textureFilterMin = TextureFilters.NEAREST;
         return this;
     }
 
     public TextureBuilder setFilterMinNearestMipmapLinear() {
-        textureFilterMin = NEAREST_MIPMAP_LINEAR;
+        textureFilterMin = TextureFilters.NEAREST_MIPMAP_LINEAR;
         return this;
     }
 
     public TextureBuilder setFilterMinNearestMipmapNearest() {
-        textureFilterMin = NEAREST_MIPMAP_NEAREST;
+        textureFilterMin = TextureFilters.NEAREST_MIPMAP_NEAREST;
         return this;
     }
 
     public TextureBuilder setFormatDepthComponent() {
-        textureFormat = DEPTH_COMPONENT;
+        textureFormat = TextureFormats.DEPTH_COMPONENT;
         return this;
     }
 
     public TextureBuilder setFormatDepthStencil() {
-        textureFormat = DEPTH_STENCIL;
+        textureFormat = TextureFormats.DEPTH_STENCIL;
         return this;
     }
 
     public TextureBuilder setFormatR() {
-        textureFormat = R;
+        textureFormat = TextureFormats.R;
         return this;
     }
 
     public TextureBuilder setFormatRG() {
-        textureFormat = RG;
+        textureFormat = TextureFormats.RG;
         return this;
     }
 
     public TextureBuilder setFormatRGB() {
-        textureFormat = RGB;
+        textureFormat = TextureFormats.RGB;
         return this;
     }
 
     public TextureBuilder setFormatRGBA() {
-        textureFormat = RGBA;
+        textureFormat = TextureFormats.RGBA;
         return this;
     }
 
@@ -780,77 +730,77 @@ public class TextureBuilder {
     }
 
     public TextureBuilder setInternalFormatDepthComponent16() {
-        textureInternalFormat = DEPTH_COMPONENT16;
+        textureInternalFormat = TextureInternalFormats.DEPTH_COMPONENT16;
         return this;
     }
 
     public TextureBuilder setInternalFormatDepthComponent24() {
-        textureInternalFormat = DEPTH_COMPONENT24;
+        textureInternalFormat = TextureInternalFormats.DEPTH_COMPONENT24;
         return this;
     }
 
     public TextureBuilder setInternalFormatDepthComponent32() {
-        textureInternalFormat = DEPTH_COMPONENT32;
+        textureInternalFormat = TextureInternalFormats.DEPTH_COMPONENT32;
         return this;
     }
 
     public TextureBuilder setInternalFormatDepth24Stencil8() {
-        textureInternalFormat = DEPTH24_STENCIL8;
+        textureInternalFormat = TextureInternalFormats.DEPTH24_STENCIL8;
         return this;
     }
 
     public TextureBuilder setInternalFormatR16F() {
-        textureInternalFormat = R16F;
+        textureInternalFormat = TextureInternalFormats.R16F;
         return this;
     }
 
     public TextureBuilder setInternalFormatR32F() {
-        textureInternalFormat = R32F;
+        textureInternalFormat = TextureInternalFormats.R32F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRG16F() {
-        textureInternalFormat = RG16F;
+        textureInternalFormat = TextureInternalFormats.RG16F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRG32F() {
-        textureInternalFormat = RG32F;
+        textureInternalFormat = TextureInternalFormats.RG32F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGB10_A2() {
-        textureInternalFormat = RGB10_A2;
+        textureInternalFormat = TextureInternalFormats.RGB10_A2;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGB16F() {
-        textureInternalFormat = RGB16F;
+        textureInternalFormat = TextureInternalFormats.RGB16F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGB32F() {
-        textureInternalFormat = RGB32F;
+        textureInternalFormat = TextureInternalFormats.RGB32F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGB8() {
-        textureInternalFormat = RGB8;
+        textureInternalFormat = TextureInternalFormats.RGB8;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGBA16F() {
-        textureInternalFormat = RGBA16F;
+        textureInternalFormat = TextureInternalFormats.RGBA16F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGBA32F() {
-        textureInternalFormat = RGBA32F;
+        textureInternalFormat = TextureInternalFormats.RGBA32F;
         return this;
     }
 
     public TextureBuilder setInternalFormatRGBA8() {
-        textureInternalFormat = RGBA8;
+        textureInternalFormat = TextureInternalFormats.RGBA8;
         return this;
     }
 
@@ -900,17 +850,17 @@ public class TextureBuilder {
     }
 
     public TextureBuilder setTextureTarget2D() {
-        textureType = TEXTURE_2D;
+        textureType = TextureTargets.TEXTURE_2D;
         return this;
     }
 
     public TextureBuilder setTextureTarget3D() {
-        textureType = TEXTURE_3D;
+        textureType = TextureTargets.TEXTURE_3D;
         return this;
     }
 
     public TextureBuilder setTextureTargetCubeMap() {
-        textureType = TEXTURE_CUBE_MAP;
+        textureType = TextureTargets.TEXTURE_CUBE_MAP;
         return this;
     }
 
