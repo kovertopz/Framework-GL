@@ -30,10 +30,10 @@ public class TextureReader {
     private final Map<String, ImageReader> imageReaders;
     private final TextureBuilder textureBuilder;
 
-    public TextureReader() {
+    public TextureReader(TextureBuilder textureBuilder) {
         useFlipDefaults = true;
         imageReaders = new HashMap<>();
-        textureBuilder = new TextureBuilder();
+        this.textureBuilder = textureBuilder;
     }
 
     public boolean isUseFlipDefaults() {

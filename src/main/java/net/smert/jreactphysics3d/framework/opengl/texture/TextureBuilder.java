@@ -24,7 +24,6 @@ import net.smert.jreactphysics3d.framework.opengl.constants.TextureFormats;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureInternalFormats;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTypes;
-import net.smert.jreactphysics3d.framework.opengl.helpers.BufferHelper;
 import net.smert.jreactphysics3d.framework.opengl.image.Conversion;
 
 /**
@@ -355,7 +354,7 @@ public class TextureBuilder {
     }
 
     private ByteBuffer createBytePixelDataBuffer(byte[] pixelarray) {
-        ByteBuffer pixeldata = BufferHelper.createByteBuffer(pixelarray.length);
+        ByteBuffer pixeldata = GL.bufferHelper.createByteBuffer(pixelarray.length);
 
         for (int i = 0, max = pixelarray.length; i < max; i++) {
             byte temp = pixelarray[i];
@@ -379,7 +378,7 @@ public class TextureBuilder {
 
     public TextureBuilder buildTexture() {
 
-        texture = new Texture();
+        texture = GL.glf.createTexture();
         texture.create();
 
         switch (textureType) {
