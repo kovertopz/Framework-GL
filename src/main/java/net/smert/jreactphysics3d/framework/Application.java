@@ -12,18 +12,8 @@
  */
 package net.smert.jreactphysics3d.framework;
 
-import net.smert.jreactphysics3d.framework.opengl.GL;
-import net.smert.jreactphysics3d.framework.opengl.OpenGL1;
-import net.smert.jreactphysics3d.framework.opengl.OpenGL2;
-import net.smert.jreactphysics3d.framework.opengl.OpenGL3;
-import net.smert.jreactphysics3d.framework.opengl.helpers.DisplayListHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.FrameBufferObjectHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.LegacyRenderHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.RenderBufferObjectHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.ShaderHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.VertexArrayHelper;
-import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
+import java.io.IOException;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
@@ -38,50 +28,24 @@ public class Application {
     private final static Logger log = LoggerFactory.getLogger(Application.class);
 
     private boolean isRunning;
-    private Configuration config;
-    private Logging logging;
+    private final Configuration config;
+    private final Logging logging;
     private Screen screen;
     private Thread mainLoopThread;
     private ThrowableHandler throwableHandler;
 
-    public Application() {
-        throwableHandler = new ThrowableHandler();
+    public Application(Configuration config, Logging logging, ThrowableHandler throwableHandler) {
+        this.config = config;
+        this.logging = logging;
+        this.throwableHandler = throwableHandler;
     }
 
-    private void configureLogging() {
-        logging = new Logging(config);
+    private void configureLogging() throws IOException {
         logging.reset();
     }
 
-    private void createStaticClass() {
-        Fw.app = this;
-        Fw.audio = new Audio();
-        Fw.config = config;
-        Fw.files = new Files(config);
-        Fw.graphics = new Graphics();
-        Fw.input = new Input(config);
-        Fw.net = new Network();
-        Fw.timer = new Timer(config);
-        Fw.window = new Window(config);
-        GL.displayListHelper = new DisplayListHelper();
-        GL.fboHelper = new FrameBufferObjectHelper();
-        GL.o1 = new OpenGL1();
-        GL.o2 = new OpenGL2();
-        GL.o3 = new OpenGL3();
-        GL.rboHelper = new RenderBufferObjectHelper();
-        GL.renderHelper = new LegacyRenderHelper();
-        GL.shaderHelper = new ShaderHelper();
-        GL.textureHelper = new TextureHelper();
-        GL.vaHelper = new VertexArrayHelper();
-        GL.vboHelper = new VertexBufferObjectHelper();
-    }
-
-    protected void setScreen(Screen screen) {
+    private void setScreen(Screen screen) {
         this.screen = screen;
-    }
-
-    protected void setConfig(Configuration config) {
-        this.config = config;
     }
 
     private void startMainLoopThread() {
@@ -105,7 +69,7 @@ public class Application {
         throwableHandler.process(t);
     }
 
-    void mainLoop() {
+    void mainLoop() throws LWJGLException {
 
         // Initialization of OpenGL must happen here since we are in a new thread
         Fw.window.create();
@@ -176,17 +140,32 @@ public class Application {
         return isRunning;
     }
 
-    public void run(Configuration config, Screen screen) {
-        setConfig(config);
+    public void run(Screen screen) throws IOException {
         setScreen(screen);
         configureLogging();
-        createStaticClass();
         startRunning();
         startMainLoopThread();
     }
 
     public void setThrowableHandler(ThrowableHandler throwableHandler) {
         this.throwableHandler = throwableHandler;
+    }
+
+    /**
+     * Switches to a new screen. This method calls pause() and destroy() on the existing screen. With this in mind you
+     * should only call this method from inside the current screen's render() method. The new screen's init() and
+     * resize() methods will be called.
+     *
+     * @param screen The new screen which will be switched to.
+     */
+    public void switchScreen(Screen screen) {
+        if (this.screen != null) {
+            this.screen.pause();
+            this.screen.destroy();
+        }
+        screen.init();
+        screen.resize(config.currentWidth, config.currentHeight);
+        this.screen = screen;
     }
 
     public void startRunning() {

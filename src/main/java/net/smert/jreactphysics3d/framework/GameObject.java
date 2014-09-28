@@ -15,7 +15,7 @@ package net.smert.jreactphysics3d.framework;
 import net.smert.jreactphysics3d.framework.math.Transform4f;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
-import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 
 /**
  *

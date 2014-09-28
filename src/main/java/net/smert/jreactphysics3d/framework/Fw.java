@@ -12,6 +12,8 @@
  */
 package net.smert.jreactphysics3d.framework;
 
+import net.smert.jreactphysics3d.framework.factory.GameObjectFactory;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -22,6 +24,7 @@ public class Fw {
     public static Audio audio;
     public static Configuration config;
     public static Files files;
+    public static GameObjectFactory gof;
     public static Graphics graphics;
     public static Input input;
     public static Network net;

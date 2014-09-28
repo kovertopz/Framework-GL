@@ -34,12 +34,12 @@ public class Input {
     private final MouseHelper mouseHelper;
     public final float MOUSE_POLL = 1.0f / 125.0f;
 
-    public Input(Configuration config) {
-        this.keyboardHelper = new KeyboardHelper();
+    public Input(KeyboardHelper keyboardHelper, MouseHelper mouseHelper) {
+        this.keyboardHelper = keyboardHelper;
         actionToKey = new HashMapStringInt();
         actionToMouse = new HashMapStringInt();
         inputProcessors = new ArrayList<>();
-        this.mouseHelper = new MouseHelper(config);
+        this.mouseHelper = mouseHelper;
     }
 
     /**

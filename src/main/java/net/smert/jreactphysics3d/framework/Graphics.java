@@ -12,24 +12,12 @@
  */
 package net.smert.jreactphysics3d.framework;
 
-import java.awt.FlowLayout;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
-import net.smert.jreactphysics3d.framework.opengl.image.bmp.BMPReader;
-import net.smert.jreactphysics3d.framework.opengl.image.gif.GIFReader;
-import net.smert.jreactphysics3d.framework.opengl.image.jpg.JPGReader;
-import net.smert.jreactphysics3d.framework.opengl.image.png.PNGReader;
-import net.smert.jreactphysics3d.framework.opengl.image.tga.TGAReader;
-import net.smert.jreactphysics3d.framework.opengl.image.tiff.TIFFReader;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
-import net.smert.jreactphysics3d.framework.opengl.model.obj.ObjReader;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
@@ -40,43 +28,34 @@ import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
  */
 public class Graphics {
 
-    public final MeshReader meshReader;
-    public final RenderableFactoryGL1 renderableFactoryGL1;
-    public final TextureReader textureReader;
+    private final MeshReader meshReader;
+    private final RenderableFactoryGL1 renderableFactoryGL1;
+    private final TextureReader textureReader;
 
-    public Graphics() {
-        meshReader = new MeshReader();
-        meshReader.registerExtension("obj", new ObjReader());
-        renderableFactoryGL1 = new RenderableFactoryGL1();
-        textureReader = new TextureReader();
-        textureReader.registerExtension("bmp", new BMPReader());
-        textureReader.registerExtension("gif", new GIFReader());
-        textureReader.registerExtension("jpeg", new JPGReader());
-        textureReader.registerExtension("jpg", new JPGReader());
-        textureReader.registerExtension("png", new PNGReader());
-        textureReader.registerExtension("tga", new TGAReader());
-        textureReader.registerExtension("tif", new TIFFReader());
-        textureReader.registerExtension("tiff", new TIFFReader());
+    public Graphics(MeshReader meshReader, RenderableFactoryGL1 renderableFactoryGL1, TextureReader textureReader) {
+        this.meshReader = meshReader;
+        this.renderableFactoryGL1 = renderableFactoryGL1;
+        this.textureReader = textureReader;
     }
 
-    public AbstractRenderable createDisplayListRenderable(Mesh mesh) {
-        return renderableFactoryGL1.createDisplayList(mesh);
+    public AbstractRenderable createDisplayListRenderable() {
+        return renderableFactoryGL1.createDisplayList();
     }
 
-    public AbstractRenderable createImmediateModeRenderable(Mesh mesh) {
-        return renderableFactoryGL1.createImmediateMode(mesh);
+    public AbstractRenderable createImmediateModeRenderable() {
+        return renderableFactoryGL1.createImmediateMode();
     }
 
-    public AbstractRenderable createVertexArrayRenderable(Mesh mesh) {
-        return renderableFactoryGL1.createVertexArray(mesh);
+    public AbstractRenderable createVertexArrayRenderable() {
+        return renderableFactoryGL1.createVertexArray();
     }
 
-    public AbstractRenderable createVertexBufferObjectRenderable(Mesh mesh) {
-        return renderableFactoryGL1.createVertexBufferObject(mesh);
+    public AbstractRenderable createVertexBufferObjectRenderable() {
+        return renderableFactoryGL1.createVertexBufferObject();
     }
 
-    public AbstractRenderable createVertexBufferObjectInterleavedRenderable(Mesh mesh) {
-        return renderableFactoryGL1.createVertexBufferObjectInterleaved(mesh);
+    public AbstractRenderable createVertexBufferObjectInterleavedRenderable() {
+        return renderableFactoryGL1.createVertexBufferObjectInterleaved();
     }
 
     /**
@@ -84,7 +63,6 @@ public class Graphics {
      * during the normal shutdown process.
      */
     public void destroy() {
-        RenderableFactoryGL1.Destroy();
         GL.vboHelper.unbind();
     }
 

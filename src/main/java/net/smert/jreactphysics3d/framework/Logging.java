@@ -31,33 +31,27 @@ public class Logging {
     private final static int MAX_LOG_SIZE = 131072;
 
     private final Configuration config;
+    private final SimpleFormatter simpleFormatter;
 
-    public Logging(Configuration config) {
+    public Logging(Configuration config, SimpleFormatter simpleFormatter) {
         this.config = config;
+        this.simpleFormatter = simpleFormatter;
     }
 
-    private void addFileHandler(Logger logger) {
-        try {
-            Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
-            file.setFormatter(new SimpleFormatter());
-            file.setLevel(config.logLevel);
-            logger.addHandler(file);
-        } catch (IOException | SecurityException ex) {
-            ex.printStackTrace();
-            System.exit(-1);
+    private void addFileHandler(Logger logger) throws IOException, SecurityException {
+        Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
+        file.setFormatter(simpleFormatter);
+        file.setLevel(config.logLevel);
+        logger.addHandler(file);
+    }
+
+    private void readLoggingProperties() throws IOException, SecurityException {
+        try (FileInputStream fis = new FileInputStream(config.logProperties)) {
+            LogManager.getLogManager().readConfiguration(fis);
         }
     }
 
-    private void readLoggingProperties() {
-        try {
-            LogManager.getLogManager().readConfiguration(new FileInputStream(config.logProperties));
-        } catch (IOException | SecurityException ex) {
-            ex.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    public void reset() {
+    public void reset() throws IOException, SecurityException {
         LogManager.getLogManager().reset();
 
         if (config.logProperties != null) {
@@ -71,7 +65,7 @@ public class Logging {
             // Setup console logging
             if (config.logConsole) {
                 Handler console = new ConsoleHandler();
-                console.setFormatter(new SimpleFormatter());
+                console.setFormatter(simpleFormatter);
                 console.setLevel(config.logLevel);
                 logger.addHandler(console);
             }
