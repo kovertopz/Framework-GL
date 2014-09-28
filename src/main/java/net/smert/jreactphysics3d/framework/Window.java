@@ -36,122 +36,109 @@ public class Window {
         vSync = config.vSyncRequested;
     }
 
-    private DisplayMode findDisplayMode(int width, int height, int bpp, int freq) {
+    private DisplayMode findDisplayMode(int width, int height, int bpp, int freq) throws LWJGLException {
 
         DisplayMode displayMode = null;
+        DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 
-        try {
-            DisplayMode[] displayModes = Display.getAvailableDisplayModes();
+        for (int i = 0, max = displayModes.length; i < max; i++) {
 
-            for (int i = 0, max = displayModes.length; i < max; i++) {
-
-                // If the display mode matches save it
-                if ((displayModes[i].getWidth() == width)
-                        && (displayModes[i].getHeight() == height)
-                        && (displayModes[i].getBitsPerPixel() == bpp)
-                        && (displayModes[i].getFrequency() == freq)) {
-                    displayMode = displayModes[i]; // Don't break in case of logging
-                }
-
-                log.debug("Found fullscreen compatible mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
-                        displayModes[i].getWidth(),
-                        displayModes[i].getHeight(),
-                        displayModes[i].getBitsPerPixel(),
-                        displayModes[i].getFrequency());
+            // If the display mode matches save it
+            if ((displayModes[i].getWidth() == width)
+                    && (displayModes[i].getHeight() == height)
+                    && (displayModes[i].getBitsPerPixel() == bpp)
+                    && (displayModes[i].getFrequency() == freq)) {
+                displayMode = displayModes[i]; // Don't break in case of logging
             }
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
+
+            log.debug("Found fullscreen compatible mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
+                    displayModes[i].getWidth(),
+                    displayModes[i].getHeight(),
+                    displayModes[i].getBitsPerPixel(),
+                    displayModes[i].getFrequency());
         }
 
         return displayMode;
     }
 
-    public void create() {
+    public void create() throws LWJGLException {
 
         // Update the configuration
         config.fullscreenEnabled = fullscreen;
         config.vSyncEnabled = vSync;
 
-        try {
-            DisplayMode displayMode = null;
+        DisplayMode displayMode = null;
 
-            if (fullscreen) {
+        if (fullscreen) {
 
-                // Attempt to find a matching full screen compatible mode
-                displayMode = findDisplayMode(config.fullscreenWidth, config.fullscreenHeight,
-                        config.fullscreenDepth, config.fullscreenFreq);
+            // Attempt to find a matching full screen compatible mode
+            displayMode = findDisplayMode(config.fullscreenWidth, config.fullscreenHeight,
+                    config.fullscreenDepth, config.fullscreenFreq);
 
-                if (displayMode == null) {
-                    log.warn("Didn't find a fullscreen display mode for the requested resolution: "
-                            + "Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
-                            config.fullscreenWidth,
-                            config.fullscreenHeight,
-                            config.fullscreenDepth,
-                            config.fullscreenFreq);
-                }
-            }
-
-            // Either a full screen mode wasn't requested or we couldn't find one that matched our settings
             if (displayMode == null) {
-                displayMode = new DisplayMode(config.desktopWidth, config.desktopHeight);
+                log.warn("Didn't find a fullscreen display mode for the requested resolution: "
+                        + "Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
+                        config.fullscreenWidth,
+                        config.fullscreenHeight,
+                        config.fullscreenDepth,
+                        config.fullscreenFreq);
             }
-
-            // Set display mode and title
-            Display.setDisplayMode(displayMode);
-            Display.setTitle(config.windowTitle);
-
-            // Only create the display when it hasn't already done so. We would get an error when switching from
-            // windowed to full screen otherwise.
-            if (Display.isCreated() == false) {
-                Display.create(config.pixelFormat, config.contextAttribs);
-
-                log.info("Created window with display mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
-                        displayMode.getWidth(),
-                        displayMode.getHeight(),
-                        displayMode.getBitsPerPixel(),
-                        displayMode.getFrequency());
-            }
-
-            // Set the window location
-            if ((config.desktopLocationX != -1) && (config.desktopLocationY != -1)) {
-                Display.setLocation(config.desktopLocationX, config.desktopLocationY);
-            }
-
-            // Set resizeable
-            if (!fullscreen) {
-                Display.setResizable(config.desktopResizable);
-            }
-
-            // Set to full screen and vSync
-            Display.setFullscreen(fullscreen);
-            Display.setVSyncEnabled(vSync);
-
-            // Create "LWJGL Timer" thread so Thread.sleep() is more accurate.
-            Display.sync(3000);
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
         }
+
+        // Either a full screen mode wasn't requested or we couldn't find one that matched our settings
+        if (displayMode == null) {
+            displayMode = new DisplayMode(config.desktopWidth, config.desktopHeight);
+        }
+
+        // Set display mode and title
+        Display.setDisplayMode(displayMode);
+        Display.setTitle(config.windowTitle);
+
+        // Only create the display when it hasn't already done so. We would get an error when switching from
+        // windowed to full screen otherwise.
+        if (Display.isCreated() == false) {
+            Display.create(config.pixelFormat, config.contextAttribs);
+
+            log.info("Created window with display mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
+                    displayMode.getWidth(),
+                    displayMode.getHeight(),
+                    displayMode.getBitsPerPixel(),
+                    displayMode.getFrequency());
+        }
+
+        // Set the window location
+        if ((config.desktopLocationX != -1) && (config.desktopLocationY != -1)) {
+            Display.setLocation(config.desktopLocationX, config.desktopLocationY);
+        }
+
+        // Set resizeable
+        if (!fullscreen) {
+            Display.setResizable(config.desktopResizable);
+        }
+
+        // Set to full screen and vSync
+        Display.setFullscreen(fullscreen);
+        Display.setVSyncEnabled(vSync);
+
+        // Create "LWJGL Timer" thread so Thread.sleep() is more accurate.
+        Display.sync(3000);
 
         // Save the current window width and height
         config.currentHeight = Display.getHeight();
         config.currentWidth = Display.getWidth();
     }
 
-    public void printDisplayModes() {
-        try {
+    public void printDisplayModes() throws LWJGLException {
 
-            // These modes should always be fullscreen compatible
-            DisplayMode[] displayModes = Display.getAvailableDisplayModes();
+        // These modes should always be fullscreen compatible
+        DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 
-            for (int i = 0, max = displayModes.length; i < max; i++) {
-                System.out.println("Found fullscreen compatible mode: "
-                        + "Width: " + displayModes[i].getWidth() + "px "
-                        + "Height: " + displayModes[i].getHeight() + "px "
-                        + "Depth: " + displayModes[i].getBitsPerPixel() + "bpp "
-                        + "Freq: " + displayModes[i].getFrequency());
-            }
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
+        for (int i = 0, max = displayModes.length; i < max; i++) {
+            System.out.println("Found fullscreen compatible mode: "
+                    + "Width: " + displayModes[i].getWidth() + "px "
+                    + "Height: " + displayModes[i].getHeight() + "px "
+                    + "Depth: " + displayModes[i].getBitsPerPixel() + "bpp "
+                    + "Freq: " + displayModes[i].getFrequency());
         }
     }
 
@@ -159,12 +146,12 @@ public class Window {
         Display.setTitle(title);
     }
 
-    public void toggleFullscreen() {
+    public void toggleFullscreen() throws LWJGLException {
         fullscreen = !fullscreen;
         create();
     }
 
-    public void toggleVSync() {
+    public void toggleVSync() throws LWJGLException {
         vSync = !vSync;
         create();
     }
