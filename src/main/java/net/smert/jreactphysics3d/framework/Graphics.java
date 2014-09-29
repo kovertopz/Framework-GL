@@ -64,8 +64,12 @@ public class Graphics {
      * during the normal shutdown process.
      */
     public void destroy() {
+        Renderable.shaderBindState.reset();
+        Renderable.textureBindState.reset();
         Renderable.vaBindState.reset();
         Renderable.vboBindState.reset();
+        GL.fboHelper.unbind();
+        GL.textureHelper.unbind();
         GL.vboHelper.unbind();
     }
 
