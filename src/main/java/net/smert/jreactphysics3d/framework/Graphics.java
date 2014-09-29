@@ -71,6 +71,11 @@ public class Graphics {
         GL.fboHelper.unbind();
         GL.textureHelper.unbind();
         GL.vboHelper.unbind();
+        Renderable.texturePool.destroy();
+    }
+
+    public Texture getTexture(String filename) {
+        return Renderable.texturePool.get(filename);
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
@@ -79,12 +84,14 @@ public class Graphics {
 
     public void loadTexture(String filename) throws IOException {
         Texture texture = textureReader.load(filename);
+        Renderable.texturePool.add(filename, texture);
     }
 
     public void loadTextures(Mesh mesh) throws IOException {
         List<String> textures = mesh.getTextures();
         for (String filename : textures) {
             Texture texture = textureReader.load(filename);
+            Renderable.texturePool.add(filename, texture);
         }
     }
 

@@ -71,6 +71,9 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.ImmediateModeRe
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TexturePool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABuilder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VADrawArrays;
@@ -284,6 +287,11 @@ public class BootStrap {
         container.addComponent(RenderableConfiguration.class);
         container.as(Characteristics.USE_NAMES).addComponent(RenderableFactoryGL1.class);
 
+        // Renderable shared
+        container.addComponent(ShaderBindState.class);
+        container.addComponent(TextureBindState.class);
+        container.addComponent(TexturePool.class);
+
         // Renderable VA
         container.addComponent(VABindState.class);
         container.addComponent(VABuilder.class);
@@ -346,6 +354,9 @@ public class BootStrap {
         Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
         Renderable.config = container.getComponent(RenderableConfiguration.class);
+        Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
+        Renderable.textureBindState = container.getComponent(TextureBindState.class);
+        Renderable.texturePool = container.getComponent(TexturePool.class);
         Renderable.vaBindState = container.getComponent(VABindState.class);
         Renderable.vaBuilder = container.getComponent(VABuilder.class);
         Renderable.vboBindState = container.getComponent(VBOBindState.class);

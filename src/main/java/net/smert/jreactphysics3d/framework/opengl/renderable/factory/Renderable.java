@@ -13,6 +13,9 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.factory;
 
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TexturePool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABuilder;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VertexArrays;
@@ -29,6 +32,9 @@ public class Renderable {
     public static ByteBuffers byteBuffers;
     public static DrawCommands drawCommandsConversion;
     public static RenderableConfiguration config;
+    public static ShaderBindState shaderBindState;
+    public static TextureBindState textureBindState;
+    public static TexturePool texturePool;
     public static VABindState vaBindState;
     public static VABuilder vaBuilder;
     public static VBOBindState vboBindState;
