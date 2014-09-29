@@ -41,7 +41,6 @@ public class VBOBindState {
     private void setColorEnabled(boolean enabled) {
         if (colorEnabled != enabled) {
             colorEnabled = enabled;
-
             if (enabled) {
                 GL.vboHelper.enableColors();
             } else {
@@ -53,7 +52,6 @@ public class VBOBindState {
     private void setNormalEnabled(boolean enabled) {
         if (normalEnabled != enabled) {
             normalEnabled = enabled;
-
             if (enabled) {
                 GL.vboHelper.enableNormals();
             } else {
@@ -65,7 +63,6 @@ public class VBOBindState {
     private void setTextureCoordinateEnabled(boolean enabled) {
         if (texCoordEnabled != enabled) {
             texCoordEnabled = enabled;
-
             if (enabled) {
                 GL.vboHelper.enableTextureCoordinates();
             } else {
@@ -77,7 +74,6 @@ public class VBOBindState {
     private void setVertexEnabled(boolean enabled) {
         if (vertexEnabled != enabled) {
             vertexEnabled = enabled;
-
             if (enabled) {
                 GL.vboHelper.enableVertices();
             } else {
@@ -89,7 +85,6 @@ public class VBOBindState {
     public void bindColor(int vboid, int strideBytes, int colorOffsetBytes) {
         if (vboColorID != vboid) {
             vboColorID = vboid;
-
             if (vboid != 0) {
                 int colorSize = Renderable.config.getColorSize();
                 int colorType = Renderable.config.getColorType();
@@ -104,7 +99,6 @@ public class VBOBindState {
     public void bindNormal(int vboid, int strideBytes, int normalOffsetBytes) {
         if (vboNormalID != vboid) {
             vboNormalID = vboid;
-
             if (vboid != 0) {
                 int normalType = Renderable.config.getNormalType();
                 setNormalEnabled(true);
@@ -118,7 +112,6 @@ public class VBOBindState {
     public void bindTextureCoordinate(int vboid, int strideBytes, int texCoordOffsetBytes) {
         if (vboTexCoordID != vboid) {
             vboTexCoordID = vboid;
-
             if (vboid != 0) {
                 int texCoordSize = Renderable.config.getTexCoordSize();
                 int texCoordType = Renderable.config.getTexCoordType();
@@ -134,7 +127,6 @@ public class VBOBindState {
     public void bindVertex(int vboid, int strideBytes, int vertexOffsetBytes) {
         if (vboVertexID != vboid) {
             vboVertexID = vboid;
-
             if (vboid != 0) {
                 int vertexSize = Renderable.config.getVertexSize();
                 int vertexType = Renderable.config.getVertexType();
@@ -149,7 +141,6 @@ public class VBOBindState {
     public void bindVertexIndex(int vboid) {
         if (vboVertexIndexID != vboid) {
             vboVertexIndexID = vboid;
-
             if (vboid != 0) {
                 GL.vboHelper.bindVerticesIndex(vboid);
             }

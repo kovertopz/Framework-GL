@@ -37,7 +37,6 @@ public class VABindState {
     private void setColorEnabled(boolean enabled) {
         if (colorEnabled != enabled) {
             colorEnabled = enabled;
-
             if (enabled) {
                 GL.vaHelper.enableColors();
             } else {
@@ -49,7 +48,6 @@ public class VABindState {
     private void setNormalEnabled(boolean enabled) {
         if (normalEnabled != enabled) {
             normalEnabled = enabled;
-
             if (enabled) {
                 GL.vaHelper.enableNormals();
             } else {
@@ -61,7 +59,6 @@ public class VABindState {
     private void setTextureCoordinateEnabled(boolean enabled) {
         if (texCoordEnabled != enabled) {
             texCoordEnabled = enabled;
-
             if (enabled) {
                 GL.vaHelper.enableTextureCoordinates();
             } else {
@@ -73,7 +70,6 @@ public class VABindState {
     private void setVertexEnabled(boolean enabled) {
         if (vertexEnabled != enabled) {
             vertexEnabled = enabled;
-
             if (enabled) {
                 GL.vaHelper.enableVertices();
             } else {
