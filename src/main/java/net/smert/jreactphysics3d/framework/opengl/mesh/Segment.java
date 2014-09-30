@@ -174,4 +174,25 @@ public class Segment {
         return (drawCommands != null);
     }
 
+    public void setAllColors(float r, float g, float b) {
+        colors.clear();
+        while (colors.size() != vertices.size()) {
+            colors.add(new Color(r, g, b, 1.0f));
+        }
+    }
+
+    public void setAllColors(float r, float g, float b, float a) {
+        colors.clear();
+        while (colors.size() != vertices.size()) {
+            colors.add(new Color(r, g, b, a));
+        }
+    }
+
+    public void setAllColors(Color color) {
+        colors.clear();
+        while (colors.size() != vertices.size()) {
+            colors.add(color);
+        }
+    }
+
 }

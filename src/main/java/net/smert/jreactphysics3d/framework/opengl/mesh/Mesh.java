@@ -70,12 +70,7 @@ public class Mesh {
         totalVertices += segment.getVertices().size();
 
         // Update booleans
-        canRenderRanged |= ((segment.getMaxIndex() - segment.getMinIndex()) > 0);
-        hasColors |= (segment.getColors().size() > 0);
-        hasNormals |= (segment.getNormals().size() > 0);
-        hasTexCoords |= (segment.getTexCoords().size() > 0);
-        hasVertices |= (segment.getVertices().size() > 0);
-        hasIndexes |= (getIndexes().size() > 0);
+        updateBooleansFromSegment();
     }
 
     public boolean canRenderRanged() {
@@ -107,6 +102,10 @@ public class Mesh {
         List<String> newTextures = new ArrayList<>();
         for (Segment segment : segments) {
             Material material = segment.getMaterial();
+
+            if (material == null) {
+                continue;
+            }
 
             Map<TextureType, String> textures = material.getTextures();
             Iterator<String> iterator = textures.values().iterator();
@@ -179,6 +178,25 @@ public class Mesh {
         firstIndexes.clear();
         indexes.clear();
         segments.clear();
+    }
+
+    public void updateBooleansFromSegment() {
+        canRenderRanged = false;
+        hasColors = false;
+        hasIndexes = false;
+        hasNormals = false;
+        hasTexCoords = false;
+        hasVertices = false;
+
+        // Update booleans
+        for (Segment segment : segments) {
+            canRenderRanged |= ((segment.getMaxIndex() - segment.getMinIndex()) > 0);
+            hasColors |= (segment.getColors().size() > 0);
+            hasNormals |= (segment.getNormals().size() > 0);
+            hasTexCoords |= (segment.getTexCoords().size() > 0);
+            hasVertices |= (segment.getVertices().size() > 0);
+            hasIndexes |= (getIndexes().size() > 0);
+        }
     }
 
 }
