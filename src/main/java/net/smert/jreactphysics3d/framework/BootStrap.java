@@ -72,6 +72,7 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexArrayRend
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TexturePool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABindState;
@@ -289,6 +290,7 @@ public class BootStrap {
 
         // Renderable shared
         container.addComponent(ShaderBindState.class);
+        container.addComponent(ShaderPool.class);
         container.addComponent(TextureBindState.class);
         container.addComponent(TexturePool.class);
 
@@ -355,6 +357,7 @@ public class BootStrap {
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
         Renderable.config = container.getComponent(RenderableConfiguration.class);
         Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
+        Renderable.shaderPool = container.getComponent(ShaderPool.class);
         Renderable.textureBindState = container.getComponent(TextureBindState.class);
         Renderable.texturePool = container.getComponent(TexturePool.class);
         Renderable.vaBindState = container.getComponent(VABindState.class);

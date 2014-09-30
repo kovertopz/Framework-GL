@@ -12,6 +12,8 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureTypeMapping;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -20,6 +22,8 @@ public abstract class AbstractDrawCall implements DrawCall {
 
     protected int[] elementCounts;
     protected int[] primitiveModes;
+    protected int[] shaders;
+    protected TextureTypeMapping[][] textureTypeMappings;
 
     public int[] getElementCounts() {
         return elementCounts;
@@ -35,6 +39,22 @@ public abstract class AbstractDrawCall implements DrawCall {
 
     public void setPrimitiveModes(int[] primitiveModes) {
         this.primitiveModes = primitiveModes;
+    }
+
+    public int[] getShaders() {
+        return shaders;
+    }
+
+    public void setShaders(int[] shaders) {
+        this.shaders = shaders;
+    }
+
+    public TextureTypeMapping[][] getTextureTypeMappings() {
+        return textureTypeMappings;
+    }
+
+    public void setTextureTypeMappings(TextureTypeMapping[][] textureTypeMappings) {
+        this.textureTypeMappings = textureTypeMappings;
     }
 
 }

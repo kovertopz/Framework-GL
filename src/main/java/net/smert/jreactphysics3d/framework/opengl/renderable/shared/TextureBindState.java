@@ -17,6 +17,7 @@ import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureUnit;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureTypeMapping;
 import net.smert.jreactphysics3d.framework.utils.HashMapIntInt;
 
 /**
@@ -55,7 +56,7 @@ public class TextureBindState {
         int textureTarget = texture.getTextureTarget();
         int activeTextureID = textureUnitToTextureID.get(activeTextureUnit);
 
-        if ((activeTextureID != HashMapIntInt.NOT_FOUND) && (activeTextureID != textureID)) {
+        if (activeTextureID != textureID) {
             textureUnitToTextureID.put(activeTextureUnit, textureID);
             bindChanged = true;
             if ((activeTextureUnit >= TextureUnit.TEXTURE0)
@@ -87,6 +88,87 @@ public class TextureBindState {
                     Renderable.shaderBindState.setTextureFlag(0.0f);
                 }
             }
+        }
+    }
+
+    public void bindTexture(int textureUnit, Texture texture) {
+        setActiveTexture(textureUnit);
+        if (texture == null) {
+            unbindCurrent();
+        } else {
+            setBindTexture(texture);
+        }
+    }
+
+    public void bindTexture0(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE0, texture);
+    }
+
+    public void bindTexture1(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE1, texture);
+    }
+
+    public void bindTexture2(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE2, texture);
+    }
+
+    public void bindTexture3(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE3, texture);
+    }
+
+    public void bindTexture4(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE4, texture);
+    }
+
+    public void bindTexture5(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE5, texture);
+    }
+
+    public void bindTexture6(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE6, texture);
+    }
+
+    public void bindTexture7(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE7, texture);
+    }
+
+    public void bindTexture8(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE8, texture);
+    }
+
+    public void bindTexture9(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE9, texture);
+    }
+
+    public void bindTexture10(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE10, texture);
+    }
+
+    public void bindTexture11(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE11, texture);
+    }
+
+    public void bindTexture12(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE12, texture);
+    }
+
+    public void bindTexture13(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE13, texture);
+    }
+
+    public void bindTexture14(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE14, texture);
+    }
+
+    public void bindTexture15(Texture texture) {
+        bindTexture(TextureUnit.TEXTURE15, texture);
+    }
+
+    public void bindTextures(TextureTypeMapping[] textures) {
+        for (TextureTypeMapping mapping : textures) {
+            int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureTypeID());
+            Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());
+            bindTexture(textureUnit, texture);
         }
     }
 
@@ -126,82 +208,9 @@ public class TextureBindState {
         activeTextureUnit = -1;
     }
 
-    public void setTexture(int textureUnit, Texture texture) {
-        setActiveTexture(textureUnit);
-        if (texture == null) {
-            unbindCurrent();
-        } else {
-            setBindTexture(texture);
-        }
-    }
-
-    public void setTexture0(Texture texture) {
-        setTexture(TextureUnit.TEXTURE0, texture);
-    }
-
-    public void setTexture1(Texture texture) {
-        setTexture(TextureUnit.TEXTURE1, texture);
-    }
-
-    public void setTexture2(Texture texture) {
-        setTexture(TextureUnit.TEXTURE2, texture);
-    }
-
-    public void setTexture3(Texture texture) {
-        setTexture(TextureUnit.TEXTURE3, texture);
-    }
-
-    public void setTexture4(Texture texture) {
-        setTexture(TextureUnit.TEXTURE4, texture);
-    }
-
-    public void setTexture5(Texture texture) {
-        setTexture(TextureUnit.TEXTURE5, texture);
-    }
-
-    public void setTexture6(Texture texture) {
-        setTexture(TextureUnit.TEXTURE6, texture);
-    }
-
-    public void setTexture7(Texture texture) {
-        setTexture(TextureUnit.TEXTURE7, texture);
-    }
-
-    public void setTexture8(Texture texture) {
-        setTexture(TextureUnit.TEXTURE8, texture);
-    }
-
-    public void setTexture9(Texture texture) {
-        setTexture(TextureUnit.TEXTURE9, texture);
-    }
-
-    public void setTexture10(Texture texture) {
-        setTexture(TextureUnit.TEXTURE10, texture);
-    }
-
-    public void setTexture11(Texture texture) {
-        setTexture(TextureUnit.TEXTURE11, texture);
-    }
-
-    public void setTexture12(Texture texture) {
-        setTexture(TextureUnit.TEXTURE12, texture);
-    }
-
-    public void setTexture13(Texture texture) {
-        setTexture(TextureUnit.TEXTURE13, texture);
-    }
-
-    public void setTexture14(Texture texture) {
-        setTexture(TextureUnit.TEXTURE14, texture);
-    }
-
-    public void setTexture15(Texture texture) {
-        setTexture(TextureUnit.TEXTURE15, texture);
-    }
-
     public void unbindAll() {
         for (int i = 0; i < maxTextureUnits; i++) {
-            setTexture(TextureUnit.TEXTURE0 + i, null);
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
         }
     }
 
@@ -231,13 +240,13 @@ public class TextureBindState {
 
     public void unbindModel() {
         for (int i = 0; i < maxModelTextureUnits; i++) {
-            setTexture(TextureUnit.TEXTURE0 + i, null);
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
         }
     }
 
     public void unbindShader() {
         for (int i = maxModelTextureUnits; i < maxShaderTextureUnits; i++) {
-            setTexture(TextureUnit.TEXTURE0 + i, null);
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
         }
     }
 

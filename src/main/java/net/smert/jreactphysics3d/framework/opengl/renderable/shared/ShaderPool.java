@@ -10,15 +10,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl;
+package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
+
+import net.smert.jreactphysics3d.framework.opengl.Shader;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Shader {
+public class ShaderPool extends ObjectPool<Shader> {
 
-    public void destroy() {
+    @Override
+    protected ObjectDestroyer<Shader> createObjectDestroyer() {
+        return new ShaderDestroyer();
+    }
+
+    private static class ShaderDestroyer extends ObjectDestroyer<Shader> {
+
+        @Override
+        public void destroy(Shader shader) {
+            shader.destroy();
+        }
+
     }
 
 }

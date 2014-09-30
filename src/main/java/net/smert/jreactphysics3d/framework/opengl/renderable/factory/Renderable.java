@@ -14,6 +14,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.factory;
 
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TexturePool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.VABindState;
@@ -33,6 +34,7 @@ public class Renderable {
     public static DrawCommands drawCommandsConversion;
     public static RenderableConfiguration config;
     public static ShaderBindState shaderBindState;
+    public static ShaderPool shaderPool;
     public static TextureBindState textureBindState;
     public static TexturePool texturePool;
     public static VABindState vaBindState;

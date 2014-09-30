@@ -10,15 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl;
+package net.smert.jreactphysics3d.framework.opengl.shader;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Shader {
-
-    public void destroy() {
-    }
+public class AbstractShader {
 
 }

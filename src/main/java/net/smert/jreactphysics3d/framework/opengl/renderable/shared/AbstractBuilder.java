@@ -12,13 +12,18 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureTypeMapping;
 import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
@@ -57,6 +62,69 @@ public abstract class AbstractBuilder {
                 }
             }
         }
+    }
+
+    public void createDrawCall(Mesh mesh, AbstractDrawCall drawCall) {
+
+        int totalSegments = mesh.getTotalSegments();
+
+        // Convert element counts from each segment
+        int[] elementCounts = new int[totalSegments];
+        for (int i = 0; i < elementCounts.length; i++) {
+            elementCounts[i] = mesh.getSegment(i).getVertices().size();
+        }
+
+        // Convert primitive modes from each segment
+        int[] primitiveModes = new int[totalSegments];
+        for (int i = 0; i < primitiveModes.length; i++) {
+            primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
+        }
+
+        // Convert shaders for each segment
+        int[] shaders = new int[totalSegments];
+        for (int i = 0; i < shaders.length; i++) {
+            shaders[i] = 0;
+
+            Material material = mesh.getSegment(i).getMaterial();
+            if (material == null) {
+                continue;
+            }
+            String shader = material.getShader();
+            if (shader == null) {
+                continue;
+            }
+
+            shaders[i] = Renderable.shaderPool.getUniqueID(shader);
+        }
+
+        // Convert textures for each segment
+        TextureTypeMapping[][] textureTypeMappings = new TextureTypeMapping[totalSegments][];
+        for (int i = 0; i < textureTypeMappings.length; i++) {
+
+            Material material = mesh.getSegment(i).getMaterial();
+            if (material == null) {
+                continue;
+            }
+
+            int j = 0;
+            Map<TextureType, String> textures = material.getTextures();
+            textureTypeMappings[i] = new TextureTypeMapping[textures.size()];
+
+            Iterator<Map.Entry<TextureType, String>> entries = textures.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry<TextureType, String> entry = entries.next();
+                TextureType textureType = entry.getKey();
+                String filename = entry.getValue();
+                int textureTypeID = textureType.ordinal();
+                int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
+                textureTypeMappings[i][j++] = new TextureTypeMapping(textureTypeID, uniqueTextureID);
+            }
+        }
+
+        drawCall.setElementCounts(elementCounts);
+        drawCall.setPrimitiveModes(primitiveModes);
+        drawCall.setShaders(shaders);
+        drawCall.setTextureTypeMappings(textureTypeMappings);
     }
 
     public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {

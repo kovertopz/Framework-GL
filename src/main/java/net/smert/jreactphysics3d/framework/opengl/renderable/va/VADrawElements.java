@@ -36,6 +36,8 @@ public class VADrawElements extends AbstractDrawCall {
     @Override
     public void render() {
         for (int i = 0; i < primitiveModes.length; i++) {
+            Renderable.shaderBindState.bindShader(shaders[i]);
+            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.vaHelper.drawElements(
                     primitiveModes[i], elementCounts[i], Renderable.config.getIndexType(), vertexIndexBuffer);
         }

@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 import net.smert.jreactphysics3d.framework.Files.FileAsset;
 import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.LightParameterType;
 import net.smert.jreactphysics3d.framework.opengl.constants.Primitives;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
@@ -32,6 +33,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -357,15 +359,15 @@ public class ObjReader implements ModelReader {
         // Lighting
         if (ambient.hasBeenSet()) {
             meshMaterial.setLighting(
-                    "ambient", new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
+                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
         }
         if (diffuse.hasBeenSet()) {
             meshMaterial.setLighting(
-                    "diffuse", new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
+                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
         }
         if (specular.hasBeenSet()) {
             meshMaterial.setLighting(
-                    "specular", new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
+                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
         }
         meshMaterial.setShininess(material.convertSpecularExponent());
 
@@ -374,19 +376,19 @@ public class ObjReader implements ModelReader {
 
         filename = material.getAmbientMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture("ambient", filename);
+            meshMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
         }
         filename = material.getDiffuseMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture("diffuse", filename);
+            meshMaterial.setTexture(TextureType.DIFFUSE, filename);
         }
         filename = material.getSpecularMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture("specular", filename);
+            meshMaterial.setTexture(TextureType.SPECULAR, filename);
         }
         filename = material.getSpecularExponentMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture("shininess", filename);
+            meshMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
         }
 
         // Add material to mesh

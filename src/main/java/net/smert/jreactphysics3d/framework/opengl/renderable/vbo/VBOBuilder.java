@@ -110,20 +110,8 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
             drawCall = drawArrays;
         }
 
-        // Convert element counts from each segment
-        int[] elementCounts = new int[totalSegments];
-        for (int i = 0; i < elementCounts.length; i++) {
-            elementCounts[i] = mesh.getSegment(i).getVertices().size();
-        }
-
-        // Convert primitive modes from each segment
-        int[] primitiveModes = new int[totalSegments];
-        for (int i = 0; i < primitiveModes.length; i++) {
-            primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
-        }
-
-        drawCall.setElementCounts(elementCounts);
-        drawCall.setPrimitiveModes(primitiveModes);
+        // Do common things
+        super.createDrawCall(mesh, drawCall);
 
         return drawCall;
     }

@@ -13,6 +13,7 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 
 import net.smert.jreactphysics3d.framework.opengl.Shader;
+import net.smert.jreactphysics3d.framework.opengl.constants.TextureUnit;
 
 /**
  *
@@ -35,10 +36,18 @@ public class ShaderBindState {
     }
 
     public void setTextureFlag(float flag) {
-        if (textureFlag != flag) {
-            textureFlag = flag;
-            setShaderUniformTextureFlag(flag);
+        if (textureFlag == flag) {
+            return;
         }
+        textureFlag = flag;
+        setShaderUniformTextureFlag(flag);
+    }
+
+    public void bindShader(int shader) {
+    }
+
+    public int getTextureUnit(int textureTypeID) {
+        return TextureUnit.TEXTURE0;
     }
 
 }

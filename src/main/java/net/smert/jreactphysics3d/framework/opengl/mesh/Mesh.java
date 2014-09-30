@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
 
 /**
  *
@@ -103,21 +104,20 @@ public class Mesh {
      * @return
      */
     public List<String> getTextures() {
-        List<String> textures = new ArrayList<>();
-        for (int i = 0; i < segments.size(); i++) {
-            Segment segment = segments.get(i);
+        List<String> newTextures = new ArrayList<>();
+        for (Segment segment : segments) {
             Material material = segment.getMaterial();
 
-            Map<String, String> matTextures = material.getTextures();
-            Iterator<String> iterator = matTextures.values().iterator();
+            Map<TextureType, String> textures = material.getTextures();
+            Iterator<String> iterator = textures.values().iterator();
             while (iterator.hasNext()) {
                 String texture = iterator.next();
-                if (!textures.contains(texture)) {
-                    textures.add(texture);
+                if (!newTextures.contains(texture)) {
+                    newTextures.add(texture);
                 }
             }
         }
-        return textures;
+        return newTextures;
     }
 
     public Segment getSegment(int index) {

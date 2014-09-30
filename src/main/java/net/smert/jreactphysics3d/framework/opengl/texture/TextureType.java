@@ -10,15 +10,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl;
+package net.smert.jreactphysics3d.framework.opengl.texture;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Shader {
+public enum TextureType {
 
-    public void destroy() {
-    }
+    AMBIENT_OCCLUSION,
+    BUMP,
+    DETAIL,
+    DIFFUSE,
+    DISPLACEMENT,
+    ENVIRONMENT,
+    GLOW,
+    HEIGHT,
+    NORMAL,
+    PARALLAX,
+    SPECULAR,
+    SPECULAR_EXPONENT,
+    TRANSLUCENT,
+    TRANSPARENCY,
+    MAX_TEXTURE_TYPES
 
 }

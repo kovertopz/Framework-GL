@@ -15,6 +15,8 @@ package net.smert.jreactphysics3d.framework.opengl.mesh;
 import java.util.HashMap;
 import java.util.Map;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.LightParameterType;
+import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
 
 /**
  *
@@ -24,8 +26,9 @@ public class Material {
 
     private boolean isOpaque;
     private int shininess;
-    private final Map<String, String> textures;
-    private final Map<String, Vector4f> lighting;
+    private String shader;
+    private final Map<TextureType, String> textures;
+    private final Map<LightParameterType, Vector4f> lighting;
 
     public Material() {
         isOpaque = true;
@@ -50,28 +53,36 @@ public class Material {
         this.shininess = shininess;
     }
 
-    public String getTexture(String textureType) {
+    public String getShader() {
+        return shader;
+    }
+
+    public void setShader(String shader) {
+        this.shader = shader;
+    }
+
+    public String getTexture(TextureType textureType) {
         return textures.get(textureType);
     }
 
-    public String setTexture(String textureType, String filename) {
+    public String setTexture(TextureType textureType, String filename) {
         return textures.put(textureType, filename);
     }
 
-    public Map<String, String> getTextures() {
+    public Map<TextureType, String> getTextures() {
         return textures;
     }
 
-    public Map<String, Vector4f> getLighting() {
+    public Map<LightParameterType, Vector4f> getLighting() {
         return lighting;
     }
 
-    public Vector4f getLighting(String lightingType) {
-        return lighting.get(lightingType);
+    public Vector4f getLighting(LightParameterType lightParameterType) {
+        return lighting.get(lightParameterType);
     }
 
-    public Vector4f setLighting(String lightingType, Vector4f value) {
-        return lighting.put(lightingType, value);
+    public Vector4f setLighting(LightParameterType lightParameterType, Vector4f value) {
+        return lighting.put(lightParameterType, value);
     }
 
 }

@@ -13,6 +13,7 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import net.smert.jreactphysics3d.framework.opengl.GL;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -34,7 +35,9 @@ public class VADrawArrays extends AbstractDrawCall {
     @Override
     public void render() {
         for (int i = 0; i < primitiveModes.length; i++) {
-            GL.vboHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
+            Renderable.shaderBindState.bindShader(shaders[i]);
+            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
+            GL.vaHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
         }
     }
 
