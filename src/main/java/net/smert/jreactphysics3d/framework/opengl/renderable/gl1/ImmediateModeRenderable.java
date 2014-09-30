@@ -34,8 +34,10 @@ public class ImmediateModeRenderable extends AbstractRenderable {
 
     @Override
     public void render() {
-        DrawCommands drawCommands = mesh.getDrawCommands();
-        drawCommands.execCommands(mesh);
+        for (int i = 0; i < mesh.getTotalSegments(); i++) {
+            DrawCommands drawCommands = mesh.getSegment(i).getDrawCommands();
+            drawCommands.execCommands(mesh);
+        }
     }
 
 }

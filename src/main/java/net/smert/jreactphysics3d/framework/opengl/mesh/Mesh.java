@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**
  *
@@ -32,7 +30,6 @@ public class Mesh {
     private boolean hasTexCoords;
     private boolean hasVertices;
     private int totalVertices;
-    private DrawCommands drawCommands;
     private final List<Integer> firstIndexes;
     private final List<Integer> indexes;
     private final List<Segment> segments;
@@ -44,18 +41,13 @@ public class Mesh {
         reset();
     }
 
-    public Mesh(DrawCommands drawCommands) {
-        this();
-        this.drawCommands = drawCommands;
-    }
-
     public void addSegment(Segment segment) {
 
         // Check arguments
         if (segments.contains(segment)) {
             throw new IllegalArgumentException("The segment already exists");
         }
-        if (segment.getVertices().isEmpty()) {
+        if (segment.getVertices().isEmpty() && (segment.hasDrawCommands() == false)) {
             throw new RuntimeException("The segment must contain at least 1 vertex");
         }
         if (!segment.getColors().isEmpty()
@@ -159,20 +151,6 @@ public class Mesh {
 
     public boolean hasVertices() {
         return hasVertices;
-    }
-
-    public DrawCommands getDrawCommands() {
-        if (drawCommands == null) {
-            drawCommands = Renderable.drawCommandsConversion;
-        }
-        return drawCommands;
-    }
-
-    public void setDrawCommands(DrawCommands drawCommands) {
-        if (drawCommands == null) {
-            throw new IllegalArgumentException("Draw commands cannot be null");
-        }
-        this.drawCommands = drawCommands;
     }
 
     public void removeSegment(Segment segment) {

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
@@ -24,10 +26,10 @@ import net.smert.jreactphysics3d.framework.utils.Color;
  */
 public class Segment {
 
-    private boolean textureIs3d;
     private int maxIndex;
     private int minIndex;
     private int primitiveMode;
+    private DrawCommands drawCommands;
     private final List<Color> colors;
     private final List<Vector3f> normals;
     private final List<Vector3f> texCoords;
@@ -36,15 +38,20 @@ public class Segment {
     private String name;
 
     public Segment() {
-        textureIs3d = false;
         maxIndex = 0;
         minIndex = 0;
+        drawCommands = null;
         primitiveMode = -1; // GL_POINTS = 0 :(
         colors = new ArrayList<>();
         normals = new ArrayList<>();
         texCoords = new ArrayList<>();
         vertices = new ArrayList<>();
         name = "";
+    }
+
+    public Segment(DrawCommands drawCommands) {
+        this();
+        this.drawCommands = drawCommands;
     }
 
     public Segment(int primitiveMode) {
@@ -77,12 +84,10 @@ public class Segment {
     }
 
     public void addTexCoord(float x, float y, float z) {
-        textureIs3d = true;
         texCoords.add(new Vector3f(x, y, z));
     }
 
     public void addTexCoord(Vector3f vector) {
-        textureIs3d = true;
         texCoords.add(vector);
     }
 
@@ -122,6 +127,17 @@ public class Segment {
         this.primitiveMode = primitiveMode;
     }
 
+    public DrawCommands getDrawCommands() {
+        return (drawCommands == null) ? Renderable.drawCommandsConversion : drawCommands;
+    }
+
+    public void setDrawCommands(DrawCommands drawCommands) {
+        if (drawCommands == null) {
+            throw new IllegalArgumentException("Draw commands cannot be null");
+        }
+        this.drawCommands = drawCommands;
+    }
+
     public List<Color> getColors() {
         return colors;
     }
@@ -154,8 +170,8 @@ public class Segment {
         this.name = name;
     }
 
-    public boolean isTextureIs3d() {
-        return textureIs3d;
+    public boolean hasDrawCommands() {
+        return (drawCommands != null);
     }
 
 }

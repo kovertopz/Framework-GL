@@ -18,9 +18,12 @@ import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
+import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
+import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
 
 /**
@@ -29,11 +32,14 @@ import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
  */
 public class Graphics {
 
+    private final MeshFactory meshFactory;
     private final MeshReader meshReader;
     private final RenderableFactoryGL1 renderableFactoryGL1;
     private final TextureReader textureReader;
 
-    public Graphics(MeshReader meshReader, RenderableFactoryGL1 renderableFactoryGL1, TextureReader textureReader) {
+    public Graphics(MeshFactory meshFactory, MeshReader meshReader, RenderableFactoryGL1 renderableFactoryGL1,
+            TextureReader textureReader) {
+        this.meshFactory = meshFactory;
         this.meshReader = meshReader;
         this.renderableFactoryGL1 = renderableFactoryGL1;
         this.textureReader = textureReader;
@@ -45,6 +51,14 @@ public class Graphics {
 
     public AbstractRenderable createImmediateModeRenderable() {
         return renderableFactoryGL1.createImmediateMode();
+    }
+
+    public Mesh createMeshWithDrawCommands(DrawCommands drawCommands) {
+        Segment segment = meshFactory.createSegment();
+        segment.setDrawCommands(drawCommands);
+        Mesh mesh = meshFactory.createMesh();
+        mesh.addSegment(segment);
+        return mesh;
     }
 
     public AbstractRenderable createVertexArrayRenderable() {
