@@ -40,7 +40,7 @@ public class MeshReader {
         if (posOfLastPeriod == -1) {
             throw new IllegalArgumentException("The filename must have an extension: " + filename);
         }
-        String extension = filename.substring(posOfLastPeriod + 1);
+        String extension = filename.substring(posOfLastPeriod + 1).toLowerCase();
 
         // Does the model reader for this extension exist?
         if (!modelReaders.containsKey(extension)) {

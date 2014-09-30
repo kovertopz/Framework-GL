@@ -538,10 +538,15 @@ public class ObjReader implements ModelReader {
         }
 
         // Take objFilename and strip the filename portion from it
+        String materialFilename;
         String separator = Fw.files.INTERNAL_FILE_SEPARATOR;
         int lastSlash = objFilename.lastIndexOf(separator);
-        String directory = objFilename.substring(0, lastSlash);
-        String materialFilename = directory + separator + materialLibrary;
+        if (lastSlash != -1) {
+            String directory = objFilename.substring(0, lastSlash);
+            materialFilename = directory + separator + materialLibrary;
+        } else {
+            materialFilename = materialLibrary;
+        }
         materialReader.reset();
         materialReader.load(materialFilename, mesh);
     }
