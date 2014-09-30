@@ -41,11 +41,11 @@ public class GL {
     public static FrameBufferObjectHelper fboHelper;
     public static GLFactory glf;
     public static MeshFactory mf;
+    public static MeshReader meshReader;
     public static OpenGL1 o1;
     public static OpenGL2 o2;
     public static OpenGL3 o3;
     public static LegacyRenderHelper renderHelper;
-    public static MeshReader meshReader;
     public static RenderableFactoryGL1 rf1;
     public static RenderBufferObjectHelper rboHelper;
     public static ShaderHelper shaderHelper;
