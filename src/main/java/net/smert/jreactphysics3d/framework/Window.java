@@ -41,21 +41,21 @@ public class Window {
         DisplayMode displayMode = null;
         DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 
-        for (int i = 0, max = displayModes.length; i < max; i++) {
+        for (DisplayMode displayMode1 : displayModes) {
 
             // If the display mode matches save it
-            if ((displayModes[i].getWidth() == width)
-                    && (displayModes[i].getHeight() == height)
-                    && (displayModes[i].getBitsPerPixel() == bpp)
-                    && (displayModes[i].getFrequency() == freq)) {
-                displayMode = displayModes[i]; // Don't break in case of logging
+            if ((displayMode1.getWidth() == width)
+                    && (displayMode1.getHeight() == height)
+                    && (displayMode1.getBitsPerPixel() == bpp)
+                    && (displayMode1.getFrequency() == freq)) {
+                displayMode = displayMode1; // Don't break in case of logging
             }
 
             log.debug("Found fullscreen compatible mode: Width: {}px Height: {}px Depth: {}bpp Freq: {}hz",
-                    displayModes[i].getWidth(),
-                    displayModes[i].getHeight(),
-                    displayModes[i].getBitsPerPixel(),
-                    displayModes[i].getFrequency());
+                    displayMode1.getWidth(),
+                    displayMode1.getHeight(),
+                    displayMode1.getBitsPerPixel(),
+                    displayMode1.getFrequency());
         }
 
         return displayMode;
@@ -133,12 +133,12 @@ public class Window {
         // These modes should always be fullscreen compatible
         DisplayMode[] displayModes = Display.getAvailableDisplayModes();
 
-        for (int i = 0, max = displayModes.length; i < max; i++) {
+        for (DisplayMode displayMode : displayModes) {
             System.out.println("Found fullscreen compatible mode: "
-                    + "Width: " + displayModes[i].getWidth() + "px "
-                    + "Height: " + displayModes[i].getHeight() + "px "
-                    + "Depth: " + displayModes[i].getBitsPerPixel() + "bpp "
-                    + "Freq: " + displayModes[i].getFrequency());
+                    + "Width: " + displayMode.getWidth() + "px "
+                    + "Height: " + displayMode.getHeight() + "px "
+                    + "Depth: " + displayMode.getBitsPerPixel() + "bpp "
+                    + "Freq: " + displayMode.getFrequency() + "hz");
         }
     }
 

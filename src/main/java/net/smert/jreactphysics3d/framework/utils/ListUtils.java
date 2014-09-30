@@ -25,7 +25,7 @@ public class ListUtils {
         Iterator<Boolean> iterator = list.iterator();
         boolean[] array = new boolean[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -36,7 +36,7 @@ public class ListUtils {
         Iterator<Byte> iterator = list.iterator();
         byte[] array = new byte[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -47,7 +47,7 @@ public class ListUtils {
         Iterator<Character> iterator = list.iterator();
         char[] array = new char[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -58,7 +58,7 @@ public class ListUtils {
         Iterator<Double> iterator = list.iterator();
         double[] array = new double[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -69,7 +69,7 @@ public class ListUtils {
         Iterator<Float> iterator = list.iterator();
         float[] array = new float[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -80,7 +80,7 @@ public class ListUtils {
         Iterator<Integer> iterator = list.iterator();
         int[] array = new int[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -91,7 +91,7 @@ public class ListUtils {
         Iterator<Long> iterator = list.iterator();
         long[] array = new long[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 
@@ -102,7 +102,7 @@ public class ListUtils {
         Iterator<Short> iterator = list.iterator();
         short[] array = new short[list.size()];
 
-        for (int i = 0, max = array.length; i < max; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = iterator.next();
         }
 

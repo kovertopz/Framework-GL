@@ -35,7 +35,7 @@ public class VADrawElements extends AbstractDrawCall {
 
     @Override
     public void render() {
-        for (int i = 0, max = primitiveModes.length; i < max; i++) {
+        for (int i = 0; i < primitiveModes.length; i++) {
             GL.vaHelper.drawElements(
                     primitiveModes[i], elementCounts[i], Renderable.config.getIndexType(), vertexIndexBuffer);
         }

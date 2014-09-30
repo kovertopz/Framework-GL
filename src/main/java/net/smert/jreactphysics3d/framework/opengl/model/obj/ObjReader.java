@@ -281,7 +281,7 @@ public class ObjReader implements ModelReader {
                 TexCoord texCoordNew = new TexCoord();
                 TexCoord texCoordOld = new TexCoord();
 
-                for (int count = 1, i = 1, max = face.getVertexIndex().size(); i < max; i++) {
+                for (int count = 1, i = 1; i < face.getVertexIndex().size(); i++) {
                     vertexOld = vertexNew;
                     vertexNew = vertices.get(face.getVertexIndex().get(i));
                     count++;

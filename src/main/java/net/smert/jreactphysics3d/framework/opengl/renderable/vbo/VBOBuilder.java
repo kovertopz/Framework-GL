@@ -73,13 +73,13 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
 
                 // Convert max indexes from each segment
                 int[] maxIndexes = new int[totalSegments];
-                for (int i = 0, max = maxIndexes.length; i < max; i++) {
+                for (int i = 0; i < maxIndexes.length; i++) {
                     maxIndexes[i] = mesh.getSegment(i).getMaxIndex();
                 }
 
                 // Convert min indexes from each segment
                 int[] minIndexes = new int[totalSegments];
-                for (int i = 0, max = minIndexes.length; i < max; i++) {
+                for (int i = 0; i < minIndexes.length; i++) {
                     minIndexes[i] = mesh.getSegment(i).getMinIndex();
                 }
 
@@ -98,7 +98,7 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
             // Convert first indexes
             int[] firstElements = new int[totalSegments];
             List<Integer> firstIndexes = mesh.getFirstIndexes();
-            for (int i = 0, max = firstElements.length; i < max; i++) {
+            for (int i = 0; i < firstElements.length; i++) {
                 firstElements[i] = firstIndexes.get(i);
             }
 
@@ -112,13 +112,13 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
 
         // Convert element counts from each segment
         int[] elementCounts = new int[totalSegments];
-        for (int i = 0, max = elementCounts.length; i < max; i++) {
+        for (int i = 0; i < elementCounts.length; i++) {
             elementCounts[i] = mesh.getSegment(i).getVertices().size();
         }
 
         // Convert primitive modes from each segment
         int[] primitiveModes = new int[totalSegments];
-        for (int i = 0, max = primitiveModes.length; i < max; i++) {
+        for (int i = 0; i < primitiveModes.length; i++) {
             primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
         }
 

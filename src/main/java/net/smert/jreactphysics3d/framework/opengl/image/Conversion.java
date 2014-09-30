@@ -24,7 +24,7 @@ public class Conversion {
     public static int[] ConvertByteArrayRGBAToARGBIntArray(byte[] RGBA, int width, int height) {
         int[] intARGB = new int[width * height];
 
-        for (int i = 0, max = intARGB.length; i < max; i++) {
+        for (int i = 0; i < intARGB.length; i++) {
             int stride = i * 4;
 
             intARGB[i]
@@ -40,7 +40,7 @@ public class Conversion {
     public static int[] ConvertByteArrayRGBToARGBIntArray(byte[] RGB, int width, int height) {
         int[] intARGB = new int[width * height];
 
-        for (int i = 0, max = intARGB.length; i < max; i++) {
+        for (int i = 0; i < intARGB.length; i++) {
             int stride = i * 3;
 
             intARGB[i]
@@ -59,7 +59,7 @@ public class Conversion {
 
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), ARGB, 0, image.getWidth());
 
-        for (int i = 0, max = ARGB.length; i < max; i++) {
+        for (int i = 0; i < ARGB.length; i++) {
             int cur = ARGB[i];
             int alpha = cur >> 24 & 0xff;
             int red = cur >> 16 & 0xff;

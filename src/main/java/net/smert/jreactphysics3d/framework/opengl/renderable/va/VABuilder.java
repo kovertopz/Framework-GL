@@ -50,7 +50,7 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
             // Convert first indexes
             int[] firstElements = new int[totalSegments];
             List<Integer> firstIndexes = mesh.getFirstIndexes();
-            for (int i = 0, max = firstElements.length; i < max; i++) {
+            for (int i = 0; i < firstElements.length; i++) {
                 firstElements[i] = firstIndexes.get(i);
             }
 
@@ -64,13 +64,13 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
 
         // Convert element counts from each segment
         int[] elementCounts = new int[totalSegments];
-        for (int i = 0, max = elementCounts.length; i < max; i++) {
+        for (int i = 0; i < elementCounts.length; i++) {
             elementCounts[i] = mesh.getSegment(i).getVertices().size();
         }
 
         // Convert primitive modes from each segment
         int[] primitiveModes = new int[totalSegments];
-        for (int i = 0, max = primitiveModes.length; i < max; i++) {
+        for (int i = 0; i < primitiveModes.length; i++) {
             primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
         }
 

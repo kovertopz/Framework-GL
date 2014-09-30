@@ -32,11 +32,11 @@ public abstract class AbstractBuilder {
         RenderableConfiguration config = Renderable.config;
 
         // For each segment in the mesh
-        for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
+        for (int i = 0; i < mesh.getTotalSegments(); i++) {
             Segment segment = mesh.getSegment(i);
 
             // For each vertex in the segment
-            for (int j = 0, max2 = segment.getVertices().size(); j < max2; j++) {
+            for (int j = 0; j < segment.getVertices().size(); j++) {
 
                 // For each type convert the data and add to the byte buffer
                 if (mesh.hasColors()) {

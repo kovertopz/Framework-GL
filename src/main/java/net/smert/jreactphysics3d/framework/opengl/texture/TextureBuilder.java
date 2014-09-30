@@ -306,7 +306,7 @@ public class TextureBuilder {
     private ByteBuffer createBytePixelDataBuffer(byte[] pixelarray) {
         ByteBuffer pixeldata = GL.bufferHelper.createByteBuffer(pixelarray.length);
 
-        for (int i = 0, max = pixelarray.length; i < max; i++) {
+        for (int i = 0; i < pixelarray.length; i++) {
             byte temp = pixelarray[i];
             int index = pixelarray.length - i - 1;
             pixelarray[i] = pixelarray[index];

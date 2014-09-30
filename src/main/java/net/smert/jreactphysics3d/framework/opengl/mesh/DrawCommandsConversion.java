@@ -29,14 +29,14 @@ public class DrawCommandsConversion implements DrawCommands {
         assert (mesh != null);
 
         // For each segment in the mesh
-        for (int i = 0, max = mesh.getTotalSegments(); i < max; i++) {
+        for (int i = 0; i < mesh.getTotalSegments(); i++) {
             Segment segment = mesh.getSegment(i);
 
             // Begin
             GL.renderHelper.begin(segment.getPrimitiveMode());
 
             // For each vertex in the segment
-            for (int j = 0, max2 = segment.getVertices().size(); j < max2; j++) {
+            for (int j = 0; j < segment.getVertices().size(); j++) {
 
                 // For each type call the render helper
                 if (mesh.hasColors()) {
