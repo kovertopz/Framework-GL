@@ -49,13 +49,12 @@ public class Input {
      * @param inputProcessor
      */
     public void addInputProcessor(InputProcessor inputProcessor) {
-        if (!inputProcessors.contains(inputProcessor)) {
-            inputProcessor.registerActions();
-            inputProcessors.add(inputProcessor);
-        } else {
+        if (inputProcessors.contains(inputProcessor)) {
             throw new IllegalArgumentException("Tried to add an InputProcessor that already exists: "
                     + inputProcessor.getClass().getSimpleName());
         }
+        inputProcessor.registerActions();
+        inputProcessors.add(inputProcessor);
     }
 
     public void clearActions() {
@@ -191,12 +190,11 @@ public class Input {
      * @param inputProcessor
      */
     public void removeInputProcessor(InputProcessor inputProcessor) {
-        if (inputProcessors.remove(inputProcessor)) {
-            inputProcessor.unregisterActions();
-        } else {
+        if (!inputProcessors.remove(inputProcessor)) {
             throw new IllegalArgumentException("Did not find an instance of the InputProcessor: "
                     + inputProcessor.getClass().getSimpleName());
         }
+        inputProcessor.unregisterActions();
     }
 
     /**

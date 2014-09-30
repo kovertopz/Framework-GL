@@ -299,7 +299,11 @@ public class RenderableConfiguration {
     }
 
     public void makeImmutable() {
-        if ((log.isInfoEnabled()) && (!isImmutable)) {
+        if (isImmutable) {
+            return;
+        }
+        isImmutable = true;
+        if (log.isInfoEnabled()) {
             log.info("Making renderable configuration immutable:"
                     + " Color Size: " + colorSize
                     + " Color Type: " + GLTypes.ConvertToString(colorType)
@@ -309,8 +313,6 @@ public class RenderableConfiguration {
                     + " Vertex Size: " + vertexSize
                     + " Vertex Type: " + GLTypes.ConvertToString(vertexType));
         }
-
-        isImmutable = true;
     }
 
 }

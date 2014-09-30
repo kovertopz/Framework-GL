@@ -36,10 +36,12 @@ public class VertexBufferObject {
     }
 
     public void destroy() {
-        if (vboID != 0) {
-            GL.vboHelper.delete(vboID);
-            log.debug("Deleted a VBO with ID: {}", vboID);
+        if (vboID == 0) {
+            return;
         }
+        GL.vboHelper.delete(vboID);
+        vboID = 0;
+        log.debug("Deleted a VBO with ID: {}", vboID);
     }
 
     public int getVboID() {

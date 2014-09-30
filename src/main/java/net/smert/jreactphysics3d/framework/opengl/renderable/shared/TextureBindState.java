@@ -43,50 +43,49 @@ public class TextureBindState {
     }
 
     private void setActiveTexture(int textureUnit) {
-        if (activeTextureUnit != textureUnit) {
-            activeTextureUnit = textureUnit;
-            GL.textureHelper.activeTexture(textureUnit);
+        if (activeTextureUnit == textureUnit) {
+            return;
         }
+        activeTextureUnit = textureUnit;
+        GL.textureHelper.activeTexture(textureUnit);
     }
 
     private void setBindTexture(Texture texture) {
-        boolean bindChanged = false;
-        boolean flagChanged = false;
         int textureID = texture.getTextureID();
-        int textureTarget = texture.getTextureTarget();
         int activeTextureID = textureUnitToTextureID.get(activeTextureUnit);
 
-        if (activeTextureID != textureID) {
-            textureUnitToTextureID.put(activeTextureUnit, textureID);
-            bindChanged = true;
-            if ((activeTextureUnit >= TextureUnit.TEXTURE0)
-                    && (activeTextureUnit < TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag)) {
-                flagChanged = true;
-            }
+        if (activeTextureID == textureID) {
+            return;
         }
 
-        if (bindChanged) {
-            switch (textureTarget) {
-                case TextureTargets.TEXTURE_2D:
-                    GL.textureHelper.setTextureTarget2D();
-                    break;
+        boolean flagChanged = false;
+        textureUnitToTextureID.put(activeTextureUnit, textureID);
+        if ((activeTextureUnit >= TextureUnit.TEXTURE0)
+                && (activeTextureUnit < TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag)) {
+            flagChanged = true;
+        }
 
-                case TextureTargets.TEXTURE_3D:
-                    GL.textureHelper.setTextureTarget3D();
-                    break;
+        int textureTarget = texture.getTextureTarget();
+        switch (textureTarget) {
+            case TextureTargets.TEXTURE_2D:
+                GL.textureHelper.setTextureTarget2D();
+                break;
 
-                case TextureTargets.TEXTURE_CUBE_MAP:
-                    GL.textureHelper.setTextureTargetCubeMap();
-                    break;
-            }
-            GL.textureHelper.bind(textureID);
+            case TextureTargets.TEXTURE_3D:
+                GL.textureHelper.setTextureTarget3D();
+                break;
 
-            if (flagChanged) {
-                if (textureID != 0) {
-                    Renderable.shaderBindState.setTextureFlag(1.0f);
-                } else {
-                    Renderable.shaderBindState.setTextureFlag(0.0f);
-                }
+            case TextureTargets.TEXTURE_CUBE_MAP:
+                GL.textureHelper.setTextureTargetCubeMap();
+                break;
+        }
+        GL.textureHelper.bind(textureID);
+
+        if (flagChanged) {
+            if (textureID != 0) {
+                Renderable.shaderBindState.setTextureFlag(1.0f);
+            } else {
+                Renderable.shaderBindState.setTextureFlag(0.0f);
             }
         }
     }
@@ -95,9 +94,9 @@ public class TextureBindState {
         setActiveTexture(textureUnit);
         if (texture == null) {
             unbindCurrent();
-        } else {
-            setBindTexture(texture);
+            return;
         }
+        setBindTexture(texture);
     }
 
     public void bindTexture0(Texture texture) {
@@ -165,6 +164,9 @@ public class TextureBindState {
     }
 
     public void bindTextures(TextureTypeMapping[] textures) {
+        if (textures == null) {
+            return;
+        }
         for (TextureTypeMapping mapping : textures) {
             int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureTypeID());
             Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());

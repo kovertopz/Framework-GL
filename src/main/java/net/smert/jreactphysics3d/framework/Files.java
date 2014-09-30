@@ -116,19 +116,19 @@ public class Files {
         for (File file : files) {
             if (file.isDirectory()) {
                 registerDirectoryAssets(fullPath, file.getAbsolutePath());
-            } else {
-
-                // Strip relativeFullPath from beginning of entry name
-                String relativePathToBaseDirectory = file.getAbsolutePath().replace(fullPathWithTrailingSlash, "");
-
-                // If we are to register an asset then it must be inside a directory. We need the directory
-                // name to determine what type of asset it belongs to.
-                if (!relativePathToBaseDirectory.contains(File.separator)) {
-                    continue;
-                }
-
-                register(fullPath, relativePathToBaseDirectory, File.separator);
+                continue;
             }
+
+            // Strip relativeFullPath from beginning of entry name
+            String relativePathToBaseDirectory = file.getAbsolutePath().replace(fullPathWithTrailingSlash, "");
+
+            // If we are to register an asset then it must be inside a directory. We need the directory
+            // name to determine what type of asset it belongs to.
+            if (!relativePathToBaseDirectory.contains(File.separator)) {
+                continue;
+            }
+
+            register(fullPath, relativePathToBaseDirectory, File.separator);
         }
     }
 
@@ -199,36 +199,37 @@ public class Files {
                 String name = entry.getName(); // Name should never start with a forward slash
 
                 // If the path or file matches the curent entry
-                if (name.startsWith(relativeFullPath)) {
-                    if (firstEntry) {
-
-                        // If the first entry is not a directory then we have a problem and won't be able to
-                        // register assets
-                        if (!entry.isDirectory()) {
-                            throw new RuntimeException(
-                                    "The full path was found inside a JAR file and must be a directory: "
-                                    + fullPath);
-                        }
-                        firstEntry = false;
-                    } else {
-
-                        // Skip entries that are just directories
-                        if (entry.isDirectory()) {
-                            continue;
-                        }
-
-                        // Strip relativeFullPath from beginning of entry name
-                        String relativePathToBaseDirectory = name.replace(relativeFullPathWithTrailingSlash, "");
-
-                        // If we are to register an asset then it must be inside a directory. We need the directory
-                        // name to determine what type of asset it belongs to.
-                        if (!relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR)) {
-                            continue;
-                        }
-
-                        register(fullPath, relativePathToBaseDirectory, INTERNAL_FILE_SEPARATOR);
-                    }
+                if (!name.startsWith(relativeFullPath)) {
+                    continue;
                 }
+
+                if (firstEntry) {
+                    // If the first entry is not a directory then we have a problem and won't be able to
+                    // register assets
+                    if (!entry.isDirectory()) {
+                        throw new RuntimeException(
+                                "The full path was found inside a JAR file and must be a directory: "
+                                + fullPath);
+                    }
+                    firstEntry = false;
+                    continue;
+                }
+
+                // Skip entries that are just directories
+                if (entry.isDirectory()) {
+                    continue;
+                }
+
+                // Strip relativeFullPath from beginning of entry name
+                String relativePathToBaseDirectory = name.replace(relativeFullPathWithTrailingSlash, "");
+
+                // If we are to register an asset then it must be inside a directory. We need the directory
+                // name to determine what type of asset it belongs to.
+                if (!relativePathToBaseDirectory.contains(INTERNAL_FILE_SEPARATOR)) {
+                    continue;
+                }
+
+                register(fullPath, relativePathToBaseDirectory, INTERNAL_FILE_SEPARATOR);
             }
         }
     }
@@ -270,11 +271,9 @@ public class Files {
 
     public FileAsset get(String resourceType, String filename) {
         String key = resourceType + INTERNAL_FILE_SEPARATOR + filename;
-
         if (!assets.containsKey(key)) {
             throw new IllegalArgumentException("Unable to find asset for type: " + resourceType + " and path: " + filename);
         }
-
         return assets.get(key);
     }
 
@@ -333,10 +332,11 @@ public class Files {
         while (fileAssetIterator.hasNext()) {
             FileAsset fileAsset = fileAssetIterator.next();
             String registeredFullPath = fileAsset.getRegisteredFullPath();
-            if (registeredFullPath.equals(fullPath)) {
-                log.debug("Unregistering asset: {}", fileAsset);
-                fileAssetIterator.remove();
+            if (!registeredFullPath.equals(fullPath)) {
+                continue;
             }
+            log.debug("Unregistering asset: {}", fileAsset);
+            fileAssetIterator.remove();
         }
     }
 

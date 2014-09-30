@@ -74,6 +74,7 @@ public class TextureBuilder {
 
     private void buildTexture2DByteBuffer() {
 
+        // Set pixel data
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
                 GL.textureHelper.setImage2DBytePixelData(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
@@ -87,24 +88,28 @@ public class TextureBuilder {
                 throw new IllegalArgumentException("Unsupported texture primitive for pixel data: " + texturePrimitive);
         }
 
-        if (useMipmap) {
-            switch (texturePrimitive) {
-                case TextureTypes.UNSIGNED_BYTE:
-                    GL.textureHelper.setByteMipmaps(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
-                    break;
+        if (!useMipmap) {
+            return;
+        }
 
-                case TextureTypes.FLOAT:
-                case TextureTypes.UNSIGNED_INT_10_10_10_2:
-                case TextureTypes.UNSIGNED_INT:
-                case TextureTypes.UNSIGNED_SHORT:
-                case TextureTypes.UNSIGNED_INT_24_8:
-                    throw new IllegalArgumentException("Unsupported texture primitive for mipmap data: " + texturePrimitive);
-            }
+        // Generate mipmaps
+        switch (texturePrimitive) {
+            case TextureTypes.UNSIGNED_BYTE:
+                GL.textureHelper.setByteMipmaps(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
+                break;
+
+            case TextureTypes.FLOAT:
+            case TextureTypes.UNSIGNED_INT_10_10_10_2:
+            case TextureTypes.UNSIGNED_INT:
+            case TextureTypes.UNSIGNED_SHORT:
+            case TextureTypes.UNSIGNED_INT_24_8:
+                throw new IllegalArgumentException("Unsupported texture primitive for mipmap data: " + texturePrimitive);
         }
     }
 
     private void buildTexture2DNullData() {
 
+        // Set pixel data
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
                 GL.textureHelper.setImage2DBytePixelData(textureInternalFormat, textureWidth, textureHeight, textureFormat, null);
@@ -131,16 +136,19 @@ public class TextureBuilder {
                 break;
         }
 
-        if (useMipmap) {
-            switch (texturePrimitive) {
-                case TextureTypes.UNSIGNED_BYTE:
-                case TextureTypes.FLOAT:
-                case TextureTypes.UNSIGNED_INT_10_10_10_2:
-                case TextureTypes.UNSIGNED_INT:
-                case TextureTypes.UNSIGNED_SHORT:
-                case TextureTypes.UNSIGNED_INT_24_8:
-                    GL.fboHelper.generateMipmap(TextureTargets.TEXTURE_2D);
-            }
+        if (!useMipmap) {
+            return;
+        }
+
+        // Generate mipmaps
+        switch (texturePrimitive) {
+            case TextureTypes.UNSIGNED_BYTE:
+            case TextureTypes.FLOAT:
+            case TextureTypes.UNSIGNED_INT_10_10_10_2:
+            case TextureTypes.UNSIGNED_INT:
+            case TextureTypes.UNSIGNED_SHORT:
+            case TextureTypes.UNSIGNED_INT_24_8:
+                GL.fboHelper.generateMipmap(TextureTargets.TEXTURE_2D);
         }
     }
 
@@ -159,6 +167,7 @@ public class TextureBuilder {
 
     private void buildTextureCubeMapByteBuffer() {
 
+        // Set pixel data
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
                 GL.textureHelper.setTextureTargetCubeMapPositiveX();
@@ -183,21 +192,25 @@ public class TextureBuilder {
                 throw new IllegalArgumentException("Unknown texture primitive for pixel data: " + texturePrimitive);
         }
 
-        if (useMipmap) {
-            switch (texturePrimitive) {
-                case TextureTypes.FLOAT:
-                case TextureTypes.UNSIGNED_BYTE:
-                case TextureTypes.UNSIGNED_INT_10_10_10_2:
-                case TextureTypes.UNSIGNED_INT:
-                case TextureTypes.UNSIGNED_SHORT:
-                case TextureTypes.UNSIGNED_INT_24_8:
-                    throw new UnsupportedOperationException("Not supported yet.");
-            }
+        if (!useMipmap) {
+            return;
+        }
+
+        // Generate mipmaps
+        switch (texturePrimitive) {
+            case TextureTypes.FLOAT:
+            case TextureTypes.UNSIGNED_BYTE:
+            case TextureTypes.UNSIGNED_INT_10_10_10_2:
+            case TextureTypes.UNSIGNED_INT:
+            case TextureTypes.UNSIGNED_SHORT:
+            case TextureTypes.UNSIGNED_INT_24_8:
+                throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
     private void buildTextureCubeMapNullData() {
 
+        // Set pixel data
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
                 GL.textureHelper.setTextureTargetCubeMapPositiveX();
@@ -290,16 +303,19 @@ public class TextureBuilder {
                 break;
         }
 
-        if (useMipmap) {
-            switch (texturePrimitive) {
-                case TextureTypes.UNSIGNED_BYTE:
-                case TextureTypes.FLOAT:
-                case TextureTypes.UNSIGNED_INT_10_10_10_2:
-                case TextureTypes.UNSIGNED_INT:
-                case TextureTypes.UNSIGNED_SHORT:
-                case TextureTypes.UNSIGNED_INT_24_8:
-                    throw new UnsupportedOperationException("Not supported yet.");
-            }
+        if (!useMipmap) {
+            return;
+        }
+
+        // Generate mipmaps
+        switch (texturePrimitive) {
+            case TextureTypes.UNSIGNED_BYTE:
+            case TextureTypes.FLOAT:
+            case TextureTypes.UNSIGNED_INT_10_10_10_2:
+            case TextureTypes.UNSIGNED_INT:
+            case TextureTypes.UNSIGNED_SHORT:
+            case TextureTypes.UNSIGNED_INT_24_8:
+                throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 

@@ -36,10 +36,12 @@ public class DisplayList {
     }
 
     public void destroy() {
-        if (displayListID != 0) {
-            GL.displayListHelper.delete(displayListID);
-            log.debug("Deleted a display list with ID: {}", displayListID);
+        if (displayListID == 0) {
+            return;
         }
+        GL.displayListHelper.delete(displayListID);
+        displayListID = 0;
+        log.debug("Deleted a display list with ID: {}", displayListID);
     }
 
     public int getDisplayListID() {

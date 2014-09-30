@@ -39,10 +39,12 @@ public class Texture {
     }
 
     public void destroy() {
-        if (textureID != 0) {
-            GL.textureHelper.delete(textureID);
-            log.debug("Deleted a texture with ID: {}", textureID);
+        if (textureID == 0) {
+            return;
         }
+        GL.textureHelper.delete(textureID);
+        textureID = 0;
+        log.debug("Deleted a texture with ID: {}", textureID);
     }
 
     public int getTextureID() {

@@ -37,11 +37,12 @@ public class VertexArray {
     }
 
     public void destroy() {
-        if (byteBuffer != null) {
-            int bufferSize = byteBuffer.capacity();
-            byteBuffer = null;
-            log.debug("Deleted a vertex array with a size: {}", bufferSize);
+        if (byteBuffer == null) {
+            return;
         }
+        int bufferSize = byteBuffer.capacity();
+        byteBuffer = null;
+        log.debug("Deleted a vertex array with a size: {}", bufferSize);
     }
 
     public ByteBuffer getByteBuffer() {

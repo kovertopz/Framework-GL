@@ -48,10 +48,11 @@ public class DisplayListRenderable extends AbstractRenderable {
 
     @Override
     public void destroy() {
-        if (displayList != null) {
-            displayList.destroy();
-            displayList = null;
+        if (displayList == null) {
+            return;
         }
+        displayList.destroy();
+        displayList = null;
     }
 
     @Override

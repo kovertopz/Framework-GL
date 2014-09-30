@@ -112,9 +112,10 @@ public class Mesh {
             Iterator<String> iterator = textures.values().iterator();
             while (iterator.hasNext()) {
                 String texture = iterator.next();
-                if (!newTextures.contains(texture)) {
-                    newTextures.add(texture);
+                if (newTextures.contains(texture)) {
+                    continue;
                 }
+                newTextures.add(texture);
             }
         }
         return newTextures;

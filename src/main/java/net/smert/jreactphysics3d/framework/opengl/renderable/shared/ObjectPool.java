@@ -53,16 +53,16 @@ public class ObjectPool<T> {
         // Trim slashes
         filename = Fw.files.trimLeftSlashes(filename);
 
-        if (!objectPool.containsKey(filename)) {
-            int uniqueID = currentUniqueID++;
-            assert (uniqueID != HashMapStringInt.NOT_FOUND);
-            filenameToUniqueID.put(filename, uniqueID);
-            objectPool.put(filename, object);
-            uniqueIDToObjectPool.put(uniqueID, object);
-        } else {
+        if (objectPool.containsKey(filename)) {
             throw new IllegalArgumentException("Tried to add a " + object.getClass().getSimpleName()
                     + " that already exists to the pool: " + filename);
         }
+
+        int uniqueID = currentUniqueID++;
+        assert (uniqueID != HashMapStringInt.NOT_FOUND);
+        filenameToUniqueID.put(filename, uniqueID);
+        objectPool.put(filename, object);
+        uniqueIDToObjectPool.put(uniqueID, object);
     }
 
     public void destroy() {

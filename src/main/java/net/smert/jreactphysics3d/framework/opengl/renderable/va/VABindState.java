@@ -35,90 +35,94 @@ public class VABindState {
     }
 
     private void setColorEnabled(boolean enabled) {
-        if (colorEnabled != enabled) {
-            colorEnabled = enabled;
-            if (enabled) {
-                GL.vaHelper.enableColors();
-            } else {
-                GL.vaHelper.disableColors();
-            }
+        if (colorEnabled == enabled) {
+            return;
+        }
+        colorEnabled = enabled;
+        if (enabled) {
+            GL.vaHelper.enableColors();
+        } else {
+            GL.vaHelper.disableColors();
         }
     }
 
     private void setNormalEnabled(boolean enabled) {
-        if (normalEnabled != enabled) {
-            normalEnabled = enabled;
-            if (enabled) {
-                GL.vaHelper.enableNormals();
-            } else {
-                GL.vaHelper.disableNormals();
-            }
+        if (normalEnabled == enabled) {
+            return;
+        }
+        normalEnabled = enabled;
+        if (enabled) {
+            GL.vaHelper.enableNormals();
+        } else {
+            GL.vaHelper.disableNormals();
         }
     }
 
     private void setTextureCoordinateEnabled(boolean enabled) {
-        if (texCoordEnabled != enabled) {
-            texCoordEnabled = enabled;
-            if (enabled) {
-                GL.vaHelper.enableTextureCoordinates();
-            } else {
-                GL.vaHelper.disableTextureCoordinates();
-            }
+        if (texCoordEnabled == enabled) {
+            return;
+        }
+        texCoordEnabled = enabled;
+        if (enabled) {
+            GL.vaHelper.enableTextureCoordinates();
+        } else {
+            GL.vaHelper.disableTextureCoordinates();
         }
     }
 
     private void setVertexEnabled(boolean enabled) {
-        if (vertexEnabled != enabled) {
-            vertexEnabled = enabled;
-            if (enabled) {
-                GL.vaHelper.enableVertices();
-            } else {
-                GL.vaHelper.disableVertices();
-            }
+        if (vertexEnabled == enabled) {
+            return;
+        }
+        vertexEnabled = enabled;
+        if (enabled) {
+            GL.vaHelper.enableVertices();
+        } else {
+            GL.vaHelper.disableVertices();
         }
     }
 
     public void bindColor(ByteBuffer colorByteBuffer) {
-        if (colorByteBuffer != null) {
-            int colorSize = Renderable.config.getColorSize();
-            int colorType = Renderable.config.getColorType();
-            setColorEnabled(true);
-            GL.vaHelper.bindColors(colorSize, colorType, colorByteBuffer);
-        } else {
+        if (colorByteBuffer == null) {
             setColorEnabled(false);
+            return;
         }
+        int colorSize = Renderable.config.getColorSize();
+        int colorType = Renderable.config.getColorType();
+        setColorEnabled(true);
+        GL.vaHelper.bindColors(colorSize, colorType, colorByteBuffer);
     }
 
     public void bindNormal(ByteBuffer normalByteBuffer) {
-        if (normalByteBuffer != null) {
-            int normalType = Renderable.config.getNormalType();
-            setNormalEnabled(true);
-            GL.vaHelper.bindNormals(normalType, normalByteBuffer);
-        } else {
+        if (normalByteBuffer == null) {
             setNormalEnabled(false);
+            return;
         }
+        int normalType = Renderable.config.getNormalType();
+        setNormalEnabled(true);
+        GL.vaHelper.bindNormals(normalType, normalByteBuffer);
     }
 
     public void bindTextureCoordinate(ByteBuffer texCoordByteBuffer) {
-        if (texCoordByteBuffer != null) {
-            int texCoordSize = Renderable.config.getTexCoordSize();
-            int texCoordType = Renderable.config.getTexCoordType();
-            setTextureCoordinateEnabled(true);
-            GL.vaHelper.bindTextureCoordinates(texCoordSize, texCoordType, texCoordByteBuffer);
-        } else {
+        if (texCoordByteBuffer == null) {
             setTextureCoordinateEnabled(false);
+            return;
         }
+        int texCoordSize = Renderable.config.getTexCoordSize();
+        int texCoordType = Renderable.config.getTexCoordType();
+        setTextureCoordinateEnabled(true);
+        GL.vaHelper.bindTextureCoordinates(texCoordSize, texCoordType, texCoordByteBuffer);
     }
 
     public void bindVertex(ByteBuffer vertexByteBuffer) {
-        if (vertexByteBuffer != null) {
-            int vertexSize = Renderable.config.getVertexSize();
-            int vertexType = Renderable.config.getVertexType();
-            setVertexEnabled(true);
-            GL.vaHelper.bindVertices(vertexSize, vertexType, vertexByteBuffer);
-        } else {
+        if (vertexByteBuffer == null) {
             setVertexEnabled(false);
+            return;
         }
+        int vertexSize = Renderable.config.getVertexSize();
+        int vertexType = Renderable.config.getVertexType();
+        setVertexEnabled(true);
+        GL.vaHelper.bindVertices(vertexSize, vertexType, vertexByteBuffer);
     }
 
     public final void reset() {

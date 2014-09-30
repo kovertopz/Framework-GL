@@ -76,9 +76,10 @@ public class ObjReader implements ModelReader {
 
     private void addComment(StringTokenizer tokenizer) {
         String comment = getRemainingTokens(tokenizer);
-        if (comment.length() > 0) {
-            comments.add(comment);
+        if (comment.length() <= 0) {
+            return;
         }
+        comments.add(comment);
     }
 
     private void addFace(StringTokenizer tokenizer) {
@@ -299,36 +300,37 @@ public class ObjReader implements ModelReader {
 
                     // Create a new triangle using the first index, the old index and the new. We reset the count back
                     // to two so the next loop will add another vertex and we will have a count of three again.
-                    if (count == 3) {
-
-                        // Add triangle
-                        segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
-                        segment.addVertex(vertexOld.getX(), vertexOld.getY(), vertexOld.getZ());
-                        segment.addVertex(vertexNew.getX(), vertexNew.getY(), vertexNew.getZ());
-
-                        // Add normals for the triangle
-                        if (face.hasNormals()) {
-                            segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
-                            segment.addNormal(normalOld.getX(), normalOld.getY(), normalOld.getZ());
-                            segment.addNormal(normalNew.getX(), normalNew.getY(), normalNew.getZ());
-                        }
-
-                        // Add texture coordinates for the triangle
-                        if (face.hasTexCoords()) {
-                            if (texCoord1.hasThree()) {
-                                segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
-                                segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV(), texCoordOld.getW());
-                                segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV(), texCoordNew.getW());
-                            } else {
-                                segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
-                                segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV());
-                                segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV());
-                            }
-                        }
-
-                        // Reset count
-                        count = 2;
+                    if (count != 3) {
+                        continue;
                     }
+
+                    // Add triangle
+                    segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
+                    segment.addVertex(vertexOld.getX(), vertexOld.getY(), vertexOld.getZ());
+                    segment.addVertex(vertexNew.getX(), vertexNew.getY(), vertexNew.getZ());
+
+                    // Add normals for the triangle
+                    if (face.hasNormals()) {
+                        segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
+                        segment.addNormal(normalOld.getX(), normalOld.getY(), normalOld.getZ());
+                        segment.addNormal(normalNew.getX(), normalNew.getY(), normalNew.getZ());
+                    }
+
+                    // Add texture coordinates for the triangle
+                    if (face.hasTexCoords()) {
+                        if (texCoord1.hasThree()) {
+                            segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
+                            segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV(), texCoordOld.getW());
+                            segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV(), texCoordNew.getW());
+                        } else {
+                            segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
+                            segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV());
+                            segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV());
+                        }
+                    }
+
+                    // Reset count
+                    count = 2;
                 }
             }
         }
@@ -396,11 +398,10 @@ public class ObjReader implements ModelReader {
     }
 
     private String getNextTokenOnly(StringTokenizer tokenizer) {
-        String nextToken = "";
-        if (tokenizer.hasMoreTokens()) {
-            nextToken = tokenizer.nextToken();
+        if (!tokenizer.hasMoreTokens()) {
+            return "";
         }
-        return nextToken;
+        return tokenizer.nextToken();
     }
 
     private String getRemainingTokens(StringTokenizer tokenizer) {
@@ -424,94 +425,96 @@ public class ObjReader implements ModelReader {
 
     private void parse(String line) {
         StringTokenizer tokenizer = new StringTokenizer(line);
+
+        if (!tokenizer.hasMoreTokens()) {
+            return;
+        }
+
         int totalTokens = tokenizer.countTokens();
+        String token = tokenizer.nextToken();
 
-        if (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
+        switch (token) {
+            case "#":
+                // Ex: "# Some random comment"
+                addComment(tokenizer);
+                break;
 
-            switch (token) {
-                case "#":
-                    // Ex: "# Some random comment"
-                    addComment(tokenizer);
-                    break;
+            case "f":
+                // Ex: "f v1 v2 v3 ... vN"
+                // Ex: "f v1/vt1 v2/vt2 v3/vt3 ... vN/vtN"
+                // Ex: "f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 ... vN/vtN/vnN"
+                // Ex: "f v1//vn1 v2//vn2 v3//vn3 ... vN//vnN"
+                // Ex: "f v1// v2// v3// ... vN//"
+                if (totalTokens >= 4) {
+                    addFace(tokenizer);
+                } else {
+                    log.warn("Invalid face definition: {}", line);
+                }
+                break;
 
-                case "f":
-                    // Ex: "f v1 v2 v3 ... vN"
-                    // Ex: "f v1/vt1 v2/vt2 v3/vt3 ... vN/vtN"
-                    // Ex: "f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 ... vN/vtN/vnN"
-                    // Ex: "f v1//vn1 v2//vn2 v3//vn3 ... vN//vnN"
-                    // Ex: "f v1// v2// v3// ... vN//"
-                    if (totalTokens >= 4) {
-                        addFace(tokenizer);
-                    } else {
-                        log.warn("Invalid face definition: {}", line);
-                    }
-                    break;
+            case "g":
+                // Blender replaces spaces with underscores. Seems to group faces.
+                // Ex: "g some_group_name"
+                // Spec says multiple groups can be applied at the same time. Only supporting one.
+                // Not using groups in our implementation
+                groupName = getNextTokenOnly(tokenizer);
+                break;
 
-                case "g":
-                    // Blender replaces spaces with underscores. Seems to group faces.
-                    // Ex: "g some_group_name"
-                    // Spec says multiple groups can be applied at the same time. Only supporting one.
-                    // Not using groups in our implementation
-                    groupName = getNextTokenOnly(tokenizer);
-                    break;
+            case "mtllib":
+                // Format supports multiple but we only use the first one. The name could have spaces in it so
+                // hopefully there is only one material.
+                // Ex: "mtllib some material filename with spaces.mtl"
+                materialLibrary = getRemainingTokens(tokenizer);
+                break;
 
-                case "mtllib":
-                    // Format supports multiple but we only use the first one. The name could have spaces in it so
-                    // hopefully there is only one material.
-                    // Ex: "mtllib some material filename with spaces.mtl"
-                    materialLibrary = getRemainingTokens(tokenizer);
-                    break;
+            case "o":
+                // Blender replaces spaces with underscores. Seems to group vertices.
+                // Ex: "o some_object_name"
+                objectName = getNextTokenOnly(tokenizer);
+                break;
 
-                case "o":
-                    // Blender replaces spaces with underscores. Seems to group vertices.
-                    // Ex: "o some_object_name"
-                    objectName = getNextTokenOnly(tokenizer);
-                    break;
+            case "s":
+                // Not using smoothing groups in our implementation
+                smoothingGroup = getNextTokenOnly(tokenizer);
+                break;
 
-                case "s":
-                    // Not using smoothing groups in our implementation
-                    smoothingGroup = getNextTokenOnly(tokenizer);
-                    break;
+            case "usemtl":
+                // Blender replaces spaces with underscores. Material applies to face definitions.
+                // Ex: "usemtl Material_Name"
+                materialName = getNextTokenOnly(tokenizer);
+                break;
 
-                case "usemtl":
-                    // Blender replaces spaces with underscores. Material applies to face definitions.
-                    // Ex: "usemtl Material_Name"
-                    materialName = getNextTokenOnly(tokenizer);
-                    break;
+            case "v":
+                // Ex: "v vX vY vZ"
+                if (totalTokens == 4) {
+                    addVertex(tokenizer);
+                } else {
+                    log.warn("Invalid vertex definition: {}", line);
+                }
+                break;
 
-                case "v":
-                    // Ex: "v vX vY vZ"
-                    if (totalTokens == 4) {
-                        addVertex(tokenizer);
-                    } else {
-                        log.warn("Invalid vertex definition: {}", line);
-                    }
-                    break;
+            case "vn":
+                // Ex: "vn nX nY nZ"
+                if (totalTokens == 4) {
+                    addNormal(tokenizer);
+                } else {
+                    log.warn("Invalid vertex definition: {}", line);
+                }
+                break;
 
-                case "vn":
-                    // Ex: "vn nX nY nZ"
-                    if (totalTokens == 4) {
-                        addNormal(tokenizer);
-                    } else {
-                        log.warn("Invalid vertex definition: {}", line);
-                    }
-                    break;
+            case "vt":
+                // Spec says we support one texture coordinate but ignoring
+                // Ex: "vt tU tV"
+                // Ex: "vt tU tV tW"
+                if ((totalTokens == 3) || (totalTokens == 4)) {
+                    addTexCoord(tokenizer);
+                } else {
+                    log.warn("Invalid texture definition: {}", line);
+                }
+                break;
 
-                case "vt":
-                    // Spec says we support one texture coordinate but ignoring
-                    // Ex: "vt tU tV"
-                    // Ex: "vt tU tV tW"
-                    if ((totalTokens == 3) || (totalTokens == 4)) {
-                        addTexCoord(tokenizer);
-                    } else {
-                        log.warn("Invalid texture definition: {}", line);
-                    }
-                    break;
-
-                default:
-                    log.warn("Skipped line with an unsupported token: " + line);
-            }
+            default:
+                log.warn("Skipped line with an unsupported token: " + line);
         }
     }
 
@@ -530,16 +533,17 @@ public class ObjReader implements ModelReader {
     }
 
     private void readMaterial(String objFilename, Mesh mesh) throws IOException {
-        if (materialLibrary.length() > 0) {
-
-            // Take objFilename and strip the filename portion from it
-            String separator = Fw.files.INTERNAL_FILE_SEPARATOR;
-            int lastSlash = objFilename.lastIndexOf(separator);
-            String directory = objFilename.substring(0, lastSlash);
-            String materialFilename = directory + separator + materialLibrary;
-            materialReader.reset();
-            materialReader.load(materialFilename, mesh);
+        if (materialLibrary.length() <= 0) {
+            return;
         }
+
+        // Take objFilename and strip the filename portion from it
+        String separator = Fw.files.INTERNAL_FILE_SEPARATOR;
+        int lastSlash = objFilename.lastIndexOf(separator);
+        String directory = objFilename.substring(0, lastSlash);
+        String materialFilename = directory + separator + materialLibrary;
+        materialReader.reset();
+        materialReader.load(materialFilename, mesh);
     }
 
     private void reset() {
@@ -591,10 +595,11 @@ public class ObjReader implements ModelReader {
         }
 
         private void addIndex(List<Integer> indexes, String index) {
-            if (index.length() > 0) {
-                int idx = indexToArray(index);
-                indexes.add(idx);
+            if (index.length() <= 0) {
+                return;
             }
+            int idx = indexToArray(index);
+            indexes.add(idx);
         }
 
         private int indexToArray(String index) {

@@ -48,9 +48,10 @@ public class MaterialReader implements ModelReader {
 
     private void addComment(StringTokenizer tokenizer) {
         String comment = getRemainingTokens(tokenizer);
-        if (comment.length() > 0) {
-            comments.add(comment);
+        if (comment.length() <= 0) {
+            return;
         }
+        comments.add(comment);
     }
 
     private Color createColor(StringTokenizer tokenizer) {
@@ -83,11 +84,10 @@ public class MaterialReader implements ModelReader {
     }
 
     private String getNextTokenOnly(StringTokenizer tokenizer) {
-        String nextToken = "";
-        if (tokenizer.hasMoreTokens()) {
-            nextToken = tokenizer.nextToken();
+        if (!tokenizer.hasMoreTokens()) {
+            return "";
         }
-        return nextToken;
+        return tokenizer.nextToken();
     }
 
     private String getRemainingTokens(StringTokenizer tokenizer) {
@@ -111,104 +111,106 @@ public class MaterialReader implements ModelReader {
 
     private void parse(String line) {
         StringTokenizer tokenizer = new StringTokenizer(line);
+
+        if (!tokenizer.hasMoreTokens()) {
+            return;
+        }
+
         int totalTokens = tokenizer.countTokens();
+        String token = tokenizer.nextToken();
 
-        if (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
+        switch (token) {
+            case "#":
+                // Ex: "# Some random comment"
+                addComment(tokenizer);
+                break;
 
-            switch (token) {
-                case "#":
-                    // Ex: "# Some random comment"
-                    addComment(tokenizer);
-                    break;
+            case "d":
+                // Ex: "d factor"
+                setDissolve(tokenizer);
+                break;
 
-                case "d":
-                    // Ex: "d factor"
-                    setDissolve(tokenizer);
-                    break;
+            case "illum":
+                // Ex: "illum illum_#"
+                setIlluminationMode(tokenizer);
+                break;
 
-                case "illum":
-                    // Ex: "illum illum_#"
-                    setIlluminationMode(tokenizer);
-                    break;
+            case "Ka":
+                // Ex: "Ka 0.000000 0.000000 0.000000"
+                if (totalTokens == 4) {
+                    setAmbient(tokenizer);
+                } else {
+                    log.warn("Invalid ambient definition: {}", line);
+                }
+                break;
 
-                case "Ka":
-                    // Ex: "Ka 0.000000 0.000000 0.000000"
-                    if (totalTokens == 4) {
-                        setAmbient(tokenizer);
-                    } else {
-                        log.warn("Invalid ambient definition: {}", line);
-                    }
-                    break;
+            case "Kd":
+                // Ex: "Kd 0.8 0.8 0.8"
+                if (totalTokens == 4) {
+                    setDiffuse(tokenizer);
+                } else {
+                    log.warn("Invalid diffuse definition: {}", line);
+                }
+                break;
 
-                case "Kd":
-                    // Ex: "Kd 0.8 0.8 0.8"
-                    if (totalTokens == 4) {
-                        setDiffuse(tokenizer);
-                    } else {
-                        log.warn("Invalid diffuse definition: {}", line);
-                    }
-                    break;
+            case "Ks":
+                // Ex: "Ks 0.8 0.8 0.8"
+                if (totalTokens == 4) {
+                    setSpecular(tokenizer);
+                } else {
+                    log.warn("Invalid specular definition: {}", line);
+                }
+                break;
 
-                case "Ks":
-                    // Ex: "Ks 0.8 0.8 0.8"
-                    if (totalTokens == 4) {
-                        setSpecular(tokenizer);
-                    } else {
-                        log.warn("Invalid specular definition: {}", line);
-                    }
-                    break;
+            case "map_Ka":
+                if (totalTokens == 2) {
+                    setAmbientMap(tokenizer);
+                } else {
+                    log.warn("Don't support optional arguments. Skipping ambient map definition: {}", line);
+                }
+                break;
 
-                case "map_Ka":
-                    if (totalTokens == 2) {
-                        setAmbientMap(tokenizer);
-                    } else {
-                        log.warn("Don't support optional arguments. Skipping ambient map definition: {}", line);
-                    }
-                    break;
+            case "map_Kd":
+                if (totalTokens == 2) {
+                    setDiffuseMap(tokenizer);
+                } else {
+                    log.warn("Don't support optional arguments. Skipping diffuse map definition: {}", line);
+                }
+                break;
 
-                case "map_Kd":
-                    if (totalTokens == 2) {
-                        setDiffuseMap(tokenizer);
-                    } else {
-                        log.warn("Don't support optional arguments. Skipping diffuse map definition: {}", line);
-                    }
-                    break;
+            case "map_Ks":
+                if (totalTokens == 2) {
+                    setSpecularMap(tokenizer);
+                } else {
+                    log.warn("Don't support optional arguments. Skipping specular map definition: {}", line);
+                }
+                break;
 
-                case "map_Ks":
-                    if (totalTokens == 2) {
-                        setSpecularMap(tokenizer);
-                    } else {
-                        log.warn("Don't support optional arguments. Skipping specular map definition: {}", line);
-                    }
-                    break;
+            case "map_Ns":
+                if (totalTokens == 2) {
+                    setSpecularExponentMap(tokenizer);
+                } else {
+                    log.warn("Don't support optional arguments. Skipping specular exponent map definition: {}", line);
+                }
+                break;
 
-                case "map_Ns":
-                    if (totalTokens == 2) {
-                        setSpecularExponentMap(tokenizer);
-                    } else {
-                        log.warn("Don't support optional arguments. Skipping specular exponent map definition: {}", line);
-                    }
-                    break;
+            case "newmtl":
+                // Ex: "newmtl my_mtl"
+                createNewMaterial(tokenizer);
+                break;
 
-                case "newmtl":
-                    // Ex: "newmtl my_mtl"
-                    createNewMaterial(tokenizer);
-                    break;
+            case "Ni":
+                // Ex: "Ni optical_density"
+                setOpticalDensity(tokenizer);
+                break;
 
-                case "Ni":
-                    // Ex: "Ni optical_density"
-                    setOpticalDensity(tokenizer);
-                    break;
+            case "Ns":
+                // Ex: "Ns exponent"
+                setSpecularExponent(tokenizer);
+                break;
 
-                case "Ns":
-                    // Ex: "Ns exponent"
-                    setSpecularExponent(tokenizer);
-                    break;
-
-                default:
-                    log.warn("Skipped line with an unsupported token: " + line);
-            }
+            default:
+                log.warn("Skipped line with an unsupported token: " + line);
         }
     }
 
@@ -227,108 +229,108 @@ public class MaterialReader implements ModelReader {
     }
 
     private void setAmbient(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            Color color = createColor(tokenizer);
-            if (color != null) {
-                currentMaterial.setAmbient(color);
-            }
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping ambient.");
+            return;
+        }
+        Color color = createColor(tokenizer);
+        if (color != null) {
+            currentMaterial.setAmbient(color);
         }
     }
 
     private void setAmbientMap(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String ambientMapFilename = getNextTokenOnly(tokenizer);
-            currentMaterial.setAmbientMapFilename(ambientMapFilename);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping ambient map.");
+            return;
         }
+        String ambientMapFilename = getNextTokenOnly(tokenizer);
+        currentMaterial.setAmbientMapFilename(ambientMapFilename);
     }
 
     private void setDiffuse(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            Color color = createColor(tokenizer);
-            if (color != null) {
-                currentMaterial.setDiffuse(color);
-            }
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping diffuse.");
+            return;
+        }
+        Color color = createColor(tokenizer);
+        if (color != null) {
+            currentMaterial.setDiffuse(color);
         }
     }
 
     private void setDiffuseMap(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String diffuseMapFilename = getNextTokenOnly(tokenizer);
-            currentMaterial.setDiffuseMapFilename(diffuseMapFilename);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping diffuse map.");
+            return;
         }
+        String diffuseMapFilename = getNextTokenOnly(tokenizer);
+        currentMaterial.setDiffuseMapFilename(diffuseMapFilename);
     }
 
     private void setDissolve(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String dissolve = getNextTokenOnly(tokenizer);
-            currentMaterial.setDissolve(dissolve);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping dissolve.");
+            return;
         }
+        String dissolve = getNextTokenOnly(tokenizer);
+        currentMaterial.setDissolve(dissolve);
     }
 
     private void setIlluminationMode(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String illuminationMode = getNextTokenOnly(tokenizer);
-            currentMaterial.setIlluminationMode(illuminationMode);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping illumination mode.");
+            return;
         }
+        String illuminationMode = getNextTokenOnly(tokenizer);
+        currentMaterial.setIlluminationMode(illuminationMode);
     }
 
     private void setOpticalDensity(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String opticalDensity = getNextTokenOnly(tokenizer);
-            currentMaterial.setOpticalDensity(opticalDensity);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping optical density.");
+            return;
         }
+        String opticalDensity = getNextTokenOnly(tokenizer);
+        currentMaterial.setOpticalDensity(opticalDensity);
     }
 
     private void setSpecular(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            Color color = createColor(tokenizer);
-            if (color != null) {
-                currentMaterial.setSpecular(color);
-            }
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping specular.");
+            return;
+        }
+        Color color = createColor(tokenizer);
+        if (color != null) {
+            currentMaterial.setSpecular(color);
         }
     }
 
     private void setSpecularExponent(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String exponent = getNextTokenOnly(tokenizer);
-            currentMaterial.setSpecularExponent(exponent);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping specular exponent.");
+            return;
         }
+        String exponent = getNextTokenOnly(tokenizer);
+        currentMaterial.setSpecularExponent(exponent);
     }
 
     private void setSpecularExponentMap(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String specularExponentMapFilename = getNextTokenOnly(tokenizer);
-            currentMaterial.setSpecularExponentMapFilename(specularExponentMapFilename);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping specular exponent map.");
+            return;
         }
+        String specularExponentMapFilename = getNextTokenOnly(tokenizer);
+        currentMaterial.setSpecularExponentMapFilename(specularExponentMapFilename);
     }
 
     private void setSpecularMap(StringTokenizer tokenizer) {
-        if (currentMaterial != null) {
-            String specularMapFilename = getNextTokenOnly(tokenizer);
-            currentMaterial.setSpecularMapFilename(specularMapFilename);
-        } else {
+        if (currentMaterial == null) {
             log.warn("Current material was NULL. Skipping specular map.");
+            return;
         }
+        String specularMapFilename = getNextTokenOnly(tokenizer);
+        currentMaterial.setSpecularMapFilename(specularMapFilename);
     }
 
     public List<Material> getMaterials() {

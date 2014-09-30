@@ -36,15 +36,15 @@ public class FpsTimer {
 
     public void update() {
         currentFps++;
-
         long deltatime = fpsTimeSpan.diffNowToLastUpdate();
-
-        if (deltatime >= 1000000000L) {
-            displayFps = currentFps;
-            currentFps = 0;
-            fpsTimeSpan.addToCurrentTime(1000000000L);
-            Fw.window.setTitle(Fw.config.getWindowTitle() + " | FPS: " + displayFps);
+        if (deltatime < 1000000000L) {
+            return;
         }
+
+        displayFps = currentFps;
+        currentFps = 0;
+        fpsTimeSpan.addToCurrentTime(1000000000L);
+        Fw.window.setTitle(Fw.config.getWindowTitle() + " | FPS: " + displayFps);
     }
 
 }
