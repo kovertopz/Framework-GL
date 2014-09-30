@@ -15,7 +15,6 @@ package net.smert.jreactphysics3d.framework.opengl.mesh;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 
 /**
@@ -30,10 +29,7 @@ public class MeshReader {
         modelReaders = new HashMap<>();
     }
 
-    public void load(String filename, Mesh mesh) throws IOException {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
+    public ModelReader getModelReader(String filename) {
 
         // Get the extension from the filename
         int posOfLastPeriod = filename.lastIndexOf(".");
@@ -48,7 +44,11 @@ public class MeshReader {
         }
 
         // Load the filename using the model reader
-        ModelReader modelReader = modelReaders.get(extension);
+        return modelReaders.get(extension);
+    }
+
+    public void load(String filename, Mesh mesh) throws IOException {
+        ModelReader modelReader = getModelReader(filename);
         modelReader.load(filename, mesh);
     }
 

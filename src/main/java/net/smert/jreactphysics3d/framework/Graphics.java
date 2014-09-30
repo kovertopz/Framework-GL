@@ -85,6 +85,7 @@ public class Graphics {
         GL.fboHelper.unbind();
         GL.textureHelper.unbind();
         GL.vboHelper.unbind();
+        Renderable.shaderPool.destroy();
         Renderable.texturePool.destroy();
     }
 

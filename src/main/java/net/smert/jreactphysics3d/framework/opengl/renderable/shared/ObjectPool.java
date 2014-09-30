@@ -15,7 +15,6 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.utils.HashMapIntGeneric;
 import net.smert.jreactphysics3d.framework.utils.HashMapStringInt;
 
@@ -49,15 +48,10 @@ public class ObjectPool<T> {
     }
 
     public void add(String filename, T object) {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
-
         if (objectPool.containsKey(filename)) {
             throw new IllegalArgumentException("Tried to add a " + object.getClass().getSimpleName()
                     + " that already exists to the pool: " + filename);
         }
-
         int uniqueID = currentUniqueID++;
         assert (uniqueID != HashMapStringInt.NOT_FOUND);
         filenameToUniqueID.put(filename, uniqueID);
@@ -84,10 +78,6 @@ public class ObjectPool<T> {
     }
 
     public T get(String filename) {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
-
         T object = objectPool.get(filename);
         if (object == null) {
             throw new IllegalArgumentException("Tried to get a object that does not exist from the pool: " + filename);
@@ -96,10 +86,6 @@ public class ObjectPool<T> {
     }
 
     public int getUniqueID(String filename) {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
-
         int uniqueID = filenameToUniqueID.get(filename);
         if (uniqueID == HashMapStringInt.NOT_FOUND) {
             throw new IllegalArgumentException("Tried to get a object that does not exist from the pool: " + filename);
@@ -108,10 +94,6 @@ public class ObjectPool<T> {
     }
 
     public void remove(String filename) {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
-
         if (objectPool.remove(filename) == null) {
             throw new IllegalArgumentException("Did not find an instance of the object: " + filename);
         }

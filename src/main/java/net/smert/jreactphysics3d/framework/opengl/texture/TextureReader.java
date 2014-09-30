@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.image.ImageReader;
 
@@ -36,18 +35,7 @@ public class TextureReader {
         this.textureBuilder = textureBuilder;
     }
 
-    public boolean isUseFlipDefaults() {
-        return useFlipDefaults;
-    }
-
-    public void setUseFlipDefaults(boolean useFlipDefaults) {
-        this.useFlipDefaults = useFlipDefaults;
-    }
-
-    public Texture load(String filename) throws IOException {
-
-        // Trim slashes
-        filename = Fw.files.trimLeftSlashes(filename);
+    public ImageReader getImageReader(String filename) {
 
         // Get the extension from the filename
         int posOfLastPeriod = filename.lastIndexOf(".");
@@ -62,7 +50,21 @@ public class TextureReader {
         }
 
         // Load the filename using the image reader
-        ImageReader imageReader = imageReaders.get(extension);
+        return imageReaders.get(extension);
+    }
+
+    public boolean isUseFlipDefaults() {
+        return useFlipDefaults;
+    }
+
+    public void setUseFlipDefaults(boolean useFlipDefaults) {
+        this.useFlipDefaults = useFlipDefaults;
+    }
+
+    public Texture load(String filename) throws IOException {
+
+        // Get image reader and load the image
+        ImageReader imageReader = getImageReader(filename);
         BufferedImage bufferedImage = imageReader.load(filename);
 
         // Flip image if the format requires it
