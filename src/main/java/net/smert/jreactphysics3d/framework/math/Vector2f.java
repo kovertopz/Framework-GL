@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Vector2f {
 
-    private final static Logger log = LoggerFactory.getLogger(Vector3f.class);
-    public final static Vector2f WORLD_X_AXIS = new Vector2f(1.0f, 0.0f);
-    public final static Vector2f WORLD_Y_AXIS = new Vector2f(0.0f, 1.0f);
+    private static Logger log = LoggerFactory.getLogger(Vector2f.class);
+    public static Vector2f WORLD_X_AXIS = new Vector2f(1.0f, 0.0f);
+    public static Vector2f WORLD_Y_AXIS = new Vector2f(0.0f, 1.0f);
 
     float x;
     float y;
@@ -40,14 +40,51 @@ public class Vector2f {
         this.y = y;
     }
 
-    public Vector2f(Vector2f v) {
-        x = v.x;
-        y = v.y;
+    public Vector2f(Vector2f vector) {
+        x = vector.x;
+        y = vector.y;
     }
 
-    // Scalar results
-    public float dot(Vector2f v) {
-        return x * v.x + y * v.y;
+    // Boolean Results
+    public boolean trim(float length) {
+        float magnitude = magnitude();
+        if (magnitude <= length) {
+            return false;
+        }
+        multiply(1.0f / magnitude);
+        multiply(length);
+        return true;
+    }
+
+    public boolean trimSquared(float length) {
+        float magnitudeSquared = magnitudeSquared();
+        if (magnitudeSquared <= length * length) {
+            return false;
+        }
+        multiply(1.0f / MathHelper.Sqrt(magnitudeSquared));
+        multiply(length);
+        return true;
+    }
+
+    // Conversion Operations
+    public void toFloatBuffer(FloatBuffer fbOut) {
+        fbOut.put(x);
+        fbOut.put(y);
+    }
+
+    // Scalar Results
+    public float dot(Vector2f vector) {
+        return x * vector.x + y * vector.y;
+    }
+
+    public float getElement(int index) {
+        switch (index) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+        }
+        throw new IllegalArgumentException("Invalid index: " + index);
     }
 
     public float getX() {
@@ -66,22 +103,30 @@ public class Vector2f {
         return x * x + y * y;
     }
 
-    // Vector results
+    public int maxAxis() {
+        return (x < y) ? 1 : 0;
+    }
+
+    public int minAxis() {
+        return (x < y) ? 0 : 1;
+    }
+
+    // Vector Results
     public Vector2f add(float x, float y) {
         this.x += x;
         this.y += y;
         return this;
     }
 
-    public Vector2f add(Vector2f v) {
-        x += v.x;
-        y += v.y;
+    public Vector2f add(Vector2f vector) {
+        x += vector.x;
+        y += vector.y;
         return this;
     }
 
-    public Vector2f addScaledVector(Vector2f v, float scale) {
-        x += v.x * scale;
-        y += v.y * scale;
+    public Vector2f addScaled(Vector2f vector, float scale) {
+        x += vector.x * scale;
+        y += vector.y * scale;
         return this;
     }
 
@@ -128,17 +173,82 @@ public class Vector2f {
         return this;
     }
 
-    public Vector2f set(Vector2f v) {
-        assert (this != v);
-        x = v.x;
-        y = v.y;
+    public Vector2f set(Vector2f vector) {
+        assert (this != vector);
+        x = vector.x;
+        y = vector.y;
         return this;
     }
 
-    public Vector2f setInvert(Vector2f v) {
-        x = -v.x;
-        y = -v.y;
+    public void setElement(int index, float value) {
+        switch (index) {
+            case 0:
+                x = value;
+                return;
+            case 1:
+                y = value;
+                return;
+        }
+        throw new IllegalArgumentException("Invalid index: " + index);
+    }
+
+    public Vector2f setInvert(Vector2f vector) {
+        x = -vector.x;
+        y = -vector.y;
         return this;
+    }
+
+    public Vector2f setInterpolate(Vector2f vector0, Vector2f vector1, float f) {
+        float s = 1.0f - f;
+        x = vector0.x * s + vector1.x * f;
+        y = vector0.y * s + vector1.y * f;
+        return this;
+    }
+
+    public Vector2f setMax(float x, float y, float z) {
+        if (x > this.x) {
+            this.x = x;
+        }
+        if (y > this.y) {
+            this.y = y;
+        }
+        return this;
+    }
+
+    public Vector2f setMax(Vector2f vector) {
+        if (vector.x > x) {
+            x = vector.x;
+        }
+        if (vector.y > y) {
+            y = vector.y;
+        }
+        return this;
+    }
+
+    public Vector2f setMin(float x, float y, float z) {
+        if (x < this.x) {
+            this.x = x;
+        }
+        if (y < this.y) {
+            this.y = y;
+        }
+        return this;
+    }
+
+    public Vector2f setMin(Vector2f vector) {
+        if (vector.x < x) {
+            x = vector.x;
+        }
+        if (vector.y < y) {
+            y = vector.y;
+        }
+        return this;
+    }
+
+    public Vector2f setNormal(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        return normalize();
     }
 
     public Vector2f setX(float x) {
@@ -151,15 +261,15 @@ public class Vector2f {
         return this;
     }
 
-    public Vector2f subtract(Vector2f v) {
-        x -= v.x;
-        y -= v.y;
+    public Vector2f subtract(Vector2f vector) {
+        x -= vector.x;
+        y -= vector.y;
         return this;
     }
 
-    public Vector2f toFloatBuffer(FloatBuffer fb) {
-        fb.put(x);
-        fb.put(y);
+    public Vector2f zero() {
+        x = 0;
+        y = 0;
         return this;
     }
 

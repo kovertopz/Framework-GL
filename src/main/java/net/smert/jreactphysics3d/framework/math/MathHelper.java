@@ -31,6 +31,10 @@ public class MathHelper {
     private MathHelper() {
     }
 
+    public static float ArcCos(float radians) {
+        return (float) StrictMath.acos(radians);
+    }
+
     public static float ArcSin(float radians) {
         return (float) StrictMath.asin(radians);
     }
@@ -41,6 +45,14 @@ public class MathHelper {
 
     public static float ArcTan2(float a, float b) {
         return (float) StrictMath.atan2(a, b);
+    }
+
+    public static float CalculateMachineEpsilonFloat() {
+        float machEps = 1.0f;
+        do {
+            machEps /= 2.0f;
+        } while ((float) (1.0 + (machEps / 2.0)) != 1.0);
+        return machEps;
     }
 
     public static float Cos(float radians) {

@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Vector3f {
 
-    private final static Logger log = LoggerFactory.getLogger(Vector3f.class);
-    public final static Vector3f WORLD_X_AXIS = new Vector3f(1.0f, 0.0f, 0.0f);
-    public final static Vector3f WORLD_Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
-    public final static Vector3f WORLD_Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
+    private static Logger log = LoggerFactory.getLogger(Vector3f.class);
+    public static Vector3f WORLD_X_AXIS = new Vector3f(1.0f, 0.0f, 0.0f);
+    public static Vector3f WORLD_Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
+    public static Vector3f WORLD_Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
 
     float x;
     float y;
@@ -44,15 +44,61 @@ public class Vector3f {
         this.z = z;
     }
 
-    public Vector3f(Vector3f v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+    public Vector3f(Vector3f vector) {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
     }
 
-    // Scalar results
-    public float dot(Vector3f v) {
-        return x * v.x + y * v.y + z * v.z;
+    public Vector3f(Vector4f vector) {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+    }
+
+    // Boolean Results
+    public boolean trim(float length) {
+        float magnitude = magnitude();
+        if (magnitude <= length) {
+            return false;
+        }
+        multiply(1.0f / magnitude);
+        multiply(length);
+        return true;
+    }
+
+    public boolean trimSquared(float length) {
+        float magnitudeSquared = magnitudeSquared();
+        if (magnitudeSquared <= length * length) {
+            return false;
+        }
+        multiply(1.0f / MathHelper.Sqrt(magnitudeSquared));
+        multiply(length);
+        return true;
+    }
+
+    // Conversion Operations
+    public void toFloatBuffer(FloatBuffer fbOut) {
+        fbOut.put(x);
+        fbOut.put(y);
+        fbOut.put(z);
+    }
+
+    // Scalar Results
+    public float dot(Vector3f vector) {
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
+    public float getElement(int index) {
+        switch (index) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+        }
+        throw new IllegalArgumentException("Invalid index: " + index);
     }
 
     public float getX() {
@@ -75,7 +121,15 @@ public class Vector3f {
         return x * x + y * y + z * z;
     }
 
-    // Vector results
+    public int maxAxis() {
+        return (x < y) ? ((y < z) ? 2 : 1) : ((x < z) ? 2 : 0);
+    }
+
+    public int minAxis() {
+        return (x < y) ? ((x < z) ? 0 : 2) : ((y < z) ? 1 : 2);
+    }
+
+    // Vector Results
     public Vector3f add(float x, float y, float z) {
         this.x += x;
         this.y += y;
@@ -83,17 +137,17 @@ public class Vector3f {
         return this;
     }
 
-    public Vector3f add(Vector3f v) {
-        x += v.x;
-        y += v.y;
-        z += v.z;
+    public Vector3f add(Vector3f vector) {
+        x += vector.x;
+        y += vector.y;
+        z += vector.z;
         return this;
     }
 
-    public Vector3f addScaledVector(Vector3f v, float scale) {
-        x += v.x * scale;
-        y += v.y * scale;
-        z += v.z * scale;
+    public Vector3f addScaled(Vector3f vector, float scale) {
+        x += vector.x * scale;
+        y += vector.y * scale;
+        z += vector.z * scale;
         return this;
     }
 
@@ -112,11 +166,11 @@ public class Vector3f {
         return this;
     }
 
-    public Vector3f cross(Vector3f v) {
+    public Vector3f cross(Vector3f vector) {
         set(
-                y * v.z - z * v.y,
-                z * v.x - x * v.z,
-                x * v.y - y * v.x);
+                y * vector.z - z * vector.y,
+                z * vector.x - x * vector.z,
+                x * vector.y - y * vector.x);
         return this;
     }
 
@@ -157,19 +211,107 @@ public class Vector3f {
         return this;
     }
 
-    public Vector3f set(Vector3f v) {
-        assert (this != v);
-        x = v.x;
-        y = v.y;
-        z = v.z;
+    public Vector3f set(Vector3f vector) {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
         return this;
     }
 
-    public Vector3f setInvert(Vector3f v) {
-        x = -v.x;
-        y = -v.y;
-        z = -v.z;
+    public Vector3f set(Vector4f vector) {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
         return this;
+    }
+
+    public void setElement(int index, float value) {
+        switch (index) {
+            case 0:
+                x = value;
+                return;
+            case 1:
+                y = value;
+                return;
+            case 2:
+                z = value;
+                return;
+        }
+        throw new IllegalArgumentException("Invalid index: " + index);
+    }
+
+    public Vector3f setInterpolate(Vector3f vector0, Vector3f vector1, float f) {
+        float s = 1.0f - f;
+        x = vector0.x * s + vector1.x * f;
+        y = vector0.y * s + vector1.y * f;
+        z = vector0.z * s + vector1.z * f;
+        return this;
+    }
+
+    public Vector3f setInvert(Vector3f vector) {
+        x = -vector.x;
+        y = -vector.y;
+        z = -vector.z;
+        return this;
+    }
+
+    public Vector3f setMax(float x, float y, float z) {
+        if (x > this.x) {
+            this.x = x;
+        }
+        if (y > this.y) {
+            this.y = y;
+        }
+        if (z > this.z) {
+            this.z = z;
+        }
+        return this;
+    }
+
+    public Vector3f setMax(Vector3f vector) {
+        if (vector.x > x) {
+            x = vector.x;
+        }
+        if (vector.y > y) {
+            y = vector.y;
+        }
+        if (vector.z > z) {
+            z = vector.z;
+        }
+        return this;
+    }
+
+    public Vector3f setMin(float x, float y, float z) {
+        if (x < this.x) {
+            this.x = x;
+        }
+        if (y < this.y) {
+            this.y = y;
+        }
+        if (z < this.z) {
+            this.z = z;
+        }
+        return this;
+    }
+
+    public Vector3f setMin(Vector3f vector) {
+        if (vector.x < x) {
+            x = vector.x;
+        }
+        if (vector.y < y) {
+            y = vector.y;
+        }
+        if (vector.z < z) {
+            z = vector.z;
+        }
+        return this;
+    }
+
+    public Vector3f setNormal(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return normalize();
     }
 
     public Vector3f setX(float x) {
@@ -187,17 +329,17 @@ public class Vector3f {
         return this;
     }
 
-    public Vector3f subtract(Vector3f v) {
-        x -= v.x;
-        y -= v.y;
-        z -= v.z;
+    public Vector3f subtract(Vector3f vector) {
+        x -= vector.x;
+        y -= vector.y;
+        z -= vector.z;
         return this;
     }
 
-    public Vector3f toFloatBuffer(FloatBuffer fb) {
-        fb.put(x);
-        fb.put(y);
-        fb.put(z);
+    public Vector3f zero() {
+        x = 0;
+        y = 0;
+        z = 0;
         return this;
     }
 
