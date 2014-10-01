@@ -105,10 +105,10 @@ public class LegacyCameraController implements InputProcessor {
             zPositionDelta += Math.cos((camRotation.getY() + 90) * MathHelper.PI_OVER_180);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_DOWN)) {
-            yPositionDelta += 0.5f;
+            yPositionDelta -= 0.5f;
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_UP)) {
-            yPositionDelta -= 0.5f;
+            yPositionDelta += 0.5f;
         }
 
         camera.setPositionX(camPosition.getX() + xPositionDelta * delta * moveSpeed);

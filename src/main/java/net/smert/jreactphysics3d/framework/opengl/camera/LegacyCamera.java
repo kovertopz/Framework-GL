@@ -73,7 +73,7 @@ public class LegacyCamera {
         GL.o1.rotate(rotation.getX(), 1.0f, 0, 0);
         GL.o1.rotate(360.0f - rotation.getY(), 0, 1.0f, 0);
         GL.o1.rotate(rotation.getZ(), 0, 0, 1.0f);
-        GL.o1.translate(-position.getX(), position.getY(), -position.getZ());
+        GL.o1.translate(-position.getX(), -position.getY(), -position.getZ());
     }
 
 }

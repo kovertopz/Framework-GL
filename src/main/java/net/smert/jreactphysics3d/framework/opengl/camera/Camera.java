@@ -107,9 +107,9 @@ public class Camera {
             movementMatrix.getYAxis().set(movementMatrix.getXAxis()).cross(movementMatrix.getZAxis()).normalize();
         }
 
-        position.addScaledVector(movementMatrix.getXAxis(), dx);
-        position.addScaledVector(movementMatrix.getYAxis(), dy);
-        position.addScaledVector(movementMatrix.getZAxis(), dz);
+        position.addScaled(movementMatrix.getXAxis(), dx);
+        position.addScaled(movementMatrix.getYAxis(), dy);
+        position.addScaled(movementMatrix.getZAxis(), dz);
     }
 
     public void rotate(float pitch, float heading, float roll) {
@@ -197,7 +197,7 @@ public class Camera {
     }
 
     public void updateViewMatrix() {
-        viewMatrix.set(rotationMatrix, position);
+        viewMatrix.setInverse(rotationMatrix, position);
     }
 
 }
