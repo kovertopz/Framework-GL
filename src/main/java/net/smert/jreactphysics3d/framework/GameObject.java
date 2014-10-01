@@ -12,10 +12,12 @@
  */
 package net.smert.jreactphysics3d.framework;
 
+import net.smert.jreactphysics3d.body.RigidBody;
+import net.smert.jreactphysics3d.collision.shapes.CollisionShape;
 import net.smert.jreactphysics3d.framework.math.Transform4f;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
-import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 
 /**
  *
@@ -23,11 +25,12 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
  */
 public class GameObject {
 
+    private AbstractRenderable renderable;
+    private CollisionShape collisionBodyShape;
     private Mesh mesh;
     private Material meshMaterial;
-    private Renderable renderable;
-    private Object rigidBody;
-    private Object collisionBodyShape;
+    private RigidBody rigidBody;
+    private Transform4f scalingTransform;
     private final Transform4f worldTransform;
 
     public GameObject() {
@@ -35,12 +38,62 @@ public class GameObject {
     }
 
     public void destroy() {
+        if (renderable == null) {
+            return;
+        }
+        renderable.destroy();
     }
 
-    public void render() {
+    public CollisionShape getCollisionBodyShape() {
+        return collisionBodyShape;
     }
 
-    public void update() {
+    public void setCollisionBodyShape(CollisionShape collisionBodyShape) {
+        this.collisionBodyShape = collisionBodyShape;
+    }
+
+    public Mesh getMesh() {
+        return mesh;
+    }
+
+    public void setMesh(Mesh mesh) {
+        this.mesh = mesh;
+    }
+
+    public Material getMeshMaterial() {
+        return meshMaterial;
+    }
+
+    public void setMeshMaterial(Material meshMaterial) {
+        this.meshMaterial = meshMaterial;
+    }
+
+    public AbstractRenderable getRenderable() {
+        return renderable;
+    }
+
+    public void setRenderable(AbstractRenderable renderable) {
+        this.renderable = renderable;
+    }
+
+    public RigidBody getRigidBody() {
+        return rigidBody;
+    }
+
+    public void setRigidBody(RigidBody rigidBody) {
+        this.rigidBody = rigidBody;
+    }
+
+    public Transform4f getScalingTransform() {
+        return scalingTransform;
+    }
+
+    public void setScalingTransform(Transform4f scalingTransform) {
+        this.scalingTransform = scalingTransform;
+    }
+
+    public Transform4f getWorldTransform() {
+        return worldTransform;
     }
 
 }

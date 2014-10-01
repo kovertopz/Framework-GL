@@ -13,6 +13,7 @@
 package net.smert.jreactphysics3d.framework;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
@@ -114,6 +115,23 @@ public class Graphics {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);
         renderable.render();
+        GL.o1.popMatrix();
+    }
+
+    public void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
+        GL.o1.pushMatrix();
+        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
+        renderable.render();
+        GL.o1.popMatrix();
+    }
+
+    public void render(GameObject gameObject, FloatBuffer transformWorldFloatBuffer) {
+        GL.o1.pushMatrix();
+        transformWorldFloatBuffer.rewind();
+        gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
+        transformWorldFloatBuffer.flip();
+        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
+        gameObject.getRenderable().render();
         GL.o1.popMatrix();
     }
 

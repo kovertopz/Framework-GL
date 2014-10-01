@@ -12,6 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.opengl;
 
+import java.nio.FloatBuffer;
 import net.smert.jreactphysics3d.framework.opengl.constants.BlendEquations;
 import net.smert.jreactphysics3d.framework.opengl.constants.BlendFunctions;
 import net.smert.jreactphysics3d.framework.opengl.constants.ClearBits;
@@ -316,6 +317,11 @@ public class OpenGL1 {
 
     public String getString(int getstring) {
         return GL11.glGetString(getstring);
+    }
+
+    public OpenGL1 multiplyMatrix(FloatBuffer fb) {
+        GL11.glMultMatrix(fb);
+        return this;
     }
 
     public OpenGL1 normal(float x, float y, float z) {

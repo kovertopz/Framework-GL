@@ -188,11 +188,6 @@ public class RenderableConfiguration {
         float z = vector.getZ();
         float w = vector.getW();
 
-        assert (x >= -1.0f && x <= 1.0f);
-        assert (y >= -1.0f && y <= 1.0f);
-        assert (z >= -1.0f && z <= 1.0f);
-        assert (w >= -1.0f && w <= 1.0f);
-
         // Depending on the GL type and size put it into the byte buffer
         switch (vertexType) {
             case GLTypes.FLOAT:
