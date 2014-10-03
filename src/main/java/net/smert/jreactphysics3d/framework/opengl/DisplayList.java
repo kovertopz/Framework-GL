@@ -40,8 +40,8 @@ public class DisplayList {
             return;
         }
         GL.displayListHelper.delete(displayListID);
-        displayListID = 0;
         log.debug("Deleted a display list with ID: {}", displayListID);
+        displayListID = 0;
     }
 
     public int getDisplayListID() {

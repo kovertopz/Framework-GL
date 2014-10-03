@@ -43,8 +43,8 @@ public class Texture {
             return;
         }
         GL.textureHelper.delete(textureID);
-        textureID = 0;
         log.debug("Deleted a texture with ID: {}", textureID);
+        textureID = 0;
     }
 
     public int getTextureID() {
