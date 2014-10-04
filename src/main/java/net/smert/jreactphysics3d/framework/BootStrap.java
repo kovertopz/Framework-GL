@@ -369,11 +369,6 @@ public class BootStrap {
 
     protected void initialize(MutablePicoContainer container) {
 
-        // Finalize renderable configuration before createStaticRenderableFactory
-        RenderableConfiguration config = container.getComponent(RenderableConfiguration.class);
-        modifyRenderableConfiguration(config);
-        config.makeImmutable();
-
         // Create instances
         MeshReader meshReader = container.getComponent(MeshReader.class);
         TextureReader textureReader = container.getComponent(TextureReader.class);
@@ -391,9 +386,6 @@ public class BootStrap {
     }
 
     protected void modifyDependencies(MutablePicoContainer container) {
-    }
-
-    protected void modifyRenderableConfiguration(RenderableConfiguration config) {
     }
 
     public void start(Class configClass, Class screenClass, String[] args) {

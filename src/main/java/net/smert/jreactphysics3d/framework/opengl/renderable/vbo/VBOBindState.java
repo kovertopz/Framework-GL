@@ -32,7 +32,6 @@ public class VBOBindState {
     private int vboVertexIndexID;
 
     public VBOBindState() {
-        Renderable.config.throwExceptionIfNotImmutable();
         reset();
     }
 

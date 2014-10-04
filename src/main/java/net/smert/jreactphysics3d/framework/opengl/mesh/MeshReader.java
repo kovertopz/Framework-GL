@@ -53,6 +53,7 @@ public class MeshReader {
     }
 
     public void registerExtension(String extension, ModelReader modelReader) {
+        extension = extension.toLowerCase();
         if (modelReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has already been registered: " + extension);
         }
@@ -60,6 +61,7 @@ public class MeshReader {
     }
 
     public void unregisterExtension(String extension) {
+        extension = extension.toLowerCase();
         if (!modelReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }

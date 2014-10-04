@@ -78,6 +78,7 @@ public class TextureReader {
     }
 
     public void registerExtension(String extension, ImageReader imageReader) {
+        extension = extension.toLowerCase();
         if (imageReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has already been registered: " + extension);
         }
@@ -85,6 +86,7 @@ public class TextureReader {
     }
 
     public void unregisterExtension(String extension) {
+        extension = extension.toLowerCase();
         if (!imageReaders.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }

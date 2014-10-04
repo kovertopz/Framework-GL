@@ -17,8 +17,6 @@ import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
 import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
 import net.smert.jreactphysics3d.framework.utils.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -26,36 +24,31 @@ import org.slf4j.LoggerFactory;
  */
 public class RenderableConfiguration {
 
-    private final static Logger log = LoggerFactory.getLogger(RenderableConfiguration.class);
+    private final static int NORMAL_SIZE = 3;
+    private final static int NORMAL_TYPE = GLTypes.FLOAT;
+    private final static int TEX_COORD_TYPE = GLTypes.FLOAT;
+    private final static int VERTEX_TYPE = GLTypes.FLOAT;
 
-    private boolean isImmutable;
     private int colorSize;
     private int colorType;
     private int indexType;
-    private final int normalSize;
-    private final int normalType;
     private int texCoordSize;
-    private final int texCoordType;
     private int vertexSize;
-    private final int vertexType;
 
     public RenderableConfiguration() {
-        isImmutable = false;
         colorSize = 4;
         colorType = GLTypes.FLOAT;
         indexType = GLTypes.UNSIGNED_INT;
-        normalSize = 3;
-        normalType = GLTypes.FLOAT;
         texCoordSize = 2;
-        texCoordType = GLTypes.FLOAT;
         vertexSize = 3;
-        vertexType = GLTypes.FLOAT;
     }
 
-    private void checkImmutable() {
-        if (isImmutable) {
-            throw new RuntimeException("The configuration has already been finalized and cannot be changed");
-        }
+    public RenderableConfiguration(RenderableConfiguration config) {
+        colorSize = config.colorSize;
+        colorType = config.colorType;
+        indexType = config.indexType;
+        texCoordSize = config.texCoordSize;
+        vertexSize = config.vertexSize;
     }
 
     public void convertColorToByteBuffer(Color color, ByteBuffer byteBuffer) {
@@ -129,7 +122,7 @@ public class RenderableConfiguration {
 
     public void convertNormalToByteBuffer(Vector3f vector, ByteBuffer byteBuffer) {
 
-        assert (normalSize == 3);
+        assert (NORMAL_SIZE == 3);
 
         float x = vector.getX();
         float y = vector.getY();
@@ -140,7 +133,7 @@ public class RenderableConfiguration {
         assert (z >= -1.0f && z <= 1.0f);
 
         // Depending on the GL type put it into the byte buffer
-        switch (normalType) {
+        switch (NORMAL_TYPE) {
             case GLTypes.FLOAT:
                 byteBuffer.putFloat(x);
                 byteBuffer.putFloat(y);
@@ -148,7 +141,7 @@ public class RenderableConfiguration {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown GL type constant for normal: " + normalType);
+                throw new IllegalArgumentException("Unknown GL type constant for normal: " + NORMAL_TYPE);
         }
     }
 
@@ -165,7 +158,7 @@ public class RenderableConfiguration {
         assert (z >= 0.0f && z <= 1.0f);
 
         // Depending on the GL type and size put it into the byte buffer
-        switch (texCoordType) {
+        switch (TEX_COORD_TYPE) {
             case GLTypes.FLOAT:
                 byteBuffer.putFloat(x);
                 byteBuffer.putFloat(y);
@@ -175,7 +168,7 @@ public class RenderableConfiguration {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown GL type constant for texture coordinate: " + texCoordType);
+                throw new IllegalArgumentException("Unknown GL type constant for texture coordinate: " + TEX_COORD_TYPE);
         }
     }
 
@@ -189,7 +182,7 @@ public class RenderableConfiguration {
         float w = vector.getW();
 
         // Depending on the GL type and size put it into the byte buffer
-        switch (vertexType) {
+        switch (VERTEX_TYPE) {
             case GLTypes.FLOAT:
                 byteBuffer.putFloat(x);
                 byteBuffer.putFloat(y);
@@ -200,7 +193,7 @@ public class RenderableConfiguration {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown GL type constant for vertex: " + vertexType);
+                throw new IllegalArgumentException("Unknown GL type constant for vertex: " + VERTEX_TYPE);
         }
     }
 
@@ -209,7 +202,6 @@ public class RenderableConfiguration {
     }
 
     public void setColorSize(int colorSize) {
-        checkImmutable();
         if ((colorSize != 3) && (colorSize != 4)) {
             throw new IllegalArgumentException("The color size must be 3 or 4. Was given: " + colorSize);
         }
@@ -221,17 +213,14 @@ public class RenderableConfiguration {
     }
 
     public void setColorTypeByte() {
-        checkImmutable();
         this.colorType = GLTypes.BYTE;
     }
 
     public void setColorTypeFloat() {
-        checkImmutable();
         this.colorType = GLTypes.FLOAT;
     }
 
     public void setColorTypeUnsignedByte() {
-        checkImmutable();
         this.colorType = GLTypes.UNSIGNED_BYTE;
     }
 
@@ -240,21 +229,19 @@ public class RenderableConfiguration {
     }
 
     public void setIndexTypeUnsignedInt() {
-        checkImmutable();
         this.indexType = GLTypes.UNSIGNED_INT;
     }
 
     public void setIndexTypeUnsignedShort() {
-        checkImmutable();
         this.indexType = GLTypes.UNSIGNED_SHORT;
     }
 
     public int getNormalSize() {
-        return normalSize;
+        return NORMAL_SIZE;
     }
 
     public int getNormalType() {
-        return normalType;
+        return NORMAL_TYPE;
     }
 
     public int getTexCoordSize() {
@@ -262,7 +249,6 @@ public class RenderableConfiguration {
     }
 
     public void setTexCoordSize(int texCoordSize) {
-        checkImmutable();
         if ((texCoordSize != 2) && (texCoordSize != 3)) {
             throw new IllegalArgumentException("The texture coordinate size must be 2 or 3. Was given: " + texCoordSize);
         }
@@ -270,7 +256,7 @@ public class RenderableConfiguration {
     }
 
     public int getTexCoordType() {
-        return texCoordType;
+        return TEX_COORD_TYPE;
     }
 
     public int getVertexSize() {
@@ -278,7 +264,6 @@ public class RenderableConfiguration {
     }
 
     public void setVertexSize(int vertexSize) {
-        checkImmutable();
         if ((vertexSize < 2) || (vertexSize > 4)) {
             throw new IllegalArgumentException("The vertex size must be 2, 3 or 4. Was given: " + vertexSize);
         }
@@ -286,30 +271,11 @@ public class RenderableConfiguration {
     }
 
     public int getVertexType() {
-        return vertexType;
+        return VERTEX_TYPE;
     }
 
-    public void makeImmutable() {
-        if (isImmutable) {
-            return;
-        }
-        isImmutable = true;
-        if (log.isInfoEnabled()) {
-            log.info("Making renderable configuration immutable:"
-                    + " Color Size: " + colorSize
-                    + " Color Type: " + GLTypes.ConvertToString(colorType)
-                    + " Normal Type: " + GLTypes.ConvertToString(normalType)
-                    + " Texture Coordinate Size: " + texCoordSize
-                    + " Texture Coordinate Type: " + GLTypes.ConvertToString(texCoordType)
-                    + " Vertex Size: " + vertexSize
-                    + " Vertex Type: " + GLTypes.ConvertToString(vertexType));
-        }
-    }
-
-    public void throwExceptionIfNotImmutable() {
-        if (!isImmutable) {
-            throw new RuntimeException("Renderable configuration must be made immutable");
-        }
+    public RenderableConfiguration clone() {
+        return new RenderableConfiguration(this);
     }
 
 }

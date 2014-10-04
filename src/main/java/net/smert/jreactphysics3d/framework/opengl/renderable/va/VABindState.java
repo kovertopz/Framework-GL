@@ -28,7 +28,6 @@ public class VABindState {
     private boolean vertexEnabled;
 
     public VABindState() {
-        Renderable.config.throwExceptionIfNotImmutable();
         reset();
     }
 
