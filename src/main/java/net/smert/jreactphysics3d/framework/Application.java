@@ -40,14 +40,6 @@ public class Application {
         this.throwableHandler = throwableHandler;
     }
 
-    private void configureLogging() throws IOException {
-        logging.reset();
-    }
-
-    private void setScreen(Screen screen) {
-        this.screen = screen;
-    }
-
     private void startMainLoopThread() {
         mainLoopThread = new Thread("LWJGL Application - Main Loop") {
             @Override
@@ -141,8 +133,8 @@ public class Application {
     }
 
     public void run(Screen screen) throws IOException {
-        setScreen(screen);
-        configureLogging();
+        this.screen = screen;
+        logging.reset(); // Configure logging
         startRunning();
         startMainLoopThread();
     }

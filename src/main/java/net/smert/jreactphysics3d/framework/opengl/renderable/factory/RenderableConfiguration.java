@@ -289,10 +289,6 @@ public class RenderableConfiguration {
         return vertexType;
     }
 
-    public boolean isImmutable() {
-        return isImmutable;
-    }
-
     public void makeImmutable() {
         if (isImmutable) {
             return;
@@ -307,6 +303,12 @@ public class RenderableConfiguration {
                     + " Texture Coordinate Type: " + GLTypes.ConvertToString(texCoordType)
                     + " Vertex Size: " + vertexSize
                     + " Vertex Type: " + GLTypes.ConvertToString(vertexType));
+        }
+    }
+
+    public void throwExceptionIfNotImmutable() {
+        if (!isImmutable) {
+            throw new RuntimeException("Renderable configuration must be made immutable");
         }
     }
 

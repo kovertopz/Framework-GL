@@ -32,9 +32,7 @@ public class VBOBindState {
     private int vboVertexIndexID;
 
     public VBOBindState() {
-        if (!Renderable.config.isImmutable()) {
-            throw new RuntimeException("Renderable configuration must be made immutable");
-        }
+        Renderable.config.throwExceptionIfNotImmutable();
         reset();
     }
 

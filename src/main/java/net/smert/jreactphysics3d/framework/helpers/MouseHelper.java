@@ -12,7 +12,7 @@
  */
 package net.smert.jreactphysics3d.framework.helpers;
 
-import net.smert.jreactphysics3d.framework.Configuration;
+import net.smert.jreactphysics3d.framework.Fw;
 
 /**
  *
@@ -38,16 +38,14 @@ public class MouseHelper {
     private float deltaY;
     private int buttonCount;
     private int[] lwjglToMouse;
-    private final Configuration config;
 
-    public MouseHelper(Configuration config) {
+    public MouseHelper() {
         isGrabbed = false;
         clearDelta();
-        this.config = config;
     }
 
     private void centerCursor() {
-        org.lwjgl.input.Mouse.setCursorPosition(config.getCurrentWidth() / 2, config.getCurrentHeight() / 2);
+        org.lwjgl.input.Mouse.setCursorPosition(Fw.config.getCurrentWidth() / 2, Fw.config.getCurrentHeight() / 2);
         org.lwjgl.input.Mouse.setGrabbed(isGrabbed);
     }
 
@@ -81,7 +79,7 @@ public class MouseHelper {
 
     private void updateWheelChange() {
         deltaWheel = org.lwjgl.input.Mouse.getDWheel();
-        deltaWheel *= config.getMouseWheelSensitivity();
+        deltaWheel *= Fw.config.getMouseWheelSensitivity();
 
         if (deltaWheel == 0) {
             nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = false;
@@ -96,8 +94,8 @@ public class MouseHelper {
     private void updateXYChange() {
         deltaX = org.lwjgl.input.Mouse.getDX();
         deltaY = org.lwjgl.input.Mouse.getDY();
-        deltaX *= config.getMouseMoveSensitivity();
-        deltaY *= config.getMouseMoveSensitivity();
+        deltaX *= Fw.config.getMouseMoveSensitivity();
+        deltaY *= Fw.config.getMouseMoveSensitivity();
         float totalDelta = deltaX + deltaY;
         nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0);
     }

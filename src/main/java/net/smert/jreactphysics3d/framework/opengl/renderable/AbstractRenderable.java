@@ -12,10 +12,18 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.renderable;
 
+import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractRenderable implements Renderable {
+public abstract class AbstractRenderable {
+
+    public abstract void create(Mesh mesh);
+
+    public abstract void destroy();
+
+    public abstract void render();
 
 }

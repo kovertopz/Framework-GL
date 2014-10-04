@@ -30,32 +30,20 @@ public class Logging {
     private final static int MAX_LOG_COUNT = 4;
     private final static int MAX_LOG_SIZE = 131072;
 
-    private final Configuration config;
     private final SimpleFormatter simpleFormatter;
 
-    public Logging(Configuration config, SimpleFormatter simpleFormatter) {
-        this.config = config;
+    public Logging(SimpleFormatter simpleFormatter) {
         this.simpleFormatter = simpleFormatter;
-    }
-
-    private void addFileHandler(Logger logger) throws IOException, SecurityException {
-        Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
-        file.setFormatter(simpleFormatter);
-        file.setLevel(config.logLevel);
-        logger.addHandler(file);
-    }
-
-    private void readLoggingProperties() throws IOException, SecurityException {
-        try (FileInputStream fis = new FileInputStream(config.logProperties)) {
-            LogManager.getLogManager().readConfiguration(fis);
-        }
     }
 
     public void reset() throws IOException, SecurityException {
         LogManager.getLogManager().reset();
 
+        Configuration config = Fw.config;
         if (config.logProperties != null) {
-            readLoggingProperties();
+            try (FileInputStream fis = new FileInputStream(config.logProperties)) {
+                LogManager.getLogManager().readConfiguration(fis);
+            }
             return;
         }
 
@@ -73,7 +61,10 @@ public class Logging {
 
         // Setup a log file
         if (config.logFile) {
-            addFileHandler(logger);
+            Handler file = new FileHandler(config.logFilename, MAX_LOG_SIZE, MAX_LOG_COUNT);
+            file.setFormatter(simpleFormatter);
+            file.setLevel(config.logLevel);
+            logger.addHandler(file);
         }
     }
 

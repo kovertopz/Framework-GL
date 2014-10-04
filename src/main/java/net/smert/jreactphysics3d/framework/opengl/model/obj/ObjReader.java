@@ -25,11 +25,11 @@ import java.util.StringTokenizer;
 import net.smert.jreactphysics3d.framework.Files.FileAsset;
 import net.smert.jreactphysics3d.framework.Fw;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.LightParameterType;
 import net.smert.jreactphysics3d.framework.opengl.constants.Primitives;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
-import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
@@ -55,14 +55,13 @@ public class ObjReader implements ModelReader {
     private final List<Vertex> normals;
     private final List<Vertex> vertices;
     private final MaterialReader materialReader;
-    private final MeshFactory meshFactory;
     private String groupName;
     private String materialLibrary;
     private String materialName;
     private String objectName;
     private String smoothingGroup;
 
-    public ObjReader(MaterialReader materialReader, MeshFactory meshFactory) {
+    public ObjReader(MaterialReader materialReader) {
         resetOnFinish = true;
         faces = new ArrayList<>();
         comments = new ArrayList<>();
@@ -70,7 +69,6 @@ public class ObjReader implements ModelReader {
         normals = new ArrayList<>();
         vertices = new ArrayList<>();
         this.materialReader = materialReader;
-        this.meshFactory = meshFactory;
         reset();
     }
 
@@ -175,7 +173,7 @@ public class ObjReader implements ModelReader {
 
             // Create segment if it doesn't exist
             if (segment == null) {
-                segment = meshFactory.createSegment();
+                segment = GL.mf.createSegment();
                 segment.setPrimitiveMode(Primitives.TRIANGLES);
                 segment.setName(segmentKey);
                 materialNameToSegments.put(segmentKey, segment);
@@ -356,7 +354,7 @@ public class ObjReader implements ModelReader {
         Color diffuse = material.getDiffuse();
         Color specular = material.getSpecular();
 
-        net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial = meshFactory.createMaterial();
+        net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial = GL.mf.createMaterial();
 
         // Lighting
         if (ambient.hasBeenSet()) {

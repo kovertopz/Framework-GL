@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.image.ImageReader;
 
@@ -27,12 +28,10 @@ public class TextureReader {
 
     private boolean useFlipDefaults;
     private final Map<String, ImageReader> imageReaders;
-    private final TextureBuilder textureBuilder;
 
-    public TextureReader(TextureBuilder textureBuilder) {
+    public TextureReader() {
         useFlipDefaults = true;
         imageReaders = new HashMap<>();
-        this.textureBuilder = textureBuilder;
     }
 
     public ImageReader getImageReader(String filename) {
@@ -69,13 +68,13 @@ public class TextureReader {
 
         // Flip image if the format requires it
         if (useFlipDefaults) {
-            textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
-            textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
+            GL.textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
+            GL.textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
         }
 
         // Build the texture
-        textureBuilder.load2D(bufferedImage).buildTexture();
-        return textureBuilder.build(true); // Reset to defaults
+        GL.textureBuilder.load2D(bufferedImage).buildTexture();
+        return GL.textureBuilder.build(true); // Reset to defaults
     }
 
     public void registerExtension(String extension, ImageReader imageReader) {

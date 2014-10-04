@@ -171,6 +171,13 @@ public class Vector4f {
         this.z = z;
     }
 
+    public void set(Vector3f vector, float w) {
+        this.w = w;
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+    }
+
     public void set(Vector4f vector) {
         w = vector.w;
         x = vector.x;
@@ -192,6 +199,13 @@ public class Vector4f {
 
     public void setZ(float z) {
         this.z = z;
+    }
+
+    public void zero() {
+        w = 0;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     @Override

@@ -35,13 +35,11 @@ public class Timer {
     private int gameTicksPerSecond;
     private int renderTicksPerSecond;
     private long currentElapsedTimeDifference;
-    private final Configuration config;
     private final FrameAve frameAve;
     private final TimeSpan elapsedTimeSpan;
     private final TimeSpan totalTimeSpan;
 
-    public Timer(Configuration config) {
-        this.config = config;
+    public Timer() {
         frameAve = new FrameAve(FRAME_SLOTS);
         elapsedTimeSpan = new TimeSpan();
         totalTimeSpan = new TimeSpan();
@@ -125,7 +123,7 @@ public class Timer {
         totalTime = (float) totalTimeSpan.diffNowToLastUpdateDouble();
 
         // Get the number of game ticks per second and render ticks based on the frame rate average
-        gameTicksPerSecond = config.gameTicksPerSecond;
+        gameTicksPerSecond = Fw.config.gameTicksPerSecond;
         renderTicksPerSecond = (int) (ONE_NANO_SECOND / frameAve.avg());
 
         assert (gameTicksPerSecond > 0);

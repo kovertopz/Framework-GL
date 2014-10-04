@@ -80,4 +80,16 @@ public class Color {
         this.a = a;
     }
 
+    public final void set(Color color) {
+        this.r = color.r;
+        this.g = color.g;
+        this.b = color.b;
+        this.a = color.a;
+    }
+
+    @Override
+    public Color clone() {
+        return new Color(this);
+    }
+
 }

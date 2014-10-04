@@ -18,14 +18,10 @@ import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
-import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
-import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
-import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
 
 /**
  *
@@ -33,45 +29,32 @@ import net.smert.jreactphysics3d.framework.opengl.texture.TextureReader;
  */
 public class Graphics {
 
-    private final MeshFactory meshFactory;
-    private final MeshReader meshReader;
-    private final RenderableFactoryGL1 renderableFactoryGL1;
-    private final TextureReader textureReader;
-
-    public Graphics(MeshFactory meshFactory, MeshReader meshReader, RenderableFactoryGL1 renderableFactoryGL1,
-            TextureReader textureReader) {
-        this.meshFactory = meshFactory;
-        this.meshReader = meshReader;
-        this.renderableFactoryGL1 = renderableFactoryGL1;
-        this.textureReader = textureReader;
-    }
-
     public AbstractRenderable createDisplayListRenderable() {
-        return renderableFactoryGL1.createDisplayList();
+        return GL.rf1.createDisplayList();
     }
 
     public AbstractRenderable createImmediateModeRenderable() {
-        return renderableFactoryGL1.createImmediateMode();
+        return GL.rf1.createImmediateMode();
     }
 
     public Mesh createMeshWithDrawCommands(DrawCommands drawCommands) {
-        Segment segment = meshFactory.createSegment();
+        Segment segment = GL.mf.createSegment();
         segment.setDrawCommands(drawCommands);
-        Mesh mesh = meshFactory.createMesh();
+        Mesh mesh = GL.mf.createMesh();
         mesh.addSegment(segment);
         return mesh;
     }
 
     public AbstractRenderable createVertexArrayRenderable() {
-        return renderableFactoryGL1.createVertexArray();
+        return GL.rf1.createVertexArray();
     }
 
     public AbstractRenderable createVertexBufferObjectRenderable() {
-        return renderableFactoryGL1.createVertexBufferObject();
+        return GL.rf1.createVertexBufferObject();
     }
 
     public AbstractRenderable createVertexBufferObjectInterleavedRenderable() {
-        return renderableFactoryGL1.createVertexBufferObjectInterleaved();
+        return GL.rf1.createVertexBufferObjectInterleaved();
     }
 
     /**
@@ -95,18 +78,18 @@ public class Graphics {
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
-        meshReader.load(filename, mesh);
+        GL.meshReader.load(filename, mesh);
     }
 
     public void loadTexture(String filename) throws IOException {
-        Texture texture = textureReader.load(filename);
+        Texture texture = GL.textureReader.load(filename);
         Renderable.texturePool.add(filename, texture);
     }
 
     public void loadTextures(Mesh mesh) throws IOException {
         List<String> textures = mesh.getTextures();
         for (String filename : textures) {
-            Texture texture = textureReader.load(filename);
+            Texture texture = GL.textureReader.load(filename);
             Renderable.texturePool.add(filename, texture);
         }
     }

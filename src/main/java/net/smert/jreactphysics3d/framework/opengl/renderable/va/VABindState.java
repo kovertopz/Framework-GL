@@ -28,9 +28,7 @@ public class VABindState {
     private boolean vertexEnabled;
 
     public VABindState() {
-        if (!Renderable.config.isImmutable()) {
-            throw new RuntimeException("Renderable configuration must be made immutable");
-        }
+        Renderable.config.throwExceptionIfNotImmutable();
         reset();
     }
 

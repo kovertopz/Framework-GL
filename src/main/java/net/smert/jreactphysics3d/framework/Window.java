@@ -28,12 +28,10 @@ public class Window {
 
     private boolean fullscreen;
     private boolean vSync;
-    private final Configuration config;
 
-    public Window(Configuration config) {
-        this.config = config;
-        fullscreen = config.fullscreenRequested;
-        vSync = config.vSyncRequested;
+    public Window() {
+        fullscreen = Fw.config.fullscreenRequested;
+        vSync = Fw.config.vSyncRequested;
     }
 
     private DisplayMode findDisplayMode(int width, int height, int bpp, int freq) throws LWJGLException {
@@ -64,6 +62,7 @@ public class Window {
     public void create() throws LWJGLException {
 
         // Update the configuration
+        Configuration config = Fw.config;
         config.fullscreenEnabled = fullscreen;
         config.vSyncEnabled = vSync;
 

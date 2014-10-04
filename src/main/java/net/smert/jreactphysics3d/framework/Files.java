@@ -47,14 +47,12 @@ public class Files {
 
     private boolean foundAsset;
     private boolean isInternal;
-    private final Configuration config;
     private FileType fileType;
     private final Map<String, FileAsset> assets;
 
-    public Files(Configuration config) {
+    public Files() {
         foundAsset = false;
         isInternal = false;
-        this.config = config;
         assets = new HashMap<>();
         try {
             registerAssets(DEFAULT_ASSETS_LOCATION, true);
@@ -290,7 +288,7 @@ public class Files {
     }
 
     public FileAsset getShader(String filename) {
-        return get(SHADER_LOCATION, config.glslVersion + INTERNAL_FILE_SEPARATOR + filename);
+        return get(SHADER_LOCATION, Fw.config.glslVersion + INTERNAL_FILE_SEPARATOR + filename);
     }
 
     public FileAsset getTexture(String filename) {
