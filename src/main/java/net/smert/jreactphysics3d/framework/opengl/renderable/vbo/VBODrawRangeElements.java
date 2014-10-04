@@ -22,8 +22,17 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  */
 public class VBODrawRangeElements extends AbstractDrawCall {
 
+    private int indexType;
     private int[] maxIndexes;
     private int[] minIndexes;
+
+    public int getIndexType() {
+        return indexType;
+    }
+
+    public void setIndexType(int indexType) {
+        this.indexType = indexType;
+    }
 
     public int[] getMaxIndexes() {
         return maxIndexes;
@@ -47,7 +56,7 @@ public class VBODrawRangeElements extends AbstractDrawCall {
             Renderable.shaderBindState.bindShader(shaders[i]);
             Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.vboHelper.drawRangeElements(
-                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], Renderable.config.getIndexType());
+                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], indexType);
         }
     }
 

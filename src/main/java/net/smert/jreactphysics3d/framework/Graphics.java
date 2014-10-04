@@ -21,6 +21,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**
@@ -38,9 +39,18 @@ public class Graphics {
     }
 
     public Mesh createMeshWithDrawCommands(DrawCommands drawCommands) {
+
+        // Create new segment with the draw commands
         Segment segment = GL.mf.createSegment();
         segment.setDrawCommands(drawCommands);
+
+        // Check to see if a renderable configuration exists before adding it
+        RenderableConfiguration config = GL.mf.createRenderableConfiguration();
+        int renderableConfigID = Renderable.configPool.getOrAdd(config);
+
+        // Create mesh and set config ID and add segment
         Mesh mesh = GL.mf.createMesh();
+        mesh.setRenderableConfigID(renderableConfigID);
         mesh.addSegment(segment);
         return mesh;
     }

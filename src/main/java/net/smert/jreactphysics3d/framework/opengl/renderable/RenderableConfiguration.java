@@ -13,10 +13,8 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable;
 
 import java.nio.ByteBuffer;
-import net.smert.jreactphysics3d.framework.math.Vector3f;
-import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.math.MathHelper;
 import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
-import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
  *
@@ -36,11 +34,7 @@ public class RenderableConfiguration {
     private int vertexSize;
 
     public RenderableConfiguration() {
-        colorSize = 4;
-        colorType = GLTypes.FLOAT;
-        indexType = GLTypes.UNSIGNED_INT;
-        texCoordSize = 2;
-        vertexSize = 3;
+        reset();
     }
 
     public RenderableConfiguration(RenderableConfiguration config) {
@@ -51,29 +45,34 @@ public class RenderableConfiguration {
         vertexSize = config.vertexSize;
     }
 
-    public void convertColorToByteBuffer(Color color, ByteBuffer byteBuffer) {
+    public void convertColorToByteBuffer(float[] colors, int index, ByteBuffer byteBuffer) {
 
         assert ((colorSize == 3) || (colorSize == 4));
 
-        float r = color.getR();
-        float g = color.getG();
-        float b = color.getB();
-        float a = color.getA();
+        int offset = colorSize * index;
+        float r = colors[offset + 0];
+        float g = colors[offset + 1];
+        float b = colors[offset + 2];
+        float a = 1.0f;
 
         assert (r >= 0.0f && r <= 1.0f);
         assert (g >= 0.0f && g <= 1.0f);
         assert (b >= 0.0f && b <= 1.0f);
-        assert (a >= 0.0f && a <= 1.0f);
+
+        if (colorSize == 4) {
+            a = colors[offset + 3];
+            assert (a >= 0.0f && a <= 1.0f);
+        }
 
         // Depending on the GL type and size convert the data and put it into the byte buffer
         switch (colorType) {
             case GLTypes.BYTE:
             case GLTypes.UNSIGNED_BYTE:
-                byteBuffer.put((byte) ((r / 1.0f) * 255));
-                byteBuffer.put((byte) ((g / 1.0f) * 255));
-                byteBuffer.put((byte) ((b / 1.0f) * 255));
+                byteBuffer.put(convertFloatToByte(r));
+                byteBuffer.put(convertFloatToByte(g));
+                byteBuffer.put(convertFloatToByte(b));
                 if (colorSize == 4) {
-                    byteBuffer.put((byte) ((a / 1.0f) * 255));
+                    byteBuffer.put(convertFloatToByte(a));
                 }
                 break;
 
@@ -89,6 +88,10 @@ public class RenderableConfiguration {
             default:
                 throw new IllegalArgumentException("Unknown GL type constant for color: " + colorType);
         }
+    }
+
+    private byte convertFloatToByte(float value) {
+        return (byte) (MathHelper.Clamp(value, 0.0f, 1.0f) * 255);
     }
 
     public int convertGLTypeToByteSize(int glType) {
@@ -120,13 +123,14 @@ public class RenderableConfiguration {
         return byteSize;
     }
 
-    public void convertNormalToByteBuffer(Vector3f vector, ByteBuffer byteBuffer) {
+    public void convertNormalToByteBuffer(float[] normals, int index, ByteBuffer byteBuffer) {
 
         assert (NORMAL_SIZE == 3);
 
-        float x = vector.getX();
-        float y = vector.getY();
-        float z = vector.getZ();
+        int offset = NORMAL_SIZE * index;
+        float x = normals[offset + 0];
+        float y = normals[offset + 1];
+        float z = normals[offset + 2];
 
         assert (x >= -1.0f && x <= 1.0f);
         assert (y >= -1.0f && y <= 1.0f);
@@ -145,25 +149,30 @@ public class RenderableConfiguration {
         }
     }
 
-    public void convertTexCoordToByteBuffer(Vector3f vector, ByteBuffer byteBuffer) {
+    public void convertTexCoordToByteBuffer(float[] texCoords, int index, ByteBuffer byteBuffer) {
 
         assert ((texCoordSize == 2) || (texCoordSize == 3));
 
-        float x = vector.getX();
-        float y = vector.getY();
-        float z = vector.getZ();
+        int offset = texCoordSize * index;
+        float s = texCoords[offset + 0];
+        float t = texCoords[offset + 1];
+        float r = 0.0f;
 
-        assert (x >= 0.0f && x <= 1.0f);
-        assert (y >= 0.0f && y <= 1.0f);
-        assert (z >= 0.0f && z <= 1.0f);
+        assert (s >= 0.0f && s <= 1.0f);
+        assert (t >= 0.0f && t <= 1.0f);
+
+        if (texCoordSize == 3) {
+            r = texCoords[offset + 2];
+            assert (r >= 0.0f && r <= 1.0f);
+        }
 
         // Depending on the GL type and size put it into the byte buffer
         switch (TEX_COORD_TYPE) {
             case GLTypes.FLOAT:
-                byteBuffer.putFloat(x);
-                byteBuffer.putFloat(y);
+                byteBuffer.putFloat(s);
+                byteBuffer.putFloat(t);
                 if (texCoordSize == 3) {
-                    byteBuffer.putFloat(z);
+                    byteBuffer.putFloat(r);
                 }
                 break;
 
@@ -172,22 +181,25 @@ public class RenderableConfiguration {
         }
     }
 
-    public void convertVertexToByteBuffer(Vector4f vector, ByteBuffer byteBuffer) {
+    public void convertVertexToByteBuffer(float[] vertices, int index, ByteBuffer byteBuffer) {
 
-        assert ((vertexSize == 3) || (vertexSize == 4));
+        assert ((vertexSize >= 2) && (vertexSize <= 4));
 
-        float x = vector.getX();
-        float y = vector.getY();
-        float z = vector.getZ();
-        float w = vector.getW();
+        int offset = vertexSize * index;
+        float x = vertices[offset + 0];
+        float y = vertices[offset + 1];
 
         // Depending on the GL type and size put it into the byte buffer
         switch (VERTEX_TYPE) {
             case GLTypes.FLOAT:
                 byteBuffer.putFloat(x);
                 byteBuffer.putFloat(y);
-                byteBuffer.putFloat(z);
+                if (vertexSize >= 3) {
+                    float z = vertices[offset + 2];
+                    byteBuffer.putFloat(z);
+                }
                 if (vertexSize == 4) {
+                    float w = vertices[offset + 3];
                     byteBuffer.putFloat(w);
                 }
                 break;
@@ -274,8 +286,52 @@ public class RenderableConfiguration {
         return VERTEX_TYPE;
     }
 
+    public final void reset() {
+        colorSize = 4;
+        colorType = GLTypes.FLOAT;
+        indexType = GLTypes.UNSIGNED_INT;
+        texCoordSize = 2;
+        vertexSize = 3;
+    }
+
+    @Override
     public RenderableConfiguration clone() {
         return new RenderableConfiguration(this);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + this.colorSize;
+        hash = 29 * hash + this.colorType;
+        hash = 29 * hash + this.indexType;
+        hash = 29 * hash + this.texCoordSize;
+        hash = 29 * hash + this.vertexSize;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RenderableConfiguration other = (RenderableConfiguration) obj;
+        if (this.colorSize != other.colorSize) {
+            return false;
+        }
+        if (this.colorType != other.colorType) {
+            return false;
+        }
+        if (this.indexType != other.indexType) {
+            return false;
+        }
+        if (this.texCoordSize != other.texCoordSize) {
+            return false;
+        }
+        return this.vertexSize == other.vertexSize;
     }
 
 }

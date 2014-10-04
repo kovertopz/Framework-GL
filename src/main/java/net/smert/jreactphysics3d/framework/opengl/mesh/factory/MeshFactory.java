@@ -15,6 +15,7 @@ package net.smert.jreactphysics3d.framework.opengl.mesh.factory;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -35,6 +36,10 @@ public class MeshFactory {
 
     public Mesh createMesh() {
         return container.getComponent(Mesh.class);
+    }
+
+    public RenderableConfiguration createRenderableConfiguration() {
+        return container.getComponent(RenderableConfiguration.class);
     }
 
     public Segment createSegment() {

@@ -15,6 +15,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 
 /**
  *
@@ -26,6 +27,8 @@ public class VABindState {
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
+    private int renderableConfigID;
+    private RenderableConfiguration config;
 
     public VABindState() {
         reset();
@@ -84,10 +87,8 @@ public class VABindState {
             setColorEnabled(false);
             return;
         }
-        int colorSize = Renderable.config.getColorSize();
-        int colorType = Renderable.config.getColorType();
         setColorEnabled(true);
-        GL.vaHelper.bindColors(colorSize, colorType, colorByteBuffer);
+        GL.vaHelper.bindColors(config.getColorSize(), config.getColorType(), colorByteBuffer);
     }
 
     public void bindNormal(ByteBuffer normalByteBuffer) {
@@ -95,9 +96,8 @@ public class VABindState {
             setNormalEnabled(false);
             return;
         }
-        int normalType = Renderable.config.getNormalType();
         setNormalEnabled(true);
-        GL.vaHelper.bindNormals(normalType, normalByteBuffer);
+        GL.vaHelper.bindNormals(config.getNormalType(), normalByteBuffer);
     }
 
     public void bindTextureCoordinate(ByteBuffer texCoordByteBuffer) {
@@ -105,10 +105,8 @@ public class VABindState {
             setTextureCoordinateEnabled(false);
             return;
         }
-        int texCoordSize = Renderable.config.getTexCoordSize();
-        int texCoordType = Renderable.config.getTexCoordType();
         setTextureCoordinateEnabled(true);
-        GL.vaHelper.bindTextureCoordinates(texCoordSize, texCoordType, texCoordByteBuffer);
+        GL.vaHelper.bindTextureCoordinates(config.getTexCoordSize(), config.getTexCoordType(), texCoordByteBuffer);
     }
 
     public void bindVertex(ByteBuffer vertexByteBuffer) {
@@ -116,10 +114,8 @@ public class VABindState {
             setVertexEnabled(false);
             return;
         }
-        int vertexSize = Renderable.config.getVertexSize();
-        int vertexType = Renderable.config.getVertexType();
         setVertexEnabled(true);
-        GL.vaHelper.bindVertices(vertexSize, vertexType, vertexByteBuffer);
+        GL.vaHelper.bindVertices(config.getVertexSize(), config.getVertexType(), vertexByteBuffer);
     }
 
     public final void reset() {
@@ -127,6 +123,16 @@ public class VABindState {
         normalEnabled = false;
         texCoordEnabled = false;
         vertexEnabled = false;
+        renderableConfigID = Integer.MIN_VALUE; // Default is -1 elsewhere
+        config = null;
+    }
+
+    public void switchRenderableConfiguration(int renderableConfigID) {
+        if (this.renderableConfigID == renderableConfigID) {
+            return;
+        }
+        this.renderableConfigID = renderableConfigID;
+        config = Renderable.configPool.get(renderableConfigID);
     }
 
     public void unbind() {

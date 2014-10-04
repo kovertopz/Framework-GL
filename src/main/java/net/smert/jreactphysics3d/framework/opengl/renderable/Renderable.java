@@ -13,6 +13,7 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable;
 
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
@@ -32,7 +33,7 @@ public class Renderable {
 
     public static ByteBuffers byteBuffers;
     public static DrawCommands drawCommandsConversion;
-    public static RenderableConfiguration config;
+    public static RenderableConfigurationPool configPool;
     public static ShaderBindState shaderBindState;
     public static ShaderPool shaderPool;
     public static TextureBindState textureBindState;

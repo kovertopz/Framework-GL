@@ -53,7 +53,7 @@ public class ObjectPool<T> {
                     + " that already exists to the pool: " + filename);
         }
         int uniqueID = currentUniqueID++;
-        assert (uniqueID != HashMapStringInt.NOT_FOUND);
+        assert (uniqueID < Integer.MAX_VALUE); // Unique IDs must be positive
         filenameToUniqueID.put(filename, uniqueID);
         objectPool.put(filename, object);
         uniqueIDToObjectPool.put(uniqueID, object);
@@ -87,16 +87,18 @@ public class ObjectPool<T> {
 
     public int getUniqueID(String filename) {
         int uniqueID = filenameToUniqueID.get(filename);
-        if (uniqueID == HashMapStringInt.NOT_FOUND) {
-            throw new IllegalArgumentException("Tried to get a object that does not exist from the pool: " + filename);
+        if (uniqueID != HashMapStringInt.NOT_FOUND) {
+            return uniqueID;
         }
-        return uniqueID;
+        return -1;
     }
 
     public void remove(String filename) {
         if (objectPool.remove(filename) == null) {
-            throw new IllegalArgumentException("Did not find an instance of the object: " + filename);
+            throw new IllegalArgumentException("Tried to remove a object that does not exist from the pool: " + filename);
         }
+        int uniqueID = filenameToUniqueID.remove(filename);
+        uniqueIDToObjectPool.remove(uniqueID);
     }
 
     public static class ObjectDestroyer<T> {

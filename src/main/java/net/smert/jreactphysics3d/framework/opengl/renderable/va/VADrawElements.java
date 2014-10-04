@@ -23,7 +23,16 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  */
 public class VADrawElements extends AbstractDrawCall {
 
+    private int indexType;
     private ByteBuffer vertexIndexBuffer;
+
+    public int getIndexType() {
+        return indexType;
+    }
+
+    public void setIndexType(int indexType) {
+        this.indexType = indexType;
+    }
 
     public ByteBuffer getVertexIndexBuffer() {
         return vertexIndexBuffer;
@@ -39,7 +48,7 @@ public class VADrawElements extends AbstractDrawCall {
             Renderable.shaderBindState.bindShader(shaders[i]);
             Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.vaHelper.drawElements(
-                    primitiveModes[i], elementCounts[i], Renderable.config.getIndexType(), vertexIndexBuffer);
+                    primitiveModes[i], elementCounts[i], indexType, vertexIndexBuffer);
         }
     }
 

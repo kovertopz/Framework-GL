@@ -12,10 +12,8 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 
-import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
-import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.factory.VBODrawCallFactory;
@@ -26,16 +24,18 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.factory.VBODraw
  */
 public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractBuilder {
 
+    private boolean canRenderRanged;
     private final VBODrawCallFactory vboDrawCallFactory;
 
     public VBOBuilder(VBODrawCallFactory vboDrawCallFactory) {
+        canRenderRanged = false;
         this.vboDrawCallFactory = vboDrawCallFactory;
     }
 
-    public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved) {
+    public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved,
+            RenderableConfiguration config) {
 
         int total = 0;
-        RenderableConfiguration config = Renderable.config;
 
         // Calculate byte size of each type and add to the total. Save the total as
         // the current offset before increasing it.
@@ -63,13 +63,13 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
         vboInterleaved.setStrideBytes(total);
     }
 
-    public AbstractDrawCall createDrawCall(Mesh mesh) {
+    public AbstractDrawCall createDrawCall(Mesh mesh, RenderableConfiguration config) {
         AbstractDrawCall drawCall;
 
         int totalSegments = mesh.getTotalSegments();
 
         if (mesh.hasIndexes()) {
-            if (mesh.canRenderRanged()) {
+            if (canRenderRanged) {
 
                 // Convert max indexes from each segment
                 int[] maxIndexes = new int[totalSegments];
@@ -85,21 +85,23 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
 
                 // Create concrete class and set specific data
                 VBODrawRangeElements drawRangedElements = vboDrawCallFactory.createDrawRangeElements();
+                drawRangedElements.setIndexType(config.getIndexType());
                 drawRangedElements.setMaxIndexes(maxIndexes);
                 drawRangedElements.setMinIndexes(minIndexes);
 
                 // Make sure we set the abstract class
                 drawCall = drawRangedElements;
             } else {
-                drawCall = vboDrawCallFactory.createDrawElements();
+                VBODrawElements drawElements = vboDrawCallFactory.createDrawElements();
+                drawElements.setIndexType(config.getIndexType());
+                drawCall = drawElements;
             }
         } else {
 
             // Convert first indexes
             int[] firstElements = new int[totalSegments];
-            List<Integer> firstIndexes = mesh.getFirstIndexes();
             for (int i = 0; i < firstElements.length; i++) {
-                firstElements[i] = firstIndexes.get(i);
+                firstElements[i] = mesh.getSegment(i).getMinIndex();
             }
 
             // Create concrete class and set specific data
@@ -114,6 +116,14 @@ public class VBOBuilder extends net.smert.jreactphysics3d.framework.opengl.rende
         super.createDrawCall(mesh, drawCall);
 
         return drawCall;
+    }
+
+    public boolean isCanRenderRanged() {
+        return canRenderRanged;
+    }
+
+    public void setCanRenderRanged(boolean canRenderRanged) {
+        this.canRenderRanged = canRenderRanged;
     }
 
 }

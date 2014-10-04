@@ -22,12 +22,22 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDraw
  */
 public class VBODrawElements extends AbstractDrawCall {
 
+    private int indexType;
+
+    public int getIndexType() {
+        return indexType;
+    }
+
+    public void setIndexType(int indexType) {
+        this.indexType = indexType;
+    }
+
     @Override
     public void render() {
         for (int i = 0; i < primitiveModes.length; i++) {
             Renderable.shaderBindState.bindShader(shaders[i]);
             Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], Renderable.config.getIndexType());
+            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], indexType);
         }
     }
 

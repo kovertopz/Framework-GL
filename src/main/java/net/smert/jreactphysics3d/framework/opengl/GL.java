@@ -24,6 +24,7 @@ import net.smert.jreactphysics3d.framework.opengl.helpers.TextureHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexArrayHelper;
 import net.smert.jreactphysics3d.framework.opengl.helpers.VertexBufferObjectHelper;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
+import net.smert.jreactphysics3d.framework.opengl.mesh.Tessellator;
 import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureBuilder;
@@ -49,6 +50,7 @@ public class GL {
     public static RenderableFactoryGL1 rf1;
     public static RenderBufferObjectHelper rboHelper;
     public static ShaderHelper shaderHelper;
+    public static Tessellator tessellator;
     public static TextureBuilder textureBuilder;
     public static TextureHelper textureHelper;
     public static TextureReader textureReader;

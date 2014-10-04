@@ -60,6 +60,7 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.MeshReader;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.mesh.Tessellator;
 import net.smert.jreactphysics3d.framework.opengl.mesh.factory.MeshFactory;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.ObjReader;
@@ -71,6 +72,7 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.ImmediateModeRe
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.jreactphysics3d.framework.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderBindState;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.ShaderPool;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.TextureBindState;
@@ -165,6 +167,7 @@ public class BootStrap {
             // Mesh
             meshFactoryContainer.addComponent(Material.class);
             meshFactoryContainer.addComponent(Mesh.class);
+            meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
 
             // Add container for MeshFactory
@@ -276,6 +279,7 @@ public class BootStrap {
         // Mesh
         container.addComponent(DrawCommandsConversion.class);
         container.addComponent(MeshReader.class);
+        container.addComponent(Tessellator.class);
 
         // Mesh factory
         container.as(Characteristics.USE_NAMES).addComponent(MeshFactory.class);
@@ -285,10 +289,10 @@ public class BootStrap {
         container.addComponent(ObjReader.class);
 
         // Renderable factory
-        container.addComponent(RenderableConfiguration.class);
         container.as(Characteristics.USE_NAMES).addComponent(RenderableFactoryGL1.class);
 
         // Renderable shared
+        container.addComponent(RenderableConfigurationPool.class);
         container.addComponent(ShaderBindState.class);
         container.addComponent(ShaderPool.class);
         container.addComponent(TextureBindState.class);
@@ -345,6 +349,7 @@ public class BootStrap {
         GL.rboHelper = container.getComponent(RenderBufferObjectHelper.class);
         GL.renderHelper = container.getComponent(LegacyRenderHelper.class);
         GL.shaderHelper = container.getComponent(ShaderHelper.class);
+        GL.tessellator = container.getComponent(Tessellator.class);
         GL.textureBuilder = container.getComponent(TextureBuilder.class);
         GL.textureHelper = container.getComponent(TextureHelper.class);
         GL.textureReader = container.getComponent(TextureReader.class);
@@ -354,8 +359,8 @@ public class BootStrap {
 
     protected void createStaticRenderable(MutablePicoContainer container) {
         Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
+        Renderable.configPool = container.getComponent(RenderableConfigurationPool.class);
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
-        Renderable.config = container.getComponent(RenderableConfiguration.class);
         Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
         Renderable.shaderPool = container.getComponent(ShaderPool.class);
         Renderable.textureBindState = container.getComponent(TextureBindState.class);

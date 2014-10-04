@@ -55,6 +55,11 @@ public class MathHelper {
         return machEps;
     }
 
+    public static float Clamp(float value, float lowerLimit, float upperLimit) {
+        assert (lowerLimit <= upperLimit);
+        return Math.min(Math.max(value, lowerLimit), upperLimit);
+    }
+
     public static float Cos(float radians) {
         return (float) StrictMath.cos(radians);
     }

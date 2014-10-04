@@ -33,7 +33,10 @@ import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
+import net.smert.jreactphysics3d.framework.utils.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,8 +148,91 @@ public class ObjReader implements ModelReader {
         addNormalOrVertex(tokenizer, vertices);
     }
 
+    private net.smert.jreactphysics3d.framework.opengl.mesh.Material convertMaterialToMeshMaterial(Material material) {
+        Color ambient = material.getAmbient();
+        Color diffuse = material.getDiffuse();
+        Color specular = material.getSpecular();
+
+        net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial = GL.mf.createMaterial();
+
+        // Lighting
+        if (ambient.hasBeenSet()) {
+            meshMaterial.setLighting(
+                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
+        }
+        if (diffuse.hasBeenSet()) {
+            meshMaterial.setLighting(
+                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
+        }
+        if (specular.hasBeenSet()) {
+            meshMaterial.setLighting(
+                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
+        }
+        meshMaterial.setShininess(material.convertSpecularExponent());
+
+        // Textures
+        String filename;
+
+        filename = material.getAmbientMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            meshMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
+        }
+        filename = material.getDiffuseMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            meshMaterial.setTexture(TextureType.DIFFUSE, filename);
+        }
+        filename = material.getSpecularMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            meshMaterial.setTexture(TextureType.SPECULAR, filename);
+        }
+        filename = material.getSpecularExponentMapFilename();
+        if ((filename != null) && (filename.length() > 0)) {
+            meshMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
+        }
+
+        return meshMaterial;
+    }
+
+    private Segment convertModelDataToMeshSegment(ModelData modelData, Material material, int[] index) {
+
+        // Create new segment and all parameters
+        Segment segment = GL.mf.createSegment();
+        segment.setElementCount(modelData.getElementCount());
+        segment.setMinIndex(index[0]);
+        index[0] += modelData.getElementCount();
+        segment.setMaxIndex(index[0] - 1);
+        segment.setName(modelData.getName());
+        if (modelData.hasNormals()) {
+            segment.setNormals(ListUtils.ToPrimitiveFloatArray(modelData.getNormals()));
+        }
+        segment.setPrimitiveMode(modelData.getPrimitiveMode());
+        if (modelData.hasTexCoords()) {
+            segment.setTexCoords(ListUtils.ToPrimitiveFloatArray(modelData.getTexCoords()));
+        }
+        if (modelData.hasVertices()) {
+            segment.setVertices(ListUtils.ToPrimitiveFloatArray(modelData.getVertices()));
+        }
+
+        // Convert the material if it exists
+        if (material != null) {
+            net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial
+                    = convertMaterialToMeshMaterial(material);
+            segment.setMaterial(meshMaterial);
+        }
+
+        return segment;
+    }
+
     private void convertToMesh(Mesh mesh) {
         mesh.reset();
+
+        // Create a renderable configuration for the mesh. Set all parameters to match model capabilities.
+        RenderableConfiguration config = GL.mf.createRenderableConfiguration();
+        config.setColorSize(4);
+        config.setColorTypeFloat();
+        config.setIndexTypeUnsignedInt();
+        config.setTexCoordSize(2); // Could change in 3 spots below
+        config.setVertexSize(3);
 
         // Map materials to their names for easy lookup
         List<Material> materials = materialReader.getMaterials();
@@ -155,9 +241,10 @@ public class ObjReader implements ModelReader {
             materialNameToMaterial.put(material.getMaterialName(), material);
         }
 
-        // Map one material to one segment
-        Map<String, Segment> materialNameToSegments = new HashMap<>();
+        // Map one material to one model data
+        Map<String, ModelData> materialNameToModelData = new HashMap<>();
 
+        // Create model data for all faces
         for (Face face : faces) {
 
             // Not sure how this would be even possible
@@ -166,37 +253,36 @@ public class ObjReader implements ModelReader {
                 continue;
             }
 
-            // Get material and segment by the material name
-            Material material = materialNameToMaterial.get(face.getMaterialName());
-            String segmentKey = (material == null) ? null : face.getMaterialName();
-            Segment segment = materialNameToSegments.get(segmentKey);
+            // Get material and model data by the material name
+            Material material = materialNameToMaterial.get(face.getMaterialName()); // Null key must not have a material
+            String modelDataKey = (material == null) ? null : face.getMaterialName();
+            ModelData modelData = materialNameToModelData.get(modelDataKey);
 
-            // Create segment if it doesn't exist
-            if (segment == null) {
-                segment = GL.mf.createSegment();
-                segment.setPrimitiveMode(Primitives.TRIANGLES);
-                segment.setName(segmentKey);
-                materialNameToSegments.put(segmentKey, segment);
+            // Create model data if it doesn't exist
+            if (modelData == null) {
+                modelData = new ModelData(Primitives.TRIANGLES);
+                modelData.setName(modelDataKey);
+                materialNameToModelData.put(modelDataKey, modelData);
             }
 
-            // Each segment has one render mode. Since face definitions for the same
-            // material can be made up of triangles, quads and triangle fans we must
-            // convert back into triangles.
+            // Each model data has one render mode. Since face definitions for the
+            // same material can be made up of triangles, quads and triangle fans
+            // we must convert back into triangles.
             if (face.isTriangle()) {
                 Vertex vertex1 = vertices.get(face.getVertexIndex().get(0));
                 Vertex vertex2 = vertices.get(face.getVertexIndex().get(1));
                 Vertex vertex3 = vertices.get(face.getVertexIndex().get(2));
-                segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
-                segment.addVertex(vertex2.getX(), vertex2.getY(), vertex2.getZ());
-                segment.addVertex(vertex3.getX(), vertex3.getY(), vertex3.getZ());
+                modelData.addVertex(vertex1);
+                modelData.addVertex(vertex2);
+                modelData.addVertex(vertex3);
 
                 if (face.hasNormals()) {
                     Vertex normal1 = normals.get(face.getNormalIndex().get(0));
                     Vertex normal2 = normals.get(face.getNormalIndex().get(1));
                     Vertex normal3 = normals.get(face.getNormalIndex().get(2));
-                    segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
-                    segment.addNormal(normal2.getX(), normal2.getY(), normal2.getZ());
-                    segment.addNormal(normal3.getX(), normal3.getY(), normal3.getZ());
+                    modelData.addNormal(normal1);
+                    modelData.addNormal(normal2);
+                    modelData.addNormal(normal3);
                 }
                 if (face.hasTexCoords()) {
                     TexCoord texCoord1 = texCoords.get(face.getTexIndex().get(0));
@@ -204,13 +290,14 @@ public class ObjReader implements ModelReader {
                     TexCoord texCoord3 = texCoords.get(face.getTexIndex().get(2));
 
                     if (texCoord1.hasThree()) {
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
-                        segment.addTexCoord(texCoord2.getU(), texCoord2.getV(), texCoord2.getW());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV(), texCoord3.getW());
+                        modelData.addTexCoord(texCoord1);
+                        modelData.addTexCoord(texCoord2);
+                        modelData.addTexCoord(texCoord3);
+                        config.setTexCoordSize(3);
                     } else {
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
-                        segment.addTexCoord(texCoord2.getU(), texCoord2.getV());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV());
+                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
+                        modelData.addTexCoord(texCoord2.getS(), texCoord2.getT());
+                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
                     }
                 }
             } else if (face.isQuad()) {
@@ -218,24 +305,24 @@ public class ObjReader implements ModelReader {
                 Vertex vertex2 = vertices.get(face.getVertexIndex().get(1));
                 Vertex vertex3 = vertices.get(face.getVertexIndex().get(2));
                 Vertex vertex4 = vertices.get(face.getVertexIndex().get(3));
-                segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
-                segment.addVertex(vertex2.getX(), vertex2.getY(), vertex2.getZ());
-                segment.addVertex(vertex3.getX(), vertex3.getY(), vertex3.getZ());
-                segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
-                segment.addVertex(vertex3.getX(), vertex3.getY(), vertex3.getZ());
-                segment.addVertex(vertex4.getX(), vertex4.getY(), vertex4.getZ());
+                modelData.addVertex(vertex1);
+                modelData.addVertex(vertex2);
+                modelData.addVertex(vertex3);
+                modelData.addVertex(vertex1);
+                modelData.addVertex(vertex3);
+                modelData.addVertex(vertex4);
 
                 if (face.hasNormals()) {
                     Vertex normal1 = normals.get(face.getNormalIndex().get(0));
                     Vertex normal2 = normals.get(face.getNormalIndex().get(1));
                     Vertex normal3 = normals.get(face.getNormalIndex().get(2));
                     Vertex normal4 = normals.get(face.getNormalIndex().get(3));
-                    segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
-                    segment.addNormal(normal2.getX(), normal2.getY(), normal2.getZ());
-                    segment.addNormal(normal3.getX(), normal3.getY(), normal3.getZ());
-                    segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
-                    segment.addNormal(normal3.getX(), normal3.getY(), normal3.getZ());
-                    segment.addNormal(normal4.getX(), normal4.getY(), normal4.getZ());
+                    modelData.addNormal(normal1);
+                    modelData.addNormal(normal2);
+                    modelData.addNormal(normal3);
+                    modelData.addNormal(normal1);
+                    modelData.addNormal(normal3);
+                    modelData.addNormal(normal4);
                 }
                 if (face.hasTexCoords()) {
                     TexCoord texCoord1 = texCoords.get(face.getTexIndex().get(0));
@@ -244,19 +331,20 @@ public class ObjReader implements ModelReader {
                     TexCoord texCoord4 = texCoords.get(face.getTexIndex().get(3));
 
                     if (texCoord1.hasThree()) {
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
-                        segment.addTexCoord(texCoord2.getU(), texCoord2.getV(), texCoord2.getW());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV(), texCoord3.getW());
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV(), texCoord3.getW());
-                        segment.addTexCoord(texCoord4.getU(), texCoord4.getV(), texCoord4.getW());
+                        modelData.addTexCoord(texCoord1);
+                        modelData.addTexCoord(texCoord2);
+                        modelData.addTexCoord(texCoord3);
+                        modelData.addTexCoord(texCoord1);
+                        modelData.addTexCoord(texCoord3);
+                        modelData.addTexCoord(texCoord4);
+                        config.setTexCoordSize(3);
                     } else {
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
-                        segment.addTexCoord(texCoord2.getU(), texCoord2.getV());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV());
-                        segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
-                        segment.addTexCoord(texCoord3.getU(), texCoord3.getV());
-                        segment.addTexCoord(texCoord4.getU(), texCoord4.getV());
+                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
+                        modelData.addTexCoord(texCoord2.getS(), texCoord2.getT());
+                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
+                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
+                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
+                        modelData.addTexCoord(texCoord4.getS(), texCoord4.getT());
                     }
                 }
             } else if (face.isTriangleFan()) {
@@ -303,27 +391,28 @@ public class ObjReader implements ModelReader {
                     }
 
                     // Add triangle
-                    segment.addVertex(vertex1.getX(), vertex1.getY(), vertex1.getZ());
-                    segment.addVertex(vertexOld.getX(), vertexOld.getY(), vertexOld.getZ());
-                    segment.addVertex(vertexNew.getX(), vertexNew.getY(), vertexNew.getZ());
+                    modelData.addVertex(vertex1);
+                    modelData.addVertex(vertexOld);
+                    modelData.addVertex(vertexNew);
 
                     // Add normals for the triangle
                     if (face.hasNormals()) {
-                        segment.addNormal(normal1.getX(), normal1.getY(), normal1.getZ());
-                        segment.addNormal(normalOld.getX(), normalOld.getY(), normalOld.getZ());
-                        segment.addNormal(normalNew.getX(), normalNew.getY(), normalNew.getZ());
+                        modelData.addNormal(normal1);
+                        modelData.addNormal(normalOld);
+                        modelData.addNormal(normalNew);
                     }
 
                     // Add texture coordinates for the triangle
                     if (face.hasTexCoords()) {
                         if (texCoord1.hasThree()) {
-                            segment.addTexCoord(texCoord1.getU(), texCoord1.getV(), texCoord1.getW());
-                            segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV(), texCoordOld.getW());
-                            segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV(), texCoordNew.getW());
+                            modelData.addTexCoord(texCoord1);
+                            modelData.addTexCoord(texCoordOld);
+                            modelData.addTexCoord(texCoordNew);
+                            config.setTexCoordSize(3);
                         } else {
-                            segment.addTexCoord(texCoord1.getU(), texCoord1.getV());
-                            segment.addTexCoord(texCoordOld.getU(), texCoordOld.getV());
-                            segment.addTexCoord(texCoordNew.getU(), texCoordNew.getV());
+                            modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
+                            modelData.addTexCoord(texCoordOld.getS(), texCoordOld.getT());
+                            modelData.addTexCoord(texCoordNew.getS(), texCoordNew.getT());
                         }
                     }
 
@@ -333,66 +422,28 @@ public class ObjReader implements ModelReader {
             }
         }
 
-        // Add all the segments to the mesh
-        Iterator<Segment> segments = materialNameToSegments.values().iterator();
-        while (segments.hasNext()) {
-            Segment segment = segments.next();
-            String name = segment.getName();
+        // Check to see if a renderable configuration exists before adding it
+        int renderableConfigID = Renderable.configPool.getOrAdd(config);
+        mesh.setRenderableConfigID(renderableConfigID);
 
-            if (name != null) {
-                Material material = materialNameToMaterial.get(name);
-                convertToMeshMaterial(segment, material);
-            }
-
-            assert (segment.getVertices().size() > 0);
+        // Add all the model data to the mesh
+        int[] index = new int[]{0};
+        Iterator<ModelData> modelData = materialNameToModelData.values().iterator();
+        while (modelData.hasNext()) {
+            ModelData data = modelData.next();
+            assert (data.getVertices().size() > 0);
+            String name = data.getName();
+            Material material = materialNameToMaterial.get(name);
+            Segment segment = convertModelDataToMeshSegment(data, material, index);
             mesh.addSegment(segment);
         }
-    }
 
-    private void convertToMeshMaterial(Segment segment, Material material) {
-        Color ambient = material.getAmbient();
-        Color diffuse = material.getDiffuse();
-        Color specular = material.getSpecular();
-
-        net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial = GL.mf.createMaterial();
-
-        // Lighting
-        if (ambient.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
+        // Generate indexes for the model
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < index[0]; i++) {
+            indexes.add(i);
         }
-        if (diffuse.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
-        }
-        if (specular.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
-        }
-        meshMaterial.setShininess(material.convertSpecularExponent());
-
-        // Textures
-        String filename;
-
-        filename = material.getAmbientMapFilename();
-        if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
-        }
-        filename = material.getDiffuseMapFilename();
-        if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.DIFFUSE, filename);
-        }
-        filename = material.getSpecularMapFilename();
-        if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.SPECULAR, filename);
-        }
-        filename = material.getSpecularExponentMapFilename();
-        if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
-        }
-
-        // Add material to mesh
-        segment.setMaterial(meshMaterial);
+        mesh.setIndexes(ListUtils.ToPrimitiveIntArray(indexes));
     }
 
     private String getNextTokenOnly(StringTokenizer tokenizer) {
@@ -595,6 +646,7 @@ public class ObjReader implements ModelReader {
             texIndex = new ArrayList<>();
             vertexIndex = new ArrayList<>();
             this.materialName = materialName;
+            assert (materialName != null);
         }
 
         private void addIndex(List<Integer> indexes, String index) {
@@ -673,45 +725,128 @@ public class ObjReader implements ModelReader {
 
     }
 
+    private static class ModelData {
+
+        private int elementCount;
+        private final int primitiveMode;
+        private final List<Float> normals;
+        private final List<Float> texCoords;
+        private final List<Float> vertices;
+        private String name;
+
+        public ModelData(int primitiveMode) {
+            elementCount = 0;
+            this.primitiveMode = primitiveMode;
+            normals = new ArrayList<>();
+            texCoords = new ArrayList<>();
+            vertices = new ArrayList<>();
+        }
+
+        public void addNormal(Vertex vertex) {
+            normals.add(vertex.getX());
+            normals.add(vertex.getY());
+            normals.add(vertex.getZ());
+        }
+
+        public void addTexCoord(float s, float t) {
+            texCoords.add(s);
+            texCoords.add(t);
+        }
+
+        public void addTexCoord(TexCoord texCoord) {
+            texCoords.add(texCoord.getS());
+            texCoords.add(texCoord.getT());
+            texCoords.add(texCoord.getR());
+        }
+
+        public void addVertex(Vertex vertex) {
+            vertices.add(vertex.getX());
+            vertices.add(vertex.getY());
+            vertices.add(vertex.getZ());
+            elementCount++;
+        }
+
+        public int getElementCount() {
+            return elementCount;
+        }
+
+        public int getPrimitiveMode() {
+            return primitiveMode;
+        }
+
+        public List<Float> getNormals() {
+            return normals;
+        }
+
+        public List<Float> getTexCoords() {
+            return texCoords;
+        }
+
+        public List<Float> getVertices() {
+            return vertices;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public boolean hasNormals() {
+            return (normals.size() > 0);
+        }
+
+        public boolean hasTexCoords() {
+            return (texCoords.size() > 0);
+        }
+
+        public boolean hasVertices() {
+            return (vertices.size() > 0);
+        }
+
+    }
+
     private static class TexCoord {
 
-        private float u;
-        private float v;
-        private float w;
+        private float s;
+        private float t;
+        private float r;
 
         private TexCoord() {
-            u = -Float.MIN_VALUE;
-            v = -Float.MIN_VALUE;
-            w = -Float.MIN_VALUE;
+            s = -Float.MIN_VALUE;
+            t = -Float.MIN_VALUE;
+            r = -Float.MIN_VALUE;
         }
 
-        public float getU() {
-            return u;
+        public float getS() {
+            return s;
         }
 
-        public float getV() {
-            return v;
+        public float getT() {
+            return t;
         }
 
-        public float getW() {
-            return w;
+        public float getR() {
+            return r;
         }
 
         public boolean hasTwo() {
-            return (u != -Float.MIN_VALUE) && (v != -Float.MIN_VALUE) && (w == -Float.MIN_VALUE);
+            return (s != -Float.MIN_VALUE) && (t != -Float.MIN_VALUE) && (r == -Float.MIN_VALUE);
         }
 
         public boolean hasThree() {
-            return (u != -Float.MIN_VALUE) && (v != -Float.MIN_VALUE) && (w != -Float.MIN_VALUE);
+            return (s != -Float.MIN_VALUE) && (t != -Float.MIN_VALUE) && (r != -Float.MIN_VALUE);
         }
 
         public void set(int index, float value) {
             if (index == 0) {
-                u = value;
+                s = value;
             } else if (index == 1) {
-                v = value;
+                t = value;
             } else if (index == 2) {
-                w = value;
+                r = value;
             } else {
                 throw new IllegalArgumentException("Unknown index: " + index);
             }

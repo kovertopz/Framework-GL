@@ -12,11 +12,12 @@
  */
 package net.smert.jreactphysics3d.framework.opengl.mesh;
 
-import net.smert.jreactphysics3d.framework.math.Vector3f;
-import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.math.MathHelper;
 import net.smert.jreactphysics3d.framework.opengl.GL;
+import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
-import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
  *
@@ -24,9 +25,15 @@ import net.smert.jreactphysics3d.framework.utils.Color;
  */
 public class DrawCommandsConversion implements DrawCommands {
 
+    private byte convertFloatToByte(float value) {
+        return (byte) (MathHelper.Clamp(value, 0.0f, 1.0f) * 255);
+    }
+
     @Override
     public void execCommands(Mesh mesh) {
         assert (mesh != null);
+
+        RenderableConfiguration config = Renderable.configPool.get(mesh.getRenderableConfigID());
 
         // For each segment in the mesh
         for (int i = 0; i < mesh.getTotalSegments(); i++) {
@@ -35,25 +42,72 @@ public class DrawCommandsConversion implements DrawCommands {
             // Begin
             GL.renderHelper.begin(segment.getPrimitiveMode());
 
+            float[] colors = segment.getColors();
+            float[] normals = segment.getNormals();
+            float[] texCoords = segment.getTexCoords();
+            float[] vertices = segment.getVertices();
+
             // For each vertex in the segment
-            for (int j = 0; j < segment.getVertices().size(); j++) {
+            for (int j = 0; j < segment.getElementCount(); j++) {
 
                 // For each type call the render helper
                 if (mesh.hasColors()) {
-                    Color color = segment.getColors().get(j);
-                    GL.renderHelper.color(color.getR(), color.getG(), color.getB(), color.getA());
+                    int offset = config.getColorSize() * j;
+                    switch (config.getColorSize()) {
+                        case 3:
+                            switch (config.getColorType()) {
+                                case GLTypes.BYTE:
+                                case GLTypes.UNSIGNED_BYTE:
+                                    byte r = convertFloatToByte(colors[offset + 0]);
+                                    byte g = convertFloatToByte(colors[offset + 1]);
+                                    byte b = convertFloatToByte(colors[offset + 2]);
+                                    GL.renderHelper.color(r, g, b);
+                                    break;
+                                case GLTypes.FLOAT:
+                                    GL.renderHelper.color(
+                                            colors[offset + 0], colors[offset + 1], colors[offset + 2]);
+                                    break;
+                                default:
+                                    throw new IllegalArgumentException(
+                                            "Unknown GL type constant for color: " + config.getColorType());
+                            }
+                            break;
+
+                        case 4:
+                            switch (config.getColorType()) {
+                                case GLTypes.BYTE:
+                                case GLTypes.UNSIGNED_BYTE:
+                                    byte r = convertFloatToByte(colors[offset + 0]);
+                                    byte g = convertFloatToByte(colors[offset + 1]);
+                                    byte b = convertFloatToByte(colors[offset + 2]);
+                                    byte a = convertFloatToByte(colors[offset + 3]);
+                                    GL.renderHelper.color(r, g, b, a);
+                                    break;
+                                case GLTypes.FLOAT:
+                                    GL.renderHelper.color(
+                                            colors[offset + 0], colors[offset + 1], colors[offset + 2], colors[offset + 3]);
+                                    break;
+                                default:
+                                    throw new IllegalArgumentException(
+                                            "Unknown GL type constant for color: " + config.getColorType());
+                            }
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Unknown color size: " + config.getColorSize());
+                    }
                 }
                 if (mesh.hasNormals()) {
-                    Vector3f normal = segment.getNormals().get(j);
-                    GL.renderHelper.normal(normal.getX(), normal.getY(), normal.getZ());
+                    int offset = config.getNormalSize() * j;
+                    GL.renderHelper.normal(normals[offset + 0], normals[offset + 1], normals[offset + 2]);
                 }
                 if (mesh.hasTexCoords()) {
-                    Vector3f texCoord = segment.getTexCoords().get(j);
-                    GL.renderHelper.texCoord(texCoord.getX(), texCoord.getY(), texCoord.getZ());
+                    int offset = config.getTexCoordSize() * j;
+                    GL.renderHelper.texCoord(texCoords[offset + 0], texCoords[offset + 1], texCoords[offset + 2]);
                 }
                 if (mesh.hasVertices()) {
-                    Vector4f vertex = segment.getVertices().get(j);
-                    GL.renderHelper.vertex(vertex.getX(), vertex.getY(), vertex.getZ(), vertex.getW());
+                    int offset = config.getVertexSize() * j;
+                    GL.renderHelper.vertex(vertices[offset + 0], vertices[offset + 1], vertices[offset + 2]);
                 }
             }
 

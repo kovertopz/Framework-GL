@@ -24,6 +24,14 @@ public class LegacyRenderHelper {
         GL11.glBegin(primitive);
     }
 
+    public void color(byte r, byte g, byte b) {
+        GL11.glColor4ub(r, g, b, (byte) 255);
+    }
+
+    public void color(byte r, byte g, byte b, byte a) {
+        GL11.glColor4ub(r, g, b, a);
+    }
+
     public void color(float r, float g, float b) {
         GL11.glColor4f(r, g, b, 1.0f);
     }

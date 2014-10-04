@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
 
 /**
@@ -24,20 +26,17 @@ import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
  */
 public class Mesh {
 
-    private boolean canRenderRanged;
     private boolean hasColors;
     private boolean hasIndexes;
     private boolean hasNormals;
     private boolean hasTexCoords;
     private boolean hasVertices;
+    private int renderableConfigID;
     private int totalVertices;
-    private final List<Integer> firstIndexes;
-    private final List<Integer> indexes;
+    private int[] indexes;
     private final List<Segment> segments;
 
     public Mesh() {
-        firstIndexes = new ArrayList<>();
-        indexes = new ArrayList<>();
         segments = new ArrayList<>();
         reset();
     }
@@ -48,33 +47,50 @@ public class Mesh {
         if (segments.contains(segment)) {
             throw new IllegalArgumentException("The segment already exists");
         }
-        if (segment.getVertices().isEmpty() && (segment.hasDrawCommands() == false)) {
-            throw new RuntimeException("The segment must contain at least 1 vertex");
+        int elementCount = segment.getElementCount();
+        RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
+        if ((elementCount == 0) && !segment.hasDrawCommands()) {
+            throw new IllegalArgumentException("The segment must contain at least 1 vertex or have draw commands");
         }
-        if (!segment.getColors().isEmpty()
-                && (segment.getColors().size() != segment.getVertices().size())) {
-            throw new RuntimeException("The total number of colors for the segment must match the number of vertices");
+        if ((segment.getColors().length != 0)
+                && (segment.getColors().length != elementCount * config.getColorSize())) {
+            throw new IllegalArgumentException(
+                    "There needs to be one color for every element in the segment. Colors: "
+                    + segment.getColors().length + " Expected: " + elementCount * config.getColorSize());
         }
-        if (!segment.getNormals().isEmpty()
-                && (segment.getNormals().size() != segment.getVertices().size())) {
-            throw new RuntimeException("The total number of normals for the segment must match the number of vertices");
+        if ((segment.getNormals().length != 0)
+                && (segment.getNormals().length != elementCount * config.getNormalSize())) {
+            throw new IllegalArgumentException(
+                    "There needs to be one normal for every element in the segment. Normals: "
+                    + segment.getNormals().length + " Expected: " + elementCount * config.getNormalSize());
         }
-        if (!segment.getTexCoords().isEmpty()
-                && (segment.getTexCoords().size() != segment.getVertices().size())) {
-            throw new RuntimeException("The total number of texture coordinates for the segment must match the number of vertices");
+        if ((segment.getTexCoords().length != 0)
+                && (segment.getTexCoords().length != elementCount * config.getTexCoordSize())) {
+            throw new IllegalArgumentException(
+                    "There needs to be one texture coord for every element in the segment. Texture Coords: "
+                    + segment.getTexCoords().length + " Expected: " + elementCount * config.getTexCoordSize());
+        }
+        if ((segment.getVertices().length != 0)
+                && (segment.getVertices().length != elementCount * config.getVertexSize())) {
+            throw new IllegalArgumentException(
+                    "There needs to be one vertex for every element in the segment. Vertices: "
+                    + segment.getVertices().length + " Expected: " + elementCount * config.getVertexSize());
         }
 
         // Add segment and update totals
-        firstIndexes.add(totalVertices);
         segments.add(segment);
-        totalVertices += segment.getVertices().size();
+        totalVertices += segment.getElementCount();
 
         // Update booleans
         updateBooleansFromSegment();
     }
 
-    public boolean canRenderRanged() {
-        return canRenderRanged;
+    public int getRenderableConfigID() {
+        return renderableConfigID;
+    }
+
+    public void setRenderableConfigID(int renderableConfigID) {
+        this.renderableConfigID = renderableConfigID;
     }
 
     public int getTotalSegments() {
@@ -85,12 +101,12 @@ public class Mesh {
         return totalVertices;
     }
 
-    public List<Integer> getFirstIndexes() {
-        return firstIndexes;
+    public int[] getIndexes() {
+        return indexes;
     }
 
-    public List<Integer> getIndexes() {
-        return indexes;
+    public void setIndexes(int[] indexes) {
+        this.indexes = indexes;
     }
 
     /**
@@ -156,32 +172,61 @@ public class Mesh {
     public void removeSegment(Segment segment) {
 
         // Check arguments
-        int index = segments.indexOf(segment);
-        if (index == -1) {
+        if (!segments.remove(segment)) {
             throw new IllegalArgumentException("The segment was not found");
         }
 
-        // Remove segments and update totals
-        firstIndexes.remove(index);
-        segments.remove(segment);
-        totalVertices -= segment.getVertices().size();
+        // Update totals
+        totalVertices -= segment.getElementCount();
     }
 
     public final void reset() {
-        canRenderRanged = false;
         hasColors = false;
         hasIndexes = false;
         hasNormals = false;
         hasTexCoords = false;
         hasVertices = false;
+        renderableConfigID = -1;
         totalVertices = 0;
-        firstIndexes.clear();
-        indexes.clear();
+        indexes = null;
         segments.clear();
     }
 
+    public void setAllColors(float r, float g, float b, float a) {
+        for (int i = 0; i < segments.size(); i++) {
+            setAllColors(i, r, g, b, a);
+        }
+    }
+
+    public void setAllColors(int segmentIndex, float r, float g, float b, float a) {
+
+        // Check arguments
+        if ((segmentIndex < 0) || (segmentIndex >= segments.size())) {
+            throw new IllegalArgumentException("Invalid segment index: " + segmentIndex);
+        }
+
+        // Get configuration from the pool
+        RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
+        int colorSize = config.getColorSize();
+
+        // Change colors for the segment
+        Segment segment = segments.get(segmentIndex);
+        int elementCount = segment.getElementCount();
+        int totalColorSize = elementCount * colorSize;
+        float[] colors = new float[totalColorSize];
+        for (int i = 0; i < elementCount; i++) {
+            int offset = i * colorSize;
+            colors[offset + 0] = r;
+            colors[offset + 1] = g;
+            colors[offset + 2] = b;
+            if (colorSize == 4) {
+                colors[offset + 3] = a;
+            }
+        }
+        segment.setColors(colors);
+    }
+
     public void updateBooleansFromSegment() {
-        canRenderRanged = false;
         hasColors = false;
         hasIndexes = false;
         hasNormals = false;
@@ -190,12 +235,11 @@ public class Mesh {
 
         // Update booleans
         for (Segment segment : segments) {
-            canRenderRanged |= ((segment.getMaxIndex() - segment.getMinIndex()) > 0);
-            hasColors |= (segment.getColors().size() > 0);
-            hasNormals |= (segment.getNormals().size() > 0);
-            hasTexCoords |= (segment.getTexCoords().size() > 0);
-            hasVertices |= (segment.getVertices().size() > 0);
-            hasIndexes |= (getIndexes().size() > 0);
+            hasColors |= ((segment.getColors() != null) && (segment.getColors().length > 0));
+            hasNormals |= ((segment.getNormals() != null) && (segment.getNormals().length > 0));
+            hasTexCoords |= ((segment.getTexCoords() != null) && (segment.getTexCoords().length > 0));
+            hasVertices |= ((segment.getVertices() != null) && (segment.getVertices().length > 0));
+            hasIndexes |= ((getIndexes() != null) && (getIndexes().length > 0));
         }
     }
 

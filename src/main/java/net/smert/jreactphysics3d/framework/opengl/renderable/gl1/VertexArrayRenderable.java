@@ -17,6 +17,7 @@ import net.smert.jreactphysics3d.framework.opengl.VertexArray;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**
@@ -31,15 +32,22 @@ public class VertexArrayRenderable extends AbstractRenderable {
     private final static int VA_VERTEX = 3;
     private final static int VA_VERTEX_INDEX = 4;
 
+    private int renderableConfigID;
     private AbstractDrawCall drawCall;
     private final VertexArray[] vas;
 
     public VertexArrayRenderable() {
+        renderableConfigID = -1;
+        drawCall = null;
         vas = new VertexArray[5];
     }
 
     @Override
     public void create(Mesh mesh) {
+
+        // Get configuration
+        renderableConfigID = mesh.getRenderableConfigID();
+        RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
 
         // Destroy existing vertex array
         destroy();
@@ -48,7 +56,7 @@ public class VertexArrayRenderable extends AbstractRenderable {
 
         // Create vertex arrays
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            Renderable.vaBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays);
+            Renderable.vaBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays, config);
         }
 
         ByteBuffer vertexIndexBuffer = null;
@@ -72,7 +80,7 @@ public class VertexArrayRenderable extends AbstractRenderable {
         }
 
         // Create draw call
-        drawCall = Renderable.vaBuilder.createDrawCall(mesh, vertexIndexBuffer);
+        drawCall = Renderable.vaBuilder.createDrawCall(mesh, config, vertexIndexBuffer);
     }
 
     @Override
@@ -111,6 +119,9 @@ public class VertexArrayRenderable extends AbstractRenderable {
         VertexArray vaNormal = vas[VA_NORMAL];
         VertexArray vaTexCoord = vas[VA_TEXCOORD];
         VertexArray vaVertex = vas[VA_VERTEX];
+
+        // Switch the renderable configuration first
+        Renderable.vaBindState.switchRenderableConfiguration(renderableConfigID);
 
         // Bind each vertex array
         if (vaColor != null) {

@@ -13,8 +13,8 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.va.factory.VADrawCallFactory;
 
@@ -30,7 +30,7 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
         this.vaDrawCallFactory = vaDrawCallFactory;
     }
 
-    public AbstractDrawCall createDrawCall(Mesh mesh, ByteBuffer vertexIndexBuffer) {
+    public AbstractDrawCall createDrawCall(Mesh mesh, RenderableConfiguration config, ByteBuffer vertexIndexBuffer) {
         AbstractDrawCall drawCall;
 
         int totalSegments = mesh.getTotalSegments();
@@ -41,6 +41,7 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
 
             // Create concrete class and set specific data
             VADrawElements drawElements = vaDrawCallFactory.createDrawElements();
+            drawElements.setIndexType(config.getIndexType());
             drawElements.setVertexIndexBuffer(vertexIndexBuffer);
 
             // Make sure we set the abstract class
@@ -49,9 +50,8 @@ public class VABuilder extends net.smert.jreactphysics3d.framework.opengl.render
 
             // Convert first indexes
             int[] firstElements = new int[totalSegments];
-            List<Integer> firstIndexes = mesh.getFirstIndexes();
             for (int i = 0; i < firstElements.length; i++) {
-                firstElements[i] = firstIndexes.get(i);
+                firstElements[i] = mesh.getSegment(i).getMinIndex();
             }
 
             // Create concrete class and set specific data

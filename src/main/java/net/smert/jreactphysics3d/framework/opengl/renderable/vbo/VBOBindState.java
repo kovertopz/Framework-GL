@@ -14,6 +14,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 
 import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 
 /**
  *
@@ -25,11 +26,13 @@ public class VBOBindState {
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
+    private int renderableConfigID;
     private int vboColorID;
     private int vboNormalID;
     private int vboTexCoordID;
     private int vboVertexID;
     private int vboVertexIndexID;
+    private RenderableConfiguration config;
 
     public VBOBindState() {
         reset();
@@ -92,10 +95,8 @@ public class VBOBindState {
             setColorEnabled(false);
             return;
         }
-        int colorSize = Renderable.config.getColorSize();
-        int colorType = Renderable.config.getColorType();
         setColorEnabled(true);
-        GL.vboHelper.bindColors(vboid, colorSize, colorType, strideBytes, colorOffsetBytes);
+        GL.vboHelper.bindColors(vboid, config.getColorSize(), config.getColorType(), strideBytes, colorOffsetBytes);
     }
 
     public void bindNormal(int vboid, int strideBytes, int normalOffsetBytes) {
@@ -107,9 +108,8 @@ public class VBOBindState {
             setNormalEnabled(false);
             return;
         }
-        int normalType = Renderable.config.getNormalType();
         setNormalEnabled(true);
-        GL.vboHelper.bindNormals(vboid, normalType, strideBytes, normalOffsetBytes);
+        GL.vboHelper.bindNormals(vboid, config.getNormalType(), strideBytes, normalOffsetBytes);
     }
 
     public void bindTextureCoordinate(int vboid, int strideBytes, int texCoordOffsetBytes) {
@@ -121,11 +121,9 @@ public class VBOBindState {
             setTextureCoordinateEnabled(false);
             return;
         }
-        int texCoordSize = Renderable.config.getTexCoordSize();
-        int texCoordType = Renderable.config.getTexCoordType();
         setTextureCoordinateEnabled(true);
         GL.vboHelper.bindTextureCoordinates(
-                vboid, texCoordSize, texCoordType, strideBytes, texCoordOffsetBytes);
+                vboid, config.getTexCoordSize(), config.getTexCoordType(), strideBytes, texCoordOffsetBytes);
     }
 
     public void bindVertex(int vboid, int strideBytes, int vertexOffsetBytes) {
@@ -136,10 +134,8 @@ public class VBOBindState {
         if (vboid == 0) {
             setVertexEnabled(false);
         }
-        int vertexSize = Renderable.config.getVertexSize();
-        int vertexType = Renderable.config.getVertexType();
         setVertexEnabled(true);
-        GL.vboHelper.bindVertices(vboid, vertexSize, vertexType, strideBytes, vertexOffsetBytes);
+        GL.vboHelper.bindVertices(vboid, config.getVertexSize(), config.getVertexType(), strideBytes, vertexOffsetBytes);
     }
 
     public void bindVertexIndex(int vboid) {
@@ -158,11 +154,21 @@ public class VBOBindState {
         normalEnabled = false;
         texCoordEnabled = false;
         vertexEnabled = false;
+        renderableConfigID = Integer.MIN_VALUE; // Default is -1 elsewhere
         vboColorID = 0;
         vboNormalID = 0;
         vboTexCoordID = 0;
         vboVertexID = 0;
         vboVertexIndexID = 0;
+        config = null;
+    }
+
+    public void switchRenderableConfiguration(int renderableConfigID) {
+        if (this.renderableConfigID == renderableConfigID) {
+            return;
+        }
+        this.renderableConfigID = renderableConfigID;
+        config = Renderable.configPool.get(renderableConfigID);
     }
 
     public void unbind() {

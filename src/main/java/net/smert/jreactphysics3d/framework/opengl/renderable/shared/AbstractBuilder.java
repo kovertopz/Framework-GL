@@ -13,10 +13,8 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.shared;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import net.smert.jreactphysics3d.framework.math.Vector3f;
-import net.smert.jreactphysics3d.framework.math.Vector4f;
+import net.smert.jreactphysics3d.framework.opengl.constants.GLTypes;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
@@ -24,7 +22,6 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureType;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureTypeMapping;
-import net.smert.jreactphysics3d.framework.utils.Color;
 
 /**
  *
@@ -32,33 +29,32 @@ import net.smert.jreactphysics3d.framework.utils.Color;
  */
 public abstract class AbstractBuilder {
 
-    private void createBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
-
-        RenderableConfiguration config = Renderable.config;
+    private void createBufferData(Mesh mesh, MultipleBuffers multipleBuffers, RenderableConfiguration config) {
 
         // For each segment in the mesh
         for (int i = 0; i < mesh.getTotalSegments(); i++) {
             Segment segment = mesh.getSegment(i);
 
+            float[] colors = segment.getColors();
+            float[] normals = segment.getNormals();
+            float[] texCoords = segment.getTexCoords();
+            float[] vertices = segment.getVertices();
+
             // For each vertex in the segment
-            for (int j = 0; j < segment.getVertices().size(); j++) {
+            for (int j = 0; j < segment.getElementCount(); j++) {
 
                 // For each type convert the data and add to the byte buffer
                 if (mesh.hasColors()) {
-                    Color color = segment.getColors().get(j);
-                    config.convertColorToByteBuffer(color, multipleBuffers.getColor());
+                    config.convertColorToByteBuffer(colors, j, multipleBuffers.getColor());
                 }
                 if (mesh.hasNormals()) {
-                    Vector3f normal = segment.getNormals().get(j);
-                    config.convertNormalToByteBuffer(normal, multipleBuffers.getNormal());
+                    config.convertNormalToByteBuffer(normals, j, multipleBuffers.getNormal());
                 }
                 if (mesh.hasTexCoords()) {
-                    Vector3f texCoord = segment.getTexCoords().get(j);
-                    config.convertTexCoordToByteBuffer(texCoord, multipleBuffers.getTexCoord());
+                    config.convertTexCoordToByteBuffer(texCoords, j, multipleBuffers.getTexCoord());
                 }
                 if (mesh.hasVertices()) {
-                    Vector4f vertex = segment.getVertices().get(j);
-                    config.convertVertexToByteBuffer(vertex, multipleBuffers.getVertex());
+                    config.convertVertexToByteBuffer(vertices, j, multipleBuffers.getVertex());
                 }
             }
         }
@@ -71,7 +67,7 @@ public abstract class AbstractBuilder {
         // Convert element counts from each segment
         int[] elementCounts = new int[totalSegments];
         for (int i = 0; i < elementCounts.length; i++) {
-            elementCounts[i] = mesh.getSegment(i).getVertices().size();
+            elementCounts[i] = mesh.getSegment(i).getElementCount();
         }
 
         // Convert primitive modes from each segment
@@ -127,24 +123,38 @@ public abstract class AbstractBuilder {
         drawCall.setTextureTypeMappings(textureTypeMappings);
     }
 
-    public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
-
-        RenderableConfiguration config = Renderable.config;
+    public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers, RenderableConfiguration config) {
 
         // Index byte buffer
         int byteSize = config.convertGLTypeToByteSize(config.getIndexType());
-        int bufferSize = byteSize * mesh.getIndexes().size();
+        int bufferSize = byteSize * mesh.getIndexes().length;
         multipleBuffers.createVertexIndex(bufferSize);
 
-        // Convert list to primitive array
-        List<Integer> indexes = mesh.getIndexes();
-        for (Integer integer : indexes) {
-            multipleBuffers.getVertexIndex().putInt(integer);
+        // Fill byte buffer with indexes
+        int[] indexes = mesh.getIndexes();
+        for (int i = 0; i < indexes.length; i++) {
+            int index = indexes[i];
+
+            switch (config.getIndexType()) {
+                case GLTypes.UNSIGNED_INT:
+                    multipleBuffers.getVertexIndex().putInt(index);
+                    break;
+
+                case GLTypes.UNSIGNED_SHORT:
+                    multipleBuffers.getVertexIndex().putShort((short) index);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown GL type constant for indexes: " + config.getIndexType());
+            }
         }
+
+        // Don't forget to flip
         multipleBuffers.getVertexIndex().flip();
     }
 
-    public void createInterleavedBufferData(Mesh mesh, int strideBytes, MultipleBuffers multipleBuffers) {
+    public void createInterleavedBufferData(Mesh mesh, int strideBytes, MultipleBuffers multipleBuffers,
+            RenderableConfiguration config) {
 
         // Create byte buffer to hold color, normal, texture coordinates and vertex data
         int bufferSize = strideBytes * mesh.getTotalVerticies();
@@ -153,16 +163,16 @@ public abstract class AbstractBuilder {
         // Set all other buffers to point to the interleaved buffer
         multipleBuffers.setInterleavedBufferToOthers();
 
-        createBufferData(mesh, multipleBuffers);
+        createBufferData(mesh, multipleBuffers, config);
 
         // Missy Elliott that shit
         multipleBuffers.getInterleaved().flip();
     }
 
-    public void createNonInterleavedBufferData(Mesh mesh, MultipleBuffers multipleBuffers) {
+    public void createNonInterleavedBufferData(Mesh mesh, MultipleBuffers multipleBuffers,
+            RenderableConfiguration config) {
 
         int bufferSize, byteSize;
-        RenderableConfiguration config = Renderable.config;
 
         // Color byte buffer
         if (mesh.hasColors()) {
@@ -192,7 +202,7 @@ public abstract class AbstractBuilder {
             multipleBuffers.createVertex(bufferSize);
         }
 
-        createBufferData(mesh, multipleBuffers);
+        createBufferData(mesh, multipleBuffers, config);
 
         if (mesh.hasColors()) {
             multipleBuffers.getColor().flip();
