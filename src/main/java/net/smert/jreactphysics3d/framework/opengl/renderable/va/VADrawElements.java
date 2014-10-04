@@ -14,7 +14,7 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.opengl.GL;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 
 /**

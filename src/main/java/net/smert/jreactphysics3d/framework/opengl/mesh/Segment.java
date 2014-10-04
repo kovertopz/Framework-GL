@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.math.Vector3f;
 import net.smert.jreactphysics3d.framework.math.Vector4f;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 import net.smert.jreactphysics3d.framework.utils.Color;
 

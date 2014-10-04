@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.jreactphysics3d.framework.opengl.renderable.factory;
+package net.smert.jreactphysics3d.framework.opengl.renderable;
 
 import java.nio.ByteBuffer;
 import net.smert.jreactphysics3d.framework.math.Vector3f;

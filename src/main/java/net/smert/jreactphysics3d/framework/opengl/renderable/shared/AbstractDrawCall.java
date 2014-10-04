@@ -22,6 +22,7 @@ public abstract class AbstractDrawCall implements DrawCall {
 
     protected int[] elementCounts;
     protected int[] primitiveModes;
+    protected int[] renderableConfigIDs;
     protected int[] shaders;
     protected TextureTypeMapping[][] textureTypeMappings;
 
@@ -39,6 +40,14 @@ public abstract class AbstractDrawCall implements DrawCall {
 
     public void setPrimitiveModes(int[] primitiveModes) {
         this.primitiveModes = primitiveModes;
+    }
+
+    public int[] getRenderableConfigIDs() {
+        return renderableConfigIDs;
+    }
+
+    public void setRenderableConfigIDs(int[] renderableConfigIDs) {
+        this.renderableConfigIDs = renderableConfigIDs;
     }
 
     public int[] getShaders() {

@@ -20,7 +20,7 @@ import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
 import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.renderable.gl1.DrawCommands;
 
 /**

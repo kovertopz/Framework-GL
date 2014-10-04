@@ -13,7 +13,7 @@
 package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 
 import net.smert.jreactphysics3d.framework.opengl.GL;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 
 /**
  *

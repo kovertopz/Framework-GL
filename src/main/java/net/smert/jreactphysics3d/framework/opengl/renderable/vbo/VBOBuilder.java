@@ -15,8 +15,8 @@ package net.smert.jreactphysics3d.framework.opengl.renderable.vbo;
 import java.util.List;
 import net.smert.jreactphysics3d.framework.opengl.VertexBufferObjectInterleaved;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.RenderableConfiguration;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.RenderableConfiguration;
 import net.smert.jreactphysics3d.framework.opengl.renderable.shared.AbstractDrawCall;
 import net.smert.jreactphysics3d.framework.opengl.renderable.vbo.factory.VBODrawCallFactory;
 

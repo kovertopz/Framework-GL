@@ -16,7 +16,7 @@ import net.smert.jreactphysics3d.framework.opengl.GL;
 import net.smert.jreactphysics3d.framework.opengl.Texture;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureTargets;
 import net.smert.jreactphysics3d.framework.opengl.constants.TextureUnit;
-import net.smert.jreactphysics3d.framework.opengl.renderable.factory.Renderable;
+import net.smert.jreactphysics3d.framework.opengl.renderable.Renderable;
 import net.smert.jreactphysics3d.framework.opengl.texture.TextureTypeMapping;
 import net.smert.jreactphysics3d.framework.utils.HashMapIntInt;
 
