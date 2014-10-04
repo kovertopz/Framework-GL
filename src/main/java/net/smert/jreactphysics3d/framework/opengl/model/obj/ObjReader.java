@@ -193,7 +193,7 @@ public class ObjReader implements ModelReader {
         return meshMaterial;
     }
 
-    private Segment convertModelDataToMeshSegment(ModelData modelData, Material material, int[] index) {
+    private Segment convertModelDataToMeshSegment(ModelData modelData, int[] index) {
 
         // Create new segment and all parameters
         Segment segment = GL.mf.createSegment();
@@ -211,13 +211,6 @@ public class ObjReader implements ModelReader {
         }
         if (modelData.hasVertices()) {
             segment.setVertices(ListUtils.ToPrimitiveFloatArray(modelData.getVertices()));
-        }
-
-        // Convert the material if it exists
-        if (material != null) {
-            net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial
-                    = convertMaterialToMeshMaterial(material);
-            segment.setMaterial(meshMaterial);
         }
 
         return segment;
@@ -432,9 +425,20 @@ public class ObjReader implements ModelReader {
         while (modelData.hasNext()) {
             ModelData data = modelData.next();
             assert (data.getVertices().size() > 0);
+
+            // Convert model data into a mesh segment
+            Segment segment = convertModelDataToMeshSegment(data, index);
+
+            // Convert the material if it exists
             String name = data.getName();
             Material material = materialNameToMaterial.get(name);
-            Segment segment = convertModelDataToMeshSegment(data, material, index);
+            if (material != null) {
+                net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial
+                        = convertMaterialToMeshMaterial(material);
+                segment.setMaterial(meshMaterial);
+            }
+
+            // Add the segment to the mesh
             mesh.addSegment(segment);
         }
 
