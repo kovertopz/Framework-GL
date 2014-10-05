@@ -68,6 +68,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 colorMaterial(int face, int material) {
+        GL11.glColorMaterial(face, material);
+        return this;
+    }
+
     public OpenGL1 cullBackFaces() {
         GL11.glCullFace(GL11.GL_BACK);
         return this;
@@ -313,6 +318,26 @@ public class OpenGL1 {
         return GL11.glGetString(getstring);
     }
 
+    public OpenGL1 light(int lightnumber, int light, FloatBuffer fb) {
+        GL11.glLight(lightnumber, light, fb);
+        return this;
+    }
+
+    public OpenGL1 loadMatrix(FloatBuffer fb) {
+        GL11.glLoadMatrix(fb);
+        return this;
+    }
+
+    public OpenGL1 material(int face, int material, FloatBuffer fb) {
+        GL11.glMaterial(face, material, fb);
+        return this;
+    }
+
+    public OpenGL1 material(int face, int material, int value) {
+        GL11.glMateriali(face, material, value);
+        return this;
+    }
+
     public OpenGL1 multiplyMatrix(FloatBuffer fb) {
         GL11.glMultMatrix(fb);
         return this;
@@ -388,8 +413,8 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setClearStencil(int s) {
-        GL11.glClearStencil(s);
+    public OpenGL1 setClearStencil(int index) {
+        GL11.glClearStencil(index);
         return this;
     }
 

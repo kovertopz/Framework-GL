@@ -37,6 +37,7 @@ public class Tessellator {
 
     private boolean convertToTriangles; // Doesn't get reset
     private boolean enableConversionForPrimitiveMode;
+    private boolean isStarted;
     private int elementCount;
     private int maxIndex;
     private int minIndex;
@@ -57,8 +58,6 @@ public class Tessellator {
     private final List<Segment> segments;
     private RenderableConfiguration config;
     private final Vector3f normal;
-    private final Vector3f normalCreation1;
-    private final Vector3f normalCreation2;
     private final Vector3f texCoord;
     private final Vector4f vertex;
 
@@ -77,19 +76,9 @@ public class Tessellator {
         vertexIndexes = new ArrayList<>(INITIAL_ELEMENTS_PER_SEGMENT); // One per vertex
         segments = new ArrayList<>(INITIAL_SEGMENTS);
         normal = new Vector3f();
-        normalCreation1 = new Vector3f();
-        normalCreation2 = new Vector3f();
         texCoord = new Vector3f();
         vertex = new Vector4f();
         reset();
-    }
-
-    private void calculateNormal(Vector3f pos1, Vector3f pos2, Vector3f pos3) {
-        // CCW order
-        normalCreation1.set(pos3).subtract(pos2); // pos2 is base pointing to pos3, index finger
-        normalCreation2.set(pos1).subtract(pos2); // pos2 is base pointing to pos1, middle finger
-        normal.set(normalCreation1).cross(normalCreation2); // right hand rule, thumb
-        normal.normalize();
     }
 
     private void findAABBMaxMin(Vector4f vertex) {
@@ -160,7 +149,9 @@ public class Tessellator {
     private void internalAddVertexToList(Vector4f vertex) {
         vertices.add(vertex.getX());
         vertices.add(vertex.getY());
-        vertices.add(vertex.getZ());
+        if (config.getVertexSize() >= 3) {
+            vertices.add(vertex.getZ());
+        }
         if (config.getVertexSize() == 4) {
             vertices.add(vertex.getW());
         }
@@ -187,11 +178,6 @@ public class Tessellator {
     public void addNormal(Vector3f normal) {
         this.normal.set(normal);
         internalAddNormal(this.normal);
-    }
-
-    public void addNormal(Vector3f pos1, Vector3f pos2, Vector3f pos3) {
-        calculateNormal(pos1, pos2, pos3);
-        internalAddNormal(normal);
     }
 
     public void addNormalAgain() {
@@ -237,6 +223,35 @@ public class Tessellator {
     public void addVertex(Vector4f vertex) {
         this.vertex.set(vertex);
         internalAddVertex(this.vertex);
+    }
+
+    public void calculateNormals() {
+        if (isStarted) {
+            throw new IllegalStateException("You cannot calculate normals until stop() has been called");
+        }
+
+        conversionState = CreateConversionState(primitiveMode);
+        normals.clear();
+
+        for (int i = 0; i < vertices.size(); i += config.getVertexSize()) {
+            vertex.zero();
+            float x = vertices.get(i + 0);
+            vertex.setX(x);
+            float y = vertices.get(i + 1);
+            vertex.setY(y);
+            if (config.getVertexSize() >= 3) {
+                float z = vertices.get(i + 2);
+                vertex.setZ(z);
+            }
+            if (config.getVertexSize() == 4) {
+                float w = vertices.get(i + 3);
+                vertex.setW(w);
+            }
+            conversionState.addVertexConversion(vertex);
+            conversionState.calculateNormals(this);
+        }
+
+        conversionState = null;
     }
 
     public Segment createSegment(String name) {
@@ -352,6 +367,7 @@ public class Tessellator {
 
     public final void reset() {
         enableConversionForPrimitiveMode = false;
+        isStarted = false;
         elementCount = 0;
         maxIndex = -1;
         minIndex = -1;
@@ -373,8 +389,6 @@ public class Tessellator {
         segments.clear();
         config = GL.mf.createRenderableConfiguration();
         normal.zero();
-        normalCreation1.zero();
-        normalCreation2.zero();
         texCoord.zero();
         vertex.zero();
     }
@@ -398,6 +412,7 @@ public class Tessellator {
         if (forceConversionForPrimitiveMode) {
             enableConversionForPrimitiveMode = true;
         }
+        isStarted = true;
         elementCount = 0;
         maxIndex = -1;
         minIndex = vertexIndex; // Save first index
@@ -412,6 +427,7 @@ public class Tessellator {
             primitiveModes.set(primitiveModes.size() - 1, primitiveMode);
             enableConversionForPrimitiveMode = false;
         }
+        isStarted = false;
         elementCounts.add(elementCount);
         maxIndexes.add(maxIndex);
         minIndexes.add(minIndex);
@@ -441,6 +457,8 @@ public class Tessellator {
         private final Vector3f normalConversion1;
         private final Vector3f normalConversion2;
         private final Vector3f normalConversion3;
+        private final Vector3f normalCreation1;
+        private final Vector3f normalCreation2;
         private final Vector3f texCoord;
         private final Vector3f texCoordConversion0;
         private final Vector3f texCoordConversion1;
@@ -464,6 +482,8 @@ public class Tessellator {
             normalConversion1 = new Vector3f();
             normalConversion2 = new Vector3f();
             normalConversion3 = new Vector3f();
+            normalCreation1 = new Vector3f();
+            normalCreation2 = new Vector3f();
             texCoord = new Vector3f();
             texCoordConversion0 = new Vector3f();
             texCoordConversion1 = new Vector3f();
@@ -474,6 +494,20 @@ public class Tessellator {
             vertexConversion1 = new Vector4f();
             vertexConversion2 = new Vector4f();
             vertexConversion3 = new Vector4f();
+        }
+
+        private void calculateNormal(Vector4f pos1, Vector4f pos2, Vector4f pos3) {
+            // CCW order
+            normalCreation1.set(
+                    pos3.getX() - pos2.getX(),
+                    pos3.getY() - pos2.getY(),
+                    pos3.getZ() - pos2.getZ()); // pos2 is base pointing to pos3, index finger
+            normalCreation2.set(
+                    pos1.getX() - pos2.getX(),
+                    pos1.getY() - pos2.getY(),
+                    pos1.getZ() - pos2.getZ()); // pos2 is base pointing to pos1, middle finger
+            normal.set(normalCreation1).cross(normalCreation2); // right hand rule, thumb
+            normal.normalize();
         }
 
         private void convertQuad(Tessellator tessellator) {
@@ -536,42 +570,42 @@ public class Tessellator {
 
         private void convertStripToTriangles(Tessellator tessellator) {
             if (hasColorsToConvert) {
-                tessellator.internalAddColorToList(colorConversion3); // Top right
-                tessellator.internalAddColorToList(colorConversion1); // Top left
-                tessellator.internalAddColorToList(colorConversion0); // Bottom left
-                tessellator.internalAddColorToList(colorConversion0); // Bottom left
-                tessellator.internalAddColorToList(colorConversion2); // Bottom right
-                tessellator.internalAddColorToList(colorConversion3); // Top Right
+                tessellator.internalAddColorToList(colorConversion2); // Top right
+                tessellator.internalAddColorToList(colorConversion0); // Top left
+                tessellator.internalAddColorToList(colorConversion1); // Bottom left
+                tessellator.internalAddColorToList(colorConversion1); // Bottom left
+                tessellator.internalAddColorToList(colorConversion3); // Bottom right
+                tessellator.internalAddColorToList(colorConversion2); // Top Right
             }
             if (hasNormalsToConvert) {
-                tessellator.internalAddNormalToList(normalConversion3);
-                tessellator.internalAddNormalToList(normalConversion1);
-                tessellator.internalAddNormalToList(normalConversion0);
-                tessellator.internalAddNormalToList(normalConversion0);
                 tessellator.internalAddNormalToList(normalConversion2);
+                tessellator.internalAddNormalToList(normalConversion0);
+                tessellator.internalAddNormalToList(normalConversion1);
+                tessellator.internalAddNormalToList(normalConversion1);
                 tessellator.internalAddNormalToList(normalConversion3);
+                tessellator.internalAddNormalToList(normalConversion2);
             }
             if (hasTexCoordsToConvert) {
-                tessellator.internalAddTexCoordToList(texCoordConversion3);
-                tessellator.internalAddTexCoordToList(texCoordConversion1);
-                tessellator.internalAddTexCoordToList(texCoordConversion0);
-                tessellator.internalAddTexCoordToList(texCoordConversion0);
                 tessellator.internalAddTexCoordToList(texCoordConversion2);
+                tessellator.internalAddTexCoordToList(texCoordConversion0);
+                tessellator.internalAddTexCoordToList(texCoordConversion1);
+                tessellator.internalAddTexCoordToList(texCoordConversion1);
                 tessellator.internalAddTexCoordToList(texCoordConversion3);
+                tessellator.internalAddTexCoordToList(texCoordConversion2);
             }
-            tessellator.internalAddVertexToList(vertexConversion3);
-            tessellator.internalAddVertexToList(vertexConversion1);
-            tessellator.internalAddVertexToList(vertexConversion0);
-            tessellator.internalAddVertexToList(vertexConversion0);
             tessellator.internalAddVertexToList(vertexConversion2);
+            tessellator.internalAddVertexToList(vertexConversion0);
+            tessellator.internalAddVertexToList(vertexConversion1);
+            tessellator.internalAddVertexToList(vertexConversion1);
             tessellator.internalAddVertexToList(vertexConversion3);
+            tessellator.internalAddVertexToList(vertexConversion2);
         }
 
         private void convertTriangle(Tessellator tessellator) {
             if (hasColorsToConvert) {
                 tessellator.internalAddColorToList(colorConversion0); // Center
-                tessellator.internalAddColorToList(colorConversion1); // Bottom right
-                tessellator.internalAddColorToList(colorConversion2); // Bottom left
+                tessellator.internalAddColorToList(colorConversion1); // Bottom left
+                tessellator.internalAddColorToList(colorConversion2); // Bottom right
             }
             if (hasNormalsToConvert) {
                 tessellator.internalAddNormalToList(normalConversion0);
@@ -685,6 +719,124 @@ public class Tessellator {
             vertexConversionCount++;
         }
 
+        public void calculateNormals(Tessellator tessellator) {
+            if (hasIncompatiblePrimitiveMode(tessellator)) {
+                throw new IllegalStateException("You cannot calculate normals in the primitive mode: "
+                        + tessellator.primitiveMode);
+            }
+            if (tessellator.primitiveMode != primitiveMode) {
+                throw new IllegalStateException("The Tessellator and ConversionState's primitiveMode must match");
+            }
+            if ((tessellator.config.getVertexSize() != 3) && (tessellator.config.getVertexSize()) != 4) {
+                throw new IllegalStateException("Currently do not support calculating normals for 2D vectors");
+            }
+            switch (primitiveMode) {
+                case Primitives.QUADS:
+                    if (vertexConversionCount == 4) {
+                        // Top right, top left, bottom left
+                        calculateNormal(vertexConversion0, vertexConversion1, vertexConversion2);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        colorConversionCount = 0;
+                        normalConversionCount = 0;
+                        texCoordConversionCount = 0;
+                        vertexConversionCount = 0;
+                    }
+                    break;
+
+                case Primitives.QUAD_STRIP:
+                    if (vertexConversionCount == 4) {
+                        // Top right, top left, bottom left
+                        calculateNormal(vertexConversion2, vertexConversion0, vertexConversion1);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        // Top right to top left, bottom right to bottom left
+                        colorConversion0.set(colorConversion2);
+                        colorConversion1.set(colorConversion3);
+                        normalConversion0.set(normalConversion2);
+                        normalConversion1.set(normalConversion3);
+                        texCoordConversion0.set(texCoordConversion2);
+                        texCoordConversion1.set(texCoordConversion3);
+                        vertexConversion0.set(vertexConversion2);
+                        vertexConversion1.set(vertexConversion3);
+                        colorConversionCount = 2;
+                        normalConversionCount = 2;
+                        texCoordConversionCount = 2;
+                        vertexConversionCount = 2;
+                    }
+                    break;
+
+                case Primitives.TRIANGLE_FAN:
+                    if (vertexConversionCount == 3) {
+                        // Center, bottom left, bottom right
+                        calculateNormal(vertexConversion0, vertexConversion1, vertexConversion2);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        // Bottom right to bottom left
+                        colorConversion1.set(colorConversion2);
+                        normalConversion1.set(normalConversion2);
+                        texCoordConversion1.set(texCoordConversion2);
+                        vertexConversion1.set(vertexConversion2);
+                        colorConversionCount = 2;
+                        normalConversionCount = 2;
+                        texCoordConversionCount = 2;
+                        vertexConversionCount = 2;
+                    }
+                    break;
+
+                case Primitives.TRIANGLE_STRIP:
+                    if (vertexConversionCount == 4) {
+                        // Top right, top left, bottom left
+                        calculateNormal(vertexConversion2, vertexConversion0, vertexConversion1);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        // Bottom left, bottom right, top right
+                        calculateNormal(vertexConversion1, vertexConversion3, vertexConversion2);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        // Top right to top left, bottom right to bottom left
+                        colorConversion0.set(colorConversion2);
+                        colorConversion1.set(colorConversion3);
+                        normalConversion0.set(normalConversion2);
+                        normalConversion1.set(normalConversion3);
+                        texCoordConversion0.set(texCoordConversion2);
+                        texCoordConversion1.set(texCoordConversion3);
+                        vertexConversion0.set(vertexConversion2);
+                        vertexConversion1.set(vertexConversion3);
+                        colorConversionCount = 2;
+                        normalConversionCount = 2;
+                        texCoordConversionCount = 2;
+                        vertexConversionCount = 2;
+                    }
+                    break;
+
+                case Primitives.TRIANGLES:
+                    if (vertexConversionCount == 3) {
+                        // Center, bottom left, bottom right
+                        calculateNormal(vertexConversion0, vertexConversion1, vertexConversion2);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        tessellator.internalAddNormal(normal);
+                        colorConversionCount = 0;
+                        normalConversionCount = 0;
+                        texCoordConversionCount = 0;
+                        vertexConversionCount = 0;
+                    }
+                    break;
+
+                default:
+                    throw new IllegalStateException("Unknown primitive mode: "
+                            + primitiveMode + " for normal calculation");
+            }
+        }
+
         public void convert(Tessellator tessellator) {
             if (hasIncompatiblePrimitiveMode(tessellator)) {
                 throw new IllegalStateException("You cannot convert in the primitive mode: "
@@ -708,6 +860,7 @@ public class Tessellator {
                 case Primitives.TRIANGLE_STRIP:
                     if (vertexConversionCount == 4) {
                         convertStripToTriangles(tessellator);
+                        // Top right to top left, bottom right to bottom left
                         colorConversion0.set(colorConversion2);
                         colorConversion1.set(colorConversion3);
                         normalConversion0.set(normalConversion2);
@@ -726,6 +879,7 @@ public class Tessellator {
                 case Primitives.TRIANGLE_FAN:
                     if (vertexConversionCount == 3) {
                         convertTriangle(tessellator);
+                        // Bottom right to bottom left
                         colorConversion1.set(colorConversion2);
                         normalConversion1.set(normalConversion2);
                         texCoordConversion1.set(texCoordConversion2);

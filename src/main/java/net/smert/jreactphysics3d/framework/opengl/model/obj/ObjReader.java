@@ -344,6 +344,14 @@ public class ObjReader implements ModelReader {
             Tessellator tessellator = entry.getValue();
             assert (tessellator.getElementCount() > 0);
 
+            // Stop the primitive mode of the tessellator
+            tessellator.stop();
+
+            // Calculate normals if there were none
+            if (tessellator.getNormalsCount() == 0) {
+                tessellator.calculateNormals();
+            }
+
             // Convert model data into a mesh segment
             Segment segment = tessellator.createSegment(name);
 
