@@ -30,6 +30,7 @@ import net.smert.jreactphysics3d.framework.opengl.LightParameterType;
 import net.smert.jreactphysics3d.framework.opengl.constants.Primitives;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Segment;
+import net.smert.jreactphysics3d.framework.opengl.mesh.Tessellator;
 import net.smert.jreactphysics3d.framework.opengl.model.ModelReader;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Color;
 import net.smert.jreactphysics3d.framework.opengl.model.obj.MaterialReader.Material;
@@ -193,39 +194,28 @@ public class ObjReader implements ModelReader {
         return meshMaterial;
     }
 
-    private Segment convertModelDataToMeshSegment(ModelData modelData, int[] index) {
-
-        // Create new segment and all parameters
-        Segment segment = GL.mf.createSegment();
-        segment.setElementCount(modelData.getElementCount());
-        segment.setMinIndex(index[0]);
-        index[0] += modelData.getElementCount();
-        segment.setMaxIndex(index[0] - 1);
-        segment.setName(modelData.getName());
-        if (modelData.hasNormals()) {
-            segment.setNormals(ListUtils.ToPrimitiveFloatArray(modelData.getNormals()));
-        }
-        segment.setPrimitiveMode(modelData.getPrimitiveMode());
-        if (modelData.hasTexCoords()) {
-            segment.setTexCoords(ListUtils.ToPrimitiveFloatArray(modelData.getTexCoords()));
-        }
-        if (modelData.hasVertices()) {
-            segment.setVertices(ListUtils.ToPrimitiveFloatArray(modelData.getVertices()));
-        }
-
-        return segment;
-    }
-
     private void convertToMesh(Mesh mesh) {
         mesh.reset();
 
-        // Create a renderable configuration for the mesh. Set all parameters to match model capabilities.
+        // Create a renderable configuration for the mesh. Set all parameters to match OBJ capabilities.
         RenderableConfiguration config = GL.mf.createRenderableConfiguration();
         config.setColorSize(4);
         config.setColorTypeFloat();
         config.setIndexTypeUnsignedInt();
-        config.setTexCoordSize(2); // Could change in 3 spots below
+        config.setTexCoordSize(2); // Could change in 2 spots below
         config.setVertexSize(3);
+
+        // Reset texture coordinate state
+        MeshConversion.hasThree = false;
+        MeshConversion.isLocked = false;
+
+        // Create a conversion state for each expected type
+        Tessellator.ConversionState conversionStateQuads
+                = Tessellator.CreateConversionState(Primitives.QUADS);
+        Tessellator.ConversionState conversionStateTriangleFan
+                = Tessellator.CreateConversionState(Primitives.TRIANGLE_FAN);
+        Tessellator.ConversionState conversionStateTriangles
+                = Tessellator.CreateConversionState(Primitives.TRIANGLES);
 
         // Map materials to their names for easy lookup
         List<Material> materials = materialReader.getMaterials();
@@ -234,10 +224,10 @@ public class ObjReader implements ModelReader {
             materialNameToMaterial.put(material.getMaterialName(), material);
         }
 
-        // Map one material to one model data
-        Map<String, ModelData> materialNameToModelData = new HashMap<>();
+        // Map one material to a tessellator
+        Map<String, Tessellator> materialNameToTessellator = new HashMap<>();
 
-        // Create model data for all faces
+        // Add each face to the correct tessellator
         for (Face face : faces) {
 
             // Not sure how this would be even possible
@@ -246,171 +236,98 @@ public class ObjReader implements ModelReader {
                 continue;
             }
 
-            // Get material and model data by the material name
-            Material material = materialNameToMaterial.get(face.getMaterialName()); // Null key must not have a material
-            String modelDataKey = (material == null) ? null : face.getMaterialName();
-            ModelData modelData = materialNameToModelData.get(modelDataKey);
+            // Get material and tessellator by the material name
+            Material material = materialNameToMaterial.get(face.getMaterialName()); // getMaterialName() is never null
+            String tessellatorKey = (material == null) ? null : face.getMaterialName();
+            // All faces which did not have a matching material get mapped to the NULL key
+            Tessellator tessellator = materialNameToTessellator.get(tessellatorKey);
 
             // Create model data if it doesn't exist
-            if (modelData == null) {
-                modelData = new ModelData(Primitives.TRIANGLES);
-                modelData.setName(modelDataKey);
-                materialNameToModelData.put(modelDataKey, modelData);
+            if (tessellator == null) {
+                tessellator = new Tessellator();
+                tessellator.setConfig(config);
+                tessellator.setConvertToTriangles(true); // Don't rely on defaults
+                tessellator.start(Primitives.TRIANGLES, true); // Force conversion
+                materialNameToTessellator.put(tessellatorKey, tessellator);
             }
 
-            // Each model data has one render mode. Since face definitions for the
-            // same material can be made up of triangles, quads and triangle fans
-            // we must convert back into triangles.
-            if (face.isTriangle()) {
-                Vertex vertex1 = vertices.get(face.getVertexIndex().get(0));
-                Vertex vertex2 = vertices.get(face.getVertexIndex().get(1));
-                Vertex vertex3 = vertices.get(face.getVertexIndex().get(2));
-                modelData.addVertex(vertex1);
-                modelData.addVertex(vertex2);
-                modelData.addVertex(vertex3);
+            // Face definitions for the same material can be made up of triangles, quads
+            // and triangle fans so we must convert back into triangles.
+            if ((face.isTriangle()) || (face.isQuad())) {
+
+                // Determine what type of conversion state is needed
+                Tessellator.ConversionState conversionState;
+                if (face.isTriangle()) {
+                    conversionState = conversionStateTriangles;
+                } else {
+                    conversionState = conversionStateQuads;
+                }
+
+                // Reset conversion state
+                conversionState.reset();
 
                 if (face.hasNormals()) {
                     Vertex normal1 = normals.get(face.getNormalIndex().get(0));
                     Vertex normal2 = normals.get(face.getNormalIndex().get(1));
                     Vertex normal3 = normals.get(face.getNormalIndex().get(2));
-                    modelData.addNormal(normal1);
-                    modelData.addNormal(normal2);
-                    modelData.addNormal(normal3);
+                    MeshConversion.addNormal(conversionState, normal1);
+                    MeshConversion.addNormal(conversionState, normal2);
+                    MeshConversion.addNormal(conversionState, normal3);
+                    if (face.isQuad()) {
+                        Vertex normal4 = normals.get(face.getNormalIndex().get(3));
+                        MeshConversion.addNormal(conversionState, normal4);
+                    }
                 }
                 if (face.hasTexCoords()) {
                     TexCoord texCoord1 = texCoords.get(face.getTexIndex().get(0));
                     TexCoord texCoord2 = texCoords.get(face.getTexIndex().get(1));
                     TexCoord texCoord3 = texCoords.get(face.getTexIndex().get(2));
-
-                    if (texCoord1.hasThree()) {
-                        modelData.addTexCoord(texCoord1);
-                        modelData.addTexCoord(texCoord2);
-                        modelData.addTexCoord(texCoord3);
-                        config.setTexCoordSize(3);
-                    } else {
-                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
-                        modelData.addTexCoord(texCoord2.getS(), texCoord2.getT());
-                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
+                    MeshConversion.checkTexCoord(texCoord1, config);
+                    MeshConversion.addTexCoord(conversionState, texCoord1);
+                    MeshConversion.addTexCoord(conversionState, texCoord2);
+                    MeshConversion.addTexCoord(conversionState, texCoord3);
+                    if (face.isQuad()) {
+                        TexCoord texCoord4 = texCoords.get(face.getTexIndex().get(3));
+                        MeshConversion.addTexCoord(conversionState, texCoord4);
                     }
                 }
-            } else if (face.isQuad()) {
                 Vertex vertex1 = vertices.get(face.getVertexIndex().get(0));
                 Vertex vertex2 = vertices.get(face.getVertexIndex().get(1));
                 Vertex vertex3 = vertices.get(face.getVertexIndex().get(2));
-                Vertex vertex4 = vertices.get(face.getVertexIndex().get(3));
-                modelData.addVertex(vertex1);
-                modelData.addVertex(vertex2);
-                modelData.addVertex(vertex3);
-                modelData.addVertex(vertex1);
-                modelData.addVertex(vertex3);
-                modelData.addVertex(vertex4);
-
-                if (face.hasNormals()) {
-                    Vertex normal1 = normals.get(face.getNormalIndex().get(0));
-                    Vertex normal2 = normals.get(face.getNormalIndex().get(1));
-                    Vertex normal3 = normals.get(face.getNormalIndex().get(2));
-                    Vertex normal4 = normals.get(face.getNormalIndex().get(3));
-                    modelData.addNormal(normal1);
-                    modelData.addNormal(normal2);
-                    modelData.addNormal(normal3);
-                    modelData.addNormal(normal1);
-                    modelData.addNormal(normal3);
-                    modelData.addNormal(normal4);
+                MeshConversion.addVertex(conversionState, vertex1);
+                MeshConversion.addVertex(conversionState, vertex2);
+                MeshConversion.addVertex(conversionState, vertex3);
+                if (face.isQuad()) {
+                    Vertex vertex4 = vertices.get(face.getVertexIndex().get(3));
+                    MeshConversion.addVertex(conversionState, vertex4);
                 }
-                if (face.hasTexCoords()) {
-                    TexCoord texCoord1 = texCoords.get(face.getTexIndex().get(0));
-                    TexCoord texCoord2 = texCoords.get(face.getTexIndex().get(1));
-                    TexCoord texCoord3 = texCoords.get(face.getTexIndex().get(2));
-                    TexCoord texCoord4 = texCoords.get(face.getTexIndex().get(3));
 
-                    if (texCoord1.hasThree()) {
-                        modelData.addTexCoord(texCoord1);
-                        modelData.addTexCoord(texCoord2);
-                        modelData.addTexCoord(texCoord3);
-                        modelData.addTexCoord(texCoord1);
-                        modelData.addTexCoord(texCoord3);
-                        modelData.addTexCoord(texCoord4);
-                        config.setTexCoordSize(3);
-                    } else {
-                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
-                        modelData.addTexCoord(texCoord2.getS(), texCoord2.getT());
-                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
-                        modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
-                        modelData.addTexCoord(texCoord3.getS(), texCoord3.getT());
-                        modelData.addTexCoord(texCoord4.getS(), texCoord4.getT());
-                    }
+                // Add the triangle or quad to the tessellator. If it's a quad it will be converted.
+                if (face.isTriangle()) {
+                    conversionState.addTriangle(tessellator);
+                } else {
+                    conversionState.addQuad(tessellator);
                 }
             } else if (face.isTriangleFan()) {
 
-                // Save the first vertex
-                Vertex vertex1 = vertices.get(face.getVertexIndex().get(0));
-                Vertex vertexNew = new Vertex();
-                Vertex vertexOld;
+                // Reset conversion state
+                conversionStateTriangleFan.reset();
 
-                // Save the first normal
-                Vertex normal1 = new Vertex();
-                if (face.hasNormals()) {
-                    normal1 = normals.get(face.getNormalIndex().get(0));
-                }
-                Vertex normalNew = new Vertex();
-                Vertex normalOld = new Vertex();
-
-                // Save the first texture coordinate
-                TexCoord texCoord1 = new TexCoord();
-                if (face.hasTexCoords()) {
-                    texCoord1 = texCoords.get(face.getTexIndex().get(0));
-                }
-                TexCoord texCoordNew = new TexCoord();
-                TexCoord texCoordOld = new TexCoord();
-
-                for (int count = 1, i = 1; i < face.getVertexIndex().size(); i++) {
-                    vertexOld = vertexNew;
-                    vertexNew = vertices.get(face.getVertexIndex().get(i));
-                    count++;
+                for (int i = 0; i < face.getVertexIndex().size(); i++) {
 
                     if (face.hasNormals()) {
-                        normalOld = normalNew;
-                        normalNew = normals.get(face.getNormalIndex().get(i));
+                        Vertex normal = normals.get(face.getNormalIndex().get(i));
+                        MeshConversion.addNormal(conversionStateTriangleFan, normal);
                     }
                     if (face.hasTexCoords()) {
-                        texCoordOld = texCoordNew;
-                        texCoordNew = texCoords.get(face.getTexIndex().get(i));
+                        TexCoord texCoord = texCoords.get(face.getTexIndex().get(i));
+                        MeshConversion.checkTexCoord(texCoord, config);
+                        MeshConversion.addTexCoord(conversionStateTriangleFan, texCoord);
                     }
+                    Vertex vertex = vertices.get(face.getVertexIndex().get(i));
+                    MeshConversion.addVertex(conversionStateTriangleFan, vertex);
 
-                    // Create a new triangle using the first index, the old index and the new. We reset the count back
-                    // to two so the next loop will add another vertex and we will have a count of three again.
-                    if (count != 3) {
-                        continue;
-                    }
-
-                    // Add triangle
-                    modelData.addVertex(vertex1);
-                    modelData.addVertex(vertexOld);
-                    modelData.addVertex(vertexNew);
-
-                    // Add normals for the triangle
-                    if (face.hasNormals()) {
-                        modelData.addNormal(normal1);
-                        modelData.addNormal(normalOld);
-                        modelData.addNormal(normalNew);
-                    }
-
-                    // Add texture coordinates for the triangle
-                    if (face.hasTexCoords()) {
-                        if (texCoord1.hasThree()) {
-                            modelData.addTexCoord(texCoord1);
-                            modelData.addTexCoord(texCoordOld);
-                            modelData.addTexCoord(texCoordNew);
-                            config.setTexCoordSize(3);
-                        } else {
-                            modelData.addTexCoord(texCoord1.getS(), texCoord1.getT());
-                            modelData.addTexCoord(texCoordOld.getS(), texCoordOld.getT());
-                            modelData.addTexCoord(texCoordNew.getS(), texCoordNew.getT());
-                        }
-                    }
-
-                    // Reset count
-                    count = 2;
+                    conversionStateTriangleFan.convert(tessellator);
                 }
             }
         }
@@ -420,17 +337,17 @@ public class ObjReader implements ModelReader {
         mesh.setRenderableConfigID(renderableConfigID);
 
         // Add all the model data to the mesh
-        int[] index = new int[]{0};
-        Iterator<ModelData> modelData = materialNameToModelData.values().iterator();
-        while (modelData.hasNext()) {
-            ModelData data = modelData.next();
-            assert (data.getVertices().size() > 0);
+        Iterator<Map.Entry<String, Tessellator>> tessellators = materialNameToTessellator.entrySet().iterator();
+        while (tessellators.hasNext()) {
+            Map.Entry<String, Tessellator> entry = tessellators.next();
+            String name = entry.getKey();
+            Tessellator tessellator = entry.getValue();
+            assert (tessellator.getElementCount() > 0);
 
             // Convert model data into a mesh segment
-            Segment segment = convertModelDataToMeshSegment(data, index);
+            Segment segment = tessellator.createSegment(name);
 
             // Convert the material if it exists
-            String name = data.getName();
             Material material = materialNameToMaterial.get(name);
             if (material != null) {
                 net.smert.jreactphysics3d.framework.opengl.mesh.Material meshMaterial
@@ -443,6 +360,13 @@ public class ObjReader implements ModelReader {
         }
 
         // Generate indexes for the model
+        int[] index = new int[]{0};
+        for (int i = 0; i < mesh.getTotalSegments(); i++) {
+            Segment segment = mesh.getSegment(i);
+            segment.setMinIndex(index[0]);
+            index[0] += segment.getElementCount();
+            segment.setMaxIndex(index[0] - 1);
+        }
         List<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < index[0]; i++) {
             indexes.add(i);
@@ -729,85 +653,43 @@ public class ObjReader implements ModelReader {
 
     }
 
-    private static class ModelData {
+    private static class MeshConversion {
 
-        private int elementCount;
-        private final int primitiveMode;
-        private final List<Float> normals;
-        private final List<Float> texCoords;
-        private final List<Float> vertices;
-        private String name;
+        public static boolean hasThree;
+        public static boolean isLocked;
 
-        public ModelData(int primitiveMode) {
-            elementCount = 0;
-            this.primitiveMode = primitiveMode;
-            normals = new ArrayList<>();
-            texCoords = new ArrayList<>();
-            vertices = new ArrayList<>();
+        public static void addNormal(Tessellator.ConversionState conversionState, Vertex vertex) {
+            conversionState.getNormal().set(vertex.getX(), vertex.getY(), vertex.getZ());
+            conversionState.addNormalConversion(conversionState.getNormal());
         }
 
-        public void addNormal(Vertex vertex) {
-            normals.add(vertex.getX());
-            normals.add(vertex.getY());
-            normals.add(vertex.getZ());
+        public static void addTexCoord(Tessellator.ConversionState conversionState, TexCoord texCoord) {
+            conversionState.getTexCoord().set(texCoord.getS(), texCoord.getT(), texCoord.getR());
+            conversionState.addTexCoordConversion(conversionState.getTexCoord());
         }
 
-        public void addTexCoord(float s, float t) {
-            texCoords.add(s);
-            texCoords.add(t);
+        public static void addVertex(Tessellator.ConversionState conversionState, Vertex vertex) {
+            conversionState.getVertex().set(vertex.getX(), vertex.getY(), vertex.getZ(), 1.0f);
+            conversionState.addVertexConversion(conversionState.getVertex());
         }
 
-        public void addTexCoord(TexCoord texCoord) {
-            texCoords.add(texCoord.getS());
-            texCoords.add(texCoord.getT());
-            texCoords.add(texCoord.getR());
-        }
-
-        public void addVertex(Vertex vertex) {
-            vertices.add(vertex.getX());
-            vertices.add(vertex.getY());
-            vertices.add(vertex.getZ());
-            elementCount++;
-        }
-
-        public int getElementCount() {
-            return elementCount;
-        }
-
-        public int getPrimitiveMode() {
-            return primitiveMode;
-        }
-
-        public List<Float> getNormals() {
-            return normals;
-        }
-
-        public List<Float> getTexCoords() {
-            return texCoords;
-        }
-
-        public List<Float> getVertices() {
-            return vertices;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public boolean hasNormals() {
-            return (normals.size() > 0);
-        }
-
-        public boolean hasTexCoords() {
-            return (texCoords.size() > 0);
-        }
-
-        public boolean hasVertices() {
-            return (vertices.size() > 0);
+        public static void checkTexCoord(TexCoord texCoord, RenderableConfiguration config) {
+            if (texCoord.hasThree()) {
+                if (!isLocked || (isLocked && hasThree)) {
+                    config.setTexCoordSize(3);
+                    hasThree = true;
+                    isLocked = true;
+                } else {
+                    throw new RuntimeException("You cannot switch from 2 texture coords to 3");
+                }
+            } else {
+                if (!isLocked || (isLocked && !hasThree)) {
+                    hasThree = false;
+                    isLocked = true;
+                } else {
+                    throw new RuntimeException("You cannot switch from 3 texture coords to 2");
+                }
+            }
         }
 
     }
