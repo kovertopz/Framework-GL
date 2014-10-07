@@ -104,6 +104,7 @@
                 <configuration>
                     <excludes>
                         <exclude>APACHE-2.txt</exclude>
+                        <exclude>examples/**</exclude>
                         <exclude>LICENSE.txt</exclude>
                         <exclude>nbactions.xml</exclude>
                         <exclude>pom.xml</exclude>
