@@ -636,6 +636,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 vertex(float x, float y) {
+        GL.renderHelper.vertex(x, y);
+        return this;
+    }
+
     public OpenGL1 vertex(float x, float y, float z) {
         GL.renderHelper.vertex(x, y, z);
         return this;

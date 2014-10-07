@@ -56,6 +56,10 @@ public class LegacyRenderHelper {
         GL11.glTexCoord3f(s, t, r);
     }
 
+    public void vertex(float x, float y) {
+        GL11.glVertex2f(x, y);
+    }
+
     public void vertex(float x, float y, float z) {
         GL11.glVertex3f(x, y, z);
     }
