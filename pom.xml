@@ -18,11 +18,25 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/kovertopz/Framework-GL.git</connection>
+        <developerConnection>scm:git:git@github.com:kovertopz/Framework-GL.git</developerConnection>
+        <url>https://github.com/kovertopz/Framework-GL</url>
+    </scm>
+
     <properties>
         <junit.version>4.11</junit.version>
         <licensemaven.version>2.6</licensemaven.version>
         <lwjgl.version>2.9.1</lwjgl.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
+        <mavenjavadoc.version>2.10.1</mavenjavadoc.version>
         <mavennatives.version>0.0.7</mavennatives.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -136,5 +150,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${mavenjavadoc.version}</version>
+                <configuration>
+                    <author>false</author>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>
