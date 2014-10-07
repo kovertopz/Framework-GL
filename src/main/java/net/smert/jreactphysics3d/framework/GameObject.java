@@ -12,8 +12,6 @@
  */
 package net.smert.jreactphysics3d.framework;
 
-import net.smert.jreactphysics3d.body.RigidBody;
-import net.smert.jreactphysics3d.collision.shapes.CollisionShape;
 import net.smert.jreactphysics3d.framework.math.Transform4f;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Mesh;
 import net.smert.jreactphysics3d.framework.opengl.mesh.Material;
@@ -26,10 +24,10 @@ import net.smert.jreactphysics3d.framework.opengl.renderable.AbstractRenderable;
 public class GameObject {
 
     private AbstractRenderable renderable;
-    private CollisionShape collisionBodyShape;
+    private Object collisionShape;
     private Mesh mesh;
     private Material meshMaterial;
-    private RigidBody rigidBody;
+    private Object rigidBody;
     private Transform4f scalingTransform;
     private final Transform4f worldTransform;
 
@@ -44,12 +42,12 @@ public class GameObject {
         renderable.destroy();
     }
 
-    public CollisionShape getCollisionBodyShape() {
-        return collisionBodyShape;
+    public Object getCollisionShape() {
+        return collisionShape;
     }
 
-    public void setCollisionBodyShape(CollisionShape collisionBodyShape) {
-        this.collisionBodyShape = collisionBodyShape;
+    public void setCollisionShape(Object collisionShape) {
+        this.collisionShape = collisionShape;
     }
 
     public Mesh getMesh() {
@@ -76,11 +74,11 @@ public class GameObject {
         this.renderable = renderable;
     }
 
-    public RigidBody getRigidBody() {
+    public Object getRigidBody() {
         return rigidBody;
     }
 
-    public void setRigidBody(RigidBody rigidBody) {
+    public void setRigidBody(Object rigidBody) {
         this.rigidBody = rigidBody;
     }
 
