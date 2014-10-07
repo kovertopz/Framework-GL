@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.smert</groupId>
-    <artifactId>jReactPhysics3D-OpenGLFramework</artifactId>
+    <artifactId>Framework-GL</artifactId>
     <version>0.4.0</version>
     <inceptionYear>2012</inceptionYear>
     <packaging>jar</packaging>
@@ -32,11 +32,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jReactPhysics3D</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-jpeg</artifactId>
