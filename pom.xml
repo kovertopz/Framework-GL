@@ -108,9 +108,9 @@
                         <exclude>LICENSE.txt</exclude>
                         <exclude>nbactions.xml</exclude>
                         <exclude>pom.xml</exclude>
-                        <exclude>src/main/java/net/smert/jreactphysics3d/framework/opengl/image/tga/LEDataInputStream.java</exclude>
-                        <exclude>src/main/java/net/smert/jreactphysics3d/framework/opengl/image/tga/LEDataOutputStream.java</exclude>
-                        <exclude>src/main/java/net/smert/jreactphysics3d/framework/opengl/image/tga/TGAImage.java</exclude>
+                        <exclude>src/main/java/net/smert/frameworkgl/opengl/image/tga/LEDataInputStream.java</exclude>
+                        <exclude>src/main/java/net/smert/frameworkgl/opengl/image/tga/LEDataOutputStream.java</exclude>
+                        <exclude>src/main/java/net/smert/frameworkgl/opengl/image/tga/TGAImage.java</exclude>
                         <exclude>src/main/resources/**</exclude>
                         <exclude>src/test/resources/**</exclude>
                     </excludes>
