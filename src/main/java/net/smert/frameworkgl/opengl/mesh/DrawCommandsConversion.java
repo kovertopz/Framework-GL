@@ -26,7 +26,7 @@ import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
 public class DrawCommandsConversion implements DrawCommands {
 
     private byte convertFloatToByte(float value) {
-        return (byte) (MathHelper.Clamp(value, 0.0f, 1.0f) * 255);
+        return (byte) (MathHelper.Clamp(value, 0f, 1f) * 255);
     }
 
     @Override

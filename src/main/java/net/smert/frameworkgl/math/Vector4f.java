@@ -31,10 +31,7 @@ public class Vector4f {
 
     // Constructors
     public Vector4f() {
-        w = 0;
-        x = 0;
-        y = 0;
-        z = 0;
+        zero();
     }
 
     public Vector4f(float x, float y, float z, float w) {
@@ -153,15 +150,15 @@ public class Vector4f {
         if (mag < MathHelper.ZERO_EPSILON) {
             log.warn("Divide By Zero. Magnitude: {} x: {} y: {} z: {} w: {}", mag, x, y, z, w);
 
-            w = 0.0f;
-            x = 0.0f;
-            y = 0.0f;
-            z = -1.0f;
+            w = 0f;
+            x = 0f;
+            y = 0f;
+            z = -1f;
 
             return this;
         }
 
-        return multiply(1.0f / mag);
+        return multiply(1f / mag);
     }
 
     public void set(float x, float y, float z, float w) {
@@ -208,11 +205,11 @@ public class Vector4f {
         this.z = z;
     }
 
-    public void zero() {
-        w = 0;
-        x = 0;
-        y = 0;
-        z = 0;
+    public final void zero() {
+        w = 0f;
+        x = 0f;
+        y = 0f;
+        z = 0f;
     }
 
     @Override

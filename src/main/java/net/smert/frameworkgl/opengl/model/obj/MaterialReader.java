@@ -373,9 +373,9 @@ public class MaterialReader implements ModelReader {
 
         private Color() {
             hasBeenSet = false;
-            r = 0;
-            g = 0;
-            b = 0;
+            r = 0f;
+            g = 0f;
+            b = 0f;
         }
 
         public float getR() {
@@ -432,8 +432,8 @@ public class MaterialReader implements ModelReader {
         private String specularExponentMapFilename;
 
         private Material(String materialName) {
-            dissolve = 1.0f;
-            opticalDensity = 1.0f;
+            dissolve = 1f;
+            opticalDensity = 1f;
             specularExponent = 0;
             illuminationMode = 0;
             ambient = new Color();
@@ -447,8 +447,8 @@ public class MaterialReader implements ModelReader {
         }
 
         public int convertSpecularExponent() {
-            float percent = specularExponent / 1000.0f; // Max is 1000
-            return (int) (128.0f * percent); // OpenGL max shininess 128
+            float percent = specularExponent / 1000f; // Max is 1000
+            return (int) (128f * percent); // OpenGL max shininess 128
         }
 
         public float getDissolve() {

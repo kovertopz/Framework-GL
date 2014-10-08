@@ -69,7 +69,7 @@ public class FansAndStrips extends Screen {
 
         // Setup camera and controller
         camera = new LegacyCamera();
-        camera.setPosition(0.0f, 0.0f, 5.0f);
+        camera.setPosition(0f, 0f, 5f);
         cameraController = new LegacyCameraController(camera);
 
         // Create mesh and set the raw draw commands directly
@@ -84,14 +84,14 @@ public class FansAndStrips extends Screen {
         GL.o1.enableDepthTest();
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
-        GL.o1.setClearDepth(1.0f);
+        GL.o1.setClearDepth(1f);
         GL.o1.setSmoothLighting(true);
         GL.o1.clear();
 
         GL.o1.setProjectionPerspective(
-                70.0f,
+                70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
-                0.05f, 128.0f);
+                .05f, 128f);
         GL.o1.setModelViewIdentity();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
@@ -122,7 +122,7 @@ public class FansAndStrips extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            Fw.graphics.render(renderableFansAndStrips, 0.0f, 0.0f, 0.0f);
+            Fw.graphics.render(renderableFansAndStrips, 0f, 0f, 0f);
         }
     }
 

@@ -32,7 +32,7 @@ public class Input {
     private final HashMapStringInt actionToMouse;
     private final List<InputProcessor> inputProcessors;
     private final MouseHelper mouseHelper;
-    public final float MOUSE_POLL = 1.0f / 125.0f;
+    public final float MOUSE_POLL = 1f / 125f;
 
     public Input(KeyboardHelper keyboardHelper, MouseHelper mouseHelper) {
         this.keyboardHelper = keyboardHelper;

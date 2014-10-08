@@ -97,13 +97,13 @@ public class Timer {
         lostRenderTicks = 0;
         remainingGameTicks = 0;
         remainingRenderTicks = 0;
-        delta = 0;
-        totalTime = 0;
+        delta = 0f;
+        totalTime = 0f;
         frameCounter = 0;
         gameTicksPerSecond = 0;
         renderTicksPerSecond = 0;
         currentElapsedTimeDifference = 0;
-        frameAve.init(ONE_NANO_SECOND / 60);
+        frameAve.init(ONE_NANO_SECOND / 60L);
         elapsedTimeSpan.reset();
         totalTimeSpan.reset();
     }
@@ -139,27 +139,27 @@ public class Timer {
         remainingRenderTicks += currentElapsedTimeDifference / renderTick;
 
         // Check to see if we have enough remaining time to take a tick
-        isGameTick = (remainingGameTicks >= 1.0D);
-        isRenderTick = (remainingRenderTicks >= 1.0D);
+        isGameTick = (remainingGameTicks >= 1D);
+        isRenderTick = (remainingRenderTicks >= 1D);
 
         // We are only allowed to take 1 tick per frame
         if (isGameTick) {
-            remainingGameTicks -= 1.0D;
+            remainingGameTicks -= 1D;
         }
         if (isRenderTick) {
-            remainingRenderTicks -= 1.0D;
+            remainingRenderTicks -= 1D;
         }
 
         // If we have any more than two ticks remaining then it is lost. If things are going well the tiny fraction
         // that will be added to the remaining ticks next frame shouldn't keep us from losing time. Render ticks are
         // going to be much more sensitive to this.
-        while (remainingGameTicks > 2.0D) {
-            lostGameTicks += 1.0D;
-            remainingGameTicks -= 1.0D;
+        while (remainingGameTicks > 2D) {
+            lostGameTicks += 1D;
+            remainingGameTicks -= 1D;
         }
-        while (remainingRenderTicks > 2.0D) {
-            lostRenderTicks += 1.0D;
-            remainingRenderTicks -= 1.0D;
+        while (remainingRenderTicks > 2D) {
+            lostRenderTicks += 1D;
+            remainingRenderTicks -= 1D;
         }
     }
 
@@ -190,7 +190,7 @@ public class Timer {
         }
 
         public long avg() {
-            long sum = 0;
+            long sum = 0L;
             for (int i = 0; i < this.slots.length; i++) {
                 sum += this.slots[i];
             }

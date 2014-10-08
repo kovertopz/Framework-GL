@@ -161,7 +161,7 @@ public class Tessellator {
     }
 
     public void addColor(float r, float g, float b) {
-        color.set(r, g, b, 1.0f);
+        color.set(r, g, b, 1f);
         internalAddColor(color);
     }
 
@@ -185,7 +185,7 @@ public class Tessellator {
     }
 
     public void addTexCoord(float s, float t) {
-        texCoord.set(s, t, 0);
+        texCoord.set(s, t, 0f);
         internalAddTexCoord(texCoord);
     }
 
@@ -196,12 +196,12 @@ public class Tessellator {
     }
 
     public void addVertex(float x, float y) {
-        vertex.set(x, y, 1.0f, 0.0f);
+        vertex.set(x, y, 1f, 0f);
         internalAddVertex(vertex);
     }
 
     public void addVertex(float x, float y, float z) {
-        vertex.set(x, y, z, 1.0f);
+        vertex.set(x, y, z, 1f);
         internalAddVertex(vertex);
     }
 
@@ -211,12 +211,12 @@ public class Tessellator {
     }
 
     public void addVertex(Vector2f vertex) {
-        this.vertex.set(vertex, 1.0f, 0.0f);
+        this.vertex.set(vertex, 1f, 0f);
         internalAddVertex(this.vertex);
     }
 
     public void addVertex(Vector3f vertex) {
-        this.vertex.set(vertex, 1.0f);
+        this.vertex.set(vertex, 1f);
         internalAddVertex(this.vertex);
     }
 

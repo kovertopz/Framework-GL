@@ -159,15 +159,15 @@ public class ObjReader implements ModelReader {
         // Lighting
         if (ambient.hasBeenSet()) {
             meshMaterial.setLighting(
-                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1.0f));
+                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1f));
         }
         if (diffuse.hasBeenSet()) {
             meshMaterial.setLighting(
-                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1.0f));
+                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1f));
         }
         if (specular.hasBeenSet()) {
             meshMaterial.setLighting(
-                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1.0f));
+                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1f));
         }
         meshMaterial.setShininess(material.convertSpecularExponent());
 
@@ -677,7 +677,7 @@ public class ObjReader implements ModelReader {
         }
 
         public static void addVertex(Tessellator.ConversionState conversionState, Vertex vertex) {
-            conversionState.getVertex().set(vertex.getX(), vertex.getY(), vertex.getZ(), 1.0f);
+            conversionState.getVertex().set(vertex.getX(), vertex.getY(), vertex.getZ(), 1f);
             conversionState.addVertexConversion(conversionState.getVertex());
         }
 
@@ -755,9 +755,9 @@ public class ObjReader implements ModelReader {
         private float z;
 
         private Vertex() {
-            x = 0;
-            y = 0;
-            z = 0;
+            x = 0f;
+            y = 0f;
+            z = 0f;
         }
 
         public float getX() {

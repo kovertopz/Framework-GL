@@ -40,25 +40,25 @@ public class LegacyCameraController implements InputProcessor {
     private final LegacyCamera camera;
 
     public LegacyCameraController(LegacyCamera camera) {
-        lookSpeed = 10.0f;
-        moveSpeed = 9.0f;
+        lookSpeed = 10f;
+        moveSpeed = 9f;
         this.camera = camera;
     }
 
     private void correctHeadingPitchAndRoll() {
         Vector3f camRotation = camera.getRotation();
 
-        if (camRotation.getX() > 90.0f) {
-            camera.setRotationX(90.0f);
-        } else if (camRotation.getX() < -90.0f) {
-            camera.setRotationX(-90.0f);
+        if (camRotation.getX() > 90f) {
+            camera.setRotationX(90f);
+        } else if (camRotation.getX() < -90f) {
+            camera.setRotationX(-90f);
         }
 
-        if ((camRotation.getY() >= 360.0f) || (camRotation.getY() <= -360.0f)) {
-            camera.setRotationY(camRotation.getY() % 360.0f);
+        if ((camRotation.getY() >= 360f) || (camRotation.getY() <= -360f)) {
+            camera.setRotationY(camRotation.getY() % 360f);
         }
-        if (camRotation.getY() < 0) {
-            camera.setRotationY(camRotation.getY() + 360.0f);
+        if (camRotation.getY() < 0f) {
+            camera.setRotationY(camRotation.getY() + 360f);
         }
     }
 
@@ -84,9 +84,9 @@ public class LegacyCameraController implements InputProcessor {
         Vector3f camPosition = camera.getPosition();
         Vector3f camRotation = camera.getRotation();
 
-        float xPositionDelta = 0;
-        float yPositionDelta = 0;
-        float zPositionDelta = 0;
+        float xPositionDelta = 0f;
+        float yPositionDelta = 0f;
+        float zPositionDelta = 0f;
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_BACK)) {
             xPositionDelta += Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
@@ -97,38 +97,38 @@ public class LegacyCameraController implements InputProcessor {
             zPositionDelta -= Math.cos(camRotation.getY() * MathHelper.PI_OVER_180);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_LEFT)) {
-            xPositionDelta += Math.sin((camRotation.getY() - 90) * MathHelper.PI_OVER_180);
-            zPositionDelta += Math.cos((camRotation.getY() - 90) * MathHelper.PI_OVER_180);
+            xPositionDelta += Math.sin((camRotation.getY() - 90f) * MathHelper.PI_OVER_180);
+            zPositionDelta += Math.cos((camRotation.getY() - 90f) * MathHelper.PI_OVER_180);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_RIGHT)) {
-            xPositionDelta += Math.sin((camRotation.getY() + 90) * MathHelper.PI_OVER_180);
-            zPositionDelta += Math.cos((camRotation.getY() + 90) * MathHelper.PI_OVER_180);
+            xPositionDelta += Math.sin((camRotation.getY() + 90f) * MathHelper.PI_OVER_180);
+            zPositionDelta += Math.cos((camRotation.getY() + 90f) * MathHelper.PI_OVER_180);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_DOWN)) {
-            yPositionDelta -= 0.5f;
+            yPositionDelta -= .5f;
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_UP)) {
-            yPositionDelta += 0.5f;
+            yPositionDelta += .5f;
         }
 
         camera.setPositionX(camPosition.getX() + xPositionDelta * delta * moveSpeed);
         camera.setPositionY(camPosition.getY() + yPositionDelta * delta * moveSpeed);
         camera.setPositionZ(camPosition.getZ() + zPositionDelta * delta * moveSpeed);
 
-        float xRotationDelta = 0;
-        float yRotationDelta = 0;
+        float xRotationDelta = 0f;
+        float yRotationDelta = 0f;
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_DOWN)) {
-            xRotationDelta -= 5.0f;
+            xRotationDelta -= 1f;
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_UP)) {
-            xRotationDelta += 5.0f;
+            xRotationDelta += 1f;
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_LEFT)) {
-            yRotationDelta -= 5.0f;
+            yRotationDelta -= 1f;
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_RIGHT)) {
-            yRotationDelta += 5.0f;
+            yRotationDelta += 1f;
         }
 
         xRotationDelta += Fw.input.getDeltaY();

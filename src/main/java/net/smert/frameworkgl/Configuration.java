@@ -66,8 +66,8 @@ public class Configuration {
         pauseNotInFocus = true;
         vSyncEnabled = false;
         vSyncRequested = false;
-        mouseMoveSensitivity = 1.0f;
-        mouseWheelSensitivity = 1.0f;
+        mouseMoveSensitivity = 1f;
+        mouseWheelSensitivity = 1f;
         backgroundFrameRate = 30;
         currentHeight = 0;
         currentWidth = 0;

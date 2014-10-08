@@ -262,19 +262,19 @@ public class Matrix4f {
         // 0 0 z pz  |  0  0  d10 d14  = (0)    (0)    (z d10 + pz d11) (z d14 + pz d15)
         // 0 0 0 1   |  0  0  d11 d15  = (0)    (0)    (d11)            (d15)
         out.d0 = d0 * matrix.d0;
-        out.d4 = 0;
+        out.d4 = 0f;
         out.d8 = d0 * matrix.d8 + d12 * matrix.d11;
         out.d12 = d0 * matrix.d12 + d12 * matrix.d15;
-        out.d1 = 0;
+        out.d1 = 0f;
         out.d5 = d5 * matrix.d5;
         out.d9 = d5 * matrix.d9 + d13 * matrix.d11;
         out.d13 = d5 * matrix.d13 + d13 * matrix.d15;
-        out.d2 = 0;
-        out.d6 = 0;
+        out.d2 = 0f;
+        out.d6 = 0f;
         out.d10 = d10 * matrix.d10 + d14 * matrix.d11;
         out.d14 = d10 * matrix.d14 + d14 * matrix.d15;
-        out.d3 = 0;
-        out.d7 = 0;
+        out.d3 = 0f;
+        out.d7 = 0f;
         out.d11 = matrix.d11;
         out.d15 = matrix.d15;
         return this;
@@ -284,39 +284,39 @@ public class Matrix4f {
         float radians = MathHelper.ToRadians(degrees);
         float c = MathHelper.Cos(radians);
         float s = MathHelper.Sin(radians);
-        float t = (1.0f - c);
+        float t = (1f - c);
         d0 = t * (vector.x * vector.x) + c;
         d1 = t * (vector.x * vector.y) + (vector.z * s);
         d2 = t * (vector.x * vector.z) - (vector.y * s);
-        d3 = 0;
+        d3 = 0f;
         d4 = t * (vector.y * vector.x) - (vector.z * s);
         d5 = t * (vector.y * vector.y) + c;
         d6 = t * (vector.y * vector.z) + (vector.x * s);
-        d7 = 0;
+        d7 = 0f;
         d8 = t * (vector.z * vector.x) + (vector.y * s);
         d9 = t * (vector.z * vector.y) - (vector.x * s);
         d10 = t * (vector.z * vector.z) + c;
-        d11 = 0;
+        d11 = 0f;
         return this;
     }
 
     public final Matrix4f identity() {
-        d0 = 1.0f;
-        d1 = 0;
-        d2 = 0;
-        d3 = 0;
-        d4 = 0;
-        d5 = 1.0f;
-        d6 = 0;
-        d7 = 0;
-        d8 = 0;
-        d9 = 0;
-        d10 = 1.0f;
-        d11 = 0;
-        d12 = 0;
-        d13 = 0;
-        d14 = 0;
-        d15 = 1.0f;
+        d0 = 1f;
+        d1 = 0f;
+        d2 = 0f;
+        d3 = 0f;
+        d4 = 0f;
+        d5 = 1f;
+        d6 = 0f;
+        d7 = 0f;
+        d8 = 0f;
+        d9 = 0f;
+        d10 = 1f;
+        d11 = 0f;
+        d12 = 0f;
+        d13 = 0f;
+        d14 = 0f;
+        d15 = 1f;
         return this;
     }
 
@@ -447,19 +447,19 @@ public class Matrix4f {
         d0 = rotation.xAxis.x;
         d1 = rotation.yAxis.x;
         d2 = rotation.zAxis.x;
-        d3 = 0;
+        d3 = 0f;
         d4 = rotation.xAxis.y;
         d5 = rotation.yAxis.y;
         d6 = rotation.zAxis.y;
-        d7 = 0;
+        d7 = 0f;
         d8 = rotation.xAxis.z;
         d9 = rotation.yAxis.z;
         d10 = rotation.zAxis.z;
-        d11 = 0;
+        d11 = 0f;
         d12 = -rotation.xAxis.dot(position);
         d13 = -rotation.yAxis.dot(position);
         d14 = -rotation.zAxis.dot(position);
-        d15 = 1;
+        d15 = 1f;
         return this;
     }
 
@@ -487,19 +487,19 @@ public class Matrix4f {
         d0 = transform.rotation.xAxis.x;
         d1 = transform.rotation.xAxis.y;
         d2 = transform.rotation.xAxis.z;
-        d3 = 0;
+        d3 = 0f;
         d4 = transform.rotation.yAxis.x;
         d5 = transform.rotation.yAxis.y;
         d6 = transform.rotation.yAxis.z;
-        d7 = 0;
+        d7 = 0f;
         d8 = transform.rotation.zAxis.x;
         d9 = transform.rotation.zAxis.y;
         d10 = transform.rotation.zAxis.z;
-        d11 = 0;
+        d11 = 0f;
         d12 = transform.position.x;
         d13 = transform.position.y;
         d14 = transform.position.z;
-        d15 = 1;
+        d15 = 1f;
         return this;
     }
 
@@ -511,36 +511,36 @@ public class Matrix4f {
     }
 
     public Matrix4f setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltax = 1.0f / (right - left);
-        float invdeltay = 1.0f / (top - bottom);
-        float invdeltaz = 1.0f / (zfar - znear);
-        float h = 2.0f * znear * invdeltay;
-        setRow(0, 2.0f * znear * invdeltax, 0.0f, (right + left) * invdeltax, 0.0f);
-        setRow(1, 0.0f, h, (top + bottom) * invdeltay, 0.0f);
-        setRow(2, 0.0f, 0.0f, -(zfar + znear) * invdeltaz, -2.0f * zfar * znear * invdeltaz);
-        setRow(3, 0.0f, 0.0f, -1.0f, 0.0f);
+        float invdeltax = 1f / (right - left);
+        float invdeltay = 1f / (top - bottom);
+        float invdeltaz = 1f / (zfar - znear);
+        float h = 2f * znear * invdeltay;
+        setRow(0, 2f * znear * invdeltax, 0f, (right + left) * invdeltax, 0f);
+        setRow(1, 0f, h, (top + bottom) * invdeltay, 0f);
+        setRow(2, 0f, 0f, -(zfar + znear) * invdeltaz, -2f * zfar * znear * invdeltaz);
+        setRow(3, 0f, 0f, -1f, 0f);
         return this;
     }
 
     public Matrix4f setOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) {
-        float invdeltax = 1.0f / (right - left);
-        float invdeltay = 1.0f / (top - bottom);
-        float invdeltaz = 1.0f / (zFar - zNear);
-        float h = 2.0f * invdeltay;
-        setRow(0, 2.0f * invdeltax, 0.0f, 0.0f, -(right + left) * invdeltax);
-        setRow(1, 0.0f, h, 0.0f, -(top + bottom) * invdeltay);
-        setRow(2, 0.0f, 0.0f, -2.0f * invdeltaz, -(zFar + zNear) * invdeltaz);
-        setRow(3, 0.0f, 0.0f, 0.0f, 1.0f);
+        float invdeltax = 1f / (right - left);
+        float invdeltay = 1f / (top - bottom);
+        float invdeltaz = 1f / (zFar - zNear);
+        float h = 2f * invdeltay;
+        setRow(0, 2f * invdeltax, 0f, 0f, -(right + left) * invdeltax);
+        setRow(1, 0f, h, 0f, -(top + bottom) * invdeltay);
+        setRow(2, 0f, 0f, -2f * invdeltaz, -(zFar + zNear) * invdeltaz);
+        setRow(3, 0f, 0f, 0f, 1f);
         return this;
     }
 
     public Matrix4f setPerspective(float fieldOfViewY, float aspectRatio, float zNear, float zFar) {
-        float cotangent = 1.0f / MathHelper.Tan(fieldOfViewY * MathHelper.PI_OVER_360);
-        float invdeltaz = 1.0f / (zFar - zNear);
-        setRow(0, cotangent / aspectRatio, 0.0f, 0.0f, 0.0f);
-        setRow(1, 0.0f, cotangent, 0.0f, 0.0f);
-        setRow(2, 0.0f, 0.0f, -(zFar + zNear) * invdeltaz, -2.0f * zNear * zFar * invdeltaz);
-        setRow(3, 0.0f, 0.0f, -1.0f, 0.0f);
+        float cotangent = 1f / MathHelper.Tan(fieldOfViewY * MathHelper.PI_OVER_360);
+        float invdeltaz = 1f / (zFar - zNear);
+        setRow(0, cotangent / aspectRatio, 0f, 0f, 0f);
+        setRow(1, 0f, cotangent, 0f, 0f);
+        setRow(2, 0f, 0f, -(zFar + zNear) * invdeltaz, -2f * zNear * zFar * invdeltaz);
+        setRow(3, 0f, 0f, -1f, 0f);
         return this;
     }
 
@@ -618,10 +618,10 @@ public class Matrix4f {
         out.d6 = d2 * matrix.d4 + d6 * matrix.d5 + d10 * matrix.d6;
         out.d10 = d2 * matrix.d8 + d6 * matrix.d9 + d10 * matrix.d10;
         out.d14 = d2 * matrix.d12 + d6 * matrix.d13 + d10 * matrix.d14 + d14;
-        out.d3 = 0;
-        out.d7 = 0;
-        out.d11 = 0;
-        out.d15 = 1;
+        out.d3 = 0f;
+        out.d7 = 0f;
+        out.d11 = 0f;
+        out.d15 = 1f;
     }
 
     // Vector Operations

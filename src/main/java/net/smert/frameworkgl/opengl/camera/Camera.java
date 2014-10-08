@@ -23,8 +23,8 @@ import net.smert.frameworkgl.math.Vector3f;
  */
 public class Camera {
 
-    public final static float MAX_SAFE_PITCH = 90.0f;
-    public final static float MAX_SAFE_ROLL = 30.0f;
+    public final static float MAX_SAFE_PITCH = 90f;
+    public final static float MAX_SAFE_ROLL = 30f;
 
     private boolean invert;
     private float aspectRatio;
@@ -45,13 +45,13 @@ public class Camera {
 
     public Camera() {
         invert = false;
-        aspectRatio = 0;
-        fieldOfView = 0;
-        totalHeading = 0;
-        totalPitch = 0;
-        totalRoll = 0;
-        zFar = 0;
-        zNear = 0;
+        aspectRatio = 0f;
+        fieldOfView = 0f;
+        totalHeading = 0f;
+        totalPitch = 0f;
+        totalRoll = 0f;
+        zFar = 0f;
+        zNear = 0f;
         movementMatrix = new Matrix3f();
         rotationMatrix = new Matrix3f();
         tempMatrix = new Matrix3f();
@@ -136,17 +136,17 @@ public class Camera {
             roll = -MAX_SAFE_ROLL - (totalRoll - roll);
         }
 
-        if (heading != 0) {
+        if (heading != 0f) {
             tempMatrix.fromAxisAngle(Vector3f.WORLD_Y_AXIS, heading);
             tempMatrix.multiplyOut(rotationMatrix.getXAxis(), rotationMatrix.getXAxis());
             tempMatrix.multiplyOut(rotationMatrix.getZAxis(), rotationMatrix.getZAxis());
         }
-        if (roll != 0) {
+        if (roll != 0f) {
             tempMatrix.fromAxisAngle(rotationMatrix.getZAxis(), roll);
             tempMatrix.multiplyOut(rotationMatrix.getYAxis(), rotationMatrix.getYAxis());
             tempMatrix.multiplyOut(rotationMatrix.getXAxis(), rotationMatrix.getXAxis());
         }
-        if (pitch != 0) {
+        if (pitch != 0f) {
             tempMatrix.fromAxisAngle(rotationMatrix.getXAxis(), pitch);
             tempMatrix.multiplyOut(rotationMatrix.getYAxis(), rotationMatrix.getYAxis());
             tempMatrix.multiplyOut(rotationMatrix.getZAxis(), rotationMatrix.getZAxis());
@@ -161,20 +161,20 @@ public class Camera {
     }
 
     public void setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltay = 1.0f / (top - bottom);
-        float h = 2.0f * znear * invdeltay;
-        aspectRatio = 1.0f;
-        fieldOfView = MathHelper.ArcTan(1.0f / h) / MathHelper.PI_OVER_360;
+        float invdeltay = 1f / (top - bottom);
+        float h = 2f * znear * invdeltay;
+        aspectRatio = 1f;
+        fieldOfView = MathHelper.ArcTan(1f / h) / MathHelper.PI_OVER_360;
         zFar = zfar;
         zNear = znear;
         projectionMatrix.setFrustum(left, right, bottom, top, znear, zfar);
     }
 
     public void setOrthogonalProjection(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltay = 1.0f / (top - bottom);
-        float h = 2.0f * invdeltay;
-        aspectRatio = 1.0f;
-        fieldOfView = MathHelper.ArcTan(1.0f / h) / MathHelper.PI_OVER_360;
+        float invdeltay = 1f / (top - bottom);
+        float h = 2f * invdeltay;
+        aspectRatio = 1f;
+        fieldOfView = MathHelper.ArcTan(1f / h) / MathHelper.PI_OVER_360;
         zFar = zfar;
         zNear = znear;
         projectionMatrix.setOrthogonal(left, right, bottom, top, znear, zfar);

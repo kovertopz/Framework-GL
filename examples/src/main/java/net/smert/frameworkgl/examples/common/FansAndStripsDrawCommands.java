@@ -30,48 +30,48 @@ public class FansAndStripsDrawCommands implements DrawCommands {
 
         // Must be in object coordinates
         GL.o1.begin(Primitives.QUAD_STRIP)
-                .color(1.0f, 0.0f, 0.0f, 1.0f) // Red
-                .vertex(-1.0f, 0.5f, 0.5f)
-                .color(0.0f, 1.0f, 0.0f, 1.0f) // Green
-                .vertex(-1.0f, -0.5f, 0.5f)
-                .color(0.0f, 0.0f, 1.0f, 1.0f) // Blue
-                .vertex(0.0f, 0.5f, 0.5f)
-                .color(1.0f, 1.0f, 0.0f, 1.0f) // Yellow
-                .vertex(0.0f, -0.5f, 0.5f)
-                .color(0.0f, 1.0f, 1.0f, 1.0f) // Cyan
-                .vertex(1.0f, 0.5f, 0.5f)
-                .color(1.0f, 0.0f, 1.0f, 1.0f) // Purple
-                .vertex(1.0f, -0.5f, 0.5f);
+                .color(1f, 0f, 0f, 1f) // Red
+                .vertex(-1f, .5f, .5f)
+                .color(0f, 1f, 0f, 1f) // Green
+                .vertex(-1f, -.5f, .5f)
+                .color(0f, 0f, 1f, 1f) // Blue
+                .vertex(0f, .5f, .5f)
+                .color(1f, 1f, 0f, 1f) // Yellow
+                .vertex(0f, -.5f, .5f)
+                .color(0f, 1f, 1f, 1f) // Cyan
+                .vertex(1f, .5f, .5f)
+                .color(1f, 0f, 1f, 1f) // Purple
+                .vertex(1f, -.5f, .5f);
         GL.o1.end();
 
         GL.o1.begin(Primitives.TRIANGLE_FAN)
-                .color(1.0f, 0.0f, 0.0f, 1.0f) // Red
-                .vertex(0.0f, -1.5f, 0.5f)
-                .color(0.0f, 1.0f, 0.0f, 1.0f) // Green
-                .vertex(-2.0f, -2.2f, 0.5f)
-                .color(0.0f, 0.0f, 1.0f, 1.0f) // Blue
-                .vertex(-1.0f, -2.7f, 0.5f)
-                .color(1.0f, 1.0f, 0.0f, 1.0f) // Yellow
-                .vertex(0.0f, -2.9f, 0.5f)
-                .color(0.0f, 1.0f, 1.0f, 1.0f) // Cyan
-                .vertex(1.0f, -2.7f, 0.5f)
-                .color(1.0f, 0.0f, 1.0f, 1.0f) // Purple
-                .vertex(2.0f, -2.2f, 0.5f);
+                .color(1f, 0f, 0f, 1f) // Red
+                .vertex(0f, -1.5f, .5f)
+                .color(0f, 1f, 0f, 1f) // Green
+                .vertex(-2f, -2.2f, .5f)
+                .color(0f, 0f, 1f, 1f) // Blue
+                .vertex(-1f, -2.7f, .5f)
+                .color(1f, 1f, 0f, 1f) // Yellow
+                .vertex(0f, -2.9f, .5f)
+                .color(0f, 1f, 1f, 1f) // Cyan
+                .vertex(1f, -2.7f, .5f)
+                .color(1f, 0f, 1f, 1f) // Purple
+                .vertex(2f, -2.2f, .5f);
         GL.o1.end();
 
         GL.o1.begin(Primitives.TRIANGLE_STRIP)
-                .color(1.0f, 0.0f, 0.0f, 1.0f) // Red
-                .vertex(-1.0f, 2.5f, 0.5f)
-                .color(0.0f, 1.0f, 0.0f, 1.0f) // Green
-                .vertex(-1.0f, 1.5f, 0.5f)
-                .color(0.0f, 0.0f, 1.0f, 1.0f) // Blue
-                .vertex(0.0f, 2.5f, 0.5f)
-                .color(1.0f, 1.0f, 0.0f, 1.0f) // Yellow
-                .vertex(0.0f, 1.5f, 0.5f)
-                .color(0.0f, 1.0f, 1.0f, 1.0f) // Cyan
-                .vertex(1.0f, 2.5f, 0.5f)
-                .color(1.0f, 0.0f, 1.0f, 1.0f) // Purple
-                .vertex(1.0f, 1.5f, 0.5f);
+                .color(1f, 0f, 0f, 1f) // Red
+                .vertex(-1f, 2.5f, .5f)
+                .color(0f, 1f, 0f, 1f) // Green
+                .vertex(-1f, 1.5f, .5f)
+                .color(0f, 0f, 1f, 1f) // Blue
+                .vertex(0f, 2.5f, .5f)
+                .color(1f, 1f, 0f, 1f) // Yellow
+                .vertex(0f, 1.5f, .5f)
+                .color(0f, 1f, 1f, 1f) // Cyan
+                .vertex(1f, 2.5f, .5f)
+                .color(1f, 0f, 1f, 1f) // Purple
+                .vertex(1f, 1.5f, .5f);
         GL.o1.end();
     }
 

@@ -31,10 +31,7 @@ public class Quaternion4f {
 
     // Constructors
     public Quaternion4f() {
-        w = 1;
-        x = 0;
-        y = 0;
-        z = 0;
+        identity();
     }
 
     public Quaternion4f(float w, float x, float y, float z) {
@@ -81,20 +78,20 @@ public class Quaternion4f {
         float yz = y * z;
         float zz = z * z;
         matrix.setColumnMajor(
-                1.0f - 2.0f * (yy + zz),
-                2.0f * (xy - wz),
-                2.0f * (xz + wy),
-                2.0f * (xy + wz),
-                1.0f - 2.0f * (xx + zz),
-                2.0f * (yz - wx),
-                2.0f * (xz - wy),
-                2.0f * (yz + wx),
-                1.0f - 2.0f * (xx + yy));
+                1f - 2f * (yy + zz),
+                2f * (xy - wz),
+                2f * (xz + wy),
+                2f * (xy + wz),
+                1f - 2f * (xx + zz),
+                2f * (yz - wx),
+                2f * (xz - wy),
+                2f * (yz + wx),
+                1f - 2f * (xx + yy));
     }
 
     // Scalar Operations
     public float getAngle() {
-        return MathHelper.ArcCos(w) * 2.0f;
+        return MathHelper.ArcCos(w) * 2f;
     }
 
     public float getW() {
@@ -123,7 +120,7 @@ public class Quaternion4f {
 
     // Quaternion Operations
     public Quaternion4f fromAxisAngle(Vector3f vector, float degrees) {
-        float halftheta = MathHelper.ToRadians(degrees) * 0.5f;
+        float halftheta = MathHelper.ToRadians(degrees) * .5f;
         float s = MathHelper.Sin(halftheta);
         w = MathHelper.Cos(halftheta);
         x = vector.x * s;
@@ -136,39 +133,39 @@ public class Quaternion4f {
         float t = matrix.xAxis.x + matrix.yAxis.y + matrix.zAxis.z;
 
         if (t > MathHelper.ZERO_EPSILON) {
-            float s = MathHelper.Sqrt(t + 1.0f) * 2.0f;
-            w = 0.25f * s;
+            float s = MathHelper.Sqrt(t + 1f) * 2f;
+            w = .25f * s;
             x = (matrix.zAxis.y - matrix.yAxis.z) / s;
             y = (matrix.xAxis.z - matrix.zAxis.x) / s;
             z = (matrix.yAxis.x - matrix.xAxis.y) / s;
         } else if ((matrix.xAxis.x > matrix.yAxis.y) && (matrix.xAxis.x > matrix.zAxis.z)) {
-            float s = MathHelper.Sqrt(1.0f + matrix.xAxis.x - matrix.yAxis.y - matrix.zAxis.z) * 2.0f;
+            float s = MathHelper.Sqrt(1f + matrix.xAxis.x - matrix.yAxis.y - matrix.zAxis.z) * 2f;
             w = (matrix.zAxis.y - matrix.yAxis.z) / s;
-            x = 0.25f * s;
+            x = .25f * s;
             y = (matrix.xAxis.y + matrix.yAxis.x) / s;
             z = (matrix.xAxis.z + matrix.zAxis.x) / s;
         } else if (matrix.yAxis.y > matrix.zAxis.z) {
-            float s = MathHelper.Sqrt(1.0f + matrix.yAxis.y - matrix.xAxis.x - matrix.zAxis.z) * 2.0f;
+            float s = MathHelper.Sqrt(1f + matrix.yAxis.y - matrix.xAxis.x - matrix.zAxis.z) * 2f;
             w = (matrix.xAxis.z - matrix.zAxis.x) / s;
             x = (matrix.xAxis.y + matrix.yAxis.x) / s;
-            y = 0.25f * s;
+            y = .25f * s;
             z = (matrix.yAxis.z + matrix.zAxis.y) / s;
         } else {
-            float s = MathHelper.Sqrt(1.0f + matrix.zAxis.z - matrix.xAxis.x - matrix.yAxis.y) * 2.0f;
+            float s = MathHelper.Sqrt(1f + matrix.zAxis.z - matrix.xAxis.x - matrix.yAxis.y) * 2f;
             w = (matrix.yAxis.x - matrix.xAxis.y) / s;
             x = (matrix.xAxis.z + matrix.zAxis.x) / s;
             y = (matrix.yAxis.z + matrix.zAxis.y) / s;
-            z = 0.25f * s;
+            z = .25f * s;
         }
 
         return this;
     }
 
-    public Quaternion4f identity() {
-        w = 1;
-        x = 0;
-        y = 0;
-        z = 0;
+    public final Quaternion4f identity() {
+        w = 1f;
+        x = 0f;
+        y = 0f;
+        z = 0f;
         return this;
     }
 
@@ -206,7 +203,7 @@ public class Quaternion4f {
             return identity();
         }
 
-        return multiply(1.0f / mag);
+        return multiply(1f / mag);
     }
 
     public Quaternion4f set(float w, float x, float y, float z) {

@@ -70,9 +70,9 @@ public class LegacyCamera {
     }
 
     public void updateOpenGL() {
-        GL.o1.rotate(rotation.getX(), 1.0f, 0, 0);
-        GL.o1.rotate(360.0f - rotation.getY(), 0, 1.0f, 0);
-        GL.o1.rotate(rotation.getZ(), 0, 0, 1.0f);
+        GL.o1.rotate(rotation.getX(), 1f, 0f, 0f);
+        GL.o1.rotate(360f - rotation.getY(), 0f, 1f, 0f);
+        GL.o1.rotate(rotation.getZ(), 0f, 0f, 1f);
         GL.o1.translate(-position.getX(), -position.getY(), -position.getZ());
     }
 

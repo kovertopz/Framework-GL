@@ -33,7 +33,7 @@ public class LegacyRenderHelper {
     }
 
     public void color(float r, float g, float b) {
-        GL11.glColor4f(r, g, b, 1.0f);
+        GL11.glColor4f(r, g, b, 1f);
     }
 
     public void color(float r, float g, float b, float a) {

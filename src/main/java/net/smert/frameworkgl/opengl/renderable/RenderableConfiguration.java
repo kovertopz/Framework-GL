@@ -53,15 +53,15 @@ public class RenderableConfiguration {
         float r = colors[offset + 0];
         float g = colors[offset + 1];
         float b = colors[offset + 2];
-        float a = 1.0f;
+        float a = 1f;
 
-        assert (r >= 0.0f && r <= 1.0f);
-        assert (g >= 0.0f && g <= 1.0f);
-        assert (b >= 0.0f && b <= 1.0f);
+        assert (r >= 0f && r <= 1f);
+        assert (g >= 0f && g <= 1f);
+        assert (b >= 0f && b <= 1f);
 
         if (colorSize == 4) {
             a = colors[offset + 3];
-            assert (a >= 0.0f && a <= 1.0f);
+            assert (a >= 0f && a <= 1f);
         }
 
         // Depending on the GL type and size convert the data and put it into the byte buffer
@@ -91,7 +91,7 @@ public class RenderableConfiguration {
     }
 
     private byte convertFloatToByte(float value) {
-        return (byte) (MathHelper.Clamp(value, 0.0f, 1.0f) * 255);
+        return (byte) (MathHelper.Clamp(value, 0f, 1f) * 255);
     }
 
     public int convertGLTypeToByteSize(int glType) {
@@ -132,9 +132,9 @@ public class RenderableConfiguration {
         float y = normals[offset + 1];
         float z = normals[offset + 2];
 
-        assert (x >= -1.0f && x <= 1.0f);
-        assert (y >= -1.0f && y <= 1.0f);
-        assert (z >= -1.0f && z <= 1.0f);
+        assert (x >= -1f && x <= 1f);
+        assert (y >= -1f && y <= 1f);
+        assert (z >= -1f && z <= 1f);
 
         // Depending on the GL type put it into the byte buffer
         switch (NORMAL_TYPE) {
@@ -156,14 +156,14 @@ public class RenderableConfiguration {
         int offset = texCoordSize * index;
         float s = texCoords[offset + 0];
         float t = texCoords[offset + 1];
-        float r = 0.0f;
+        float r = 0f;
 
-        assert (s >= 0.0f && s <= 1.0f);
-        assert (t >= 0.0f && t <= 1.0f);
+        assert (s >= 0f && s <= 1f);
+        assert (t >= 0f && t <= 1f);
 
         if (texCoordSize == 3) {
             r = texCoords[offset + 2];
-            assert (r >= 0.0f && r <= 1.0f);
+            assert (r >= 0f && r <= 1f);
         }
 
         // Depending on the GL type and size put it into the byte buffer

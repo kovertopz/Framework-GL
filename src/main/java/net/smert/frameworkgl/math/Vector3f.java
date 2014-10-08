@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 public class Vector3f {
 
     private static Logger log = LoggerFactory.getLogger(Vector3f.class);
-    public static Vector3f WORLD_X_AXIS = new Vector3f(1.0f, 0.0f, 0.0f);
-    public static Vector3f WORLD_Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
-    public static Vector3f WORLD_Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
+    public static Vector3f WORLD_X_AXIS = new Vector3f(1f, 0f, 0f);
+    public static Vector3f WORLD_Y_AXIS = new Vector3f(0f, 1f, 0f);
+    public static Vector3f WORLD_Z_AXIS = new Vector3f(0f, 0f, 1f);
 
     float x;
     float y;
@@ -33,9 +33,7 @@ public class Vector3f {
 
     // Constructors
     public Vector3f() {
-        x = 0;
-        y = 0;
-        z = 0;
+        zero();
     }
 
     public Vector3f(float x, float y, float z) {
@@ -62,7 +60,7 @@ public class Vector3f {
         if (magnitude <= length) {
             return false;
         }
-        multiply(1.0f / magnitude);
+        multiply(1f / magnitude);
         multiply(length);
         return true;
     }
@@ -72,7 +70,7 @@ public class Vector3f {
         if (magnitudeSquared <= length * length) {
             return false;
         }
-        multiply(1.0f / MathHelper.Sqrt(magnitudeSquared));
+        multiply(1f / MathHelper.Sqrt(magnitudeSquared));
         multiply(length);
         return true;
     }
@@ -194,14 +192,14 @@ public class Vector3f {
         if (mag < MathHelper.ZERO_EPSILON) {
             log.warn("Divide By Zero. Magnitude: {} x: {} y: {} z: {}", mag, x, y, z);
 
-            x = 0.0f;
-            y = 0.0f;
-            z = -1.0f;
+            x = 0f;
+            y = 0f;
+            z = -1f;
 
             return this;
         }
 
-        return multiply(1.0f / mag);
+        return multiply(1f / mag);
     }
 
     public Vector3f set(float x, float y, float z) {
@@ -241,7 +239,7 @@ public class Vector3f {
     }
 
     public Vector3f setInterpolate(Vector3f vector0, Vector3f vector1, float f) {
-        float s = 1.0f - f;
+        float s = 1f - f;
         x = vector0.x * s + vector1.x * f;
         y = vector0.y * s + vector1.y * f;
         z = vector0.z * s + vector1.z * f;
@@ -336,10 +334,10 @@ public class Vector3f {
         return this;
     }
 
-    public Vector3f zero() {
-        x = 0;
-        y = 0;
-        z = 0;
+    public final Vector3f zero() {
+        x = 0f;
+        y = 0f;
+        z = 0f;
         return this;
     }
 

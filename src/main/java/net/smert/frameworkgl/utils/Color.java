@@ -85,10 +85,10 @@ public class Color {
     }
 
     public final void setWhite() {
-        this.r = 1.0f;
-        this.g = 1.0f;
-        this.b = 1.0f;
-        this.a = 1.0f;
+        this.r = 1f;
+        this.g = 1f;
+        this.b = 1f;
+        this.a = 1f;
     }
 
 }

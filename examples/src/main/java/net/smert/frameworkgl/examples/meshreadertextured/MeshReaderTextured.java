@@ -70,7 +70,7 @@ public class MeshReaderTextured extends Screen {
 
         // Setup camera and controller
         camera = new LegacyCamera();
-        camera.setPosition(0.0f, 0.0f, 5.0f);
+        camera.setPosition(0f, 0f, 5f);
         cameraController = new LegacyCameraController(camera);
 
         // Memory usage
@@ -105,7 +105,7 @@ public class MeshReaderTextured extends Screen {
         GL.o1.enableDepthTest();
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
-        GL.o1.setClearDepth(1.0f);
+        GL.o1.setClearDepth(1f);
         GL.o1.enableLight0();
         GL.o1.enableLighting();
         GL.o1.setSmoothLighting(true);
@@ -113,16 +113,16 @@ public class MeshReaderTextured extends Screen {
         GL.o1.clear();
 
         GL.o1.setProjectionPerspective(
-                70.0f,
+                70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
-                0.05f, 512.0f);
+                .05f, 128f);
         GL.o1.setModelViewIdentity();
 
         // Light position
-        lightFloatBuffer.put(0.0f);
-        lightFloatBuffer.put(15.0f);
-        lightFloatBuffer.put(10.0f);
-        lightFloatBuffer.put(1.0f);
+        lightFloatBuffer.put(0f);
+        lightFloatBuffer.put(15f);
+        lightFloatBuffer.put(10f);
+        lightFloatBuffer.put(1f);
         lightFloatBuffer.flip();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
@@ -156,7 +156,7 @@ public class MeshReaderTextured extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0.0f);
+            Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
         }
     }
 

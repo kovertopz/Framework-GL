@@ -151,7 +151,7 @@ public class Matrix3f {
         float radians = MathHelper.ToRadians(degrees);
         float c = MathHelper.Cos(radians);
         float s = MathHelper.Sin(radians);
-        float t = (1.0f - c);
+        float t = (1f - c);
         xAxis.set(
                 t * (vector.x * vector.x) + c,
                 t * (vector.x * vector.y) + (vector.z * s),
@@ -168,9 +168,9 @@ public class Matrix3f {
     }
 
     public Matrix3f identity() {
-        xAxis.set(1.0f, 0.0f, 0.0f);
-        yAxis.set(0.0f, 1.0f, 0.0f);
-        zAxis.set(0.0f, 0.0f, 1.0f);
+        xAxis.set(1f, 0f, 0f);
+        yAxis.set(0f, 1f, 0f);
+        zAxis.set(0f, 0f, 1f);
         return this;
     }
 
@@ -310,7 +310,7 @@ public class Matrix3f {
         zAxis.x = (matrix.yAxis.x * matrix.zAxis.y - matrix.zAxis.x * matrix.yAxis.y);
         zAxis.y = -(matrix.xAxis.x * matrix.zAxis.y - matrix.zAxis.x * matrix.xAxis.y);
         zAxis.z = (matrix.xAxis.x * matrix.yAxis.y - matrix.yAxis.x * matrix.xAxis.y);
-        return multiply(1.0f / determinant);
+        return multiply(1f / determinant);
     }
 
     public Matrix3f setRowMajor(
@@ -324,15 +324,15 @@ public class Matrix3f {
     }
 
     public Matrix3f setSkewSymmetric(Vector3f vector) {
-        xAxis.x = 0;
+        xAxis.x = 0f;
         xAxis.y = vector.z;
         xAxis.z = -vector.y;
         yAxis.x = -vector.z;
-        yAxis.y = 0;
+        yAxis.y = 0f;
         yAxis.z = vector.x;
         zAxis.x = vector.y;
         zAxis.y = -vector.x;
-        zAxis.z = 0;
+        zAxis.z = 0f;
         return this;
     }
 
@@ -428,14 +428,14 @@ public class Matrix3f {
             h = MathHelper.ArcTan2(-xAxis.z, xAxis.x);
         }
 
-        return 180.0f - MathHelper.ToDegrees(h);
+        return 180f - MathHelper.ToDegrees(h);
     }
 
     public float getPitch() {
         float p, t = xAxis.y;
 
         if ((t >= MathHelper.TOLERANCE_EULER_CONVERSION) || (t <= -MathHelper.TOLERANCE_EULER_CONVERSION)) {
-            p = 0;
+            p = 0f;
         } else {
             p = MathHelper.ArcTan2(-zAxis.y, yAxis.y);
         }

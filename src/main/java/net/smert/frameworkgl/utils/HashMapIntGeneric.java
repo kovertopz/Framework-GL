@@ -32,7 +32,7 @@ public class HashMapIntGeneric<V> {
     private static int DEFAULT_INITIAL_CAPACITY = 16;
     private static int MAXIMUM_CAPACITY = 1 << 30;
     private static int NULL_BUCKET = 0;
-    private static float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static float DEFAULT_LOAD_FACTOR = .75f;
     // Not a true "not found" setting, just an unlikely value. Since we don't allow
     // for NULL there is no value which can be used. Means you can't have this value
     // under normal conditions.

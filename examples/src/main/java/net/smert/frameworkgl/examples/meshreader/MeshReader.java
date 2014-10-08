@@ -88,7 +88,7 @@ public class MeshReader extends Screen {
 
         // Setup camera and controller
         camera = new LegacyCamera();
-        camera.setPosition(0.0f, 0.0f, 5.0f);
+        camera.setPosition(0f, 0f, 5f);
         cameraController = new LegacyCameraController(camera);
 
         // Memory usage
@@ -109,25 +109,25 @@ public class MeshReader extends Screen {
         // Load the meshes from obj models
         try {
             Fw.graphics.loadMesh("primitives/capsule.obj", meshCapsule);
-            meshCapsule.setAllColors(0.5f, 0.0f, 0.0f, 1.0f);
+            meshCapsule.setAllColors(.5f, 0f, 0f, 1f);
             meshCapsule.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cone.obj", meshCone);
-            meshCone.setAllColors(1.0f, 0.5f, 0.32f, 1.0f);
+            meshCone.setAllColors(1f, .5f, .32f, 1f);
             meshCone.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cube.obj", meshCube);
-            meshCube.setAllColors(0.0f, 0.5f, 1.0f, 1.0f);
+            meshCube.setAllColors(0f, .5f, 1f, 1f);
             meshCube.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cylinder.obj", meshCylinder);
-            meshCylinder.setAllColors(1.0f, 0.843f, 0.0f, 1.0f);
+            meshCylinder.setAllColors(1f, .843f, 0f, 1f);
             meshCylinder.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/icosphere.obj", meshIcoSphere);
-            meshIcoSphere.setAllColors(1.0f, 0.271f, 0.0f, 1.0f);
+            meshIcoSphere.setAllColors(1f, .271f, 0f, 1f);
             meshIcoSphere.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/torus.obj", meshTorus);
-            meshTorus.setAllColors(0.5f, 1.0f, 0.831f, 1.0f);
+            meshTorus.setAllColors(.5f, 1f, .831f, 1f);
             meshTorus.updateBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/uvsphere.obj", meshUvSphere);
-            meshUvSphere.setAllColors(0.576f, 0.439f, 0.859f, 1.0f);
+            meshUvSphere.setAllColors(.576f, .439f, .859f, 1f);
             meshUvSphere.updateBooleansFromSegment();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -154,7 +154,7 @@ public class MeshReader extends Screen {
         GL.o1.enableDepthTest();
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
-        GL.o1.setClearDepth(1.0f);
+        GL.o1.setClearDepth(1f);
         GL.o1.enableColorMaterial();
         GL.o1.enableLight0();
         GL.o1.enableLighting();
@@ -162,16 +162,16 @@ public class MeshReader extends Screen {
         GL.o1.clear();
 
         GL.o1.setProjectionPerspective(
-                70.0f,
+                70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
-                0.05f, 512.0f);
+                .05f, 128f);
         GL.o1.setModelViewIdentity();
 
         // Light position
-        lightFloatBuffer.put(0.0f);
-        lightFloatBuffer.put(15.0f);
-        lightFloatBuffer.put(10.0f);
-        lightFloatBuffer.put(1.0f);
+        lightFloatBuffer.put(0f);
+        lightFloatBuffer.put(15f);
+        lightFloatBuffer.put(10f);
+        lightFloatBuffer.put(1f);
         lightFloatBuffer.flip();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
@@ -205,13 +205,13 @@ public class MeshReader extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.render(renderableCapsule, -3.0f, 0.0f, 3.0f);
-            Fw.graphics.render(renderableCone, 3.0f, 0.0f, 3.0f);
-            Fw.graphics.render(renderableCube, -3.0f, 0.0f, 0.0f);
-            Fw.graphics.render(renderableCylinder, 3.0f, 0.0f, 0.0f);
-            Fw.graphics.render(renderableIcoSphere, -3.0f, 0.0f, -3.0f);
-            Fw.graphics.render(renderableUvSphere, 3.0f, 0.0f, -3.0f);
-            Fw.graphics.render(renderableTorus, 0.0f, 3.0f, 0.0f);
+            Fw.graphics.render(renderableCapsule, -3f, 0f, 3f);
+            Fw.graphics.render(renderableCone, 3f, 0f, 3f);
+            Fw.graphics.render(renderableCube, -3f, 0f, 0f);
+            Fw.graphics.render(renderableCylinder, 3f, 0f, 0f);
+            Fw.graphics.render(renderableIcoSphere, -3f, 0f, -3f);
+            Fw.graphics.render(renderableUvSphere, 3f, 0f, -3f);
+            Fw.graphics.render(renderableTorus, 0f, 3f, 0f);
         }
     }
 

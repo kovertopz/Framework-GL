@@ -86,19 +86,19 @@ public class Transform4f {
         fbOut.put(rotation.xAxis.x);
         fbOut.put(rotation.xAxis.y);
         fbOut.put(rotation.xAxis.z);
-        fbOut.put(0);
+        fbOut.put(0f);
         fbOut.put(rotation.yAxis.x);
         fbOut.put(rotation.yAxis.y);
         fbOut.put(rotation.yAxis.z);
-        fbOut.put(0);
+        fbOut.put(0f);
         fbOut.put(rotation.zAxis.x);
         fbOut.put(rotation.zAxis.y);
         fbOut.put(rotation.zAxis.z);
-        fbOut.put(0);
+        fbOut.put(0f);
         fbOut.put(position.x);
         fbOut.put(position.y);
         fbOut.put(position.z);
-        fbOut.put(1);
+        fbOut.put(1f);
     }
 
     public void toColumnArray(float[] out) {
@@ -120,19 +120,19 @@ public class Transform4f {
         out[0] = rotation.xAxis.x;
         out[1] = rotation.xAxis.y;
         out[2] = rotation.xAxis.z;
-        out[3] = 0;
+        out[3] = 0f;
         out[4] = rotation.yAxis.x;
         out[5] = rotation.yAxis.y;
         out[6] = rotation.yAxis.z;
-        out[7] = 0;
+        out[7] = 0f;
         out[8] = rotation.zAxis.x;
         out[9] = rotation.zAxis.y;
         out[10] = rotation.zAxis.z;
-        out[11] = 0;
+        out[11] = 0f;
         out[12] = position.x;
         out[13] = position.y;
         out[14] = position.z;
-        out[15] = 1;
+        out[15] = 1f;
     }
 
     public void toRowArray(float[] out) {

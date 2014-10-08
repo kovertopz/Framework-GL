@@ -50,9 +50,9 @@ public class MouseHelper {
     }
 
     private void clearDelta() {
-        deltaWheel = 0;
-        deltaX = 0;
-        deltaY = 0;
+        deltaWheel = 0f;
+        deltaX = 0f;
+        deltaY = 0f;
     }
 
     private int mapLwglToArray(int button) {
@@ -81,10 +81,10 @@ public class MouseHelper {
         deltaWheel = org.lwjgl.input.Mouse.getDWheel();
         deltaWheel *= Fw.config.getMouseWheelSensitivity();
 
-        if (deltaWheel == 0) {
+        if (deltaWheel == 0f) {
             nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = false;
             nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_DOWN)] = false;
-        } else if (deltaWheel > 0) {
+        } else if (deltaWheel > 0f) {
             nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = true;
         } else {
             nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_DOWN)] = true;
@@ -97,7 +97,7 @@ public class MouseHelper {
         deltaX *= Fw.config.getMouseMoveSensitivity();
         deltaY *= Fw.config.getMouseMoveSensitivity();
         float totalDelta = deltaX + deltaY;
-        nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0);
+        nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0f);
     }
 
     public float getDeltaWheel() {

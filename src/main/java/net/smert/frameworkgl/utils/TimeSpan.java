@@ -18,7 +18,7 @@ package net.smert.frameworkgl.utils;
  */
 public class TimeSpan {
 
-    public final static double ONE_NANO_SECOND = 1000000000.0D;
+    public final static double ONE_NANO_SECOND = 1000000000D;
 
     private long currentTime;
     private long lastTime;

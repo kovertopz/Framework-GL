@@ -18,14 +18,14 @@ package net.smert.frameworkgl.math;
  */
 public class MathHelper {
 
-    public final static float DEG_TO_RAD = (float) Math.PI / 180.0f;
+    public final static float DEG_TO_RAD = (float) Math.PI / 180f;
     public final static float FLOAT_EPSILON = 1.1920928955078125E-7f;
-    public final static float PI_OVER_2 = (float) Math.PI / 2.0f;
-    public final static float PI_OVER_180 = (float) Math.PI / 180.0f;
-    public final static float PI_OVER_360 = (float) Math.PI / 360.0f;
-    public final static float RAD_TO_DEG = 180.0f / (float) Math.PI;
-    public final static float TOLERANCE_DOT_PRODUCT_PARALLEL = 0.999999f;
-    public final static float TOLERANCE_EULER_CONVERSION = 0.999999f;
+    public final static float PI_OVER_2 = (float) Math.PI / 2f;
+    public final static float PI_OVER_180 = (float) Math.PI / 180f;
+    public final static float PI_OVER_360 = (float) Math.PI / 360f;
+    public final static float RAD_TO_DEG = 180f / (float) Math.PI;
+    public final static float TOLERANCE_DOT_PRODUCT_PARALLEL = .999999f;
+    public final static float TOLERANCE_EULER_CONVERSION = .999999f;
     public final static float ZERO_EPSILON = FLOAT_EPSILON * FLOAT_EPSILON * FLOAT_EPSILON;
 
     private MathHelper() {
@@ -48,10 +48,10 @@ public class MathHelper {
     }
 
     public static float CalculateMachineEpsilonFloat() {
-        float machEps = 1.0f;
+        float machEps = 1f;
         do {
-            machEps /= 2.0f;
-        } while ((float) (1.0 + (machEps / 2.0)) != 1.0);
+            machEps /= 2f;
+        } while ((float) (1 + (machEps / 2)) != 1);
         return machEps;
     }
 

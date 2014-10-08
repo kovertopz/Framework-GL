@@ -23,16 +23,15 @@ import org.slf4j.LoggerFactory;
 public class Vector2f {
 
     private static Logger log = LoggerFactory.getLogger(Vector2f.class);
-    public static Vector2f WORLD_X_AXIS = new Vector2f(1.0f, 0.0f);
-    public static Vector2f WORLD_Y_AXIS = new Vector2f(0.0f, 1.0f);
+    public static Vector2f WORLD_X_AXIS = new Vector2f(1f, 0f);
+    public static Vector2f WORLD_Y_AXIS = new Vector2f(0f, 1f);
 
     float x;
     float y;
 
     // Constructors
     public Vector2f() {
-        x = 0;
-        y = 0;
+        zero();
     }
 
     public Vector2f(float x, float y) {
@@ -51,7 +50,7 @@ public class Vector2f {
         if (magnitude <= length) {
             return false;
         }
-        multiply(1.0f / magnitude);
+        multiply(1f / magnitude);
         multiply(length);
         return true;
     }
@@ -61,7 +60,7 @@ public class Vector2f {
         if (magnitudeSquared <= length * length) {
             return false;
         }
-        multiply(1.0f / MathHelper.Sqrt(magnitudeSquared));
+        multiply(1f / MathHelper.Sqrt(magnitudeSquared));
         multiply(length);
         return true;
     }
@@ -158,13 +157,13 @@ public class Vector2f {
         if (mag < MathHelper.ZERO_EPSILON) {
             log.warn("Divide By Zero. Magnitude: {} x: {} y: {}", mag, x, y);
 
-            x = 1.0f;
-            y = 0.0f;
+            x = 1f;
+            y = 0f;
 
             return this;
         }
 
-        return multiply(1.0f / mag);
+        return multiply(1f / mag);
     }
 
     public Vector2f set(float x, float y) {
@@ -199,7 +198,7 @@ public class Vector2f {
     }
 
     public Vector2f setInterpolate(Vector2f vector0, Vector2f vector1, float f) {
-        float s = 1.0f - f;
+        float s = 1f - f;
         x = vector0.x * s + vector1.x * f;
         y = vector0.y * s + vector1.y * f;
         return this;
@@ -267,9 +266,9 @@ public class Vector2f {
         return this;
     }
 
-    public Vector2f zero() {
-        x = 0;
-        y = 0;
+    public final Vector2f zero() {
+        x = 0f;
+        y = 0f;
         return this;
     }
 

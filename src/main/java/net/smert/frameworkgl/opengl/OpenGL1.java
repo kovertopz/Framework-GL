@@ -30,7 +30,7 @@ import org.lwjgl.util.glu.GLU;
 public class OpenGL1 {
 
     private boolean wireframeMode = false;
-    private float defaultLineWidth = 1.0f;
+    private float defaultLineWidth = 1f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
 
     public OpenGL1 begin(int primitive) {
