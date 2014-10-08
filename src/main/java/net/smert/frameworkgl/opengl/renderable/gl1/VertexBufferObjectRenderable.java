@@ -62,48 +62,48 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
 
         // Send byte buffer data for colors
         if (mesh.hasColors()) {
-            vbos[VBO_COLOR] = GL.glf.createVertexBufferObject();
-            VertexBufferObject vboColor = vbos[VBO_COLOR];
+            VertexBufferObject vboColor = GL.glf.createVertexBufferObject();
             vboColor.create();
             GL.vboHelper.setBufferData(vboColor.getVboID(), Renderable.byteBuffers.getColor(),
                     VertexBufferObjectTypes.STATIC_DRAW);
+            vbos[VBO_COLOR] = vboColor;
         }
 
         // Send byte buffer data for normals
         if (mesh.hasNormals()) {
-            vbos[VBO_NORMAL] = GL.glf.createVertexBufferObject();
-            VertexBufferObject vboNormal = vbos[VBO_NORMAL];
+            VertexBufferObject vboNormal = GL.glf.createVertexBufferObject();
             vboNormal.create();
             GL.vboHelper.setBufferData(vboNormal.getVboID(), Renderable.byteBuffers.getNormal(),
                     VertexBufferObjectTypes.STATIC_DRAW);
+            vbos[VBO_NORMAL] = vboNormal;
         }
 
         // Send byte buffer data for texture coordinates
         if (mesh.hasTexCoords()) {
-            vbos[VBO_TEXCOORD] = GL.glf.createVertexBufferObject();
-            VertexBufferObject vboTexCoord = vbos[VBO_TEXCOORD];
+            VertexBufferObject vboTexCoord = GL.glf.createVertexBufferObject();
             vboTexCoord.create();
             GL.vboHelper.setBufferData(vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(),
                     VertexBufferObjectTypes.STATIC_DRAW);
+            vbos[VBO_TEXCOORD] = vboTexCoord;
         }
 
         // Send byte buffer data for vertices
         if (mesh.hasVertices()) {
-            vbos[VBO_VERTEX] = GL.glf.createVertexBufferObject();
-            VertexBufferObject vboVertex = vbos[VBO_VERTEX];
+            VertexBufferObject vboVertex = GL.glf.createVertexBufferObject();
             vboVertex.create();
             GL.vboHelper.setBufferData(vboVertex.getVboID(), Renderable.byteBuffers.getVertex(),
                     VertexBufferObjectTypes.STATIC_DRAW);
+            vbos[VBO_VERTEX] = vboVertex;
         }
 
         // Create VBO for indexes
         if (mesh.hasIndexes()) {
-            vbos[VBO_VERTEX_INDEX] = GL.glf.createVertexBufferObject();
-            VertexBufferObject vboVertexIndex = vbos[VBO_VERTEX_INDEX];
+            VertexBufferObject vboVertexIndex = GL.glf.createVertexBufferObject();
             vboVertexIndex.create();
             Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
                     VertexBufferObjectTypes.STATIC_DRAW);
+            vbos[VBO_VERTEX_INDEX] = vboVertexIndex;
         }
 
         GL.vboHelper.unbind();

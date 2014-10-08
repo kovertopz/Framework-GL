@@ -20,6 +20,7 @@ import net.smert.frameworkgl.opengl.constants.DepthFunctions;
 import net.smert.frameworkgl.opengl.constants.StencilFunctions;
 import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 
@@ -163,6 +164,16 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 disableNormalize() {
+        GL11.glDisable(GL11.GL_NORMALIZE);
+        return this;
+    }
+
+    public OpenGL1 disableRescaleNormal() {
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        return this;
+    }
+
     public OpenGL1 disableStencilTest() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
         return this;
@@ -265,6 +276,16 @@ public class OpenGL1 {
 
     public OpenGL1 enableLinePolygonFillMode() {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+        return this;
+    }
+
+    public OpenGL1 enableNormalize() {
+        GL11.glEnable(GL11.GL_NORMALIZE);
+        return this;
+    }
+
+    public OpenGL1 enableRescaleNormal() {
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         return this;
     }
 

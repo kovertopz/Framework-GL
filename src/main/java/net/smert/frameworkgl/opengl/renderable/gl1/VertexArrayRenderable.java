@@ -75,8 +75,9 @@ public class VertexArrayRenderable extends AbstractRenderable {
             vas[VA_VERTEX] = Renderable.vertexArrays.getVertexVertexArray();
         }
         if (mesh.hasIndexes()) {
-            vas[VA_VERTEX_INDEX] = Renderable.vertexArrays.getVertexIndexVertexArray();
-            vertexIndexBuffer = vas[VA_VERTEX_INDEX].getByteBuffer();
+            VertexArray vertexIndex = Renderable.vertexArrays.getVertexIndexVertexArray();
+            vertexIndexBuffer = vertexIndex.getByteBuffer();
+            vas[VA_VERTEX_INDEX] = vertexIndex;
         }
 
         // Create draw call
