@@ -56,11 +56,22 @@ import net.smert.frameworkgl.opengl.image.tga.TGAImage;
 import net.smert.frameworkgl.opengl.image.tga.TGAReader;
 import net.smert.frameworkgl.opengl.image.tiff.TIFFReader;
 import net.smert.frameworkgl.opengl.mesh.DrawCommandsConversion;
+import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveBox;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCylinder;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveFrustum;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveGrid;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitivePyramid;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveQuad;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveSphere;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveToriod;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.model.obj.MaterialReader;
 import net.smert.frameworkgl.opengl.model.obj.ObjReader;
@@ -169,6 +180,17 @@ public class BootStrap {
             meshFactoryContainer.addComponent(Mesh.class);
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
+            meshFactoryContainer.addComponent(PrimitiveBox.class);
+            meshFactoryContainer.addComponent(PrimitiveCapsule.class);
+            meshFactoryContainer.addComponent(PrimitiveCone.class);
+            meshFactoryContainer.addComponent(PrimitiveCylinder.class);
+            meshFactoryContainer.addComponent(PrimitiveFrustum.class);
+            meshFactoryContainer.addComponent(PrimitiveGrid.class);
+            meshFactoryContainer.addComponent(PrimitivePyramid.class);
+            meshFactoryContainer.addComponent(PrimitiveQuad.class);
+            meshFactoryContainer.addComponent(PrimitiveSphere.class);
+            meshFactoryContainer.addComponent(PrimitiveToriod.class);
+            meshFactoryContainer.addComponent(Tessellator.class);
 
             // Add container for MeshFactory
             parentContainer.addComponent("meshFactoryContainer", meshFactoryContainer);
@@ -278,6 +300,7 @@ public class BootStrap {
 
         // Mesh
         container.addComponent(DrawCommandsConversion.class);
+        container.addComponent(DynamicMeshBuilder.class);
         container.addComponent(MeshReader.class);
         container.addComponent(Tessellator.class);
 
@@ -336,12 +359,13 @@ public class BootStrap {
 
     protected void createStaticOpenGL(MutablePicoContainer container) {
         GL.bufferHelper = container.getComponent(BufferHelper.class);
-        GL.cf = container.getComponent(CameraFactory.class);
+        GL.cameraFactory = container.getComponent(CameraFactory.class);
         GL.displayListHelper = container.getComponent(DisplayListHelper.class);
+        GL.dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         GL.fboHelper = container.getComponent(FrameBufferObjectHelper.class);
-        GL.glf = container.getComponent(GLFactory.class);
+        GL.glFactory = container.getComponent(GLFactory.class);
         GL.meshReader = container.getComponent(MeshReader.class);
-        GL.mf = container.getComponent(MeshFactory.class);
+        GL.meshFactory = container.getComponent(MeshFactory.class);
         GL.o1 = container.getComponent(OpenGL1.class);
         GL.o2 = container.getComponent(OpenGL2.class);
         GL.o3 = container.getComponent(OpenGL3.class);
@@ -375,8 +399,21 @@ public class BootStrap {
     protected void initialize(MutablePicoContainer container) {
 
         // Create instances
+        DynamicMeshBuilder dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         MeshReader meshReader = container.getComponent(MeshReader.class);
         TextureReader textureReader = container.getComponent(TextureReader.class);
+
+        // Register dynamic meshes
+        dynamicMeshBuilder.register("box", GL.meshFactory.createDynamicPrimitiveBox());
+        dynamicMeshBuilder.register("capsule", GL.meshFactory.createDynamicPrimitiveCapsule());
+        dynamicMeshBuilder.register("cone", GL.meshFactory.createDynamicPrimitiveCone());
+        dynamicMeshBuilder.register("cylinder", GL.meshFactory.createDynamicPrimitiveCylinder());
+        dynamicMeshBuilder.register("frustum", GL.meshFactory.createDynamicPrimitiveFrustum());
+        dynamicMeshBuilder.register("grid", GL.meshFactory.createDynamicPrimitiveGrid());
+        dynamicMeshBuilder.register("pyramid", GL.meshFactory.createDynamicPrimitivePyramid());
+        dynamicMeshBuilder.register("quad", GL.meshFactory.createDynamicPrimitiveQuad());
+        dynamicMeshBuilder.register("sphere", GL.meshFactory.createDynamicPrimitiveSphere());
+        dynamicMeshBuilder.register("toriod", GL.meshFactory.createDynamicPrimitiveToriod());
 
         // Register extensions
         meshReader.registerExtension("obj", container.getComponent(ObjReader.class));
@@ -401,10 +438,10 @@ public class BootStrap {
 
         // Classes may be instantiated past this point
         modifyDependencies(container);
-        initialize(container);
         createStaticFramework(container);
         createStaticOpenGL(container);
         createStaticRenderable(container);
+        initialize(container);
 
         // Start the application
         try {
