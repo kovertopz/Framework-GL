@@ -19,6 +19,7 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
@@ -38,20 +39,46 @@ public class Graphics {
         return GL.rf1.createImmediateMode();
     }
 
-    public Mesh createMeshWithDrawCommands(DrawCommands drawCommands) {
+    public Mesh createMesh(DrawCommands drawCommands) {
 
         // Create new segment with the draw commands
-        Segment segment = GL.mf.createSegment();
+        Segment segment = GL.meshFactory.createSegment();
         segment.setDrawCommands(drawCommands);
 
         // Check to see if a renderable configuration exists before adding it
-        RenderableConfiguration config = GL.mf.createRenderableConfiguration();
+        RenderableConfiguration config = GL.meshFactory.createRenderableConfiguration();
         int renderableConfigID = Renderable.configPool.getOrAdd(config);
 
         // Create mesh and set config ID and add segment
-        Mesh mesh = GL.mf.createMesh();
+        Mesh mesh = GL.meshFactory.createMesh();
         mesh.setRenderableConfigID(renderableConfigID);
         mesh.addSegment(segment);
+        return mesh;
+    }
+
+    public Mesh createMesh(Tessellator tessellator) {
+        Mesh mesh = GL.meshFactory.createMesh();
+        return createMesh(tessellator, mesh);
+    }
+
+    public Mesh createMesh(Tessellator tessellator, Mesh mesh) {
+
+        // Reset the mesh
+        mesh.reset();
+
+        // Check to see if a renderable configuration exists before adding it
+        RenderableConfiguration config = tessellator.getRenderableConfiguration();
+        int renderableConfigID = Renderable.configPool.getOrAdd(config);
+
+        // Set config ID
+        mesh.setRenderableConfigID(renderableConfigID);
+
+        // Add segments
+        List<Segment> segments = tessellator.getSegments();
+        for (Segment segment : segments) {
+            mesh.addSegment(segment);
+        }
+
         return mesh;
     }
 

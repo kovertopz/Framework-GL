@@ -85,9 +85,9 @@ public class ImmediateMode extends Screen {
         cameraController = new LegacyCameraController(camera);
 
         // Create meshes and set the raw draw commands directly
-        meshQuads = Fw.graphics.createMeshWithDrawCommands(cubeQuads);
-        meshQuadsWithPerVertexColors = Fw.graphics.createMeshWithDrawCommands(cubeQuadsWithPerVertexColors);
-        meshTriangles = Fw.graphics.createMeshWithDrawCommands(cubeTriangles);
+        meshQuads = Fw.graphics.createMesh(cubeQuads);
+        meshQuadsWithPerVertexColors = Fw.graphics.createMesh(cubeQuadsWithPerVertexColors);
+        meshTriangles = Fw.graphics.createMesh(cubeTriangles);
 
         // Create immediate mode renderables
         renderableQuads = Fw.graphics.createImmediateModeRenderable();

@@ -112,6 +112,13 @@ public class Vector4f {
     }
 
     // Vector Results
+    public void add(Vector4f vector) {
+        this.w += vector.w;
+        this.x += vector.x;
+        this.y += vector.y;
+        this.z += vector.z;
+    }
+
     public void addW(float w) {
         this.w += w;
     }

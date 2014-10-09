@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.examples.common;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
@@ -116,10 +117,9 @@ public class CubeMeshForTriangles extends Mesh {
         GL.tessellator.addVertex(-.5f, -.5f, .5f);
 
         GL.tessellator.stop();
+        GL.tessellator.addSegment("Cube mesh for triangles");
 
-        int renderableConfigID = GL.tessellator.getOrAddConfigToPool();
-        setRenderableConfigID(renderableConfigID);
-        addSegment(GL.tessellator.createSegment("Cube mesh for triangles"));
+        Fw.graphics.createMesh(GL.tessellator, this);
     }
 
 }

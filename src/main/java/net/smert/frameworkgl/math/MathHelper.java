@@ -24,6 +24,7 @@ public class MathHelper {
     public final static float PI_OVER_180 = (float) Math.PI / 180f;
     public final static float PI_OVER_360 = (float) Math.PI / 360f;
     public final static float RAD_TO_DEG = 180f / (float) Math.PI;
+    public final static float TAU = (float) Math.PI * 2f;
     public final static float TOLERANCE_DOT_PRODUCT_PARALLEL = .999999f;
     public final static float TOLERANCE_EULER_CONVERSION = .999999f;
     public final static float ZERO_EPSILON = FLOAT_EPSILON * FLOAT_EPSILON * FLOAT_EPSILON;

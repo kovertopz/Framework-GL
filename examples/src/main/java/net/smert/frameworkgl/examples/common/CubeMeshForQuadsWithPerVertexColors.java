@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.examples.common;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
@@ -93,10 +94,9 @@ public class CubeMeshForQuadsWithPerVertexColors extends Mesh {
         GL.tessellator.addVertex(-.5f, -.5f, .5f);
 
         GL.tessellator.stop();
+        GL.tessellator.addSegment("Cube mesh for quads with per vertex colors");
 
-        int renderableConfigID = GL.tessellator.getOrAddConfigToPool();
-        setRenderableConfigID(renderableConfigID);
-        addSegment(GL.tessellator.createSegment("Cube mesh for quads with per vertex colors"));
+        Fw.graphics.createMesh(GL.tessellator, this);
     }
 
 }

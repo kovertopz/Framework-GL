@@ -73,7 +73,7 @@ public class FansAndStrips extends Screen {
         cameraController = new LegacyCameraController(camera);
 
         // Create mesh and set the raw draw commands directly
-        meshFansAndStrips = Fw.graphics.createMeshWithDrawCommands(fansAndStrips);
+        meshFansAndStrips = Fw.graphics.createMesh(fansAndStrips);
 
         // Create immediate mode renderable
         renderableFansAndStrips = Fw.graphics.createImmediateModeRenderable();
