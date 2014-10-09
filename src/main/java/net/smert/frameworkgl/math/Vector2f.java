@@ -111,6 +111,12 @@ public class Vector2f {
     }
 
     // Vector Results
+    public Vector2f abs() {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        return this;
+    }
+
     public Vector2f add(float x, float y) {
         this.x += x;
         this.y += y;

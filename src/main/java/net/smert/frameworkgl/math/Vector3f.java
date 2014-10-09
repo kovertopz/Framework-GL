@@ -128,6 +128,13 @@ public class Vector3f {
     }
 
     // Vector Results
+    public Vector3f abs() {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        z = Math.abs(z);
+        return this;
+    }
+
     public Vector3f add(float x, float y, float z) {
         this.x += x;
         this.y += y;

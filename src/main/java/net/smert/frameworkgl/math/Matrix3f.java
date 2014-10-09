@@ -428,7 +428,11 @@ public class Matrix3f {
             h = MathHelper.ArcTan2(-xAxis.z, xAxis.x);
         }
 
-        return 180f - MathHelper.ToDegrees(h);
+        h = -MathHelper.ToDegrees(h) + 360f;
+        if (h > 360f) {
+            h -= 360f;
+        }
+        return h;
     }
 
     public float getPitch() {

@@ -60,50 +60,94 @@ public class Matrix4f {
     }
 
     // Conversion Operations
-    public void extractPlanes(Vector4f[] planes) {
+    public void extractPlanes(
+            Vector4f nearPlane, Vector4f farPlane,
+            Vector4f leftPlane, Vector4f rightPlane,
+            Vector4f bottomPlane, Vector4f topPlane) {
 
         // Near Plane (row 2 + row 3)
-        planes[0].x = d2 + d3;
-        planes[0].y = d6 + d7;
-        planes[0].z = d10 + d11;
-        planes[0].w = d14 + d15;
+        nearPlane.x = d2 + d3;
+        nearPlane.y = d6 + d7;
+        nearPlane.z = d10 + d11;
+        nearPlane.w = d14 + d15;
 
         // Far Plane (row 3 - row 2)
-        planes[1].x = d3 - d2;
-        planes[1].y = d7 - d6;
-        planes[1].z = d11 - d10;
-        planes[1].w = d15 - d14;
+        farPlane.x = d3 - d2;
+        farPlane.y = d7 - d6;
+        farPlane.z = d11 - d10;
+        farPlane.w = d15 - d14;
 
         // Left Plane (row 0 + row 3)
-        planes[2].x = d0 + d3;
-        planes[2].y = d4 + d7;
-        planes[2].z = d8 + d11;
-        planes[2].w = d12 + d15;
+        leftPlane.x = d0 + d3;
+        leftPlane.y = d4 + d7;
+        leftPlane.z = d8 + d11;
+        leftPlane.w = d12 + d15;
 
         // Right Plane (row 3 - row 0)
-        planes[3].x = d3 - d0;
-        planes[3].y = d7 - d4;
-        planes[3].z = d11 - d8;
-        planes[3].w = d15 - d12;
+        rightPlane.x = d3 - d0;
+        rightPlane.y = d7 - d4;
+        rightPlane.z = d11 - d8;
+        rightPlane.w = d15 - d12;
 
         // Bottom Plane (row 1 + row 3)
-        planes[4].x = d1 + d3;
-        planes[4].y = d5 + d7;
-        planes[4].z = d9 + d11;
-        planes[4].w = d13 + d15;
+        bottomPlane.x = d1 + d3;
+        bottomPlane.y = d5 + d7;
+        bottomPlane.z = d9 + d11;
+        bottomPlane.w = d13 + d15;
 
         // Top Plane (row 3 - row 1)
-        planes[5].x = d3 - d1;
-        planes[5].y = d7 - d5;
-        planes[5].z = d11 - d9;
-        planes[5].w = d15 - d13;
+        topPlane.x = d3 - d1;
+        topPlane.y = d7 - d5;
+        topPlane.z = d11 - d9;
+        topPlane.w = d15 - d13;
 
-        planes[0].normalize();
-        planes[1].normalize();
-        planes[2].normalize();
-        planes[3].normalize();
-        planes[4].normalize();
-        planes[5].normalize();
+        nearPlane.normalize();
+        farPlane.normalize();
+        leftPlane.normalize();
+        rightPlane.normalize();
+        bottomPlane.normalize();
+        topPlane.normalize();
+    }
+
+    public void extractPlanes(ClipPlanes clipPlanes) {
+
+        // Near Plane (row 2 + row 3)
+        clipPlanes.npX = d2 + d3;
+        clipPlanes.npY = d6 + d7;
+        clipPlanes.npZ = d10 + d11;
+        clipPlanes.npW = d14 + d15;
+
+        // Far Plane (row 3 - row 2)
+        clipPlanes.fpX = d3 - d2;
+        clipPlanes.fpY = d7 - d6;
+        clipPlanes.fpZ = d11 - d10;
+        clipPlanes.fpW = d15 - d14;
+
+        // Left Plane (row 0 + row 3)
+        clipPlanes.lpX = d0 + d3;
+        clipPlanes.lpY = d4 + d7;
+        clipPlanes.lpZ = d8 + d11;
+        clipPlanes.lpW = d12 + d15;
+
+        // Right Plane (row 3 - row 0)
+        clipPlanes.rpX = d3 - d0;
+        clipPlanes.rpY = d7 - d4;
+        clipPlanes.rpZ = d11 - d8;
+        clipPlanes.rpW = d15 - d12;
+
+        // Bottom Plane (row 1 + row 3)
+        clipPlanes.bpX = d1 + d3;
+        clipPlanes.bpY = d5 + d7;
+        clipPlanes.bpZ = d9 + d11;
+        clipPlanes.bpW = d13 + d15;
+
+        // Top Plane (row 3 - row 1)
+        clipPlanes.tpX = d3 - d1;
+        clipPlanes.tpY = d7 - d5;
+        clipPlanes.tpZ = d11 - d9;
+        clipPlanes.tpW = d15 - d13;
+
+        clipPlanes.normalize();
     }
 
     public void fromColumnArray(float[] in) {
@@ -123,6 +167,25 @@ public class Matrix4f {
         d13 = in[13];
         d14 = in[14];
         d15 = in[15];
+    }
+
+    public void fromColumnFloatBuffer(FloatBuffer fbIn) {
+        d0 = fbIn.get();
+        d1 = fbIn.get();
+        d2 = fbIn.get();
+        d3 = fbIn.get();
+        d4 = fbIn.get();
+        d5 = fbIn.get();
+        d6 = fbIn.get();
+        d7 = fbIn.get();
+        d8 = fbIn.get();
+        d9 = fbIn.get();
+        d10 = fbIn.get();
+        d11 = fbIn.get();
+        d12 = fbIn.get();
+        d13 = fbIn.get();
+        d14 = fbIn.get();
+        d15 = fbIn.get();
     }
 
     public void fromRowArray(float[] in) {

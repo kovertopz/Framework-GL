@@ -18,8 +18,8 @@ package net.smert.frameworkgl.math;
  */
 public class AABB {
 
-    private final Vector3f max;
-    private final Vector3f min;
+    final Vector3f max;
+    final Vector3f min;
 
     public AABB() {
         max = new Vector3f();
@@ -76,6 +76,11 @@ public class AABB {
             return false;
         }
         return ((max.getY() >= aabb.min.getY()) && (aabb.max.getY() >= min.getY()));
+    }
+
+    @Override
+    public String toString() {
+        return "min: " + min + " max: " + max;
     }
 
 }
