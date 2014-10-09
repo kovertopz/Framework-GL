@@ -1,0 +1,209 @@
+/**
+ * Copyright 2014 Jason Sorensen (sorensenj@smert.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+package net.smert.frameworkgl.examples.frustumculling;
+
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import net.smert.frameworkgl.Fw;
+import net.smert.frameworkgl.GameObject;
+import net.smert.frameworkgl.Screen;
+import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.helpers.Keyboard;
+import net.smert.frameworkgl.math.Vector3f;
+import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.camera.CameraController;
+import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
+import net.smert.frameworkgl.opengl.constants.GetString;
+import net.smert.frameworkgl.opengl.constants.Light;
+import net.smert.frameworkgl.utils.FpsTimer;
+import net.smert.frameworkgl.utils.MemoryUsage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ *
+ * @author Jason Sorensen <sorensenj@smert.net>
+ */
+public class FrustumCulling extends Screen {
+
+    private final static Logger log = LoggerFactory.getLogger(FrustumCulling.class);
+
+    private boolean wireframe;
+    private DynamicMeshWorld dynamicMeshesWorld;
+    private FloatBuffer lightFloatBuffer;
+    private FloatBuffer viewMatrixFloatBuffer;
+    private FloatBuffer projectionMatrixFloatBuffer;
+    private FloatBuffer transformWorldFloatBuffer;
+    private FpsTimer fpsTimer;
+    private Camera camera;
+    private CameraController cameraController;
+    private final List<GameObject> gameObjectsToRender;
+    private MemoryUsage memoryUsage;
+
+    public FrustumCulling(String[] args) {
+        wireframe = false;
+        gameObjectsToRender = new ArrayList<>();
+    }
+
+    private void handleInput() {
+        if (Fw.input.isKeyDown(Keyboard.ESCAPE) == true) {
+            Fw.app.stopRunning();
+        }
+        if ((Fw.input.isKeyDown(Keyboard.F1) == true) && (Fw.input.wasKeyDown(Keyboard.F1) == false)) {
+            wireframe = !wireframe;
+            if (wireframe) {
+                GL.o1.setPolygonModeFrontLine();
+            } else {
+                GL.o1.setPolygonModeFrontFill();
+            }
+        }
+        if (Fw.input.isKeyDown(Keyboard.F)) {
+            camera.updatePlanes();
+            Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
+            updateGameObjectsToRender();
+        }
+        cameraController.update();
+    }
+
+    private void updateGameObjectsToRender() {
+        gameObjectsToRender.clear();
+        for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
+            if (gameObject.getRenderableState().isEnabled()) {
+                gameObjectsToRender.add(gameObject);
+            }
+        }
+    }
+
+    @Override
+    public void destroy() {
+        for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
+            gameObject.destroy();
+        }
+        Fw.input.removeInputProcessor(cameraController);
+        Fw.input.releaseMouseCursor();
+    }
+
+    @Override
+    public void init() {
+
+        // Create timer
+        fpsTimer = new FpsTimer();
+
+        // Setup camera and controller
+        camera = new Camera();
+        camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 0f, -1f), Vector3f.WORLD_Y_AXIS);
+        camera.setPerspectiveProjection(
+                70f,
+                (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
+                .05f, 128f);
+        cameraController = new CameraController(camera);
+
+        // Memory usage
+        memoryUsage = new MemoryUsage();
+
+        // Float buffer for light and matrices
+        lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+
+        // Create dynamic mesh world
+        dynamicMeshesWorld = new DynamicMeshWorld();
+        dynamicMeshesWorld.init();
+
+        // Frustum culling
+        FrustumCullingClipSpaceSymmetrical frustumCulling = new FrustumCullingClipSpaceSymmetrical();
+        camera.setFrustumCulling(frustumCulling);
+        updateGameObjectsToRender();
+
+        // Update AABBs
+        Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
+
+        GL.o1.enableCulling();
+        GL.o1.cullBackFaces();
+        GL.o1.enableDepthTest();
+        GL.o1.setDepthFuncLess();
+        GL.o1.enableDepthMask();
+        GL.o1.setClearDepth(1f);
+        GL.o1.enableColorMaterial();
+        GL.o1.enableLight0();
+        GL.o1.enableLighting();
+        GL.o1.setSmoothLighting(true);
+        GL.o1.clear();
+
+        GL.o1.setModelViewIdentity();
+
+        // Light position
+        lightFloatBuffer.put(0f);
+        lightFloatBuffer.put(15f);
+        lightFloatBuffer.put(10f);
+        lightFloatBuffer.put(1f);
+        lightFloatBuffer.flip();
+
+        log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
+
+        Fw.input.addInputProcessor(cameraController);
+        Fw.input.grabMouseCursor();
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void render() {
+        fpsTimer.update();
+        memoryUsage.update();
+
+        if (Fw.timer.isGameTick()) {
+            // Do nothing
+        }
+
+        if (Fw.timer.isRenderTick()) {
+            handleInput();
+
+            // Clear screen
+            GL.o1.clear();
+
+            // Update camera
+            camera.updateViewMatrix();
+            camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
+            camera.getViewMatrix().toFloatBuffer(viewMatrixFloatBuffer);
+            projectionMatrixFloatBuffer.flip();
+            viewMatrixFloatBuffer.flip();
+            GL.o1.switchProjection();
+            GL.o1.loadMatrix(projectionMatrixFloatBuffer);
+            GL.o1.switchModelView();
+            GL.o1.loadMatrix(viewMatrixFloatBuffer);
+
+            GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
+
+            // Render directly
+            for (GameObject gameObject : gameObjectsToRender) {
+                Fw.graphics.render(gameObject, transformWorldFloatBuffer);
+            }
+        }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        GL.o1.setViewport(0, 0, width, height);
+    }
+
+    @Override
+    public void resume() {
+    }
+
+}
