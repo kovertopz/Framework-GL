@@ -15,8 +15,12 @@ package net.smert.frameworkgl;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.List;
+import net.smert.frameworkgl.math.AABB;
+import net.smert.frameworkgl.math.AABBUtilities;
+import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
+import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
@@ -65,6 +69,9 @@ public class Graphics {
 
         // Reset the mesh
         mesh.reset();
+
+        // Save AABB
+        tessellator.getAABB(mesh.getAabb());
 
         // Check to see if a renderable configuration exists before adding it
         RenderableConfiguration config = tessellator.getRenderableConfiguration();
@@ -131,6 +138,17 @@ public class Graphics {
         }
     }
 
+    public void performCulling(Camera camera, GameObject gameObject) {
+        boolean inView = camera.getFrustumCulling().isAABBInFrustum(gameObject.getWorldAabb());
+        gameObject.getRenderableState().setEnabled(inView);
+    }
+
+    public void performCulling(Camera camera, List<GameObject> gameObjects) {
+        for (GameObject gameObject : gameObjects) {
+            performCulling(camera, gameObject);
+        }
+    }
+
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);
@@ -153,6 +171,32 @@ public class Graphics {
         GL.o1.multiplyMatrix(transformWorldFloatBuffer);
         gameObject.getRenderable().render();
         GL.o1.popMatrix();
+    }
+
+    public void updateAabb(GameObject gameObject) {
+        AABB localAabb = gameObject.getMesh().getAabb();
+        AABB worldAabb = gameObject.getWorldAabb();
+        Transform4f worldTransform = gameObject.getWorldTransform();
+        AABBUtilities.Transform(localAabb, worldTransform, worldAabb);
+    }
+
+    public void updateAabb(GameObject gameObject, float margin) {
+        AABB localAabb = gameObject.getMesh().getAabb();
+        AABB worldAabb = gameObject.getWorldAabb();
+        Transform4f worldTransform = gameObject.getWorldTransform();
+        AABBUtilities.Transform(localAabb, margin, worldTransform, worldAabb);
+    }
+
+    public void updateAabb(List<GameObject> gameObjects) {
+        for (GameObject gameObject : gameObjects) {
+            updateAabb(gameObject);
+        }
+    }
+
+    public void updateAabb(List<GameObject> gameObjects, float margin) {
+        for (GameObject gameObject : gameObjects) {
+            updateAabb(gameObject, margin);
+        }
     }
 
 }

@@ -35,6 +35,7 @@ public class Camera {
     private float zFar;
     private float zNear;
 
+    private AbstractFrustumCulling frustumCulling;
     private final Matrix3f movementMatrix;
     private final Matrix3f rotationMatrix;
     private final Matrix3f tempMatrix;
@@ -61,6 +62,14 @@ public class Camera {
         viewDirection = new Vector3f();
     }
 
+    private void updateRotationMatrix() {
+        rotationMatrix.orthonormalize();
+        viewDirection.setInvert(rotationMatrix.getZAxis());
+        totalHeading = rotationMatrix.getHeading();
+        totalPitch = rotationMatrix.getPitch();
+        totalRoll = rotationMatrix.getRoll();
+    }
+
     public float getHeading() {
         return totalHeading;
     }
@@ -73,12 +82,28 @@ public class Camera {
         return totalRoll;
     }
 
+    public AbstractFrustumCulling getFrustumCulling() {
+        return frustumCulling;
+    }
+
+    public void setFrustumCulling(AbstractFrustumCulling frustumCulling) {
+        this.frustumCulling = frustumCulling;
+    }
+
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }
 
     public Matrix4f getViewMatrix() {
         return viewMatrix;
+    }
+
+    public Vector3f getPosition() {
+        return position;
+    }
+
+    public Vector3f getViewDirection() {
+        return viewDirection;
     }
 
     public void lookAt(Vector3f position, Vector3f target, Vector3f up) {
@@ -188,12 +213,8 @@ public class Camera {
         projectionMatrix.setPerspective(fieldofviewy, aspectratio, znear, zfar);
     }
 
-    public void updateRotationMatrix() {
-        rotationMatrix.orthonormalize();
-        viewDirection.setInvert(rotationMatrix.getZAxis());
-        totalHeading = rotationMatrix.getHeading();
-        totalPitch = rotationMatrix.getPitch();
-        totalRoll = rotationMatrix.getRoll();
+    public void updatePlanes() {
+        frustumCulling.updatePlanes(projectionMatrix, viewMatrix);
     }
 
     public void updateViewMatrix() {

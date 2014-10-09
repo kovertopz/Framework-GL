@@ -12,11 +12,13 @@
  */
 package net.smert.frameworkgl;
 
+import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.RenderableState;
 
 /**
  *
@@ -24,15 +26,19 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
  */
 public class GameObject {
 
+    private final AABB worldAabb;
     private AbstractRenderable renderable;
     private Object collisionShape;
     private Mesh mesh;
     private Material meshMaterial;
+    private final RenderableState renderableState;
     private Object rigidBody;
     private Transform4f scalingTransform;
     private final Transform4f worldTransform;
 
     public GameObject() {
+        worldAabb = new AABB();
+        renderableState = new RenderableState();
         worldTransform = new Transform4f();
     }
 
@@ -43,28 +49,8 @@ public class GameObject {
         renderable.destroy();
     }
 
-    public Object getCollisionShape() {
-        return collisionShape;
-    }
-
-    public void setCollisionShape(Object collisionShape) {
-        this.collisionShape = collisionShape;
-    }
-
-    public Mesh getMesh() {
-        return mesh;
-    }
-
-    public void setMesh(Mesh mesh) {
-        this.mesh = mesh;
-    }
-
-    public Material getMeshMaterial() {
-        return meshMaterial;
-    }
-
-    public void setMeshMaterial(Material meshMaterial) {
-        this.meshMaterial = meshMaterial;
+    public AABB getWorldAabb() {
+        return worldAabb;
     }
 
     public AbstractRenderable getRenderable() {
@@ -75,12 +61,40 @@ public class GameObject {
         this.renderable = renderable;
     }
 
+    public Material getMeshMaterial() {
+        return meshMaterial;
+    }
+
+    public void setMeshMaterial(Material meshMaterial) {
+        this.meshMaterial = meshMaterial;
+    }
+
+    public Mesh getMesh() {
+        return mesh;
+    }
+
+    public void setMesh(Mesh mesh) {
+        this.mesh = mesh;
+    }
+
+    public Object getCollisionShape() {
+        return collisionShape;
+    }
+
+    public void setCollisionShape(Object collisionShape) {
+        this.collisionShape = collisionShape;
+    }
+
     public Object getRigidBody() {
         return rigidBody;
     }
 
     public void setRigidBody(Object rigidBody) {
         this.rigidBody = rigidBody;
+    }
+
+    public RenderableState getRenderableState() {
+        return renderableState;
     }
 
     public Transform4f getScalingTransform() {
