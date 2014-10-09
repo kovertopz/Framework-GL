@@ -38,11 +38,15 @@ public class LegacyCameraController implements InputProcessor {
     private float lookSpeed;
     private float moveSpeed;
     private final LegacyCamera camera;
+    private final Vector3f positionDelta;
+    private final Vector3f rotationDelta;
 
     public LegacyCameraController(LegacyCamera camera) {
         lookSpeed = 10f;
         moveSpeed = 9f;
         this.camera = camera;
+        positionDelta = new Vector3f();
+        rotationDelta = new Vector3f();
     }
 
     private void correctHeadingPitchAndRoll() {
@@ -84,65 +88,69 @@ public class LegacyCameraController implements InputProcessor {
         Vector3f camPosition = camera.getPosition();
         Vector3f camRotation = camera.getRotation();
 
-        float xPositionDelta = 0f;
-        float yPositionDelta = 0f;
-        float zPositionDelta = 0f;
+        positionDelta.zero();
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_BACK)) {
-            xPositionDelta += Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
-            zPositionDelta += Math.cos(camRotation.getY() * MathHelper.PI_OVER_180);
+            positionDelta.addX(MathHelper.Sin(camRotation.getY() * MathHelper.PI_OVER_180));
+            positionDelta.addZ(MathHelper.Cos(camRotation.getY() * MathHelper.PI_OVER_180));
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_FORWARD)) {
-            xPositionDelta -= Math.sin(camRotation.getY() * MathHelper.PI_OVER_180);
-            zPositionDelta -= Math.cos(camRotation.getY() * MathHelper.PI_OVER_180);
+            positionDelta.addX(-MathHelper.Sin(camRotation.getY() * MathHelper.PI_OVER_180));
+            positionDelta.addZ(-MathHelper.Cos(camRotation.getY() * MathHelper.PI_OVER_180));
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_LEFT)) {
-            xPositionDelta += Math.sin((camRotation.getY() - 90f) * MathHelper.PI_OVER_180);
-            zPositionDelta += Math.cos((camRotation.getY() - 90f) * MathHelper.PI_OVER_180);
+            positionDelta.addX(MathHelper.Sin((camRotation.getY() - 90f) * MathHelper.PI_OVER_180));
+            positionDelta.addZ(MathHelper.Cos((camRotation.getY() - 90f) * MathHelper.PI_OVER_180));
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_RIGHT)) {
-            xPositionDelta += Math.sin((camRotation.getY() + 90f) * MathHelper.PI_OVER_180);
-            zPositionDelta += Math.cos((camRotation.getY() + 90f) * MathHelper.PI_OVER_180);
+            positionDelta.addX(MathHelper.Sin((camRotation.getY() + 90f) * MathHelper.PI_OVER_180));
+            positionDelta.addZ(MathHelper.Cos((camRotation.getY() + 90f) * MathHelper.PI_OVER_180));
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_DOWN)) {
-            yPositionDelta -= .5f;
+            positionDelta.setY(-1.0f);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_MOVE_UP)) {
-            yPositionDelta += .5f;
+            positionDelta.setY(1.0f);
         }
 
-        camera.setPositionX(camPosition.getX() + xPositionDelta * delta * moveSpeed);
-        camera.setPositionY(camPosition.getY() + yPositionDelta * delta * moveSpeed);
-        camera.setPositionZ(camPosition.getZ() + zPositionDelta * delta * moveSpeed);
+        if (positionDelta.magnitudeSquared() > 0) {
+            positionDelta.normalize();
+            positionDelta.multiply(delta * moveSpeed);
+            camera.setPositionX(camPosition.getX() + positionDelta.getX());
+            camera.setPositionY(camPosition.getY() + positionDelta.getY());
+            camera.setPositionZ(camPosition.getZ() + positionDelta.getZ());
+        }
 
-        float xRotationDelta = 0f;
-        float yRotationDelta = 0f;
+        // Positive rotation delta = counterclockwise rotation
+        rotationDelta.zero();
 
         if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_DOWN)) {
-            xRotationDelta -= 1f;
+            rotationDelta.addX(-1.0f);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_LOOK_UP)) {
-            xRotationDelta += 1f;
+            rotationDelta.addX(1.0f);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_LEFT)) {
-            yRotationDelta -= 1f;
+            rotationDelta.addY(1.0f);
         }
         if (Fw.input.isActionKeyDown(KEY_ACTION_TURN_RIGHT)) {
-            yRotationDelta += 1f;
+            rotationDelta.addY(-1.0f);
         }
 
-        xRotationDelta += Fw.input.getDeltaY();
-        yRotationDelta += Fw.input.getDeltaX();
+        rotationDelta.addX(Fw.input.getDeltaY());
+        rotationDelta.addY(-Fw.input.getDeltaX());
 
         // LWJGL will return 0 for mouse movement if the frame rate is higher than 125fps. If we just used the delta
         // amount then the mouse speed would be reduced. MOUSE_POLL is set for 125fps to compensate for this issue.
         // If the frame rate is lower than 125fps then we want the larger delta.
-        float mousePoll = Math.max(delta, Fw.input.MOUSE_POLL);
-
-        camera.setRotationX(camRotation.getX() - xRotationDelta * mousePoll * lookSpeed);
-        camera.setRotationY(camRotation.getY() - yRotationDelta * mousePoll * lookSpeed);
-
-        correctHeadingPitchAndRoll();
+        if (rotationDelta.magnitudeSquared() > 0) {
+            float mousePoll = Math.max(delta, Fw.input.MOUSE_POLL);
+            rotationDelta.multiply(mousePoll * lookSpeed);
+            camera.setRotationX(camRotation.getX() - rotationDelta.getX());
+            camera.setRotationY(camRotation.getY() + rotationDelta.getY());
+            camera.setRotationZ(camRotation.getZ() - rotationDelta.getZ());
+            correctHeadingPitchAndRoll();
+        }
     }
 
     @Override
