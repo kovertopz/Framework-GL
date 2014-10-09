@@ -339,6 +339,14 @@ public class OpenGL1 {
         return GL11.glGetString(getstring);
     }
 
+    public void getProjectionMatrix(FloatBuffer fb) {
+        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, fb);
+    }
+
+    public void getModelViewMatrix(FloatBuffer fb) {
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, fb);
+    }
+
     public OpenGL1 light(int lightnumber, int light, FloatBuffer fb) {
         GL11.glLight(lightnumber, light, fb);
         return this;
