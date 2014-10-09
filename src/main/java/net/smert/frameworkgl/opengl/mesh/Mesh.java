@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.texture.TextureType;
@@ -35,9 +36,11 @@ public class Mesh {
     private int totalVertices;
     private int[] indexes;
     private final List<Segment> segments;
+    private final AABB aabb;
 
     public Mesh() {
         segments = new ArrayList<>();
+        aabb = new AABB();
         reset();
     }
 
@@ -107,6 +110,10 @@ public class Mesh {
 
     public void setIndexes(int[] indexes) {
         this.indexes = indexes;
+    }
+
+    public AABB getAabb() {
+        return aabb;
     }
 
     /**
