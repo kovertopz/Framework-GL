@@ -12,7 +12,6 @@
  */
 package net.smert.frameworkgl.examples.common;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
@@ -28,7 +27,6 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
  */
 public class DynamicMeshWorld {
 
-    private FloatBuffer transformWorldFloatBuffer;
     private final List<GameObject> gameObjects;
 
     public DynamicMeshWorld() {
@@ -45,16 +43,11 @@ public class DynamicMeshWorld {
         return gameObject;
     }
 
-    public void destroy() {
-        for (GameObject gameObject : gameObjects) {
-            gameObject.destroy();
-        }
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
     }
 
     public void init() {
-
-        // Float buffer for matrices
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         // Build floor
         final Mesh baseFloor = GL.dynamicMeshBuilder.
@@ -482,12 +475,6 @@ public class DynamicMeshWorld {
 
         // Reset builder
         GL.dynamicMeshBuilder.reset();
-    }
-
-    public void render() {
-        for (GameObject gameObject : gameObjects) {
-            Fw.graphics.render(gameObject, transformWorldFloatBuffer);
-        }
     }
 
 }

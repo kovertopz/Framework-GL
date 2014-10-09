@@ -164,7 +164,7 @@ public class BulletGameObject extends GameObject {
         }
 
         @Override
-        public final void setWorldTransform(Matrix4 worldTransform) {
+        public void setWorldTransform(Matrix4 worldTransform) {
             this.worldTransform.set(worldTransform);
             gameObject.getWorldTransform().fromOpenGLArray(worldTransform.getValues());
             gameObject.getWorldTransform().multiply(gameObject.getScalingTransform());

@@ -39,6 +39,7 @@ public class PrimitiveSphere extends AbstractDynamicMesh {
         }
         GL.tessellator.setLocalPosition(constructionInfo.localPosition);
 
+        // -Z
         GL.tessellator.start(Primitives.TRIANGLE_STRIP);
 
         float angle = MathHelper.TAU / sides;
@@ -84,6 +85,7 @@ public class PrimitiveSphere extends AbstractDynamicMesh {
         GL.tessellator.stop();
         GL.tessellator.addSegment("Primitive Sphere - Dome -Z");
 
+        // +Z
         GL.tessellator.start(Primitives.TRIANGLE_STRIP);
 
         pos1.set(0f, 0f, 0f);

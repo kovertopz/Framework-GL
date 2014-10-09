@@ -13,7 +13,9 @@
 package net.smert.frameworkgl.examples.dynamicmeshes;
 
 import java.nio.FloatBuffer;
+import java.util.List;
 import net.smert.frameworkgl.Fw;
+import net.smert.frameworkgl.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
 import net.smert.frameworkgl.helpers.Keyboard;
@@ -38,6 +40,7 @@ public class DynamicMeshes extends Screen {
     private boolean wireframe;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
+    private FloatBuffer transformWorldFloatBuffer;
     private FpsTimer fpsTimer;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
@@ -64,7 +67,10 @@ public class DynamicMeshes extends Screen {
 
     @Override
     public void destroy() {
-        dynamicMeshesWorld.destroy();
+        List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();
+        for (GameObject gameObject : gameObjects) {
+            gameObject.destroy();
+        }
         Fw.input.removeInputProcessor(cameraController);
         Fw.input.releaseMouseCursor();
     }
@@ -83,8 +89,9 @@ public class DynamicMeshes extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Float buffer for light
+        // Float buffer for light and matrices
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
@@ -146,7 +153,10 @@ public class DynamicMeshes extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            dynamicMeshesWorld.render();
+            List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();
+            for (GameObject gameObject : gameObjects) {
+                Fw.graphics.render(gameObject, transformWorldFloatBuffer);
+            }
         }
     }
 

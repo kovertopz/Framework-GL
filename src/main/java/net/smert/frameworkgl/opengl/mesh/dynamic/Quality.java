@@ -16,7 +16,7 @@ package net.smert.frameworkgl.opengl.mesh.dynamic;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public final class Quality {
+public class Quality {
 
     private int x;
     private int y;
@@ -34,33 +34,33 @@ public final class Quality {
         this.z = z;
     }
 
-    public final int getX() {
+    public int getX() {
         return x;
     }
 
-    public final int getY() {
+    public int getY() {
         return y;
     }
 
-    public final int getZ() {
+    public int getZ() {
         return z;
     }
 
-    public final void set(int x, int y, int z) {
+    public void set(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public final void setX(int x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public final void setY(int y) {
+    public void setY(int y) {
         this.y = y;
     }
 
-    public final void setZ(int z) {
+    public void setZ(int z) {
         this.z = z;
     }
 
