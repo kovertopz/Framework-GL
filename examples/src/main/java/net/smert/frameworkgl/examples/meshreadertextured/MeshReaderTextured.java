@@ -80,7 +80,7 @@ public class MeshReaderTextured extends Screen {
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         // Create meshes
-        meshCrateAndBarrel = GL.mf.createMesh();
+        meshCrateAndBarrel = GL.meshFactory.createMesh();
 
         // Load the meshes from obj models
         try {

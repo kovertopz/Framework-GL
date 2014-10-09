@@ -74,7 +74,7 @@ public class TextureReader {
 
         // Build the texture
         GL.textureBuilder.load2D(bufferedImage).buildTexture();
-        return GL.textureBuilder.build(true); // Reset to defaults
+        return GL.textureBuilder.createTexture(true); // Reset to defaults
     }
 
     public void registerExtension(String extension, ImageReader imageReader) {

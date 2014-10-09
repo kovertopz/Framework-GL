@@ -98,13 +98,13 @@ public class MeshReader extends Screen {
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         // Create meshes
-        meshCapsule = GL.mf.createMesh();
-        meshCone = GL.mf.createMesh();
-        meshCube = GL.mf.createMesh();
-        meshCylinder = GL.mf.createMesh();
-        meshIcoSphere = GL.mf.createMesh();
-        meshTorus = GL.mf.createMesh();
-        meshUvSphere = GL.mf.createMesh();
+        meshCapsule = GL.meshFactory.createMesh();
+        meshCone = GL.meshFactory.createMesh();
+        meshCube = GL.meshFactory.createMesh();
+        meshCylinder = GL.meshFactory.createMesh();
+        meshIcoSphere = GL.meshFactory.createMesh();
+        meshTorus = GL.meshFactory.createMesh();
+        meshUvSphere = GL.meshFactory.createMesh();
 
         // Load the meshes from obj models
         try {

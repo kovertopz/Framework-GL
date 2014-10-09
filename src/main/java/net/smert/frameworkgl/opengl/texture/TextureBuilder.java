@@ -334,17 +334,9 @@ public class TextureBuilder {
         return pixeldata;
     }
 
-    public Texture build(boolean reset) {
-        Texture temp = texture;
-        if (reset) {
-            reset();
-        }
-        return temp;
-    }
-
     public TextureBuilder buildTexture() {
 
-        texture = GL.glf.createTexture();
+        texture = GL.glFactory.createTexture();
         texture.create();
 
         switch (textureType) {
@@ -424,6 +416,14 @@ public class TextureBuilder {
     public TextureBuilder createBytePixelDataBufferZPos() {
         pixelByteBufferZPos = createBytePixelDataBuffer(pixelByteArray);
         return this;
+    }
+
+    public Texture createTexture(boolean reset) {
+        Texture temp = texture;
+        if (reset) {
+            reset();
+        }
+        return temp;
     }
 
     public int getTextureFilterMag() {

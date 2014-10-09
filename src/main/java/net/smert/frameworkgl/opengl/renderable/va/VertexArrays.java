@@ -31,7 +31,7 @@ public class VertexArrays implements MultipleBuffers {
 
     @Override
     public void createColor(int bufferSize) {
-        color = GL.glf.createVertexArray();
+        color = GL.glFactory.createVertexArray();
         color.create(bufferSize);
     }
 
@@ -42,25 +42,25 @@ public class VertexArrays implements MultipleBuffers {
 
     @Override
     public void createNormal(int bufferSize) {
-        normal = GL.glf.createVertexArray();
+        normal = GL.glFactory.createVertexArray();
         normal.create(bufferSize);
     }
 
     @Override
     public void createTexCoord(int bufferSize) {
-        texCoord = GL.glf.createVertexArray();
+        texCoord = GL.glFactory.createVertexArray();
         texCoord.create(bufferSize);
     }
 
     @Override
     public void createVertex(int bufferSize) {
-        vertex = GL.glf.createVertexArray();
+        vertex = GL.glFactory.createVertexArray();
         vertex.create(bufferSize);
     }
 
     @Override
     public void createVertexIndex(int bufferSize) {
-        vertexIndex = GL.glf.createVertexArray();
+        vertexIndex = GL.glFactory.createVertexArray();
         vertexIndex.create(bufferSize);
     }
 

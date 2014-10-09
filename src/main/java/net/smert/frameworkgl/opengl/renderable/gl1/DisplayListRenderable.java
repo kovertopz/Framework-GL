@@ -32,7 +32,7 @@ public class DisplayListRenderable extends AbstractRenderable {
         destroy();
 
         // Create display list
-        displayList = GL.glf.createDisplayList();
+        displayList = GL.glFactory.createDisplayList();
         displayList.create();
         int displayListID = displayList.getDisplayListID();
 

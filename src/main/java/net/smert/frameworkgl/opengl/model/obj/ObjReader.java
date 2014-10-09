@@ -154,7 +154,7 @@ public class ObjReader implements ModelReader {
         Color diffuse = material.getDiffuse();
         Color specular = material.getSpecular();
 
-        net.smert.frameworkgl.opengl.mesh.Material meshMaterial = GL.mf.createMaterial();
+        net.smert.frameworkgl.opengl.mesh.Material meshMaterial = GL.meshFactory.createMaterial();
 
         // Lighting
         if (ambient.hasBeenSet()) {
@@ -198,7 +198,7 @@ public class ObjReader implements ModelReader {
         mesh.reset();
 
         // Create a renderable configuration for the mesh. Set all parameters to match OBJ capabilities.
-        RenderableConfiguration config = GL.mf.createRenderableConfiguration();
+        RenderableConfiguration config = GL.meshFactory.createRenderableConfiguration();
         config.setColorSize(4);
         config.setColorTypeFloat();
         config.setIndexTypeUnsignedInt();
@@ -244,7 +244,7 @@ public class ObjReader implements ModelReader {
 
             // Create model data if it doesn't exist
             if (tessellator == null) {
-                tessellator = new Tessellator();
+                tessellator = GL.meshFactory.createTessellator();
                 tessellator.setConfig(config);
                 tessellator.setConvertToTriangles(true); // Don't rely on defaults
                 tessellator.start(Primitives.TRIANGLES, true); // Force conversion

@@ -36,7 +36,7 @@ public class Logging {
         this.simpleFormatter = simpleFormatter;
     }
 
-    public void reset() throws IOException, SecurityException {
+    public void reset() throws IOException {
         LogManager.getLogManager().reset();
 
         Configuration config = Fw.config;

@@ -52,7 +52,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
         // Create VBO
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            vboInterleaved = GL.glf.createVertexBufferObjectInterleaved();
+            vboInterleaved = GL.glFactory.createVertexBufferObjectInterleaved();
             vboInterleaved.create();
             Renderable.vboBuilder.calculateOffsetsAndStride(mesh, vboInterleaved, config);
             Renderable.vboBuilder.createInterleavedBufferData(
@@ -76,7 +76,7 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
 
         // Create VBO for indexes
         if (mesh.hasIndexes()) {
-            vboVertexIndex = GL.glf.createVertexBufferObject();
+            vboVertexIndex = GL.glFactory.createVertexBufferObject();
             vboVertexIndex.create();
             Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),

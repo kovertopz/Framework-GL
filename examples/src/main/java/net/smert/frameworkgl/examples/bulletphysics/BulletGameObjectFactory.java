@@ -105,12 +105,12 @@ public class BulletGameObjectFactory {
     public void init() {
 
         // Create meshes
-        meshBox = GL.mf.createMesh();
-        meshCapsule = GL.mf.createMesh();
-        meshCone = GL.mf.createMesh();
-        meshCylinder = GL.mf.createMesh();
-        meshGround = GL.mf.createMesh();
-        meshSphere = GL.mf.createMesh();
+        meshBox = GL.meshFactory.createMesh();
+        meshCapsule = GL.meshFactory.createMesh();
+        meshCone = GL.meshFactory.createMesh();
+        meshCylinder = GL.meshFactory.createMesh();
+        meshGround = GL.meshFactory.createMesh();
+        meshSphere = GL.meshFactory.createMesh();
 
         // Load the meshes from obj models
         try {

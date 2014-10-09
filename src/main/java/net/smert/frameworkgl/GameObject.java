@@ -13,6 +13,7 @@
 package net.smert.frameworkgl;
 
 import net.smert.frameworkgl.math.Transform4f;
+import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
@@ -92,6 +93,21 @@ public class GameObject {
 
     public Transform4f getWorldTransform() {
         return worldTransform;
+    }
+
+    public GameObject setWorldPosition(float x, float y, float z) {
+        worldTransform.setPosition(x, y, z);
+        return this;
+    }
+
+    public GameObject setWorldPosition(Vector3f position) {
+        worldTransform.setPosition(position);
+        return this;
+    }
+
+    public GameObject setWorldRotation(Vector3f axis, float angle) {
+        worldTransform.getRotation().fromAxisAngle(axis, angle);
+        return this;
     }
 
 }

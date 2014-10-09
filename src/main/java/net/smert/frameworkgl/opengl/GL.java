@@ -23,6 +23,7 @@ import net.smert.frameworkgl.opengl.helpers.ShaderHelper;
 import net.smert.frameworkgl.opengl.helpers.TextureHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexArrayHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexBufferObjectHelper;
+import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
@@ -36,12 +37,13 @@ import net.smert.frameworkgl.opengl.texture.TextureReader;
  */
 public class GL {
 
-    public static CameraFactory cf;
+    public static CameraFactory cameraFactory;
     public static BufferHelper bufferHelper;
     public static DisplayListHelper displayListHelper;
+    public static DynamicMeshBuilder dynamicMeshBuilder;
     public static FrameBufferObjectHelper fboHelper;
-    public static GLFactory glf;
-    public static MeshFactory mf;
+    public static GLFactory glFactory;
+    public static MeshFactory meshFactory;
     public static MeshReader meshReader;
     public static OpenGL1 o1;
     public static OpenGL2 o2;

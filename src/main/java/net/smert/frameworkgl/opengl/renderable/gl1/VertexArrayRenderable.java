@@ -26,20 +26,17 @@ import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
  */
 public class VertexArrayRenderable extends AbstractRenderable {
 
-    private final static int VA_COLOR = 0;
-    private final static int VA_NORMAL = 1;
-    private final static int VA_TEXCOORD = 2;
-    private final static int VA_VERTEX = 3;
-    private final static int VA_VERTEX_INDEX = 4;
-
     private int renderableConfigID;
     private AbstractDrawCall drawCall;
-    private final VertexArray[] vas;
+    private VertexArray vaColor;
+    private VertexArray vaNormal;
+    private VertexArray vaTexCoord;
+    private VertexArray vaVertex;
+    private VertexArray vaVertexIndex;
 
     public VertexArrayRenderable() {
         renderableConfigID = -1;
         drawCall = null;
-        vas = new VertexArray[5];
     }
 
     @Override
@@ -63,21 +60,20 @@ public class VertexArrayRenderable extends AbstractRenderable {
 
         // Save vertex arrays
         if (mesh.hasColors()) {
-            vas[VA_COLOR] = Renderable.vertexArrays.getColorVertexArray();
+            vaColor = Renderable.vertexArrays.getColorVertexArray();
         }
         if (mesh.hasNormals()) {
-            vas[VA_NORMAL] = Renderable.vertexArrays.getNormalVertexArray();
+            vaNormal = Renderable.vertexArrays.getNormalVertexArray();
         }
         if (mesh.hasTexCoords()) {
-            vas[VA_TEXCOORD] = Renderable.vertexArrays.getTexCoordVertexArray();
+            vaTexCoord = Renderable.vertexArrays.getTexCoordVertexArray();
         }
         if (mesh.hasVertices()) {
-            vas[VA_VERTEX] = Renderable.vertexArrays.getVertexVertexArray();
+            vaVertex = Renderable.vertexArrays.getVertexVertexArray();
         }
         if (mesh.hasIndexes()) {
-            VertexArray vertexIndex = Renderable.vertexArrays.getVertexIndexVertexArray();
-            vertexIndexBuffer = vertexIndex.getByteBuffer();
-            vas[VA_VERTEX_INDEX] = vertexIndex;
+            vaVertexIndex = Renderable.vertexArrays.getVertexIndexVertexArray();
+            vertexIndexBuffer = vaVertexIndex.getByteBuffer();
         }
 
         // Create draw call
@@ -86,40 +82,30 @@ public class VertexArrayRenderable extends AbstractRenderable {
 
     @Override
     public void destroy() {
-
-        VertexArray vaColor = vas[VA_COLOR];
-        VertexArray vaNormal = vas[VA_NORMAL];
-        VertexArray vaTexCoord = vas[VA_TEXCOORD];
-        VertexArray vaVertex = vas[VA_VERTEX];
-        VertexArray vaVertexIndex = vas[VA_VERTEX_INDEX];
-
         if (vaColor != null) {
             vaColor.destroy();
+            vaColor = null;
         }
         if (vaNormal != null) {
             vaNormal.destroy();
+            vaNormal = null;
         }
         if (vaTexCoord != null) {
             vaTexCoord.destroy();
+            vaTexCoord = null;
         }
         if (vaVertex != null) {
             vaVertex.destroy();
+            vaVertex = null;
         }
         if (vaVertexIndex != null) {
             vaVertexIndex.destroy();
-        }
-        for (int i = 0; i < vas.length; i++) {
-            vas[i] = null;
+            vaVertexIndex = null;
         }
     }
 
     @Override
     public void render() {
-
-        VertexArray vaColor = vas[VA_COLOR];
-        VertexArray vaNormal = vas[VA_NORMAL];
-        VertexArray vaTexCoord = vas[VA_TEXCOORD];
-        VertexArray vaVertex = vas[VA_VERTEX];
 
         // Switch the renderable configuration first
         Renderable.vaBindState.switchRenderableConfiguration(renderableConfigID);
