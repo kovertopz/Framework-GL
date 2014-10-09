@@ -83,8 +83,8 @@ public class Tessellator {
     }
 
     private void findAABBMaxMin(Vector4f vertex) {
-        aabb.setMax(vertex);
-        aabb.setMin(vertex);
+        aabb.getMax().setMax(vertex.getX(), vertex.getY(), vertex.getZ());
+        aabb.getMin().setMin(vertex.getX(), vertex.getY(), vertex.getZ());
     }
 
     private void internalAddColor(Color color) {
@@ -379,8 +379,8 @@ public class Tessellator {
     }
 
     public void getAABB(AABB aabb) {
-        aabb.getMax().set(this.aabb.getMax());
-        aabb.getMin().set(this.aabb.getMin());
+        aabb.setMax(this.aabb.getMax());
+        aabb.setMin(this.aabb.getMin());
     }
 
     public boolean isConvertToTriangles() {
@@ -399,8 +399,8 @@ public class Tessellator {
         minIndex = -1;
         primitiveMode = -1;
         vertexIndex = 0;
-        aabb.setMax(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
-        aabb.setMin(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
+        aabb.setMax(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
+        aabb.setMin(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
         color.setWhite();
         conversionState = null;
         colors.clear();
