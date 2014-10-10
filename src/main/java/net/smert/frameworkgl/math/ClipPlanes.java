@@ -185,7 +185,9 @@ public class ClipPlanes {
             return true;
         }
 
-        // AABB is not in the frustum or it is bigger than so we do a proximity test
+        // AABB is not in the frustum or it is bigger than so we do a proximity
+        // test. This gives us false positives but does not ruin the user
+        // experience by having objects that pop in and out of the frustum.
         Vector3f center = new Vector3f(aabbMin).add(aabbMax).multiply(.5f);
         Vector3f extent = new Vector3f(aabbMax).subtract(aabbMin).multiply(.5f);
         float maxExtent = MathHelper.Sqrt(extent.dot(extent));
