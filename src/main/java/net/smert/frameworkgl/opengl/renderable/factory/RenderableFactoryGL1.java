@@ -12,8 +12,9 @@
  */
 package net.smert.frameworkgl.opengl.renderable.factory;
 
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderableInterleaved;
 import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
@@ -32,23 +33,31 @@ public class RenderableFactoryGL1 {
         container = renderableFactoryGL1Container;
     }
 
-    public AbstractRenderable createDisplayList() {
+    public DisplayListRenderable createDisplayList() {
         return container.getComponent(DisplayListRenderable.class);
     }
 
-    public AbstractRenderable createImmediateMode() {
+    public DynamicVertexBufferObjectRenderable createDynamicVertexBufferObject() {
+        return container.getComponent(DynamicVertexBufferObjectRenderable.class);
+    }
+
+    public DynamicVertexBufferObjectRenderableInterleaved createDynamicVertexBufferObjectInterleaved() {
+        return container.getComponent(DynamicVertexBufferObjectRenderableInterleaved.class);
+    }
+
+    public ImmediateModeRenderable createImmediateMode() {
         return container.getComponent(ImmediateModeRenderable.class);
     }
 
-    public AbstractRenderable createVertexArray() {
+    public VertexArrayRenderable createVertexArray() {
         return container.getComponent(VertexArrayRenderable.class);
     }
 
-    public AbstractRenderable createVertexBufferObject() {
+    public VertexBufferObjectRenderable createVertexBufferObject() {
         return container.getComponent(VertexBufferObjectRenderable.class);
     }
 
-    public AbstractRenderable createVertexBufferObjectInterleaved() {
+    public VertexBufferObjectRenderableInterleaved createVertexBufferObjectInterleaved() {
         return container.getComponent(VertexBufferObjectRenderableInterleaved.class);
     }
 

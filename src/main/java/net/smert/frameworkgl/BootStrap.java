@@ -35,6 +35,7 @@ import net.smert.frameworkgl.opengl.VertexArrayObject;
 import net.smert.frameworkgl.opengl.VertexBufferObject;
 import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
@@ -79,6 +80,8 @@ import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderableInterleaved;
 import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
@@ -164,6 +167,7 @@ public class BootStrap {
 
             // Camera
             cameraFactoryContainer.addComponent(Camera.class);
+            cameraFactoryContainer.addComponent(CameraController.class);
             cameraFactoryContainer.addComponent(LegacyCamera.class);
             cameraFactoryContainer.addComponent(LegacyCameraController.class);
 
@@ -202,6 +206,8 @@ public class BootStrap {
 
             // Renderable
             renderableFactoryGL1Container.addComponent(DisplayListRenderable.class);
+            renderableFactoryGL1Container.addComponent(DynamicVertexBufferObjectRenderable.class);
+            renderableFactoryGL1Container.addComponent(DynamicVertexBufferObjectRenderableInterleaved.class);
             renderableFactoryGL1Container.addComponent(ImmediateModeRenderable.class);
             renderableFactoryGL1Container.addComponent(VertexArrayRenderable.class);
             renderableFactoryGL1Container.addComponent(VertexBufferObjectRenderable.class);

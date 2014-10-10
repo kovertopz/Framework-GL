@@ -28,15 +28,22 @@ import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
  */
 public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable {
 
-    private boolean hasColors;
-    private boolean hasIndexes;
-    private boolean hasNormals;
-    private boolean hasTexCoords;
-    private boolean hasVertices;
-    private int renderableConfigID;
-    private AbstractDrawCall drawCall;
-    private VertexBufferObject vboVertexIndex;
-    private VertexBufferObjectInterleaved vboInterleaved;
+    protected boolean hasColors;
+    protected boolean hasIndexes;
+    protected boolean hasNormals;
+    protected boolean hasTexCoords;
+    protected boolean hasVertices;
+    protected int bufferUsage;
+    protected int renderableConfigID;
+    protected AbstractDrawCall drawCall;
+    protected VertexBufferObject vboVertexIndex;
+    protected VertexBufferObjectInterleaved vboInterleaved;
+
+    public VertexBufferObjectRenderableInterleaved() {
+        bufferUsage = VertexBufferObjectTypes.STATIC_DRAW;
+        renderableConfigID = -1;
+        drawCall = null;
+    }
 
     @Override
     public void create(Mesh mesh) {
@@ -48,39 +55,28 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         // Destroy existing VBOs
         destroy();
 
-        Renderable.byteBuffers.reset();
-
-        // Create VBO
+        // Create interleaved buffer data, VBO and send interleaved buffer data
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             vboInterleaved = GL.glFactory.createVertexBufferObjectInterleaved();
             vboInterleaved.create();
             Renderable.vboBuilder.calculateOffsetsAndStride(mesh, vboInterleaved, config);
             Renderable.vboBuilder.createInterleavedBufferData(
                     mesh, vboInterleaved.getStrideBytes(), Renderable.byteBuffers, config);
-            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), Renderable.byteBuffers.getInterleaved(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(vboInterleaved.getVboID(), Renderable.byteBuffers.getInterleaved(), bufferUsage);
         }
 
-        if (mesh.hasColors()) {
-            hasColors = true;
-        }
-        if (mesh.hasNormals()) {
-            hasNormals = true;
-        }
-        if (mesh.hasTexCoords()) {
-            hasTexCoords = true;
-        }
-        if (mesh.hasVertices()) {
-            hasVertices = true;
-        }
+        hasColors = mesh.hasColors();
+        hasNormals = mesh.hasNormals();
+        hasTexCoords = mesh.hasTexCoords();
+        hasVertices = mesh.hasVertices();
 
-        // Create VBO for indexes
+        // Create VBO, byte buffer data and send byte buffer data for indexes
         if (mesh.hasIndexes()) {
             vboVertexIndex = GL.glFactory.createVertexBufferObject();
             vboVertexIndex.create();
             Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+                    bufferUsage);
             hasIndexes = true;
         }
 

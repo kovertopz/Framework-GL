@@ -27,15 +27,17 @@ import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
  */
 public class VertexBufferObjectRenderable extends AbstractRenderable {
 
-    private int renderableConfigID;
-    private AbstractDrawCall drawCall;
-    private VertexBufferObject vboColor;
-    private VertexBufferObject vboNormal;
-    private VertexBufferObject vboTexCoord;
-    private VertexBufferObject vboVertex;
-    private VertexBufferObject vboVertexIndex;
+    protected int bufferUsage;
+    protected int renderableConfigID;
+    protected AbstractDrawCall drawCall;
+    protected VertexBufferObject vboColor;
+    protected VertexBufferObject vboNormal;
+    protected VertexBufferObject vboTexCoord;
+    protected VertexBufferObject vboVertex;
+    protected VertexBufferObject vboVertexIndex;
 
     public VertexBufferObjectRenderable() {
+        bufferUsage = VertexBufferObjectTypes.STATIC_DRAW;
         renderableConfigID = -1;
         drawCall = null;
     }
@@ -50,52 +52,46 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         // Destroy existing VBOs
         destroy();
 
-        Renderable.byteBuffers.reset();
-
-        // Create VBOs
+        // Create non interleaved buffer data
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             Renderable.vboBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers, config);
         }
 
-        // Send byte buffer data for colors
+        // Create VBO and send byte buffer data for colors
         if (mesh.hasColors()) {
             vboColor = GL.glFactory.createVertexBufferObject();
             vboColor.create();
-            GL.vboHelper.setBufferData(vboColor.getVboID(), Renderable.byteBuffers.getColor(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(vboColor.getVboID(), Renderable.byteBuffers.getColor(), bufferUsage);
         }
 
-        // Send byte buffer data for normals
+        // Create VBO and send byte buffer data for normals
         if (mesh.hasNormals()) {
             vboNormal = GL.glFactory.createVertexBufferObject();
             vboNormal.create();
-            GL.vboHelper.setBufferData(vboNormal.getVboID(), Renderable.byteBuffers.getNormal(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(vboNormal.getVboID(), Renderable.byteBuffers.getNormal(), bufferUsage);
         }
 
-        // Send byte buffer data for texture coordinates
+        // Create VBO and send byte buffer data for texture coordinates
         if (mesh.hasTexCoords()) {
             vboTexCoord = GL.glFactory.createVertexBufferObject();
             vboTexCoord.create();
-            GL.vboHelper.setBufferData(vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(), bufferUsage);
         }
 
-        // Send byte buffer data for vertices
+        // Create VBO and send byte buffer data for vertices
         if (mesh.hasVertices()) {
             vboVertex = GL.glFactory.createVertexBufferObject();
             vboVertex.create();
-            GL.vboHelper.setBufferData(vboVertex.getVboID(), Renderable.byteBuffers.getVertex(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+            GL.vboHelper.setBufferData(vboVertex.getVboID(), Renderable.byteBuffers.getVertex(), bufferUsage);
         }
 
-        // Create VBO for indexes
+        // Create VBO, byte buffer data and send byte buffer data for indexes
         if (mesh.hasIndexes()) {
             vboVertexIndex = GL.glFactory.createVertexBufferObject();
             vboVertexIndex.create();
             Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.setBufferElementData(vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
-                    VertexBufferObjectTypes.STATIC_DRAW);
+                    bufferUsage);
         }
 
         GL.vboHelper.unbind();

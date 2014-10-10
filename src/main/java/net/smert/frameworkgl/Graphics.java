@@ -27,7 +27,14 @@ import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderableInterleaved;
+import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
 
 /**
  *
@@ -35,11 +42,19 @@ import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
  */
 public class Graphics {
 
-    public AbstractRenderable createDisplayListRenderable() {
+    public DisplayListRenderable createDisplayListRenderable() {
         return GL.rf1.createDisplayList();
     }
 
-    public AbstractRenderable createImmediateModeRenderable() {
+    public DynamicVertexBufferObjectRenderable createDynamicVertexBufferObjectRenderable() {
+        return GL.rf1.createDynamicVertexBufferObject();
+    }
+
+    public DynamicVertexBufferObjectRenderableInterleaved createDynamicVertexBufferObjectInterleavedRenderable() {
+        return GL.rf1.createDynamicVertexBufferObjectInterleaved();
+    }
+
+    public ImmediateModeRenderable createImmediateModeRenderable() {
         return GL.rf1.createImmediateMode();
     }
 
@@ -89,15 +104,15 @@ public class Graphics {
         return mesh;
     }
 
-    public AbstractRenderable createVertexArrayRenderable() {
+    public VertexArrayRenderable createVertexArrayRenderable() {
         return GL.rf1.createVertexArray();
     }
 
-    public AbstractRenderable createVertexBufferObjectRenderable() {
+    public VertexBufferObjectRenderable createVertexBufferObjectRenderable() {
         return GL.rf1.createVertexBufferObject();
     }
 
-    public AbstractRenderable createVertexBufferObjectInterleavedRenderable() {
+    public VertexBufferObjectRenderableInterleaved createVertexBufferObjectInterleavedRenderable() {
         return GL.rf1.createVertexBufferObjectInterleaved();
     }
 

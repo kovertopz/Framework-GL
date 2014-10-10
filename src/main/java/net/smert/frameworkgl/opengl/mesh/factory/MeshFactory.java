@@ -16,7 +16,6 @@ import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
-import net.smert.frameworkgl.opengl.mesh.dynamic.AbstractDynamicMesh;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveBox;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
@@ -42,43 +41,43 @@ public class MeshFactory {
         container = meshFactoryContainer;
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveBox() {
+    public PrimitiveBox createDynamicPrimitiveBox() {
         return container.getComponent(PrimitiveBox.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveCapsule() {
+    public PrimitiveCapsule createDynamicPrimitiveCapsule() {
         return container.getComponent(PrimitiveCapsule.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveCone() {
+    public PrimitiveCone createDynamicPrimitiveCone() {
         return container.getComponent(PrimitiveCone.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveCylinder() {
+    public PrimitiveCylinder createDynamicPrimitiveCylinder() {
         return container.getComponent(PrimitiveCylinder.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveFrustum() {
+    public PrimitiveFrustum createDynamicPrimitiveFrustum() {
         return container.getComponent(PrimitiveFrustum.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveGrid() {
+    public PrimitiveGrid createDynamicPrimitiveGrid() {
         return container.getComponent(PrimitiveGrid.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitivePyramid() {
+    public PrimitivePyramid createDynamicPrimitivePyramid() {
         return container.getComponent(PrimitivePyramid.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveQuad() {
+    public PrimitiveQuad createDynamicPrimitiveQuad() {
         return container.getComponent(PrimitiveQuad.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveSphere() {
+    public PrimitiveSphere createDynamicPrimitiveSphere() {
         return container.getComponent(PrimitiveSphere.class);
     }
 
-    public AbstractDynamicMesh createDynamicPrimitiveToriod() {
+    public PrimitiveToriod createDynamicPrimitiveToriod() {
         return container.getComponent(PrimitiveToriod.class);
     }
 
