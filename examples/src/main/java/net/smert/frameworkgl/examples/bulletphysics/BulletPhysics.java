@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.smert.frameworkgl.Fw;
-import net.smert.frameworkgl.GameObject;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Matrix3f;

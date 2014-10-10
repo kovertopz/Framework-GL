@@ -15,7 +15,7 @@ package net.smert.frameworkgl.examples.common;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
-import net.smert.frameworkgl.GameObject;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;

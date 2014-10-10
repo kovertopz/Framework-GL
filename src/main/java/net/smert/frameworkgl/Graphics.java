@@ -15,6 +15,7 @@ package net.smert.frameworkgl;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.List;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Transform4f;

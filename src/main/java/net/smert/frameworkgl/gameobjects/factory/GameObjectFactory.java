@@ -12,7 +12,7 @@
  */
 package net.smert.frameworkgl.gameobjects.factory;
 
-import net.smert.frameworkgl.GameObject;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import org.picocontainer.MutablePicoContainer;
 
 /**

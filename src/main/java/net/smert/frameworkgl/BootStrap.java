@@ -14,6 +14,7 @@ package net.smert.frameworkgl;
 
 import java.io.IOException;
 import java.util.logging.SimpleFormatter;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
