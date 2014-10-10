@@ -44,7 +44,7 @@ public class Tessellator {
     private int vertexIndex;
     private final AABB aabb;
     private final Color color;
-    private ConversionState conversionState;
+    private final ConversionState conversionState;
     private final List<Float> colors;
     private final List<Float> normals;
     private final List<Float> texCoords;
@@ -65,6 +65,7 @@ public class Tessellator {
         convertToTriangles = true;
         aabb = new AABB();
         color = new Color();
+        conversionState = new ConversionState();
         colors = new ArrayList<>(INITIAL_COMPONENT_ELEMENTS_PER_SEGMENT); // Up to four per vertex
         normals = new ArrayList<>(INITIAL_COMPONENT_ELEMENTS_PER_SEGMENT);  // Three per vertex
         texCoords = new ArrayList<>(INITIAL_COMPONENT_ELEMENTS_PER_SEGMENT);  // Up to three per vertex
@@ -248,7 +249,7 @@ public class Tessellator {
             throw new IllegalStateException("You cannot calculate normals until stop() has been called");
         }
 
-        conversionState = CreateConversionState(primitiveMode);
+        conversionState.setPrimitiveMode(primitiveMode);
         normals.clear();
 
         for (int i = 0; i < vertices.size(); i += config.getVertexSize()) {
@@ -270,7 +271,7 @@ public class Tessellator {
         }
 
         conversionState.finishCalculateNormals(this);
-        conversionState = null;
+        conversionState.reset();
     }
 
     public Segment createSegment(String name) {
@@ -402,7 +403,7 @@ public class Tessellator {
         aabb.setMax(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
         aabb.setMin(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
         color.setWhite();
-        conversionState = null;
+        conversionState.reset();
         colors.clear();
         normals.clear();
         texCoords.clear();
@@ -452,12 +453,12 @@ public class Tessellator {
         minIndex = vertexIndex; // Save first index
         this.primitiveMode = primitiveMode;
         primitiveModes.add(this.primitiveMode);
-        conversionState = CreateConversionState(primitiveMode);
+        conversionState.setPrimitiveMode(primitiveMode);
     }
 
     public void stop() {
         if (enableConversionForPrimitiveMode) {
-            conversionState = null;
+            conversionState.reset();
             primitiveMode = Primitives.TRIANGLES;
             primitiveModes.set(primitiveModes.size() - 1, primitiveMode);
             enableConversionForPrimitiveMode = false;
@@ -469,7 +470,9 @@ public class Tessellator {
     }
 
     public static ConversionState CreateConversionState(int primitiveMode) {
-        return new ConversionState(primitiveMode);
+        ConversionState conversionState = new ConversionState();
+        conversionState.setPrimitiveMode(primitiveMode);
+        return conversionState;
     }
 
     public static class ConversionState {
@@ -481,7 +484,7 @@ public class Tessellator {
         private boolean hasTexCoordsToConvert;
         private int colorConversionCount;
         private int normalConversionCount;
-        private final int primitiveMode;
+        private int primitiveMode;
         private int texCoordConversionCount;
         private int vertexConversionCount;
         private final Color color;
@@ -507,8 +510,7 @@ public class Tessellator {
         private final Vector4f vertexConversion2;
         private final Vector4f vertexConversion3;
 
-        public ConversionState(int primitiveMode) {
-            this.primitiveMode = primitiveMode;
+        public ConversionState() {
             color = new Color();
             colorConversion0 = new Color();
             colorConversion1 = new Color();
@@ -1002,6 +1004,14 @@ public class Tessellator {
             }
         }
 
+        public int getPrimitiveMode() {
+            return primitiveMode;
+        }
+
+        public void setPrimitiveMode(int primitiveMode) {
+            this.primitiveMode = primitiveMode;
+        }
+
         public Color getColor() {
             return color;
         }
@@ -1026,6 +1036,7 @@ public class Tessellator {
             hasTexCoordsToConvert = false;
             colorConversionCount = 0;
             normalConversionCount = 0;
+            primitiveMode = -1;
             texCoordConversionCount = 0;
             vertexConversionCount = 0;
             color.setWhite();

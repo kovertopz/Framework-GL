@@ -95,15 +95,6 @@ public class VertexArrays implements MultipleBuffers {
     }
 
     @Override
-    public void reset() {
-        color = null;
-        normal = null;
-        texCoord = null;
-        vertex = null;
-        vertexIndex = null;
-    }
-
-    @Override
     public void setInterleavedBufferToOthers() {
         throw new UnsupportedOperationException("Not supported.");
     }

@@ -86,67 +86,67 @@ public class VBOBindState {
         }
     }
 
-    public void bindColor(int vboid, int strideBytes, int colorOffsetBytes) {
-        if (vboColorID == vboid) {
+    public void bindColor(int vboID, int strideBytes, int colorOffsetBytes) {
+        if (vboColorID == vboID) {
             return;
         }
-        vboColorID = vboid;
-        if (vboid == 0) {
+        vboColorID = vboID;
+        if (vboID == 0) {
             setColorEnabled(false);
             return;
         }
         setColorEnabled(true);
-        GL.vboHelper.bindColors(vboid, config.getColorSize(), config.getColorType(), strideBytes, colorOffsetBytes);
+        GL.vboHelper.bindColors(vboID, config.getColorSize(), config.getColorType(), strideBytes, colorOffsetBytes);
     }
 
-    public void bindNormal(int vboid, int strideBytes, int normalOffsetBytes) {
-        if (vboNormalID == vboid) {
+    public void bindNormal(int vboID, int strideBytes, int normalOffsetBytes) {
+        if (vboNormalID == vboID) {
             return;
         }
-        vboNormalID = vboid;
-        if (vboid == 0) {
+        vboNormalID = vboID;
+        if (vboID == 0) {
             setNormalEnabled(false);
             return;
         }
         setNormalEnabled(true);
-        GL.vboHelper.bindNormals(vboid, config.getNormalType(), strideBytes, normalOffsetBytes);
+        GL.vboHelper.bindNormals(vboID, config.getNormalType(), strideBytes, normalOffsetBytes);
     }
 
-    public void bindTextureCoordinate(int vboid, int strideBytes, int texCoordOffsetBytes) {
-        if (vboTexCoordID == vboid) {
+    public void bindTextureCoordinate(int vboID, int strideBytes, int texCoordOffsetBytes) {
+        if (vboTexCoordID == vboID) {
             return;
         }
-        vboTexCoordID = vboid;
-        if (vboid == 0) {
+        vboTexCoordID = vboID;
+        if (vboID == 0) {
             setTextureCoordinateEnabled(false);
             return;
         }
         setTextureCoordinateEnabled(true);
         GL.vboHelper.bindTextureCoordinates(
-                vboid, config.getTexCoordSize(), config.getTexCoordType(), strideBytes, texCoordOffsetBytes);
+                vboID, config.getTexCoordSize(), config.getTexCoordType(), strideBytes, texCoordOffsetBytes);
     }
 
-    public void bindVertex(int vboid, int strideBytes, int vertexOffsetBytes) {
-        if (vboVertexID == vboid) {
+    public void bindVertex(int vboID, int strideBytes, int vertexOffsetBytes) {
+        if (vboVertexID == vboID) {
             return;
         }
-        vboVertexID = vboid;
-        if (vboid == 0) {
+        vboVertexID = vboID;
+        if (vboID == 0) {
             setVertexEnabled(false);
         }
         setVertexEnabled(true);
-        GL.vboHelper.bindVertices(vboid, config.getVertexSize(), config.getVertexType(), strideBytes, vertexOffsetBytes);
+        GL.vboHelper.bindVertices(vboID, config.getVertexSize(), config.getVertexType(), strideBytes, vertexOffsetBytes);
     }
 
-    public void bindVertexIndex(int vboid) {
-        if (vboVertexIndexID == vboid) {
+    public void bindVertexIndex(int vboID) {
+        if (vboVertexIndexID == vboID) {
             return;
         }
-        vboVertexIndexID = vboid;
-        if (vboid == 0) {
+        vboVertexIndexID = vboID;
+        if (vboID == 0) {
             return;
         }
-        GL.vboHelper.bindVerticesIndex(vboid);
+        GL.vboHelper.bindVerticesIndex(vboID);
     }
 
     public final void reset() {

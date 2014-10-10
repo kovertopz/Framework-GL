@@ -12,8 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.mesh.dynamic;
 
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -23,7 +23,7 @@ import net.smert.frameworkgl.utils.Color;
 public class PrimitiveGrid extends AbstractDynamicMesh {
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float numLinesX = constructionInfo.size.getX() * .5f;
         float numLinesZ = constructionInfo.size.getZ() * .5f;
         float stepX = 1f / constructionInfo.quality.getX();
@@ -34,60 +34,60 @@ public class PrimitiveGrid extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
-        GL.tessellator.start(Primitives.LINES);
+        tessellator.start(Primitives.LINES);
 
         for (float i = 1; i <= numLinesX; i++) {
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormal(0f, 1f, 0f);
-            GL.tessellator.addVertex(-numLinesX, 0f, i * stepX);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(numLinesX, 0f, i * stepX);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(-numLinesX, 0f, -i * stepX);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(numLinesX, 0f, -i * stepX);
+            tessellator.addColor(color0);
+            tessellator.addNormal(0f, 1f, 0f);
+            tessellator.addVertex(-numLinesX, 0f, i * stepX);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(numLinesX, 0f, i * stepX);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(-numLinesX, 0f, -i * stepX);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(numLinesX, 0f, -i * stepX);
         }
 
         for (float i = 1; i <= numLinesZ; i++) {
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(i * stepZ, 0f, -numLinesZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(i * stepZ, 0f, numLinesZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(-i * stepZ, 0f, -numLinesZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(-i * stepZ, 0f, numLinesZ);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(i * stepZ, 0f, -numLinesZ);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(i * stepZ, 0f, numLinesZ);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(-i * stepZ, 0f, -numLinesZ);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(-i * stepZ, 0f, numLinesZ);
         }
 
         // Middle X
-        GL.tessellator.addColor(color1);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(-numLinesX, 0f, 0f);
-        GL.tessellator.addColor(color1);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(numLinesX, 0f, 0f);
+        tessellator.addColor(color1);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(-numLinesX, 0f, 0f);
+        tessellator.addColor(color1);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(numLinesX, 0f, 0f);
         // Middle Z
-        GL.tessellator.addColor(color2);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(0f, 0f, -numLinesZ);
-        GL.tessellator.addColor(color2);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(0f, 0f, numLinesZ);
+        tessellator.addColor(color2);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(0f, 0f, -numLinesZ);
+        tessellator.addColor(color2);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(0f, 0f, numLinesZ);
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Grid");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Grid");
     }
 
 }

@@ -14,8 +14,8 @@ package net.smert.frameworkgl.opengl.mesh.dynamic;
 
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -30,7 +30,7 @@ public class PrimitiveCylinder extends AbstractDynamicMesh {
     }
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float halfZ = constructionInfo.size.getZ() * .5f;
         float radiusX = constructionInfo.radius.getX();
         float radiusY = constructionInfo.radius.getY();
@@ -39,13 +39,13 @@ public class PrimitiveCylinder extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
         // Middle
-        GL.tessellator.start(Primitives.TRIANGLE_STRIP);
+        tessellator.start(Primitives.TRIANGLE_STRIP);
 
         float angle = MathHelper.TAU / sides;
         float cosAngle = MathHelper.Cos(angle);
@@ -63,60 +63,60 @@ public class PrimitiveCylinder extends AbstractDynamicMesh {
             radius1.setX(cosAngle * radius1.getX() - sinAngle * radius1.getY());
             radius1.setY(t);
             pos3.set(radius1.getX() * radiusX, radius1.getY() * radiusY, halfZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormal(pos1, pos2, pos3);
-            GL.tessellator.addVertex(pos1);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(pos2);
+            tessellator.addColor(color0);
+            tessellator.addNormal(pos1, pos2, pos3);
+            tessellator.addVertex(pos1);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(pos2);
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Cylinder - Middle");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Cylinder - Middle");
 
         // -Z
-        GL.tessellator.start(Primitives.TRIANGLE_FAN);
+        tessellator.start(Primitives.TRIANGLE_FAN);
 
         pos1.zero();
         radius1.set(1f, 0f, -halfZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(new Vector3f(0f, 0f, -1f));
-        GL.tessellator.addVertex(new Vector3f(0f, 0f, -halfZ));
+        tessellator.addColor(color0);
+        tessellator.addNormal(new Vector3f(0f, 0f, -1f));
+        tessellator.addVertex(new Vector3f(0f, 0f, -halfZ));
 
         for (int i = 0; i <= sides; i++) {
             pos1.set(radius1.getX() * radiusX, radius1.getY() * radiusY, -halfZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(pos1);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(pos1);
             t = -sinAngle * radius1.getX() + cosAngle * radius1.getY();
             radius1.setX(cosAngle * radius1.getX() + sinAngle * radius1.getY());
             radius1.setY(t);
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Cylinder - Cap -Z");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Cylinder - Cap -Z");
 
         // +Z
-        GL.tessellator.start(Primitives.TRIANGLE_FAN);
+        tessellator.start(Primitives.TRIANGLE_FAN);
 
         pos1.zero();
         radius1.set(1f, 0f, halfZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(new Vector3f(0f, 0f, 1f));
-        GL.tessellator.addVertex(new Vector3f(0f, 0f, halfZ));
+        tessellator.addColor(color0);
+        tessellator.addNormal(new Vector3f(0f, 0f, 1f));
+        tessellator.addVertex(new Vector3f(0f, 0f, halfZ));
 
         for (int i = 0; i <= sides; i++) {
             pos1.set(radius1.getX() * radiusX, radius1.getY() * radiusY, halfZ);
-            GL.tessellator.addColor(color0);
-            GL.tessellator.addNormalAgain();
-            GL.tessellator.addVertex(pos1);
+            tessellator.addColor(color0);
+            tessellator.addNormalAgain();
+            tessellator.addVertex(pos1);
             t = sinAngle * radius1.getX() + cosAngle * radius1.getY();
             radius1.setX(cosAngle * radius1.getX() - sinAngle * radius1.getY());
             radius1.setY(t);
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Cylinder - Cap +Z");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Cylinder - Cap +Z");
     }
 
 }

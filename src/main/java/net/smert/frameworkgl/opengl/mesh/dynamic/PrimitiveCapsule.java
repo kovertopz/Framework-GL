@@ -14,8 +14,8 @@ package net.smert.frameworkgl.opengl.mesh.dynamic;
 
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -25,7 +25,7 @@ import net.smert.frameworkgl.utils.Color;
 public class PrimitiveCapsule extends AbstractDynamicMesh {
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float halfZ = constructionInfo.size.getZ() * .5f;
         float radiusX = constructionInfo.radius.getX();
         float radiusY = constructionInfo.radius.getY();
@@ -35,13 +35,13 @@ public class PrimitiveCapsule extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
         // Middle
-        GL.tessellator.start(Primitives.TRIANGLE_STRIP);
+        tessellator.start(Primitives.TRIANGLE_STRIP);
 
         if (halfZ < 0f) {
             halfZ = 0f;
@@ -64,20 +64,20 @@ public class PrimitiveCapsule extends AbstractDynamicMesh {
                 radius1.setX(cosAngle * radius1.getX() - sinAngle * radius1.getY());
                 radius1.setY(t);
                 pos3.set(radius1.getX() * radiusX, radius1.getY() * radiusY, halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(pos1, pos2, pos3);
-                GL.tessellator.addVertex(pos1);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormalAgain();
-                GL.tessellator.addVertex(pos2);
+                tessellator.addColor(color0);
+                tessellator.addNormal(pos1, pos2, pos3);
+                tessellator.addVertex(pos1);
+                tessellator.addColor(color0);
+                tessellator.addNormalAgain();
+                tessellator.addVertex(pos2);
             }
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Capsule - Middle");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Capsule - Middle");
 
         // -Z
-        GL.tessellator.start(Primitives.TRIANGLE_STRIP);
+        tessellator.start(Primitives.TRIANGLE_STRIP);
 
         pos1.set(0f, 0f, 0f);
         pos2.set(0f, 0f, 0f);
@@ -103,23 +103,23 @@ public class PrimitiveCapsule extends AbstractDynamicMesh {
                 radius2.setX(cosAngle * radius2.getX() - sinAngle * radius2.getY());
                 radius2.setY(t);
                 pos3.set(radius1.getX() * radiusX, radius1.getY() * radiusY, -halfZ + radius1.getZ() * radiusZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(pos1, pos2, pos3);
-                GL.tessellator.addVertex(pos1);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormalAgain();
-                GL.tessellator.addVertex(pos2);
+                tessellator.addColor(color0);
+                tessellator.addNormal(pos1, pos2, pos3);
+                tessellator.addVertex(pos1);
+                tessellator.addColor(color0);
+                tessellator.addNormalAgain();
+                tessellator.addVertex(pos2);
             }
 
             startZ = startNewZ;
             startX = startNewX;
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Capsule - Dome -Z");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Capsule - Dome -Z");
 
         // +Z
-        GL.tessellator.start(Primitives.TRIANGLE_STRIP);
+        tessellator.start(Primitives.TRIANGLE_STRIP);
 
         pos1.set(0f, 0f, 0f);
         pos2.set(0f, 0f, 0f);
@@ -145,20 +145,20 @@ public class PrimitiveCapsule extends AbstractDynamicMesh {
                 radius2.setX(cosAngle * radius2.getX() + sinAngle * radius2.getY());
                 radius2.setY(t);
                 pos3.set(radius1.getX() * radiusX, radius1.getY() * radiusY, halfZ + radius1.getZ() * radiusZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(pos1, pos2, pos3);
-                GL.tessellator.addVertex(pos1);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormalAgain();
-                GL.tessellator.addVertex(pos2);
+                tessellator.addColor(color0);
+                tessellator.addNormal(pos1, pos2, pos3);
+                tessellator.addVertex(pos1);
+                tessellator.addColor(color0);
+                tessellator.addNormalAgain();
+                tessellator.addVertex(pos2);
             }
 
             startX = startNewX;
             startZ = startNewZ;
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Capsule - Dome +Z");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Capsule - Dome +Z");
     }
 
 }

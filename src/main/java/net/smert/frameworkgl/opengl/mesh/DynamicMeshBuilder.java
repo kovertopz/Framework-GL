@@ -40,7 +40,7 @@ public class DynamicMeshBuilder {
         if (dynamicMesh == null) {
             throw new IllegalArgumentException("The requested dynamic mesh: " + name + " does not exist");
         }
-        dynamicMesh.create(false, constructionInfo);
+        dynamicMesh.create(false, constructionInfo, GL.tessellator);
         return this;
     }
 
@@ -49,12 +49,17 @@ public class DynamicMeshBuilder {
         if (dynamicMesh == null) {
             throw new IllegalArgumentException("The requested dynamic mesh: " + name + " does not exist");
         }
-        dynamicMesh.create(true, constructionInfo);
+        dynamicMesh.create(true, constructionInfo, GL.tessellator);
         return this;
     }
 
     public Mesh createMesh(boolean reset) {
-        Mesh mesh = Fw.graphics.createMesh(GL.tessellator);
+        Mesh mesh = GL.meshFactory.createMesh();
+        return createMesh(reset, mesh);
+    }
+
+    public Mesh createMesh(boolean reset, Mesh mesh) {
+        Fw.graphics.createMesh(GL.tessellator, mesh);
         if (reset) {
             reset();
         }

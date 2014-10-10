@@ -31,32 +31,50 @@ public class ByteBuffers implements MultipleBuffers {
 
     @Override
     public void createColor(int bufferSize) {
-        color = BufferUtils.createByteBuffer(bufferSize);
+        if ((color == null) || (color.capacity() < bufferSize)) {
+            color = BufferUtils.createByteBuffer(bufferSize);
+        }
+        color.clear();
     }
 
     @Override
     public void createInterleaved(int bufferSize) {
-        interleaved = BufferUtils.createByteBuffer(bufferSize);
+        if ((interleaved == null) || (interleaved.capacity() < bufferSize)) {
+            interleaved = BufferUtils.createByteBuffer(bufferSize);
+        }
+        interleaved.clear();
     }
 
     @Override
     public void createNormal(int bufferSize) {
-        normal = BufferUtils.createByteBuffer(bufferSize);
+        if ((normal == null) || (normal.capacity() < bufferSize)) {
+            normal = BufferUtils.createByteBuffer(bufferSize);
+        }
+        normal.clear();
     }
 
     @Override
     public void createTexCoord(int bufferSize) {
-        texCoord = BufferUtils.createByteBuffer(bufferSize);
+        if ((texCoord == null) || (texCoord.capacity() < bufferSize)) {
+            texCoord = BufferUtils.createByteBuffer(bufferSize);
+        }
+        texCoord.clear();
     }
 
     @Override
     public void createVertex(int bufferSize) {
-        vertex = BufferUtils.createByteBuffer(bufferSize);
+        if ((vertex == null) || (vertex.capacity() < bufferSize)) {
+            vertex = BufferUtils.createByteBuffer(bufferSize);
+        }
+        vertex.clear();
     }
 
     @Override
     public void createVertexIndex(int bufferSize) {
-        vertexIndex = BufferUtils.createByteBuffer(bufferSize);
+        if ((vertexIndex == null) || (vertexIndex.capacity() < bufferSize)) {
+            vertexIndex = BufferUtils.createByteBuffer(bufferSize);
+        }
+        vertexIndex.clear();
     }
 
     @Override
@@ -87,16 +105,6 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public ByteBuffer getVertexIndex() {
         return vertexIndex;
-    }
-
-    @Override
-    public void reset() {
-        color = null;
-        interleaved = null;
-        normal = null;
-        texCoord = null;
-        vertex = null;
-        vertexIndex = null;
     }
 
     @Override

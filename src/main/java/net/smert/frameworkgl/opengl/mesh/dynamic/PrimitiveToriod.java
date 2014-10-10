@@ -14,8 +14,8 @@ package net.smert.frameworkgl.opengl.mesh.dynamic;
 
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -30,7 +30,7 @@ public class PrimitiveToriod extends AbstractDynamicMesh {
     }
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float radiusIn = constructionInfo.radius.getX();
         float radiusOut = constructionInfo.radius.getY();
         int rings = constructionInfo.quality.getX() * 4;
@@ -39,10 +39,10 @@ public class PrimitiveToriod extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
         float cosTheta = 1f;
         float ringDelta = MathHelper.TAU / rings;
@@ -57,7 +57,7 @@ public class PrimitiveToriod extends AbstractDynamicMesh {
             float cosThetaNew = MathHelper.Cos(thetaNew);
             float sinThetaNew = MathHelper.Sin(thetaNew);
 
-            GL.tessellator.start(Primitives.QUAD_STRIP);
+            tessellator.start(Primitives.QUAD_STRIP);
 
             for (int j = sides; j >= 0; j--) {
                 phi += sideDelta;
@@ -66,18 +66,18 @@ public class PrimitiveToriod extends AbstractDynamicMesh {
                 float dist = radiusOut + radiusIn * cosPhi;
                 normal.set(cosThetaNew * cosPhi, -sinThetaNew * cosPhi, sinPhi);
                 normal.normalize();
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(normal);
-                GL.tessellator.addVertex(cosThetaNew * dist, -sinThetaNew * dist, radiusIn * sinPhi);
+                tessellator.addColor(color0);
+                tessellator.addNormal(normal);
+                tessellator.addVertex(cosThetaNew * dist, -sinThetaNew * dist, radiusIn * sinPhi);
                 normal.set(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
                 normal.normalize();
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(normal);
-                GL.tessellator.addVertex(cosTheta * dist, -sinTheta * dist, radiusIn * sinPhi);
+                tessellator.addColor(color0);
+                tessellator.addNormal(normal);
+                tessellator.addVertex(cosTheta * dist, -sinTheta * dist, radiusIn * sinPhi);
             }
 
-            GL.tessellator.stop();
-            GL.tessellator.addSegment("Primitive Toriod - Ring");
+            tessellator.stop();
+            tessellator.addSegment("Primitive Toriod - Ring");
 
             theta = thetaNew;
             cosTheta = cosThetaNew;

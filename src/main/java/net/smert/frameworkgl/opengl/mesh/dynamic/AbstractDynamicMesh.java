@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.mesh.dynamic;
 
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -22,6 +24,6 @@ public abstract class AbstractDynamicMesh {
         return true;
     }
 
-    public abstract void create(boolean reset, ConstructionInfo primitiveconstructioninfo);
+    public abstract void create(boolean reset, ConstructionInfo primitiveconstructioninfo, Tessellator tessellator);
 
 }

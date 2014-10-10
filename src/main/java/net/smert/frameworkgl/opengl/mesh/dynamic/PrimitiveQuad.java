@@ -12,8 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.mesh.dynamic;
 
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 
 /**
  *
@@ -22,7 +22,7 @@ import net.smert.frameworkgl.opengl.constants.Primitives;
 public class PrimitiveQuad extends AbstractDynamicMesh {
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float halfX = constructionInfo.size.getX() * .5f;
         float halfY = constructionInfo.size.getY() * .5f;
         float sizeX = constructionInfo.size.getX();
@@ -40,12 +40,12 @@ public class PrimitiveQuad extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
-        GL.tessellator.start(Primitives.QUADS);
+        tessellator.start(Primitives.QUADS);
 
         // Face +Z
         for (int x = 0; x < qualityX; x++) {
@@ -60,19 +60,19 @@ public class PrimitiveQuad extends AbstractDynamicMesh {
                 float xMax = -halfX + ((startX + stepX) * sizeX);
                 float yMin = -halfY + (startY * sizeY);
                 float yMax = -halfY + ((startY + stepY) * sizeY);
-                GL.tessellator.addTexCoord(texCoordMaxNewX, texCoordMaxNewY);
-                GL.tessellator.addVertex(xMax, yMax, 0f);
-                GL.tessellator.addTexCoord(texCoordMinNewX, texCoordMaxNewY);
-                GL.tessellator.addVertex(xMin, yMax, 0f);
-                GL.tessellator.addTexCoord(texCoordMinNewX, texCoordMinNewY);
-                GL.tessellator.addVertex(xMin, yMin, 0f);
-                GL.tessellator.addTexCoord(texCoordMaxNewX, texCoordMinNewY);
-                GL.tessellator.addVertex(xMax, yMin, 0f);
+                tessellator.addTexCoord(texCoordMaxNewX, texCoordMaxNewY);
+                tessellator.addVertex(xMax, yMax, 0f);
+                tessellator.addTexCoord(texCoordMinNewX, texCoordMaxNewY);
+                tessellator.addVertex(xMin, yMax, 0f);
+                tessellator.addTexCoord(texCoordMinNewX, texCoordMinNewY);
+                tessellator.addVertex(xMin, yMin, 0f);
+                tessellator.addTexCoord(texCoordMaxNewX, texCoordMinNewY);
+                tessellator.addVertex(xMax, yMin, 0f);
             }
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Quad");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Quad");
     }
 
 }

@@ -13,8 +13,8 @@
 package net.smert.frameworkgl.opengl.mesh.dynamic;
 
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -24,7 +24,7 @@ import net.smert.frameworkgl.utils.Color;
 public class PrimitiveFrustum extends AbstractDynamicMesh {
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float halfBottomX = constructionInfo.size.getX() * .5f;
         float halfBottomZ = constructionInfo.size.getZ() * .5f;
         float halfY = constructionInfo.size.getY() * .5f;
@@ -34,115 +34,115 @@ public class PrimitiveFrustum extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
-        GL.tessellator.start(Primitives.QUADS);
+        tessellator.start(Primitives.QUADS);
 
         // Face +Z
         final Vector3f pos1 = new Vector3f(halfTopX, halfY, halfTopZ);
         final Vector3f pos2 = new Vector3f(-halfTopX, halfY, halfTopZ);
         final Vector3f pos3 = new Vector3f(-halfBottomX, -halfY, halfBottomZ);
         final Vector3f pos4 = new Vector3f(halfBottomX, -halfY, halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(pos1, pos2, pos3);
-        GL.tessellator.addVertex(pos1);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos2);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos3);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos4);
+        tessellator.addColor(color0);
+        tessellator.addNormal(pos1, pos2, pos3);
+        tessellator.addVertex(pos1);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos2);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos3);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos4);
 
         // Face +X
         pos1.set(halfTopX, halfY, -halfTopZ);
         pos2.set(halfTopX, halfY, halfTopZ);
         pos3.set(halfBottomX, -halfY, halfBottomZ);
         pos4.set(halfBottomX, -halfY, -halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(pos1, pos2, pos3);
-        GL.tessellator.addVertex(pos1);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos2);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos3);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos4);
+        tessellator.addColor(color0);
+        tessellator.addNormal(pos1, pos2, pos3);
+        tessellator.addVertex(pos1);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos2);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos3);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos4);
 
         // Face -Z
         pos1.set(-halfTopX, halfY, -halfTopZ);
         pos2.set(halfTopX, halfY, -halfTopZ);
         pos3.set(halfBottomX, -halfY, -halfBottomZ);
         pos4.set(-halfBottomX, -halfY, -halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(pos1, pos2, pos3);
-        GL.tessellator.addVertex(pos1);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos2);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos3);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos4);
+        tessellator.addColor(color0);
+        tessellator.addNormal(pos1, pos2, pos3);
+        tessellator.addVertex(pos1);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos2);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos3);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos4);
 
         // Face -X
         pos1.set(-halfTopX, halfY, halfTopZ);
         pos2.set(-halfTopX, halfY, -halfTopZ);
         pos3.set(-halfBottomX, -halfY, -halfBottomZ);
         pos4.set(-halfBottomX, -halfY, halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(pos1, pos2, pos3);
-        GL.tessellator.addVertex(pos1);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos2);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos3);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(pos4);
+        tessellator.addColor(color0);
+        tessellator.addNormal(pos1, pos2, pos3);
+        tessellator.addVertex(pos1);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos2);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos3);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(pos4);
 
         // Face +Y
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(0f, 1f, 0f);
-        GL.tessellator.addVertex(halfTopX, halfY, -halfTopZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(-halfTopX, halfY, -halfTopZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(-halfTopX, halfY, halfTopZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(halfTopX, halfY, halfTopZ);
+        tessellator.addColor(color0);
+        tessellator.addNormal(0f, 1f, 0f);
+        tessellator.addVertex(halfTopX, halfY, -halfTopZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(-halfTopX, halfY, -halfTopZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(-halfTopX, halfY, halfTopZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(halfTopX, halfY, halfTopZ);
 
         // Face -Y
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormal(0f, -1f, 0f);
-        GL.tessellator.addVertex(halfBottomX, -halfY, halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(-halfBottomX, -halfY, halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(-halfBottomX, -halfY, -halfBottomZ);
-        GL.tessellator.addColor(color0);
-        GL.tessellator.addNormalAgain();
-        GL.tessellator.addVertex(halfBottomX, -halfY, -halfBottomZ);
+        tessellator.addColor(color0);
+        tessellator.addNormal(0f, -1f, 0f);
+        tessellator.addVertex(halfBottomX, -halfY, halfBottomZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(-halfBottomX, -halfY, halfBottomZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(-halfBottomX, -halfY, -halfBottomZ);
+        tessellator.addColor(color0);
+        tessellator.addNormalAgain();
+        tessellator.addVertex(halfBottomX, -halfY, -halfBottomZ);
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Frustum");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Frustum");
     }
 
 }

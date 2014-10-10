@@ -49,8 +49,6 @@ public class VertexArrayRenderable extends AbstractRenderable {
         // Destroy existing vertex array
         destroy();
 
-        Renderable.vertexArrays.reset();
-
         // Create vertex arrays
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
             Renderable.vaBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays, config);

@@ -35,6 +35,9 @@ public class ConstructionInfo {
 
     public ConstructionInfo() {
         colors = new HashMapIntGeneric<>();
+        colors.put(0, new Color());
+        colors.put(1, new Color());
+        colors.put(2, new Color());
         quality = new Quality();
         texCoordMinMaxX = new Vector2f();
         texCoordMinMaxY = new Vector2f();
@@ -145,10 +148,9 @@ public class ConstructionInfo {
 
     public final void reset() {
         convertToTriangles = true;
-        colors.clear();
-        colors.put(0, new Color());
-        colors.put(1, new Color());
-        colors.put(2, new Color());
+        colors.get(0).setWhite();
+        colors.get(1).setWhite();
+        colors.get(2).setWhite();
         quality.set(1, 1, 1);
         texCoordMinMaxX.set(0.0f, 1.0f);
         texCoordMinMaxY.set(0.0f, 1.0f);

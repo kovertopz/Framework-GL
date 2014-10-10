@@ -12,8 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.mesh.dynamic;
 
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
+import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -23,7 +23,7 @@ import net.smert.frameworkgl.utils.Color;
 public class PrimitiveBox extends AbstractDynamicMesh {
 
     @Override
-    public void create(boolean reset, ConstructionInfo constructionInfo) {
+    public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
         float halfX = constructionInfo.size.getX() * .5f;
         float halfY = constructionInfo.size.getY() * .5f;
         float halfZ = constructionInfo.size.getZ() * .5f;
@@ -40,12 +40,12 @@ public class PrimitiveBox extends AbstractDynamicMesh {
 
         // Reset
         if (reset == true) {
-            GL.tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
-            GL.tessellator.reset();
+            tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
+            tessellator.reset();
         }
-        GL.tessellator.setLocalPosition(constructionInfo.localPosition);
+        tessellator.setLocalPosition(constructionInfo.localPosition);
 
-        GL.tessellator.start(Primitives.QUADS);
+        tessellator.start(Primitives.QUADS);
 
         // Face +Z
         for (int x = 0; x < qualityX; x++) {
@@ -56,18 +56,18 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float xMax = -halfX + ((startX + stepX) * sizeX);
                 float yMin = -halfY + (startY * sizeY);
                 float yMax = -halfY + ((startY + stepY) * sizeY);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, 1f);
-                GL.tessellator.addVertex(xMax, yMax, halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, 1f);
-                GL.tessellator.addVertex(xMin, yMax, halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, 1f);
-                GL.tessellator.addVertex(xMin, yMin, halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, 1f);
-                GL.tessellator.addVertex(xMax, yMin, halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, 1f);
+                tessellator.addVertex(xMax, yMax, halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, 1f);
+                tessellator.addVertex(xMin, yMax, halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, 1f);
+                tessellator.addVertex(xMin, yMin, halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, 1f);
+                tessellator.addVertex(xMax, yMin, halfZ);
             }
         }
 
@@ -80,18 +80,18 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float yMax = -halfY + ((startY + stepY) * sizeY);
                 float zMin = -halfZ + (startZ * sizeZ);
                 float zMax = -halfZ + ((startZ + stepZ) * sizeZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(1f, 0f, 0f);
-                GL.tessellator.addVertex(halfX, yMax, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(1f, 0f, 0f);
-                GL.tessellator.addVertex(halfX, yMax, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(1f, 0f, 0f);
-                GL.tessellator.addVertex(halfX, yMin, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(1f, 0f, 0f);
-                GL.tessellator.addVertex(halfX, yMin, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(1f, 0f, 0f);
+                tessellator.addVertex(halfX, yMax, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(1f, 0f, 0f);
+                tessellator.addVertex(halfX, yMax, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(1f, 0f, 0f);
+                tessellator.addVertex(halfX, yMin, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(1f, 0f, 0f);
+                tessellator.addVertex(halfX, yMin, zMin);
             }
         }
 
@@ -104,18 +104,18 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float xMax = -halfX + ((startX + stepX) * sizeX);
                 float yMin = -halfY + (startY * sizeY);
                 float yMax = -halfY + ((startY + stepY) * sizeY);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, -1f);
-                GL.tessellator.addVertex(xMin, yMax, -halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, -1f);
-                GL.tessellator.addVertex(xMax, yMax, -halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, -1f);
-                GL.tessellator.addVertex(xMax, yMin, -halfZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 0f, -1f);
-                GL.tessellator.addVertex(xMin, yMin, -halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, -1f);
+                tessellator.addVertex(xMin, yMax, -halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, -1f);
+                tessellator.addVertex(xMax, yMax, -halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, -1f);
+                tessellator.addVertex(xMax, yMin, -halfZ);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 0f, -1f);
+                tessellator.addVertex(xMin, yMin, -halfZ);
             }
         }
 
@@ -128,18 +128,18 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float yMax = -halfY + ((startY + stepY) * sizeY);
                 float zMin = -halfZ + (startZ * sizeZ);
                 float zMax = -halfZ + ((startZ + stepZ) * sizeZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(-1f, 0f, 0f);
-                GL.tessellator.addVertex(-halfX, yMax, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(-1f, 0f, 0f);
-                GL.tessellator.addVertex(-halfX, yMax, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(-1f, 0f, 0f);
-                GL.tessellator.addVertex(-halfX, yMin, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(-1f, 0f, 0f);
-                GL.tessellator.addVertex(-halfX, yMin, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(-1f, 0f, 0f);
+                tessellator.addVertex(-halfX, yMax, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(-1f, 0f, 0f);
+                tessellator.addVertex(-halfX, yMax, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(-1f, 0f, 0f);
+                tessellator.addVertex(-halfX, yMin, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(-1f, 0f, 0f);
+                tessellator.addVertex(-halfX, yMin, zMax);
             }
         }
 
@@ -152,18 +152,18 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float xMax = -halfX + ((startX + stepX) * sizeX);
                 float zMin = -halfZ + (startZ * sizeZ);
                 float zMax = -halfZ + ((startZ + stepZ) * sizeZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 1f, 0f);
-                GL.tessellator.addVertex(xMax, halfY, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 1f, 0f);
-                GL.tessellator.addVertex(xMin, halfY, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 1f, 0f);
-                GL.tessellator.addVertex(xMin, halfY, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, 1f, 0f);
-                GL.tessellator.addVertex(xMax, halfY, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 1f, 0f);
+                tessellator.addVertex(xMax, halfY, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 1f, 0f);
+                tessellator.addVertex(xMin, halfY, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 1f, 0f);
+                tessellator.addVertex(xMin, halfY, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, 1f, 0f);
+                tessellator.addVertex(xMax, halfY, zMax);
             }
         }
 
@@ -176,23 +176,23 @@ public class PrimitiveBox extends AbstractDynamicMesh {
                 float xMax = -halfX + ((startX + stepX) * sizeX);
                 float zMin = -halfZ + (startZ * sizeZ);
                 float zMax = -halfZ + ((startZ + stepZ) * sizeZ);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, -1f, 0f);
-                GL.tessellator.addVertex(xMax, -halfY, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, -1f, 0f);
-                GL.tessellator.addVertex(xMin, -halfY, zMax);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, -1f, 0f);
-                GL.tessellator.addVertex(xMin, -halfY, zMin);
-                GL.tessellator.addColor(color0);
-                GL.tessellator.addNormal(0f, -1f, 0f);
-                GL.tessellator.addVertex(xMax, -halfY, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, -1f, 0f);
+                tessellator.addVertex(xMax, -halfY, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, -1f, 0f);
+                tessellator.addVertex(xMin, -halfY, zMax);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, -1f, 0f);
+                tessellator.addVertex(xMin, -halfY, zMin);
+                tessellator.addColor(color0);
+                tessellator.addNormal(0f, -1f, 0f);
+                tessellator.addVertex(xMax, -halfY, zMin);
             }
         }
 
-        GL.tessellator.stop();
-        GL.tessellator.addSegment("Primitive Box");
+        tessellator.stop();
+        tessellator.addSegment("Primitive Box");
     }
 
 }
