@@ -124,4 +124,10 @@ public class GameObject {
         return this;
     }
 
+    public void init() {
+    }
+
+    public void update() {
+    }
+
 }
