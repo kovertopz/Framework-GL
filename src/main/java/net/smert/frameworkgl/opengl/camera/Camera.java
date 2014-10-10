@@ -70,6 +70,14 @@ public class Camera {
         totalRoll = rotationMatrix.getRoll();
     }
 
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public float getFieldOfView() {
+        return fieldOfView;
+    }
+
     public float getHeading() {
         return totalHeading;
     }
@@ -82,12 +90,24 @@ public class Camera {
         return totalRoll;
     }
 
+    public float getZFar() {
+        return zFar;
+    }
+
+    public float getZNear() {
+        return zNear;
+    }
+
     public AbstractFrustumCulling getFrustumCulling() {
         return frustumCulling;
     }
 
     public void setFrustumCulling(AbstractFrustumCulling frustumCulling) {
         this.frustumCulling = frustumCulling;
+    }
+
+    public Matrix3f getRotationMatrix() {
+        return rotationMatrix;
     }
 
     public Matrix4f getProjectionMatrix() {
@@ -104,6 +124,14 @@ public class Camera {
 
     public Vector3f getViewDirection() {
         return viewDirection;
+    }
+
+    public boolean isInvert() {
+        return invert;
+    }
+
+    public void setInvert(boolean invert) {
+        this.invert = invert;
     }
 
     public void lookAt(Vector3f position, Vector3f target, Vector3f up) {
@@ -185,32 +213,32 @@ public class Camera {
         updateRotationMatrix();
     }
 
-    public void setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltay = 1f / (top - bottom);
-        float h = 2f * znear * invdeltay;
-        aspectRatio = 1f;
+    public void setFrustum(float left, float right, float bottom, float top, float zNear, float zFar) {
+        float invDeltaY = 1f / (top - bottom);
+        float h = 2f * zNear * invDeltaY;
+        aspectRatio = (right - left) / (top - bottom);
         fieldOfView = MathHelper.ArcTan(1f / h) / MathHelper.PI_OVER_360;
-        zFar = zfar;
-        zNear = znear;
-        projectionMatrix.setFrustum(left, right, bottom, top, znear, zfar);
+        this.zFar = zFar;
+        this.zNear = zNear;
+        projectionMatrix.setFrustum(left, right, bottom, top, zNear, zFar);
     }
 
-    public void setOrthogonalProjection(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltay = 1f / (top - bottom);
-        float h = 2f * invdeltay;
+    public void setOrthogonalProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
+        float invDeltaY = 1f / (top - bottom);
+        float h = 2f * invDeltaY;
         aspectRatio = 1f;
         fieldOfView = MathHelper.ArcTan(1f / h) / MathHelper.PI_OVER_360;
-        zFar = zfar;
-        zNear = znear;
-        projectionMatrix.setOrthogonal(left, right, bottom, top, znear, zfar);
+        this.zFar = zFar;
+        this.zNear = zNear;
+        projectionMatrix.setOrthogonal(left, right, bottom, top, zNear, zFar);
     }
 
-    public void setPerspectiveProjection(float fieldofviewy, float aspectratio, float znear, float zfar) {
-        aspectRatio = aspectratio;
-        fieldOfView = fieldofviewy;
-        zFar = zfar;
-        zNear = znear;
-        projectionMatrix.setPerspective(fieldofviewy, aspectratio, znear, zfar);
+    public void setPerspectiveProjection(float fieldOfViewY, float aspectRatio, float zNear, float zFar) {
+        this.aspectRatio = aspectRatio;
+        fieldOfView = fieldOfViewY;
+        this.zFar = zFar;
+        this.zNear = zNear;
+        projectionMatrix.setPerspective(fieldOfViewY, aspectRatio, zNear, zFar);
     }
 
     public void updatePlanes() {

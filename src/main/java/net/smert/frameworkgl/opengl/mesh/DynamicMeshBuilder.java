@@ -110,6 +110,11 @@ public class DynamicMeshBuilder {
         return this;
     }
 
+    public DynamicMeshBuilder setCustomData(int index, Object object) {
+        constructionInfo.setCustomData(index, object);
+        return this;
+    }
+
     public DynamicMeshBuilder setLocalPosition(float x, float y, float z) {
         constructionInfo.setLocalPosition(x, y, z);
         return this;

@@ -19,10 +19,12 @@ package net.smert.frameworkgl.opengl.renderable;
 public class RenderableState {
 
     private boolean enabled;
+    private boolean inFrustum;
     private boolean opaque;
 
     public RenderableState() {
         enabled = true;
+        inFrustum = true;
         opaque = true;
     }
 
@@ -32,6 +34,14 @@ public class RenderableState {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isInFrustum() {
+        return inFrustum;
+    }
+
+    public void setInFrustum(boolean inFrustum) {
+        this.inFrustum = inFrustum;
     }
 
     public boolean isOpaque() {

@@ -19,6 +19,7 @@ import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Transform4f;
+import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
@@ -155,8 +156,8 @@ public class Graphics {
     }
 
     public void performCulling(Camera camera, GameObject gameObject) {
-        boolean inView = camera.getFrustumCulling().isAABBInFrustum(gameObject.getWorldAabb());
-        gameObject.getRenderableState().setEnabled(inView);
+        boolean inFrustum = camera.getFrustumCulling().isAABBInFrustum(gameObject.getWorldAabb());
+        gameObject.getRenderableState().setInFrustum(inFrustum);
     }
 
     public void performCulling(Camera camera, List<GameObject> gameObjects) {
@@ -175,6 +176,13 @@ public class Graphics {
     public void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
         GL.o1.pushMatrix();
         GL.o1.multiplyMatrix(transformWorldFloatBuffer);
+        renderable.render();
+        GL.o1.popMatrix();
+    }
+
+    public void render(AbstractRenderable renderable, Vector3f position) {
+        GL.o1.pushMatrix();
+        GL.o1.translate(position.getX(), position.getY(), position.getZ());
         renderable.render();
         GL.o1.popMatrix();
     }

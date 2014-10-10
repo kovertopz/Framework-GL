@@ -26,6 +26,7 @@ import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitivePyramid;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveQuad;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveSphere;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveToriod;
+import net.smert.frameworkgl.opengl.mesh.dynamic.ViewFrustum;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import org.picocontainer.MutablePicoContainer;
 
@@ -79,6 +80,10 @@ public class MeshFactory {
 
     public PrimitiveToriod createDynamicPrimitiveToriod() {
         return container.getComponent(PrimitiveToriod.class);
+    }
+
+    public ViewFrustum createDynamicViewFrustum() {
+        return container.getComponent(ViewFrustum.class);
     }
 
     public Material createMaterial() {

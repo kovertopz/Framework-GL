@@ -76,6 +76,7 @@ import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitivePyramid;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveQuad;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveSphere;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveToriod;
+import net.smert.frameworkgl.opengl.mesh.dynamic.ViewFrustum;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.model.obj.MaterialReader;
 import net.smert.frameworkgl.opengl.model.obj.ObjReader;
@@ -199,6 +200,7 @@ public class BootStrap {
             meshFactoryContainer.addComponent(PrimitiveQuad.class);
             meshFactoryContainer.addComponent(PrimitiveSphere.class);
             meshFactoryContainer.addComponent(PrimitiveToriod.class);
+            meshFactoryContainer.addComponent(ViewFrustum.class);
             meshFactoryContainer.addComponent(Tessellator.class);
 
             // Add container for MeshFactory
@@ -425,6 +427,7 @@ public class BootStrap {
         dynamicMeshBuilder.register("quad", GL.meshFactory.createDynamicPrimitiveQuad());
         dynamicMeshBuilder.register("sphere", GL.meshFactory.createDynamicPrimitiveSphere());
         dynamicMeshBuilder.register("toriod", GL.meshFactory.createDynamicPrimitiveToriod());
+        dynamicMeshBuilder.register("view_frustum", GL.meshFactory.createDynamicViewFrustum());
 
         // Register extensions
         meshReader.registerExtension("obj", container.getComponent(ObjReader.class));

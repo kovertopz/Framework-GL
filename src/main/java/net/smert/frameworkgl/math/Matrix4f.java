@@ -573,36 +573,36 @@ public class Matrix4f {
         return this;
     }
 
-    public Matrix4f setFrustum(float left, float right, float bottom, float top, float znear, float zfar) {
-        float invdeltax = 1f / (right - left);
-        float invdeltay = 1f / (top - bottom);
-        float invdeltaz = 1f / (zfar - znear);
-        float h = 2f * znear * invdeltay;
-        setRow(0, 2f * znear * invdeltax, 0f, (right + left) * invdeltax, 0f);
-        setRow(1, 0f, h, (top + bottom) * invdeltay, 0f);
-        setRow(2, 0f, 0f, -(zfar + znear) * invdeltaz, -2f * zfar * znear * invdeltaz);
+    public Matrix4f setFrustum(float left, float right, float bottom, float top, float zNear, float zFar) {
+        float invDeltaX = 1f / (right - left);
+        float invDeltaY = 1f / (top - bottom);
+        float invDeltaZ = 1f / (zFar - zNear);
+        float h = 2f * zNear * invDeltaY;
+        setRow(0, 2f * zNear * invDeltaX, 0f, (right + left) * invDeltaX, 0f);
+        setRow(1, 0f, h, (top + bottom) * invDeltaY, 0f);
+        setRow(2, 0f, 0f, -(zFar + zNear) * invDeltaZ, -2f * zFar * zNear * invDeltaZ);
         setRow(3, 0f, 0f, -1f, 0f);
         return this;
     }
 
     public Matrix4f setOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) {
-        float invdeltax = 1f / (right - left);
-        float invdeltay = 1f / (top - bottom);
-        float invdeltaz = 1f / (zFar - zNear);
-        float h = 2f * invdeltay;
-        setRow(0, 2f * invdeltax, 0f, 0f, -(right + left) * invdeltax);
-        setRow(1, 0f, h, 0f, -(top + bottom) * invdeltay);
-        setRow(2, 0f, 0f, -2f * invdeltaz, -(zFar + zNear) * invdeltaz);
+        float invDeltaX = 1f / (right - left);
+        float invDeltaY = 1f / (top - bottom);
+        float invDeltaZ = 1f / (zFar - zNear);
+        float h = 2f * invDeltaY;
+        setRow(0, 2f * invDeltaX, 0f, 0f, -(right + left) * invDeltaX);
+        setRow(1, 0f, h, 0f, -(top + bottom) * invDeltaY);
+        setRow(2, 0f, 0f, -2f * invDeltaZ, -(zFar + zNear) * invDeltaZ);
         setRow(3, 0f, 0f, 0f, 1f);
         return this;
     }
 
     public Matrix4f setPerspective(float fieldOfViewY, float aspectRatio, float zNear, float zFar) {
-        float cotangent = 1f / MathHelper.Tan(fieldOfViewY * MathHelper.PI_OVER_360);
-        float invdeltaz = 1f / (zFar - zNear);
-        setRow(0, cotangent / aspectRatio, 0f, 0f, 0f);
-        setRow(1, 0f, cotangent, 0f, 0f);
-        setRow(2, 0f, 0f, -(zFar + zNear) * invdeltaz, -2f * zNear * zFar * invdeltaz);
+        float coTangent = 1f / MathHelper.Tan(fieldOfViewY * MathHelper.PI_OVER_360);
+        float invDeltaZ = 1f / (zFar - zNear);
+        setRow(0, coTangent / aspectRatio, 0f, 0f, 0f);
+        setRow(1, 0f, coTangent, 0f, 0f);
+        setRow(2, 0f, 0f, -(zFar + zNear) * invDeltaZ, -2f * zNear * zFar * invDeltaZ);
         setRow(3, 0f, 0f, -1f, 0f);
         return this;
     }
