@@ -26,16 +26,16 @@ public class FrameBufferObjectHelper {
 
     private int textureTarget = TextureTargets.TEXTURE_2D;
 
-    public void attachRenderBuffer(int attachment, int rboid) {
-        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment, GL30.GL_RENDERBUFFER, rboid);
+    public void attachRenderBuffer(int attachment, int rboID) {
+        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment, GL30.GL_RENDERBUFFER, rboID);
     }
 
-    public void attachTexture(int attachment, int textureid) {
-        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, attachment, textureTarget, textureid, 0);
+    public void attachTexture(int attachment, int textureID) {
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, attachment, textureTarget, textureID, 0);
     }
 
-    public void bind(int fboid) {
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fboid);
+    public void bind(int fboID) {
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fboID);
     }
 
     public void blit(int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, int mask, int filter) {
@@ -50,8 +50,8 @@ public class FrameBufferObjectHelper {
         return GL30.glGenFramebuffers();
     }
 
-    public void delete(int fboid) {
-        GL30.glDeleteFramebuffers(fboid);
+    public void delete(int fboID) {
+        GL30.glDeleteFramebuffers(fboID);
     }
 
     public void disableBuffers() {
@@ -71,21 +71,21 @@ public class FrameBufferObjectHelper {
         GL11.glDrawBuffer(mode);
     }
 
-    public void drawBuffer(IntBuffer intbuffer) {
-        GL20.glDrawBuffers(intbuffer);
+    public void drawBuffer(IntBuffer intBuffer) {
+        GL20.glDrawBuffers(intBuffer);
     }
 
-    public void generateMipmap(int textarget) {
-        GL30.glGenerateMipmap(textarget);
+    public void generateMipmap(int textureTarget) {
+        GL30.glGenerateMipmap(textureTarget);
     }
 
     public void readBuffer(int mode) {
         GL11.glReadBuffer(mode);
     }
 
-    public void setBlitTargets(int sourcefboid, int destinationfboid) {
-        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, destinationfboid);
-        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, sourcefboid);
+    public void setBlitTargets(int sourceFboID, int destinationFboID) {
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, destinationFboID);
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, sourceFboID);
     }
 
     public void setTextureTarget2D() {

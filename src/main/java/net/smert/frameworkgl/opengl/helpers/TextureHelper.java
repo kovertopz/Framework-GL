@@ -37,95 +37,95 @@ public class TextureHelper {
         GL13.glActiveTexture(textureunit);
     }
 
-    public void bind(int textureid) {
-        GL11.glBindTexture(textureTarget, textureid);
+    public void bind(int textureID) {
+        GL11.glBindTexture(textureTarget, textureID);
     }
 
     public int create() {
         return GL11.glGenTextures();
     }
 
-    public void create(IntBuffer textureids) {
-        GL11.glGenTextures(textureids);
+    public void create(IntBuffer textureIDs) {
+        GL11.glGenTextures(textureIDs);
     }
 
-    public void delete(int textureid) {
-        GL11.glDeleteTextures(textureid);
+    public void delete(int textureID) {
+        GL11.glDeleteTextures(textureID);
     }
 
     public void generateMipmap() {
         GL30.glGenerateMipmap(textureTarget);
     }
 
-    public void setByteMipmaps(int internalformat, int width, int height, int format, ByteBuffer pixeldata) {
-        GLU.gluBuild2DMipmaps(textureTarget, internalformat, width, height, format, TextureTypes.UNSIGNED_BYTE, pixeldata);
+    public void setByteMipmaps(int internalFormat, int width, int height, int format, ByteBuffer pixelData) {
+        GLU.gluBuild2DMipmaps(textureTarget, internalFormat, width, height, format, TextureTypes.UNSIGNED_BYTE, pixelData);
     }
 
-    public void setClamping(int wrapr, int wraps, int wrapt) {
-        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_S, wrapr);
-        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_S, wraps);
-        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_T, wrapt);
+    public void setClamping(int wrapR, int wrapS, int wrapT) {
+        GL11.glTexParameteri(textureTarget, GL12.GL_TEXTURE_WRAP_R, wrapR);
+        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_S, wrapS);
+        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_T, wrapT);
     }
 
-    public void setCompareFunction(int comparefunc) {
-        GL11.glTexParameteri(textureTarget, GL14.GL_TEXTURE_COMPARE_FUNC, comparefunc);
+    public void setCompareFunction(int compareFunc) {
+        GL11.glTexParameteri(textureTarget, GL14.GL_TEXTURE_COMPARE_FUNC, compareFunc);
     }
 
-    public void setCompareMode(int comparemode) {
-        GL11.glTexParameteri(textureTarget, GL14.GL_TEXTURE_COMPARE_MODE, comparemode);
+    public void setCompareMode(int compareMode) {
+        GL11.glTexParameteri(textureTarget, GL14.GL_TEXTURE_COMPARE_MODE, compareMode);
     }
 
-    public void setFilters(int magfilter, int minfilter) {
-        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_MAG_FILTER, magfilter);
-        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_MIN_FILTER, minfilter);
+    public void setFilters(int magFilter, int minFilter) {
+        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_MAG_FILTER, magFilter);
+        GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_MIN_FILTER, minFilter);
     }
 
-    public void setImage2DBytePixelData(int internalformat, int width, int height, int format, ByteBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.UNSIGNED_BYTE, pixeldata);
+    public void setImage2DBytePixelData(int internalFormat, int width, int height, int format, ByteBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.UNSIGNED_BYTE, pixelData);
     }
 
-    public void setImage2DFloatPixelData(int internalformat, int width, int height, int format, FloatBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.FLOAT, pixeldata);
+    public void setImage2DFloatPixelData(int internalFormat, int width, int height, int format, FloatBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.FLOAT, pixelData);
     }
 
-    public void setImage2DInt1010102PixelData(int internalformat, int width, int height, int format, IntBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.UNSIGNED_INT_10_10_10_2, pixeldata);
+    public void setImage2DInt1010102PixelData(int internalFormat, int width, int height, int format, IntBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.UNSIGNED_INT_10_10_10_2, pixelData);
     }
 
-    public void setImage2DIntPixelData(int internalformat, int width, int height, int format, IntBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.UNSIGNED_INT, pixeldata);
+    public void setImage2DIntPixelData(int internalFormat, int width, int height, int format, IntBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.UNSIGNED_INT, pixelData);
     }
 
-    public void setImage2DShortPixelData(int internalformat, int width, int height, int format, ShortBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.UNSIGNED_SHORT, pixeldata);
+    public void setImage2DShortPixelData(int internalFormat, int width, int height, int format, ShortBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.UNSIGNED_SHORT, pixelData);
     }
 
-    public void setImage2DStencilPixelData(int internalformat, int width, int height, int format, IntBuffer pixeldata) {
-        GL11.glTexImage2D(textureTarget, 0, internalformat, width, height, 0, format, TextureTypes.UNSIGNED_INT_24_8, pixeldata);
+    public void setImage2DStencilPixelData(int internalFormat, int width, int height, int format, IntBuffer pixelData) {
+        GL11.glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, TextureTypes.UNSIGNED_INT_24_8, pixelData);
     }
 
-    public void setImage3DBytePixelData(int internalformat, int width, int height, int depth, int format, ByteBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.UNSIGNED_BYTE, pixeldata);
+    public void setImage3DBytePixelData(int internalFormat, int width, int height, int depth, int format, ByteBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_BYTE, pixelData);
     }
 
-    public void setImage3DFloatPixelData(int internalformat, int width, int height, int depth, int format, FloatBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.FLOAT, pixeldata);
+    public void setImage3DFloatPixelData(int internalFormat, int width, int height, int depth, int format, FloatBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.FLOAT, pixelData);
     }
 
-    public void setImage3DInt1010102PixelData(int internalformat, int width, int height, int depth, int format, IntBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT_10_10_10_2, pixeldata);
+    public void setImage3DInt1010102PixelData(int internalFormat, int width, int height, int depth, int format, IntBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT_10_10_10_2, pixelData);
     }
 
-    public void setImage3DIntPixelData(int internalformat, int width, int height, int depth, int format, IntBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT, pixeldata);
+    public void setImage3DIntPixelData(int internalFormat, int width, int height, int depth, int format, IntBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT, pixelData);
     }
 
-    public void setImage3DShortPixelData(int internalformat, int width, int height, int depth, int format, ShortBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.UNSIGNED_SHORT, pixeldata);
+    public void setImage3DShortPixelData(int internalFormat, int width, int height, int depth, int format, ShortBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_SHORT, pixelData);
     }
 
-    public void setImage3DStencilPixelData(int internalformat, int width, int height, int depth, int format, IntBuffer pixeldata) {
-        GL12.glTexImage3D(textureTarget, 0, internalformat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT_24_8, pixeldata);
+    public void setImage3DStencilPixelData(int internalFormat, int width, int height, int depth, int format, IntBuffer pixelData) {
+        GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT_24_8, pixelData);
     }
 
     public void setTextureTarget2D() {

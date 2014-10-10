@@ -20,20 +20,20 @@ import org.lwjgl.opengl.GL30;
  */
 public class RenderBufferObjectHelper {
 
-    public void bind(int rboid) {
-        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, rboid);
+    public void bind(int rboID) {
+        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, rboID);
     }
 
     public int create() {
         return GL30.glGenRenderbuffers();
     }
 
-    public void delete(int rboid) {
-        GL30.glDeleteRenderbuffers(rboid);
+    public void delete(int rboID) {
+        GL30.glDeleteRenderbuffers(rboID);
     }
 
-    public void storage(int internalformat, int width, int height) {
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalformat, width, height);
+    public void storage(int internalFormat, int width, int height) {
+        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalFormat, width, height);
     }
 
     public void unbind() {

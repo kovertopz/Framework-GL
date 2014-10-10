@@ -21,16 +21,16 @@ import org.lwjgl.opengl.GL20;
  */
 public class ShaderHelper {
 
-    public void attach(int programid, int shaderid) {
-        GL20.glAttachShader(programid, shaderid);
+    public void attach(int programID, int shaderID) {
+        GL20.glAttachShader(programID, shaderID);
     }
 
-    public void bind(int programid) {
-        GL20.glUseProgram(programid);
+    public void bind(int programID) {
+        GL20.glUseProgram(programID);
     }
 
-    public void compile(int shaderid) {
-        GL20.glCompileShader(shaderid);
+    public void compile(int shaderID) {
+        GL20.glCompileShader(shaderID);
     }
 
     public int createProgram() {
@@ -41,48 +41,48 @@ public class ShaderHelper {
         return GL20.glCreateShader(type);
     }
 
-    public void deleteProgram(int programid) {
-        GL20.glDeleteProgram(programid);
+    public void deleteProgram(int programID) {
+        GL20.glDeleteProgram(programID);
     }
 
-    public void deleteShader(int shaderid) {
-        GL20.glDeleteShader(shaderid);
+    public void deleteShader(int shaderID) {
+        GL20.glDeleteShader(shaderID);
     }
 
-    public boolean getCompileStatus(int shaderid) {
-        return GL20.glGetShaderi(shaderid, GL20.GL_COMPILE_STATUS) != GL11.GL_FALSE;
+    public boolean getCompileStatus(int shaderID) {
+        return GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) != GL11.GL_FALSE;
     }
 
-    public boolean getLinkStatus(int programid) {
-        return GL20.glGetProgrami(programid, GL20.GL_LINK_STATUS) != GL11.GL_FALSE;
+    public boolean getLinkStatus(int programID) {
+        return GL20.glGetProgrami(programID, GL20.GL_LINK_STATUS) != GL11.GL_FALSE;
     }
 
-    public boolean getValidateStatus(int programid) {
-        return GL20.glGetProgrami(programid, GL20.GL_VALIDATE_STATUS) != GL11.GL_FALSE;
+    public boolean getValidateStatus(int programID) {
+        return GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) != GL11.GL_FALSE;
     }
 
-    public int getUniformLocation(int programid, String uniformname) {
-        return GL20.glGetUniformLocation(programid, uniformname);
+    public int getUniformLocation(int programID, String uniformName) {
+        return GL20.glGetUniformLocation(programID, uniformName);
     }
 
-    public String getInfoLog(int objectid) {
-        return GL20.glGetShaderInfoLog(objectid, 8192);
+    public String getInfoLog(int objectID) {
+        return GL20.glGetShaderInfoLog(objectID, 8192);
     }
 
-    public void link(int programid) {
-        GL20.glLinkProgram(programid);
+    public void link(int programID) {
+        GL20.glLinkProgram(programID);
     }
 
-    public void setSource(int shaderid, String code) {
-        GL20.glShaderSource(shaderid, code);
+    public void setSource(int shaderID, String code) {
+        GL20.glShaderSource(shaderID, code);
     }
 
     public void unbind() {
         GL20.glUseProgram(0);
     }
 
-    public void validate(int program) {
-        GL20.glValidateProgram(program);
+    public void validate(int programID) {
+        GL20.glValidateProgram(programID);
     }
 
 }

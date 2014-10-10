@@ -20,20 +20,20 @@ import org.lwjgl.opengl.GL11;
  */
 public class DisplayListHelper {
 
-    public void begin(int id) {
-        GL11.glNewList(id, GL11.GL_COMPILE);
+    public void begin(int displayListID) {
+        GL11.glNewList(displayListID, GL11.GL_COMPILE);
     }
 
-    public void call(int id) {
-        GL11.glCallList(id);
+    public void call(int displayListID) {
+        GL11.glCallList(displayListID);
     }
 
     public int create() {
         return GL11.glGenLists(1);
     }
 
-    public void delete(int id) {
-        GL11.glDeleteLists(id, 1);
+    public void delete(int displayListID) {
+        GL11.glDeleteLists(displayListID, 1);
     }
 
     public void end() {

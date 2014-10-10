@@ -26,36 +26,36 @@ import org.lwjgl.opengl.GL15;
  */
 public class VertexBufferObjectHelper {
 
-    public void bindColors(int vboid, int size, int type, int stridebytes, int offsetbytes) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL11.glColorPointer(size, type, stridebytes, offsetbytes);
+    public void bindColors(int vboID, int size, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL11.glColorPointer(size, type, strideBytes, offsetBytes);
     }
 
-    public void bindNormals(int vboid, int type, int stridebytes, int offsetbytes) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL11.glNormalPointer(type, stridebytes, offsetbytes);
+    public void bindNormals(int vboID, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL11.glNormalPointer(type, strideBytes, offsetBytes);
     }
 
-    public void bindVertices(int vboid, int size, int type, int stridebytes, int offsetbytes) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL11.glVertexPointer(size, type, stridebytes, offsetbytes);
+    public void bindVertices(int vboID, int size, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL11.glVertexPointer(size, type, strideBytes, offsetBytes);
     }
 
-    public void bindVerticesIndex(int vboid) {
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
+    public void bindVerticesIndex(int vboID) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
     }
 
-    public void bindTextureCoordinates(int vboid, int size, int type, int stridebytes, int offsetbytes) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL11.glTexCoordPointer(size, type, stridebytes, offsetbytes);
+    public void bindTextureCoordinates(int vboID, int size, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL11.glTexCoordPointer(size, type, strideBytes, offsetBytes);
     }
 
     public int create() {
         return GL15.glGenBuffers();
     }
 
-    public void delete(int vboid) {
-        GL15.glDeleteBuffers(vboid);
+    public void delete(int vboID) {
+        GL15.glDeleteBuffers(vboID);
     }
 
     public void disableColors() {
@@ -82,8 +82,8 @@ public class VertexBufferObjectHelper {
         GL11.glDrawElements(mode, count, type, 0);
     }
 
-    public void drawRangeElements(int mode, int start, int end, int count, int type) {
-        GL12.glDrawRangeElements(mode, start, end, count, type, 0);
+    public void drawRangeElements(int mode, int minIndex, int maxIndex, int count, int type) {
+        GL12.glDrawRangeElements(mode, minIndex, maxIndex, count, type, 0);
     }
 
     public void enableColors() {
@@ -102,44 +102,79 @@ public class VertexBufferObjectHelper {
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
     }
 
-    public void setBufferData(int vboid, ByteBuffer bytebuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, bytebuffer, usage);
+    public void setBufferData(int vboID, ByteBuffer byteBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, byteBuffer, usage);
     }
 
-    public void setBufferData(int vboid, FloatBuffer floatbuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floatbuffer, usage);
+    public void setBufferData(int vboID, FloatBuffer floatBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floatBuffer, usage);
     }
 
-    public void setBufferData(int vboid, IntBuffer intbuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, intbuffer, usage);
+    public void setBufferData(int vboID, IntBuffer intBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, intBuffer, usage);
     }
 
-    public void setBufferData(int vboid, ShortBuffer shortbuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, shortbuffer, usage);
+    public void setBufferData(int vboID, ShortBuffer shortBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, shortBuffer, usage);
     }
 
-    public void setBufferElementData(int vboid, ByteBuffer byteBuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
+    public void setBufferElementData(int vboID, ByteBuffer byteBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, byteBuffer, usage);
     }
 
-    public void setBufferElementData(int vboid, IntBuffer intbuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, intbuffer, usage);
+    public void setBufferElementData(int vboID, IntBuffer intBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, intBuffer, usage);
     }
 
-    public void setBufferElementData(int vboid, ShortBuffer shortbuffer, int usage) {
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboid);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, shortbuffer, usage);
+    public void setBufferElementData(int vboID, ShortBuffer shortBuffer, int usage) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, shortBuffer, usage);
     }
 
     public void unbind() {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    public void updateBufferData(int vboID, int offsetBytes, ByteBuffer byteBuffer) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offsetBytes, byteBuffer);
+    }
+
+    public void updateBufferData(int vboID, int offsetBytes, FloatBuffer floatBuffer) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offsetBytes, floatBuffer);
+    }
+
+    public void updateBufferData(int vboID, int offsetBytes, IntBuffer intBuffer) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offsetBytes, intBuffer);
+    }
+
+    public void updateBufferData(int vboID, int offsetBytes, ShortBuffer shortBuffer) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offsetBytes, shortBuffer);
+    }
+
+    public void updateBufferElementData(int vboID, int offsetBytes, ByteBuffer byteBuffer) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, offsetBytes, byteBuffer);
+    }
+
+    public void updateBufferElementData(int vboID, int offsetBytes, IntBuffer intBuffer) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, offsetBytes, intBuffer);
+    }
+
+    public void updateBufferElementData(int vboID, int offsetBytes, ShortBuffer shortBuffer) {
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, offsetBytes, shortBuffer);
     }
 
 }
