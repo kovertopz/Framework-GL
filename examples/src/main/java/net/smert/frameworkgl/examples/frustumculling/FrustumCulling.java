@@ -19,6 +19,7 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
@@ -51,6 +52,7 @@ public class FrustumCulling extends Screen {
     private CameraController cameraController;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
+    private ViewFrustumGameObject viewFrustumGameObject;
 
     public FrustumCulling(String[] args) {
         wireframe = false;
@@ -71,6 +73,12 @@ public class FrustumCulling extends Screen {
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {
             camera.updatePlanes();
+            viewFrustumGameObject.getRenderableState().setInFrustum(true);
+            viewFrustumGameObject.getWorldTransform().getRotation().set(camera.getRotationMatrix());
+            viewFrustumGameObject.setWorldPosition(camera.getPosition());
+            viewFrustumGameObject.update(
+                    camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+            Fw.graphics.updateAabb(viewFrustumGameObject);
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             updateGameObjectsToRender();
         }
@@ -80,9 +88,12 @@ public class FrustumCulling extends Screen {
     private void updateGameObjectsToRender() {
         gameObjectsToRender.clear();
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
-            if (gameObject.getRenderableState().isEnabled()) {
+            if (gameObject.getRenderableState().isInFrustum()) {
                 gameObjectsToRender.add(gameObject);
             }
+        }
+        if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
+            gameObjectsToRender.add(viewFrustumGameObject);
         }
     }
 
@@ -91,6 +102,7 @@ public class FrustumCulling extends Screen {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
             gameObject.destroy();
         }
+        viewFrustumGameObject.destroy();
         Fw.input.removeInputProcessor(cameraController);
         Fw.input.releaseMouseCursor();
     }
@@ -103,7 +115,7 @@ public class FrustumCulling extends Screen {
 
         // Setup camera and controller
         camera = GL.cameraFactory.createCamera();
-        camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 0f, -1f), Vector3f.WORLD_Y_AXIS);
+        camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 2f, -1f), Vector3f.WORLD_Y_AXIS);
         camera.setPerspectiveProjection(
                 70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
@@ -123,6 +135,16 @@ public class FrustumCulling extends Screen {
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
+
+        // View frustum game object
+        viewFrustumGameObject = new ViewFrustumGameObject();
+        viewFrustumGameObject.getColor0().set("black");
+        viewFrustumGameObject.getColor1().set("yellow");
+        viewFrustumGameObject.getColor2().set("yellow");
+        viewFrustumGameObject.getColor3().set("white");
+        viewFrustumGameObject.getRenderableState().setInFrustum(false);
+        viewFrustumGameObject.init(
+                camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
 
         // Frustum culling
         FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();

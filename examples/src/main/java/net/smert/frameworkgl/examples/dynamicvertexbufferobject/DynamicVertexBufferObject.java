@@ -19,6 +19,7 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
@@ -52,6 +53,7 @@ public class DynamicVertexBufferObject extends Screen {
     private CameraController cameraController;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
+    private ViewFrustumGameObject viewFrustumGameObject;
 
     public DynamicVertexBufferObject(String[] args) {
         wireframe = false;
@@ -72,6 +74,12 @@ public class DynamicVertexBufferObject extends Screen {
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {
             camera.updatePlanes();
+            viewFrustumGameObject.getRenderableState().setInFrustum(true);
+            viewFrustumGameObject.getWorldTransform().getRotation().set(camera.getRotationMatrix());
+            viewFrustumGameObject.setWorldPosition(camera.getPosition());
+            viewFrustumGameObject.update(
+                    camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+            Fw.graphics.updateAabb(viewFrustumGameObject);
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             Fw.graphics.performCulling(camera, dynamicSphereGameObject);
             updateGameObjectsToRender();
@@ -82,13 +90,15 @@ public class DynamicVertexBufferObject extends Screen {
     private void updateGameObjectsToRender() {
         gameObjectsToRender.clear();
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
-            if (gameObject.getRenderableState().isEnabled()) {
+            if (gameObject.getRenderableState().isInFrustum()) {
                 gameObjectsToRender.add(gameObject);
             }
         }
-        GameObject gameObject = dynamicSphereGameObject;
-        if (gameObject.getRenderableState().isEnabled()) {
-            gameObjectsToRender.add(gameObject);
+        if (dynamicSphereGameObject.getRenderableState().isInFrustum()) {
+            gameObjectsToRender.add(dynamicSphereGameObject);
+        }
+        if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
+            gameObjectsToRender.add(viewFrustumGameObject);
         }
     }
 
@@ -98,6 +108,7 @@ public class DynamicVertexBufferObject extends Screen {
             gameObject.destroy();
         }
         dynamicSphereGameObject.destroy();
+        viewFrustumGameObject.destroy();
         Fw.input.removeInputProcessor(cameraController);
         Fw.input.releaseMouseCursor();
     }
@@ -110,7 +121,7 @@ public class DynamicVertexBufferObject extends Screen {
 
         // Setup camera and controller
         camera = GL.cameraFactory.createCamera();
-        camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 0f, -1f), Vector3f.WORLD_Y_AXIS);
+        camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 2f, -1f), Vector3f.WORLD_Y_AXIS);
         camera.setPerspectiveProjection(
                 70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
@@ -134,6 +145,16 @@ public class DynamicVertexBufferObject extends Screen {
         // Dynamic sphere
         dynamicSphereGameObject = new DynamicSphereGameObject();
         dynamicSphereGameObject.init();
+
+        // View frustum game object
+        viewFrustumGameObject = new ViewFrustumGameObject();
+        viewFrustumGameObject.getColor0().set("black");
+        viewFrustumGameObject.getColor1().set("yellow");
+        viewFrustumGameObject.getColor2().set("yellow");
+        viewFrustumGameObject.getColor3().set("white");
+        viewFrustumGameObject.getRenderableState().setInFrustum(false);
+        viewFrustumGameObject.init(
+                camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
 
         // Frustum culling
         FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();
