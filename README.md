@@ -23,6 +23,5 @@ Framework-GL has the following features :
 - Multi-platform (Windows, Linux, Mac OS X)
 - Examples
 
-Github : https://github.com/kovertopz/Framework-GL
-
+Github : https://github.com/kovertopz/Framework-GL  
 Author : Jason Sorensen
