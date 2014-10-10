@@ -16,9 +16,9 @@ import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
-import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveBox;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCylinder;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveFrustum;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveGrid;
@@ -41,16 +41,16 @@ public class MeshFactory {
         container = meshFactoryContainer;
     }
 
-    public PrimitiveBox createDynamicPrimitiveBox() {
-        return container.getComponent(PrimitiveBox.class);
-    }
-
     public PrimitiveCapsule createDynamicPrimitiveCapsule() {
         return container.getComponent(PrimitiveCapsule.class);
     }
 
     public PrimitiveCone createDynamicPrimitiveCone() {
         return container.getComponent(PrimitiveCone.class);
+    }
+
+    public PrimitiveCube createDynamicPrimitiveCube() {
+        return container.getComponent(PrimitiveCube.class);
     }
 
     public PrimitiveCylinder createDynamicPrimitiveCylinder() {

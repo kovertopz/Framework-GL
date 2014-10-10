@@ -54,7 +54,7 @@ public class DynamicMeshWorld {
                 setColor(0, "silver").
                 setQuality(4, 1, 4).
                 setSize(64f, 3f, 64f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh baseFloorGrid = GL.dynamicMeshBuilder.
                 setColor(0, "dark_gray").
@@ -68,18 +68,18 @@ public class DynamicMeshWorld {
                 setColor(0, "silver").
                 setQuality(1, 1, 8).
                 setSize(.5f, 2f, 64f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh baseWallPosX = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh baseWallNegZ = GL.dynamicMeshBuilder.
                 setQuality(8, 1, 1).
                 setSize(64f, 2f, .5f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh baseWallPosZ = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(baseFloor).setWorldPosition(0f, -1.51f, 0f);
@@ -94,18 +94,18 @@ public class DynamicMeshWorld {
                 setColor(0, "yellow").
                 setQuality(1, 5, 1).
                 setSize(.25f, 9.999f, 1f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bigSlope = GL.dynamicMeshBuilder.
                 setColor(0, "crimson").
                 setQuality(3, 2, 13).
                 setSize(6f, 4f, 26f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bigWall = GL.dynamicMeshBuilder.
                 setQuality(1, 5, 8).
                 setSize(2f, 10f, 16f).
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(bigLadder).setWorldPosition(-20f, 4.9995f, -8f);
@@ -117,22 +117,22 @@ public class DynamicMeshWorld {
                 setColor(0, "midnight_blue").
                 setQuality(2, 1, 2).
                 setSize(4f, .5f, 5f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh slopewithvaryinginclines2 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh slopewithvaryinginclines3 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh slopewithvaryinginclines4 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh slopewithvaryinginclines5 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh slopewithvaryinginclines6 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(slopewithvaryinginclines1).setWorldPosition(-8f, 0f, -3f).setWorldRotation(Vector3f.WORLD_X_AXIS, 10f);
@@ -147,43 +147,43 @@ public class DynamicMeshWorld {
                 setColor(0, "lime_green").
                 setQuality(1, 1, 1).
                 setSize(2f, .1f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes2 = GL.dynamicMeshBuilder.
                 setSize(2f, .2f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes3 = GL.dynamicMeshBuilder.
                 setSize(2f, .3f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes4 = GL.dynamicMeshBuilder.
                 setSize(2f, .4f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes5 = GL.dynamicMeshBuilder.
                 setSize(2f, .5f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes6 = GL.dynamicMeshBuilder.
                 setSize(2f, .7f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes7 = GL.dynamicMeshBuilder.
                 setSize(2f, .9f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes8 = GL.dynamicMeshBuilder.
                 setSize(2f, 1.1f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes9 = GL.dynamicMeshBuilder.
                 setSize(2f, 1.4f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh stairsWithVaryingSizes10 = GL.dynamicMeshBuilder.
                 setSize(2f, 1.7f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(stairsWithVaryingSizes1).setWorldPosition(0f, .1f / 2f, -2f);
@@ -202,22 +202,22 @@ public class DynamicMeshWorld {
                 setColor(0, "yellow").
                 setQuality(2, 1, 2).
                 setSize(4f, .5f, 5f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bridgeWithVaryingSlopes2 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bridgeWithVaryingSlopes3 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bridgeWithVaryingSlopes4 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bridgeWithVaryingSlopes5 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh bridgeWithVaryingSlopes6 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(bridgeWithVaryingSlopes1).setWorldPosition(8f, .68f, -3.6f).setWorldRotation(Vector3f.WORLD_X_AXIS, 20f);
@@ -232,10 +232,10 @@ public class DynamicMeshWorld {
                 setColor(0, "cyan").
                 setQuality(2, 1, 12).
                 setSize(4f, 1f, 24f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh doubleVerticalSlope2 = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(doubleVerticalSlope1).setWorldPosition(16f, 5f, -12f).setWorldRotation(Vector3f.WORLD_X_AXIS, 25f);
@@ -246,12 +246,12 @@ public class DynamicMeshWorld {
                 setColor(0, "steel_blue").
                 setQuality(3, 2, 4).
                 setSize(6f, 5f, 8f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh doubleHorizontalSlope2 = GL.dynamicMeshBuilder.
                 setQuality(2, 4, 2).
                 setSize(4f, 8f, 4f).
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(doubleHorizontalSlope1).setWorldPosition(25f, 2.5f, -8f);
@@ -262,10 +262,10 @@ public class DynamicMeshWorld {
                 setColor(0, "deep_pink").
                 setQuality(2, 1, 2).
                 setSize(4f, .5f, 4f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh platformNextToVerticalMovingPlatform = GL.dynamicMeshBuilder.
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(platformNextToDoubleVerticalSlope).setWorldPosition(16f, 0f, 2f);
@@ -276,7 +276,7 @@ public class DynamicMeshWorld {
                 setColor(0, "orange").
                 setQuality(2, 1, 2).
                 setSize(4f, .5f, 5f).
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(crushSlopeForHorizontalMovingPlatform).setWorldPosition(10f, 1f, 14.5f).setWorldRotation(Vector3f.WORLD_X_AXIS, -65f);
@@ -336,17 +336,17 @@ public class DynamicMeshWorld {
                 setColor(0, "azure").
                 setQuality(1, 1, 1).
                 setSize(1f, 1f, 1f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh box2 = GL.dynamicMeshBuilder.
                 setQuality(4, 4, 4).
                 setSize(2f, 2f, 2f).
-                build("box").
+                build("cube").
                 createMesh(false);
         final Mesh box3 = GL.dynamicMeshBuilder.
                 setQuality(8, 8, 8).
                 setSize(4f, 4f, 4f).
-                build("box").
+                build("cube").
                 createMesh(false);
 
         createGameObject(box1).setWorldPosition(1.5f, .5f, 18.5f);

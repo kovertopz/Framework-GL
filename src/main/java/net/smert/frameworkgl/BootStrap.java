@@ -66,9 +66,9 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
-import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveBox;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
+import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCylinder;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveFrustum;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveGrid;
@@ -189,9 +189,9 @@ public class BootStrap {
             meshFactoryContainer.addComponent(Mesh.class);
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
-            meshFactoryContainer.addComponent(PrimitiveBox.class);
             meshFactoryContainer.addComponent(PrimitiveCapsule.class);
             meshFactoryContainer.addComponent(PrimitiveCone.class);
+            meshFactoryContainer.addComponent(PrimitiveCube.class);
             meshFactoryContainer.addComponent(PrimitiveCylinder.class);
             meshFactoryContainer.addComponent(PrimitiveFrustum.class);
             meshFactoryContainer.addComponent(PrimitiveGrid.class);
@@ -415,9 +415,9 @@ public class BootStrap {
         TextureReader textureReader = container.getComponent(TextureReader.class);
 
         // Register dynamic meshes
-        dynamicMeshBuilder.register("box", GL.meshFactory.createDynamicPrimitiveBox());
         dynamicMeshBuilder.register("capsule", GL.meshFactory.createDynamicPrimitiveCapsule());
         dynamicMeshBuilder.register("cone", GL.meshFactory.createDynamicPrimitiveCone());
+        dynamicMeshBuilder.register("cube", GL.meshFactory.createDynamicPrimitiveCube());
         dynamicMeshBuilder.register("cylinder", GL.meshFactory.createDynamicPrimitiveCylinder());
         dynamicMeshBuilder.register("frustum", GL.meshFactory.createDynamicPrimitiveFrustum());
         dynamicMeshBuilder.register("grid", GL.meshFactory.createDynamicPrimitiveGrid());

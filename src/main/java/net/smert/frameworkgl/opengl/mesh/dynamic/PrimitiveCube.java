@@ -20,7 +20,7 @@ import net.smert.frameworkgl.utils.Color;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class PrimitiveBox extends AbstractDynamicMesh {
+public class PrimitiveCube extends AbstractDynamicMesh {
 
     @Override
     public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
