@@ -37,14 +37,13 @@ public class LegacyCameraController implements InputProcessor {
 
     private float lookSpeed;
     private float moveSpeed;
-    private final LegacyCamera camera;
+    private LegacyCamera camera;
     private final Vector3f positionDelta;
     private final Vector3f rotationDelta;
 
-    public LegacyCameraController(LegacyCamera camera) {
+    public LegacyCameraController() {
         lookSpeed = 10f;
         moveSpeed = 9f;
-        this.camera = camera;
         positionDelta = new Vector3f();
         rotationDelta = new Vector3f();
     }
@@ -80,6 +79,14 @@ public class LegacyCameraController implements InputProcessor {
 
     public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public LegacyCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(LegacyCamera camera) {
+        this.camera = camera;
     }
 
     public void update() {

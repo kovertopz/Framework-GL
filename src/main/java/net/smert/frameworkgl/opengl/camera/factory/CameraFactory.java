@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.camera.factory;
 
 import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import org.picocontainer.MutablePicoContainer;
@@ -31,6 +32,10 @@ public class CameraFactory {
 
     public Camera createCamera() {
         return container.getComponent(Camera.class);
+    }
+
+    public CameraController createCameraController() {
+        return container.getComponent(CameraController.class);
     }
 
     public LegacyCamera createLegacyCamera() {

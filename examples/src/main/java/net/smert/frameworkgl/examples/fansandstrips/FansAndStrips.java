@@ -68,9 +68,10 @@ public class FansAndStrips extends Screen {
         fpsTimer = new FpsTimer();
 
         // Setup camera and controller
-        camera = new LegacyCamera();
+        camera = GL.cameraFactory.createLegacyCamera();
         camera.setPosition(0f, 0f, 5f);
-        cameraController = new LegacyCameraController(camera);
+        cameraController = GL.cameraFactory.createLegacyCameraController();
+        cameraController.setCamera(camera);
 
         // Create mesh and set the raw draw commands directly
         meshFansAndStrips = Fw.graphics.createMesh(fansAndStrips);

@@ -102,13 +102,14 @@ public class FrustumCulling extends Screen {
         fpsTimer = new FpsTimer();
 
         // Setup camera and controller
-        camera = new Camera();
+        camera = GL.cameraFactory.createCamera();
         camera.lookAt(new Vector3f(0f, 2f, 5f), new Vector3f(0f, 0f, -1f), Vector3f.WORLD_Y_AXIS);
         camera.setPerspectiveProjection(
                 70f,
                 (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
                 .05f, 128f);
-        cameraController = new CameraController(camera);
+        cameraController = GL.cameraFactory.createCameraController();
+        cameraController.setCamera(camera);
 
         // Memory usage
         memoryUsage = new MemoryUsage();

@@ -36,14 +36,13 @@ public class CameraController implements InputProcessor {
 
     private float lookSpeed;
     private float moveSpeed;
-    private final Camera camera;
+    private Camera camera;
     private final Vector3f positionDelta;
     private final Vector3f rotationDelta;
 
-    public CameraController(Camera camera) {
+    public CameraController() {
         lookSpeed = 10f;
         moveSpeed = 9f;
-        this.camera = camera;
         positionDelta = new Vector3f();
         rotationDelta = new Vector3f();
     }
@@ -62,6 +61,14 @@ public class CameraController implements InputProcessor {
 
     public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
     public void update() {
