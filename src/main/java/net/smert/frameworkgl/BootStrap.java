@@ -14,7 +14,7 @@ package net.smert.frameworkgl;
 
 import java.io.IOException;
 import java.util.logging.SimpleFormatter;
-import net.smert.frameworkgl.factory.GameObjectFactory;
+import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.opengl.AmbientLight;
@@ -36,6 +36,8 @@ import net.smert.frameworkgl.opengl.VertexBufferObject;
 import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
+import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpace;
+import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
@@ -168,6 +170,8 @@ public class BootStrap {
             // Camera
             cameraFactoryContainer.addComponent(Camera.class);
             cameraFactoryContainer.addComponent(CameraController.class);
+            cameraFactoryContainer.addComponent(FrustumCullingClipSpace.class);
+            cameraFactoryContainer.addComponent(FrustumCullingClipSpaceSymmetrical.class);
             cameraFactoryContainer.addComponent(LegacyCamera.class);
             cameraFactoryContainer.addComponent(LegacyCameraController.class);
 

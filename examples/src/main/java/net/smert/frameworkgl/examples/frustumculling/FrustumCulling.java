@@ -125,7 +125,7 @@ public class FrustumCulling extends Screen {
         dynamicMeshesWorld.init();
 
         // Frustum culling
-        FrustumCullingClipSpaceSymmetrical frustumCulling = new FrustumCullingClipSpaceSymmetrical();
+        FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();
         camera.setFrustumCulling(frustumCulling);
         updateGameObjectsToRender();
 

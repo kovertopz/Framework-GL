@@ -12,7 +12,7 @@
  */
 package net.smert.frameworkgl;
 
-import net.smert.frameworkgl.factory.GameObjectFactory;
+import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 
 /**
  *

@@ -34,7 +34,7 @@ public class DynamicMeshWorld {
     }
 
     private GameObject createGameObject(Mesh mesh) {
-        GameObject gameObject = new GameObject();
+        GameObject gameObject = Fw.gof.createGameObject();
         AbstractRenderable renderable = Fw.graphics.createVertexBufferObjectRenderable();
         renderable.create(mesh);
         gameObject.setMesh(mesh); // Attach to game object
