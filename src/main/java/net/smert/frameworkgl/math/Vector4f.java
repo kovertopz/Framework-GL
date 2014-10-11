@@ -91,6 +91,34 @@ public class Vector4f {
     }
 
     // Scalar Results
+    public float distance(Vector4f vector) {
+        float d0 = w - vector.w;
+        float d1 = x - vector.x;
+        float d2 = y - vector.y;
+        float d3 = z - vector.z;
+        return MathHelper.Sqrt(d0 * d0 + d1 * d1 + d2 * d2 + d3 * d3);
+    }
+
+    public float distanceSquared(Vector4f vector) {
+        float d0 = w - vector.w;
+        float d1 = x - vector.x;
+        float d2 = y - vector.y;
+        float d3 = z - vector.z;
+        return d0 * d0 + d1 * d1 + d2 * d2 + d3 * d3;
+    }
+
+    public float dot(Vector4f vector) {
+        return w * vector.w + x * vector.x + y * vector.y + z * vector.z;
+    }
+
+    public float dot3(Vector3f vector) {
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
+    public float dot3(Vector4f vector) {
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
     public float getW() {
         return w;
     }
@@ -109,6 +137,10 @@ public class Vector4f {
 
     public float magnitude() {
         return MathHelper.Sqrt(w * w + x * x + y * y + z * z);
+    }
+
+    public float magnitudeSquared() {
+        return w * w + x * x + y * y + z * z;
     }
 
     // Vector Results

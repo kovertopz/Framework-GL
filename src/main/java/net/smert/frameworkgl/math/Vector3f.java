@@ -83,6 +83,20 @@ public class Vector3f {
     }
 
     // Scalar Results
+    public float distance(Vector3f vector) {
+        float d0 = x - vector.x;
+        float d1 = y - vector.y;
+        float d2 = z - vector.z;
+        return MathHelper.Sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    }
+
+    public float distanceSquared(Vector3f vector) {
+        float d0 = x - vector.x;
+        float d1 = y - vector.y;
+        float d2 = z - vector.z;
+        return d0 * d0 + d1 * d1 + d2 * d2;
+    }
+
     public float dot(Vector3f vector) {
         return x * vector.x + y * vector.y + z * vector.z;
     }

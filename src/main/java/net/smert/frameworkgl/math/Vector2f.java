@@ -72,6 +72,18 @@ public class Vector2f {
     }
 
     // Scalar Results
+    public float distance(Vector2f vector) {
+        float d0 = x - vector.x;
+        float d1 = y - vector.y;
+        return MathHelper.Sqrt(d0 * d0 + d1 * d1);
+    }
+
+    public float distanceSquared(Vector2f vector) {
+        float d0 = x - vector.x;
+        float d1 = y - vector.y;
+        return d0 * d0 + d1 * d1;
+    }
+
     public float dot(Vector2f vector) {
         return x * vector.x + y * vector.y;
     }
