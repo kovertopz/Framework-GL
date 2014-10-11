@@ -66,6 +66,7 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
+import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
@@ -76,6 +77,7 @@ import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitivePyramid;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveQuad;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveSphere;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveToriod;
+import net.smert.frameworkgl.opengl.mesh.dynamic.SimpleOrientationAxis;
 import net.smert.frameworkgl.opengl.mesh.dynamic.ViewFrustum;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.model.obj.MaterialReader;
@@ -191,6 +193,7 @@ public class BootStrap {
             meshFactoryContainer.addComponent(Mesh.class);
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
+            meshFactoryContainer.addComponent(AABB.class);
             meshFactoryContainer.addComponent(PrimitiveCapsule.class);
             meshFactoryContainer.addComponent(PrimitiveCone.class);
             meshFactoryContainer.addComponent(PrimitiveCube.class);
@@ -201,6 +204,7 @@ public class BootStrap {
             meshFactoryContainer.addComponent(PrimitiveQuad.class);
             meshFactoryContainer.addComponent(PrimitiveSphere.class);
             meshFactoryContainer.addComponent(PrimitiveToriod.class);
+            meshFactoryContainer.addComponent(SimpleOrientationAxis.class);
             meshFactoryContainer.addComponent(ViewFrustum.class);
             meshFactoryContainer.addComponent(Tessellator.class);
 
@@ -421,6 +425,7 @@ public class BootStrap {
         TextureReader textureReader = container.getComponent(TextureReader.class);
 
         // Register dynamic meshes
+        dynamicMeshBuilder.register("aabb", GL.meshFactory.createDynamicAABB());
         dynamicMeshBuilder.register("capsule", GL.meshFactory.createDynamicPrimitiveCapsule());
         dynamicMeshBuilder.register("cone", GL.meshFactory.createDynamicPrimitiveCone());
         dynamicMeshBuilder.register("cube", GL.meshFactory.createDynamicPrimitiveCube());
@@ -429,6 +434,7 @@ public class BootStrap {
         dynamicMeshBuilder.register("grid", GL.meshFactory.createDynamicPrimitiveGrid());
         dynamicMeshBuilder.register("pyramid", GL.meshFactory.createDynamicPrimitivePyramid());
         dynamicMeshBuilder.register("quad", GL.meshFactory.createDynamicPrimitiveQuad());
+        dynamicMeshBuilder.register("simple_orientation_axis", GL.meshFactory.createDynamicSimpleOrientationAxis());
         dynamicMeshBuilder.register("sphere", GL.meshFactory.createDynamicPrimitiveSphere());
         dynamicMeshBuilder.register("toriod", GL.meshFactory.createDynamicPrimitiveToriod());
         dynamicMeshBuilder.register("view_frustum", GL.meshFactory.createDynamicViewFrustum());

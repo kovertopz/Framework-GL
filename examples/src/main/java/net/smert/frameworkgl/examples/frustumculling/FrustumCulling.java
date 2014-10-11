@@ -19,8 +19,11 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.gameobjects.AABBGameObject;
+import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
+import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
@@ -41,7 +44,10 @@ public class FrustumCulling extends Screen {
 
     private final static Logger log = LoggerFactory.getLogger(FrustumCulling.class);
 
+    private boolean renderAabbs;
+    private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
+    private AABBGameObject aabbGameObject;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
     private FloatBuffer viewMatrixFloatBuffer;
@@ -52,9 +58,12 @@ public class FrustumCulling extends Screen {
     private CameraController cameraController;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
+    private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private ViewFrustumGameObject viewFrustumGameObject;
 
     public FrustumCulling(String[] args) {
+        renderAabbs = false;
+        renderSimpleOrientationAxis = false;
         wireframe = false;
         gameObjectsToRender = new ArrayList<>();
     }
@@ -70,6 +79,12 @@ public class FrustumCulling extends Screen {
             } else {
                 GL.o1.setPolygonModeFrontFill();
             }
+        }
+        if ((Fw.input.isKeyDown(Keyboard.B) == true) && (Fw.input.wasKeyDown(Keyboard.B) == false)) {
+            renderAabbs = !renderAabbs;
+        }
+        if ((Fw.input.isKeyDown(Keyboard.O) == true) && (Fw.input.wasKeyDown(Keyboard.O) == false)) {
+            renderSimpleOrientationAxis = !renderSimpleOrientationAxis;
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {
             camera.updatePlanes();
@@ -92,12 +107,6 @@ public class FrustumCulling extends Screen {
                 gameObjectsToRender.add(gameObject);
             }
         }
-        if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-            gameObjectsToRender.add(viewFrustumGameObject);
-        }
-        // Sorting is not truly necessary in this demo since there is only one object
-        // that needs blending and it gets added to the end of the list.
-        Fw.graphics.sort(gameObjectsToRender, camera.getPosition());
     }
 
     @Override
@@ -135,9 +144,21 @@ public class FrustumCulling extends Screen {
         projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
         transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
+        // AABB game object
+        aabbGameObject = new AABBGameObject();
+        aabbGameObject.getColor0().set("yellow");
+        aabbGameObject.init(new AABB()); // Empty AABB
+
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
+
+        // Simple axis game object
+        simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
+        simpleOrientationAxisGameObject.getColor0().set("red");
+        simpleOrientationAxisGameObject.getColor1().set("green");
+        simpleOrientationAxisGameObject.getColor2().set("blue");
+        simpleOrientationAxisGameObject.init();
 
         // View frustum game object
         viewFrustumGameObject = new ViewFrustumGameObject();
@@ -219,8 +240,39 @@ public class FrustumCulling extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.getLegacyRenderer().renderOpaque(gameObjectsToRender, transformWorldFloatBuffer);
-            Fw.graphics.getLegacyRenderer().renderBlend(gameObjectsToRender, transformWorldFloatBuffer);
+            Fw.graphics.getLegacyRenderer().render(gameObjectsToRender, transformWorldFloatBuffer);
+
+            // Render debug
+            GL.o1.disableLighting();
+
+            // View frustum
+            if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
+                Fw.graphics.getLegacyRenderer().renderBlend(viewFrustumGameObject, transformWorldFloatBuffer);
+            }
+
+            // AABBs
+            if (renderAabbs) {
+                for (GameObject gameObject : gameObjectsToRender) {
+                    AABB worldAabb = gameObject.getWorldAabb();
+                    // Updating AABBs this way is costly
+                    aabbGameObject.update(worldAabb);
+                    // AABB is already in world coordinates so we don't translate
+                    Fw.graphics.getLegacyRenderer().render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                }
+            }
+
+            // Orientation axis
+            if (renderSimpleOrientationAxis) {
+                GL.o1.disableDepthTest();
+                for (GameObject gameObject : gameObjectsToRender) {
+                    simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
+                    Fw.graphics.getLegacyRenderer().render(simpleOrientationAxisGameObject, transformWorldFloatBuffer);
+                }
+                GL.o1.enableDepthTest();
+            }
+
+            // Restore lighting
+            GL.o1.enableLighting();
         }
     }
 

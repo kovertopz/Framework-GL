@@ -124,6 +124,11 @@ public class GameObject {
         return this;
     }
 
+    public GameObject setWorldTransform(Transform4f worldTransform) {
+        this.worldTransform.set(worldTransform);
+        return this;
+    }
+
     public void init() {
     }
 

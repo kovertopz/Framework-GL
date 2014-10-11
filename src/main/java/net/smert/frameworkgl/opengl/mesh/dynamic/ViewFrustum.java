@@ -64,106 +64,74 @@ public class ViewFrustum extends AbstractDynamicMesh {
         // Aspect ratio is 1 when we have an ortho camera
         if (aspectRatio != 1f) {
             tessellator.addColor(color0);
-            tessellator.addNormal(vertexNearTopLeft, vertexNearTopRight, vertexFarTopRight);
             tessellator.addVertex(0.0f, 0.0f, 0.0f);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarTopRight);
             tessellator.addColor(color0);
-            tessellator.addNormal(vertexFarTopLeft, vertexNearTopLeft, vertexNearTopRight);
             tessellator.addVertex(0.0f, 0.0f, 0.0f);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarTopLeft);
             tessellator.addColor(color0);
-            tessellator.addNormal(vertexFarBottomLeft, vertexNearBottomLeft, vertexNearBottomRight);
             tessellator.addVertex(0.0f, 0.0f, 0.0f);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarBottomLeft);
             tessellator.addColor(color0);
-            tessellator.addNormal(vertexNearBottomLeft, vertexNearBottomRight, vertexFarBottomRight);
             tessellator.addVertex(0.0f, 0.0f, 0.0f);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarBottomRight);
         } else {
             tessellator.addColor(color0);
-            tessellator.addNormal(0f, 1f, 0f);
             tessellator.addVertex(vertexNearTopRight);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarTopRight);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexNearTopLeft);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarTopLeft);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexNearBottomLeft);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarBottomLeft);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexNearBottomRight);
             tessellator.addColor(color0);
-            tessellator.addNormalAgain();
             tessellator.addVertex(vertexFarBottomRight);
         }
 
         // Near plane
         tessellator.addColor(color1);
-        tessellator.addNormal(0f, 0f, 1f);
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
         tessellator.addColor(color1);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopRight);
 
         // Far plane
         tessellator.addColor(color2);
-        tessellator.addNormal(0f, 0f, 1f);
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color2);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopRight);
 
         tessellator.stop();
@@ -173,170 +141,122 @@ public class ViewFrustum extends AbstractDynamicMesh {
 
         // Near - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearBottomLeft, vertexNearBottomRight, vertexNearTopRight);
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
 
         // Far - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarBottomRight, vertexFarBottomLeft, vertexFarTopLeft);
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
 
         // Left - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarBottomLeft, vertexNearBottomLeft, vertexNearTopLeft);
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
 
         // Right - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearBottomRight, vertexFarBottomRight, vertexFarTopRight);
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
 
         // Bottom - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarBottomLeft, vertexFarBottomRight, vertexNearBottomRight);
         tessellator.addVertex(vertexNearBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
 
         // Top - Outside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearTopLeft, vertexNearTopRight, vertexFarTopRight);
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopRight);
 
         // Near - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearBottomRight, vertexNearBottomLeft, vertexNearTopLeft);
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
 
         // Far - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarBottomLeft, vertexFarBottomRight, vertexFarTopRight);
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
 
         // Left - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearBottomLeft, vertexFarBottomLeft, vertexFarTopLeft);
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
 
         // Right - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarBottomRight, vertexNearBottomRight, vertexNearTopRight);
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
 
         // Bottom - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexNearBottomLeft, vertexNearBottomRight, vertexFarBottomRight);
         tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearBottomRight);
 
         // Top - Inside
         tessellator.addColor(color3);
-        tessellator.addNormal(vertexFarTopLeft, vertexFarTopRight, vertexNearTopRight);
         tessellator.addVertex(vertexNearTopRight);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexNearTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color3);
-        tessellator.addNormalAgain();
         tessellator.addVertex(vertexFarTopRight);
 
         tessellator.stop();

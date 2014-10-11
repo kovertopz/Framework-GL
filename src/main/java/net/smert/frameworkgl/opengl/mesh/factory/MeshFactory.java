@@ -16,6 +16,7 @@ import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
+import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
@@ -26,6 +27,7 @@ import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitivePyramid;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveQuad;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveSphere;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveToriod;
+import net.smert.frameworkgl.opengl.mesh.dynamic.SimpleOrientationAxis;
 import net.smert.frameworkgl.opengl.mesh.dynamic.ViewFrustum;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import org.picocontainer.MutablePicoContainer;
@@ -40,6 +42,10 @@ public class MeshFactory {
 
     public MeshFactory(MutablePicoContainer meshFactoryContainer) {
         container = meshFactoryContainer;
+    }
+
+    public AABB createDynamicAABB() {
+        return container.getComponent(AABB.class);
     }
 
     public PrimitiveCapsule createDynamicPrimitiveCapsule() {
@@ -80,6 +86,10 @@ public class MeshFactory {
 
     public PrimitiveToriod createDynamicPrimitiveToriod() {
         return container.getComponent(PrimitiveToriod.class);
+    }
+
+    public SimpleOrientationAxis createDynamicSimpleOrientationAxis() {
+        return container.getComponent(SimpleOrientationAxis.class);
     }
 
     public ViewFrustum createDynamicViewFrustum() {
