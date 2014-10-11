@@ -24,6 +24,7 @@ import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.constants.Light;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import org.slf4j.Logger;
@@ -135,19 +136,20 @@ public class MeshReader extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCapsule = Fw.graphics.createVertexBufferObjectRenderable();
+        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+        renderableCapsule = legacyRenderer.createVertexBufferObjectRenderable();
         renderableCapsule.create(meshCapsule);
-        renderableCone = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableCone = legacyRenderer.createVertexBufferObjectRenderable();
         renderableCone.create(meshCone);
-        renderableCube = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableCube = legacyRenderer.createVertexBufferObjectRenderable();
         renderableCube.create(meshCube);
-        renderableCylinder = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableCylinder = legacyRenderer.createVertexBufferObjectRenderable();
         renderableCylinder.create(meshCylinder);
-        renderableIcoSphere = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableIcoSphere = legacyRenderer.createVertexBufferObjectRenderable();
         renderableIcoSphere.create(meshIcoSphere);
-        renderableTorus = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableTorus = legacyRenderer.createVertexBufferObjectRenderable();
         renderableTorus.create(meshTorus);
-        renderableUvSphere = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableUvSphere = legacyRenderer.createVertexBufferObjectRenderable();
         renderableUvSphere.create(meshUvSphere);
 
         GL.o1.enableCulling();
@@ -206,13 +208,14 @@ public class MeshReader extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.render(renderableCapsule, -3f, 0f, 3f);
-            Fw.graphics.render(renderableCone, 3f, 0f, 3f);
-            Fw.graphics.render(renderableCube, -3f, 0f, 0f);
-            Fw.graphics.render(renderableCylinder, 3f, 0f, 0f);
-            Fw.graphics.render(renderableIcoSphere, -3f, 0f, -3f);
-            Fw.graphics.render(renderableUvSphere, 3f, 0f, -3f);
-            Fw.graphics.render(renderableTorus, 0f, 3f, 0f);
+            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+            legacyRenderer.render(renderableCapsule, -3f, 0f, 3f);
+            legacyRenderer.render(renderableCone, 3f, 0f, 3f);
+            legacyRenderer.render(renderableCube, -3f, 0f, 0f);
+            legacyRenderer.render(renderableCylinder, 3f, 0f, 0f);
+            legacyRenderer.render(renderableIcoSphere, -3f, 0f, -3f);
+            legacyRenderer.render(renderableUvSphere, 3f, 0f, -3f);
+            legacyRenderer.render(renderableTorus, 0f, 3f, 0f);
         }
     }
 

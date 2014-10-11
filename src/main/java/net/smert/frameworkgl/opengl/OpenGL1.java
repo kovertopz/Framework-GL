@@ -402,6 +402,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 setBlendingFunctionOneAndOneMinusSrcAlpha() {
+        GL11.glBlendFunc(BlendFunctions.ONE, BlendFunctions.ONE_MINUS_SRC_ALPHA);
+        return this;
+    }
+
     public OpenGL1 setBlendingEquationAdd() {
         GL14.glBlendEquation(BlendEquations.ADD);
         return this;

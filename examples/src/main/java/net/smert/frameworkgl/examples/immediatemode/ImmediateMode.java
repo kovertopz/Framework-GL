@@ -24,6 +24,7 @@ import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,11 +92,12 @@ public class ImmediateMode extends Screen {
         meshTriangles = Fw.graphics.createMesh(cubeTriangles);
 
         // Create immediate mode renderables
-        renderableQuads = Fw.graphics.createImmediateModeRenderable();
+        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+        renderableQuads = legacyRenderer.createImmediateModeRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = Fw.graphics.createImmediateModeRenderable();
+        renderableQuadsWithPerVertexColors = legacyRenderer.createImmediateModeRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = Fw.graphics.createImmediateModeRenderable();
+        renderableTriangles = legacyRenderer.createImmediateModeRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -141,9 +143,10 @@ public class ImmediateMode extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            Fw.graphics.render(renderableTriangles, -2f, 0f, 0f);
-            Fw.graphics.render(renderableQuads, 2f, 0f, 0f);
-            Fw.graphics.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+            legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
+            legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
+            legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

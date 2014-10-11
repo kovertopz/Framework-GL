@@ -100,6 +100,9 @@ public class DynamicVertexBufferObject extends Screen {
         if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
             gameObjectsToRender.add(viewFrustumGameObject);
         }
+        // Sorting is not truly necessary in this demo since there is only one object
+        // that needs blending and it gets added to the end of the list.
+        Fw.graphics.sort(gameObjectsToRender, camera.getPosition());
     }
 
     @Override
@@ -152,6 +155,7 @@ public class DynamicVertexBufferObject extends Screen {
         viewFrustumGameObject.getColor1().set("yellow");
         viewFrustumGameObject.getColor2().set("yellow");
         viewFrustumGameObject.getColor3().set("white");
+        viewFrustumGameObject.getColor3().setA(.4f);
         viewFrustumGameObject.getRenderableState().setInFrustum(false);
         viewFrustumGameObject.init(
                 camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
@@ -164,6 +168,7 @@ public class DynamicVertexBufferObject extends Screen {
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
 
+        GL.o1.setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha();
         GL.o1.enableCulling();
         GL.o1.cullBackFaces();
         GL.o1.enableDepthTest();
@@ -230,9 +235,8 @@ public class DynamicVertexBufferObject extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            for (GameObject gameObject : gameObjectsToRender) {
-                Fw.graphics.render(gameObject, transformWorldFloatBuffer);
-            }
+            Fw.graphics.getLegacyRenderer().renderOpaque(gameObjectsToRender, transformWorldFloatBuffer);
+            Fw.graphics.getLegacyRenderer().renderBlend(gameObjectsToRender, transformWorldFloatBuffer);
         }
     }
 

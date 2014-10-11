@@ -55,6 +55,9 @@ public class ViewFrustumGameObject extends GameObject {
 
     public void init(float aspectRatio, float fieldOfView, float zNear, float zFar) {
 
+        // This object is not opaque
+        getRenderableState().setOpaque(false);
+
         // Create mesh and renderable
         Mesh mesh = GL.meshFactory.createMesh();
         GL.dynamicMeshBuilder.
@@ -68,7 +71,7 @@ public class ViewFrustumGameObject extends GameObject {
                 setCustomData(3, zFar).
                 build("view_frustum").
                 createMesh(false, mesh);
-        viewFrustumRenderable = Fw.graphics.createDynamicVertexBufferObjectRenderable();
+        viewFrustumRenderable = Fw.graphics.getLegacyRenderer().createDynamicVertexBufferObjectRenderable();
         viewFrustumRenderable.create(mesh);
 
         // Attach to game object

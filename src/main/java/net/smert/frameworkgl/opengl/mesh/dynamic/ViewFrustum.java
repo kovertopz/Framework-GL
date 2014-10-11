@@ -143,28 +143,28 @@ public class ViewFrustum extends AbstractDynamicMesh {
         // Far plane
         tessellator.addColor(color2);
         tessellator.addNormal(0f, 0f, 1f);
-        tessellator.addVertex(vertexNearTopRight);
+        tessellator.addVertex(vertexFarTopRight);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearTopLeft);
+        tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearTopLeft);
+        tessellator.addVertex(vertexFarTopLeft);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearBottomLeft);
+        tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearBottomLeft);
+        tessellator.addVertex(vertexFarBottomLeft);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearBottomRight);
+        tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearBottomRight);
+        tessellator.addVertex(vertexFarBottomRight);
         tessellator.addColor(color2);
         tessellator.addNormalAgain();
-        tessellator.addVertex(vertexNearTopRight);
+        tessellator.addVertex(vertexFarTopRight);
 
         tessellator.stop();
         tessellator.addSegment("View Frustum - Lines");

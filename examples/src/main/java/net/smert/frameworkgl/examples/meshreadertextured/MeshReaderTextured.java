@@ -98,7 +98,7 @@ public class MeshReaderTextured extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCrateAndBarrel = Fw.graphics.createVertexBufferObjectRenderable();
+        renderableCrateAndBarrel = Fw.graphics.getLegacyRenderer().createVertexBufferObjectRenderable();
         renderableCrateAndBarrel.create(meshCrateAndBarrel);
 
         GL.o1.enableCulling();
@@ -157,7 +157,7 @@ public class MeshReaderTextured extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
+            Fw.graphics.getLegacyRenderer().render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
         }
     }
 

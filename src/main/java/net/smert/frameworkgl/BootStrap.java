@@ -108,6 +108,7 @@ import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawArrays;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawRangeElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
 import org.picocontainer.Characteristics;
@@ -349,6 +350,9 @@ public class BootStrap {
 
         // Renderable VBO factory
         container.as(Characteristics.USE_NAMES).addComponent(VBODrawCallFactory.class);
+
+        // Renderers
+        container.addComponent(LegacyRenderer.class);
 
         // Texture
         container.addComponent(TextureBuilder.class);

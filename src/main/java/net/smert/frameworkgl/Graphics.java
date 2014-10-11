@@ -13,7 +13,8 @@
 package net.smert.frameworkgl;
 
 import java.io.IOException;
-import java.nio.FloatBuffer;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.AABB;
@@ -26,17 +27,10 @@ import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderableInterleaved;
-import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 
 /**
  *
@@ -44,20 +38,11 @@ import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderableI
  */
 public class Graphics {
 
-    public DisplayListRenderable createDisplayListRenderable() {
-        return GL.rf1.createDisplayList();
-    }
+    private final LegacyRenderer legacyRenderer;
+    private static RenderableComparison renderableComparison = new RenderableComparison();
 
-    public DynamicVertexBufferObjectRenderable createDynamicVertexBufferObjectRenderable() {
-        return GL.rf1.createDynamicVertexBufferObject();
-    }
-
-    public DynamicVertexBufferObjectRenderableInterleaved createDynamicVertexBufferObjectInterleavedRenderable() {
-        return GL.rf1.createDynamicVertexBufferObjectInterleaved();
-    }
-
-    public ImmediateModeRenderable createImmediateModeRenderable() {
-        return GL.rf1.createImmediateMode();
+    public Graphics(LegacyRenderer legacyRenderer) {
+        this.legacyRenderer = legacyRenderer;
     }
 
     public Mesh createMesh(DrawCommands drawCommands) {
@@ -106,32 +91,31 @@ public class Graphics {
         return mesh;
     }
 
-    public VertexArrayRenderable createVertexArrayRenderable() {
-        return GL.rf1.createVertexArray();
-    }
-
-    public VertexBufferObjectRenderable createVertexBufferObjectRenderable() {
-        return GL.rf1.createVertexBufferObject();
-    }
-
-    public VertexBufferObjectRenderableInterleaved createVertexBufferObjectInterleavedRenderable() {
-        return GL.rf1.createVertexBufferObjectInterleaved();
-    }
-
     /**
      * This method should be called just before the Display is destroyed. This is automatically called in Application
      * during the normal shutdown process.
      */
     public void destroy() {
+        legacyRenderer.destroy();
         Renderable.shaderBindState.reset();
         Renderable.textureBindState.reset();
-        Renderable.vaBindState.reset();
-        Renderable.vboBindState.reset();
         GL.fboHelper.unbind();
         GL.textureHelper.unbind();
         GL.vboHelper.unbind();
         Renderable.shaderPool.destroy();
         Renderable.texturePool.destroy();
+    }
+
+    public Comparator<GameObject> getRenderableComparison() {
+        return renderableComparison;
+    }
+
+    public void setRenderableComparison(RenderableComparison renderableComparison) {
+        Graphics.renderableComparison = renderableComparison;
+    }
+
+    public LegacyRenderer getLegacyRenderer() {
+        return legacyRenderer;
     }
 
     public Texture getTexture(String filename) {
@@ -166,35 +150,13 @@ public class Graphics {
         }
     }
 
-    public void render(AbstractRenderable renderable, float x, float y, float z) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(x, y, z);
-        renderable.render();
-        GL.o1.popMatrix();
+    public void sort(List<GameObject> gameObjects, Vector3f cameraPosition) {
+        sort(gameObjects, cameraPosition, renderableComparison);
     }
 
-    public void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
-        GL.o1.pushMatrix();
-        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
-        renderable.render();
-        GL.o1.popMatrix();
-    }
-
-    public void render(AbstractRenderable renderable, Vector3f position) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(position.getX(), position.getY(), position.getZ());
-        renderable.render();
-        GL.o1.popMatrix();
-    }
-
-    public void render(GameObject gameObject, FloatBuffer transformWorldFloatBuffer) {
-        GL.o1.pushMatrix();
-        transformWorldFloatBuffer.rewind();
-        gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-        transformWorldFloatBuffer.flip();
-        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
-        gameObject.getRenderable().render();
-        GL.o1.popMatrix();
+    public void sort(List<GameObject> gameObjects, Vector3f cameraPosition, RenderableComparison renderableComparison) {
+        renderableComparison.setCameraPosition(cameraPosition);
+        Collections.sort(gameObjects, renderableComparison);
     }
 
     public void updateAabb(GameObject gameObject) {
@@ -221,6 +183,36 @@ public class Graphics {
         for (GameObject gameObject : gameObjects) {
             updateAabb(gameObject, margin);
         }
+    }
+
+    public static class RenderableComparison implements Comparator<GameObject> {
+
+        private Vector3f cameraPosition;
+
+        public void setCameraPosition(Vector3f cameraPosition) {
+            this.cameraPosition = cameraPosition;
+        }
+
+        @Override
+        public int compare(GameObject o1, GameObject o2) {
+            boolean o1Opaque = o1.getRenderableState().isOpaque();
+            boolean o2Opaque = o2.getRenderableState().isOpaque();
+            if ((o1Opaque == o2Opaque) && (o1Opaque)) {
+                return 0;
+            }
+            if ((o1Opaque != o2Opaque) && (!o1Opaque)) {
+                return 1;
+            }
+            if ((o1Opaque != o2Opaque) && (o1Opaque)) {
+                return -1;
+            }
+            // Both objects are not opaque
+            Vector3f o1Position = o1.getWorldTransform().getPosition();
+            Vector3f o2Position = o2.getWorldTransform().getPosition();
+            return (int) cameraPosition.distanceSquared(o2Position)
+                    - (int) cameraPosition.distanceSquared(o1Position);
+        }
+
     }
 
 }

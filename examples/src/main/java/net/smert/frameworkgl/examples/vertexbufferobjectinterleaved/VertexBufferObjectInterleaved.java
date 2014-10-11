@@ -24,6 +24,7 @@ import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,11 +84,12 @@ public class VertexBufferObjectInterleaved extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create vertex buffer object interleaved renderables
-        renderableQuads = Fw.graphics.createVertexBufferObjectInterleavedRenderable();
+        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+        renderableQuads = legacyRenderer.createVertexBufferObjectInterleavedRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = Fw.graphics.createVertexBufferObjectInterleavedRenderable();
+        renderableQuadsWithPerVertexColors = legacyRenderer.createVertexBufferObjectInterleavedRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = Fw.graphics.createVertexBufferObjectInterleavedRenderable();
+        renderableTriangles = legacyRenderer.createVertexBufferObjectInterleavedRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -133,9 +135,10 @@ public class VertexBufferObjectInterleaved extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            Fw.graphics.render(renderableTriangles, -2f, 0f, 0f);
-            Fw.graphics.render(renderableQuads, 2f, 0f, 0f);
-            Fw.graphics.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
+            legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
+            legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
+            legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 
