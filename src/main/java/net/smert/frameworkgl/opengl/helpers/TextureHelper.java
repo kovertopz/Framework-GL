@@ -128,6 +128,18 @@ public class TextureHelper {
         GL12.glTexImage3D(textureTarget, 0, internalFormat, width, height, depth, 0, format, TextureTypes.UNSIGNED_INT_24_8, pixelData);
     }
 
+    public void setLodBias(float lodBias) {
+        GL11.glTexParameterf(textureTarget, GL14.GL_TEXTURE_LOD_BIAS, lodBias);
+    }
+
+    public void setMaxLod(float maxLod) {
+        GL11.glTexParameterf(textureTarget, GL12.GL_TEXTURE_MAX_LOD, maxLod);
+    }
+
+    public void setMinLod(float minLod) {
+        GL11.glTexParameterf(textureTarget, GL12.GL_TEXTURE_MIN_LOD, minLod);
+    }
+
     public void setTextureTarget2D() {
         textureTarget = TextureTargets.TEXTURE_2D;
     }

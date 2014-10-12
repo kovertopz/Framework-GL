@@ -37,6 +37,9 @@ public class TextureBuilder {
     private boolean nullData;
     private boolean useMipmap;
     private byte[] pixelByteArray;
+    private float lodBias;
+    private float maxLod;
+    private float minLod;
     private int textureCompareFunction;
     private int textureCompareMode;
     private int textureFilterMag;
@@ -358,6 +361,9 @@ public class TextureBuilder {
         GL.textureHelper.setCompareFunction(textureCompareFunction);
         GL.textureHelper.setCompareMode(textureCompareMode);
         GL.textureHelper.setFilters(textureFilterMag, textureFilterMin);
+        GL.textureHelper.setLodBias(lodBias);
+        GL.textureHelper.setMaxLod(maxLod);
+        GL.textureHelper.setMinLod(minLod);
 
         switch (textureType) {
             case TextureTargets.TEXTURE_2D:
@@ -534,6 +540,9 @@ public class TextureBuilder {
         nullData = false;
         useMipmap = false;
         pixelByteArray = null;
+        lodBias = 0f;
+        maxLod = 1000f;
+        minLod = -1000f;
         setCompareFunctionLessEqual();
         setCompareModeNone();
         setFilterMagNearest();
@@ -827,6 +836,21 @@ public class TextureBuilder {
 
     public TextureBuilder setLoadFlipVertically(boolean enabled) {
         flipVertically = enabled;
+        return this;
+    }
+
+    public TextureBuilder setLodBias(float lodBias) {
+        this.lodBias = lodBias;
+        return this;
+    }
+
+    public TextureBuilder setMaxLod(float maxLod) {
+        this.maxLod = maxLod;
+        return this;
+    }
+
+    public TextureBuilder setMinLod(float minLod) {
+        this.minLod = minLod;
         return this;
     }
 
