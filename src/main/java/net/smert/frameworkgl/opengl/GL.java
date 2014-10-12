@@ -28,6 +28,7 @@ import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
+import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
 
@@ -43,6 +44,7 @@ public class GL {
     public static DynamicMeshBuilder dynamicMeshBuilder;
     public static FrameBufferObjectHelper fboHelper;
     public static GLFactory glFactory;
+    public static LegacyRenderer legacyRenderer;
     public static MeshFactory meshFactory;
     public static MeshReader meshReader;
     public static OpenGL1 o1;

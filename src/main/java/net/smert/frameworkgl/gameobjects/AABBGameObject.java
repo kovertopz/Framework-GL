@@ -45,7 +45,7 @@ public class AABBGameObject extends GameObject {
                 setCustomData(0, aabb).
                 build("aabb").
                 createMesh(false, mesh);
-        aabbRenderable = Fw.graphics.getLegacyRenderer().createDynamicVertexBufferObjectRenderable();
+        aabbRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
         aabbRenderable.create(mesh);
 
         // Attach to game object

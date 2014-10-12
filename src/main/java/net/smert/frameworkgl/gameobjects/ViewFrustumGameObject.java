@@ -71,7 +71,7 @@ public class ViewFrustumGameObject extends GameObject {
                 setCustomData(3, zFar).
                 build("view_frustum").
                 createMesh(false, mesh);
-        viewFrustumRenderable = Fw.graphics.getLegacyRenderer().createDynamicVertexBufferObjectRenderable();
+        viewFrustumRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
         viewFrustumRenderable.create(mesh);
 
         // Attach to game object

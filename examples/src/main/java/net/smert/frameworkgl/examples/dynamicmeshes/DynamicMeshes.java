@@ -155,7 +155,7 @@ public class DynamicMeshes extends Screen {
 
             // Render directly
             List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();
-            Fw.graphics.getLegacyRenderer().render(gameObjects, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjects, transformWorldFloatBuffer);
         }
     }
 

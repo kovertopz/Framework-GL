@@ -24,7 +24,6 @@ import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +83,11 @@ public class VertexBufferObject extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create vertex buffer object renderables
-        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-        renderableQuads = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableQuads = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableQuadsWithPerVertexColors = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableTriangles = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -135,10 +133,9 @@ public class VertexBufferObject extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-            legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
-            legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
-            legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            GL.legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

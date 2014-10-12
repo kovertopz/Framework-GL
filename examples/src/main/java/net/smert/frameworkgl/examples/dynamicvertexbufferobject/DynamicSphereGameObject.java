@@ -62,7 +62,7 @@ public class DynamicSphereGameObject extends GameObject {
                 createMesh(false, dynamicMesh);
 
         // Create renderable
-        dynamicVBORenderable = Fw.graphics.getLegacyRenderer().createDynamicVertexBufferObjectRenderable();
+        dynamicVBORenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
         dynamicVBORenderable.create(dynamicMesh);
 
         // Attach to game object

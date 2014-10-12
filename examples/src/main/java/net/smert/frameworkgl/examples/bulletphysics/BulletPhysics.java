@@ -188,7 +188,7 @@ public class BulletPhysics extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.getLegacyRenderer().render(gameObjects, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjects, transformWorldFloatBuffer);
         }
     }
 

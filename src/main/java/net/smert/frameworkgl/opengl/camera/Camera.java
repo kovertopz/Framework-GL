@@ -106,6 +106,10 @@ public class Camera {
         this.frustumCulling = frustumCulling;
     }
 
+    public Matrix3f getMovementMatrix() {
+        return movementMatrix;
+    }
+
     public Matrix3f getRotationMatrix() {
         return rotationMatrix;
     }
@@ -148,9 +152,9 @@ public class Camera {
     }
 
     public void moveForward(float dx, float dy, float dz) {
-        float zdotup = viewDirection.dot(Vector3f.WORLD_Y_AXIS);
+        float zDotUp = viewDirection.dot(Vector3f.WORLD_Y_AXIS);
 
-        if ((zdotup < -MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL) || (zdotup > MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL)) {
+        if ((zDotUp < -MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL) || (zDotUp > MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL)) {
             movementMatrix.getZAxis().set(Vector3f.WORLD_Y_AXIS).cross(rotationMatrix.getXAxis()).normalize();
             movementMatrix.getXAxis().set(movementMatrix.getZAxis()).cross(Vector3f.WORLD_Y_AXIS).normalize();
             movementMatrix.getYAxis().set(movementMatrix.getXAxis()).cross(movementMatrix.getZAxis()).normalize();

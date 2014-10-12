@@ -256,14 +256,14 @@ public class DynamicVertexBufferObject extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            Fw.graphics.getLegacyRenderer().render(gameObjectsToRender, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjectsToRender, transformWorldFloatBuffer);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                Fw.graphics.getLegacyRenderer().renderBlend(viewFrustumGameObject, transformWorldFloatBuffer);
+                GL.legacyRenderer.renderBlend(viewFrustumGameObject, transformWorldFloatBuffer);
             }
 
             // AABBs
@@ -273,7 +273,7 @@ public class DynamicVertexBufferObject extends Screen {
                     // Updating AABBs this way is costly
                     aabbGameObject.update(worldAabb);
                     // AABB is already in world coordinates so we don't translate
-                    Fw.graphics.getLegacyRenderer().render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                    GL.legacyRenderer.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
                 }
             }
 
@@ -282,7 +282,7 @@ public class DynamicVertexBufferObject extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    Fw.graphics.getLegacyRenderer().render(simpleOrientationAxisGameObject, transformWorldFloatBuffer);
+                    GL.legacyRenderer.render(simpleOrientationAxisGameObject, transformWorldFloatBuffer);
                 }
                 GL.o1.enableDepthTest();
             }

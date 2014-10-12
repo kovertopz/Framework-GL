@@ -385,6 +385,7 @@ public class BootStrap {
         GL.dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         GL.fboHelper = container.getComponent(FrameBufferObjectHelper.class);
         GL.glFactory = container.getComponent(GLFactory.class);
+        GL.legacyRenderer = container.getComponent(LegacyRenderer.class);
         GL.meshReader = container.getComponent(MeshReader.class);
         GL.meshFactory = container.getComponent(MeshFactory.class);
         GL.o1 = container.getComponent(OpenGL1.class);

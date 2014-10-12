@@ -24,7 +24,6 @@ import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,12 +91,11 @@ public class ImmediateMode extends Screen {
         meshTriangles = Fw.graphics.createMesh(cubeTriangles);
 
         // Create immediate mode renderables
-        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-        renderableQuads = legacyRenderer.createImmediateModeRenderable();
+        renderableQuads = GL.legacyRenderer.createImmediateModeRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = legacyRenderer.createImmediateModeRenderable();
+        renderableQuadsWithPerVertexColors = GL.legacyRenderer.createImmediateModeRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = legacyRenderer.createImmediateModeRenderable();
+        renderableTriangles = GL.legacyRenderer.createImmediateModeRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -143,10 +141,9 @@ public class ImmediateMode extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-            legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
-            legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
-            legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            GL.legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

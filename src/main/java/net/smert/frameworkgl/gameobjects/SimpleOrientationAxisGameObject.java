@@ -58,7 +58,7 @@ public class SimpleOrientationAxisGameObject extends GameObject {
                 build("simple_orientation_axis").
                 createMesh(false, mesh);
         VertexBufferObjectRenderable simpleOrientationAxisRenderable
-                = Fw.graphics.getLegacyRenderer().createVertexBufferObjectRenderable();
+                = GL.legacyRenderer.createVertexBufferObjectRenderable();
         simpleOrientationAxisRenderable.create(mesh);
 
         // Attach to game object

@@ -240,9 +240,9 @@ public class Matrix3f {
         zAxis.set(position).subtract(target);
         zAxis.normalize();
 
-        float zdotup = zAxis.dot(up);
+        float zDotUp = zAxis.dot(up);
 
-        if ((zdotup < -MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL) || (zdotup > MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL)) {
+        if ((zDotUp < -MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL) || (zDotUp > MathHelper.TOLERANCE_DOT_PRODUCT_PARALLEL)) {
             yAxis.set(zAxis).cross(Vector3f.WORLD_X_AXIS);
             yAxis.normalize();
             xAxis.set(yAxis).cross(zAxis);

@@ -30,7 +30,6 @@ import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 
 /**
  *
@@ -38,12 +37,7 @@ import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
  */
 public class Graphics {
 
-    private final LegacyRenderer legacyRenderer;
     private static RenderableComparison renderableComparison = new RenderableComparison();
-
-    public Graphics(LegacyRenderer legacyRenderer) {
-        this.legacyRenderer = legacyRenderer;
-    }
 
     public Mesh createMesh(DrawCommands drawCommands) {
 
@@ -96,7 +90,7 @@ public class Graphics {
      * during the normal shutdown process.
      */
     public void destroy() {
-        legacyRenderer.destroy();
+        GL.legacyRenderer.destroy();
         Renderable.shaderBindState.reset();
         Renderable.textureBindState.reset();
         GL.fboHelper.unbind();
@@ -112,10 +106,6 @@ public class Graphics {
 
     public void setRenderableComparison(RenderableComparison renderableComparison) {
         Graphics.renderableComparison = renderableComparison;
-    }
-
-    public LegacyRenderer getLegacyRenderer() {
-        return legacyRenderer;
     }
 
     public Texture getTexture(String filename) {

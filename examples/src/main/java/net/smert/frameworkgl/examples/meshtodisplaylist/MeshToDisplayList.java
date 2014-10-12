@@ -24,7 +24,6 @@ import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.utils.FpsTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +83,11 @@ public class MeshToDisplayList extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create display list renderables
-        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-        renderableQuads = legacyRenderer.createDisplayListRenderable();
+        renderableQuads = GL.legacyRenderer.createDisplayListRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = legacyRenderer.createDisplayListRenderable();
+        renderableQuadsWithPerVertexColors = GL.legacyRenderer.createDisplayListRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = legacyRenderer.createDisplayListRenderable();
+        renderableTriangles = GL.legacyRenderer.createDisplayListRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -135,10 +133,9 @@ public class MeshToDisplayList extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-            legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
-            legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
-            legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            GL.legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
+            GL.legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

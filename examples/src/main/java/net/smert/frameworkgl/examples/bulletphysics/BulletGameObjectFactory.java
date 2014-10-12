@@ -32,7 +32,6 @@ import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 
 /**
  *
@@ -138,18 +137,17 @@ public class BulletGameObjectFactory {
         }
 
         // Create vertex buffer object renderables
-        LegacyRenderer legacyRenderer = Fw.graphics.getLegacyRenderer();
-        renderableBox = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableBox = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableBox.create(meshBox);
-        renderableCapsule = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCapsule = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableCapsule.create(meshCapsule);
-        renderableCone = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCone = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableCone.create(meshCone);
-        renderableCylinder = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCylinder = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableCylinder.create(meshCylinder);
-        renderableGround = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableGround = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableGround.create(meshGround);
-        renderableSphere = legacyRenderer.createVertexBufferObjectRenderable();
+        renderableSphere = GL.legacyRenderer.createVertexBufferObjectRenderable();
         renderableSphere.create(meshSphere);
 
         // Scaling transforms
