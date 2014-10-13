@@ -49,7 +49,6 @@ public class BulletPhysics extends Screen {
     private float spawnTimer;
     private BulletWrapper bulletWrapper;
     private FloatBuffer lightFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
     private FpsTimer fpsTimer;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
@@ -97,7 +96,6 @@ public class BulletPhysics extends Screen {
 
         // Float buffer for light and matrices
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         BulletGameObject groundGameObject
                 = bulletWrapper.createBulletGameObject("ground", new Transform4f(new Matrix3f().identity(), new Vector3f()));
@@ -188,7 +186,7 @@ public class BulletPhysics extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(gameObjects, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjects);
         }
     }
 

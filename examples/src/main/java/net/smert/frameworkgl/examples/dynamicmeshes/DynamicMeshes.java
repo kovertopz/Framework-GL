@@ -40,7 +40,6 @@ public class DynamicMeshes extends Screen {
     private boolean wireframe;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
     private FpsTimer fpsTimer;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
@@ -92,7 +91,6 @@ public class DynamicMeshes extends Screen {
 
         // Float buffer for light and matrices
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
@@ -155,7 +153,7 @@ public class DynamicMeshes extends Screen {
 
             // Render directly
             List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();
-            GL.legacyRenderer.render(gameObjects, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjects);
         }
     }
 

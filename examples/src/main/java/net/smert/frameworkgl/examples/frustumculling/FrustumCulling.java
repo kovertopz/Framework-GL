@@ -50,9 +50,6 @@ public class FrustumCulling extends Screen {
     private AABBGameObject aabbGameObject;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
-    private FloatBuffer viewMatrixFloatBuffer;
-    private FloatBuffer projectionMatrixFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
     private FpsTimer fpsTimer;
     private Camera camera;
     private CameraController cameraController;
@@ -140,9 +137,6 @@ public class FrustumCulling extends Screen {
 
         // Float buffer for light and matrices
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
@@ -227,27 +221,19 @@ public class FrustumCulling extends Screen {
             GL.o1.clear();
 
             // Update camera
-            camera.updateViewMatrix();
-            camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
-            camera.getViewMatrix().toFloatBuffer(viewMatrixFloatBuffer);
-            projectionMatrixFloatBuffer.flip();
-            viewMatrixFloatBuffer.flip();
-            GL.o1.switchProjection();
-            GL.o1.loadMatrix(projectionMatrixFloatBuffer);
-            GL.o1.switchModelView();
-            GL.o1.loadMatrix(viewMatrixFloatBuffer);
+            GL.legacyRenderer.setCamera(camera);
 
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(gameObjectsToRender, transformWorldFloatBuffer);
+            GL.legacyRenderer.render(gameObjectsToRender);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                GL.legacyRenderer.renderBlend(viewFrustumGameObject, transformWorldFloatBuffer);
+                GL.legacyRenderer.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -266,7 +252,7 @@ public class FrustumCulling extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    GL.legacyRenderer.render(simpleOrientationAxisGameObject, transformWorldFloatBuffer);
+                    GL.legacyRenderer.render(simpleOrientationAxisGameObject);
                 }
                 GL.o1.enableDepthTest();
             }
