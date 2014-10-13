@@ -563,21 +563,22 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setProjectionOrtho(double left, double right, double bottom, double top, double znear, double zfar) {
+    public OpenGL1 setProjectionOrtho(double left, double right, double bottom, double top, double zNear, double zFar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glOrtho(left, right, bottom, top, znear, zfar);
+        GL11.glLoadIdentity(); // glOrtho sadly doesn't set all rows and columns
+        GL11.glOrtho(left, right, bottom, top, zNear, zFar);
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
         return this;
     }
 
-    public OpenGL1 setProjectionPerspective(float fovy, float aspectratio, float znear, float zfar) {
+    public OpenGL1 setProjectionPerspective(float fovy, float aspectratio, float zNear, float zFar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
+        GL11.glLoadIdentity(); // gluPerspective sadly doesn't set all rows and columns
         GLU.gluPerspective(
                 fovy,
                 aspectratio,
-                znear,
-                zfar);
+                zNear,
+                zFar);
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
         return this;
     }

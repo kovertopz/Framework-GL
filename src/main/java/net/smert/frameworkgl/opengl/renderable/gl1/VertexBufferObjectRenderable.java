@@ -133,18 +133,28 @@ public class VertexBufferObjectRenderable extends AbstractRenderable {
         // Bind each VBO
         if (vboColor != null) {
             Renderable.vboBindState.bindColor(vboColor.getVboID(), 0, 0);
+        } else {
+            Renderable.vboBindState.bindColor(0, 0, 0);
         }
         if (vboNormal != null) {
             Renderable.vboBindState.bindNormal(vboNormal.getVboID(), 0, 0);
+        } else {
+            Renderable.vboBindState.bindNormal(0, 0, 0);
         }
         if (vboTexCoord != null) {
             Renderable.vboBindState.bindTextureCoordinate(vboTexCoord.getVboID(), 0, 0);
+        } else {
+            Renderable.vboBindState.bindTextureCoordinate(0, 0, 0);
         }
         if (vboVertex != null) {
             Renderable.vboBindState.bindVertex(vboVertex.getVboID(), 0, 0);
+        } else {
+            Renderable.vboBindState.bindVertex(0, 0, 0);
         }
         if (vboVertexIndex != null) {
             Renderable.vboBindState.bindVertexIndex(vboVertexIndex.getVboID());
+        } else {
+            Renderable.vboBindState.bindVertexIndex(0);
         }
 
         drawCall.render();

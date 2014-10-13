@@ -115,21 +115,31 @@ public class VertexBufferObjectRenderableInterleaved extends AbstractRenderable 
         if (hasColors) {
             Renderable.vboBindState.bindColor(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getColorOffsetBytes());
+        } else {
+            Renderable.vboBindState.bindColor(0, 0, 0);
         }
         if (hasNormals) {
             Renderable.vboBindState.bindNormal(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getNormalOffsetBytes());
+        } else {
+            Renderable.vboBindState.bindNormal(0, 0, 0);
         }
         if (hasTexCoords) {
             Renderable.vboBindState.bindTextureCoordinate(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getTexCoordOffsetBytes());
+        } else {
+            Renderable.vboBindState.bindTextureCoordinate(0, 0, 0);
         }
         if (hasVertices) {
             Renderable.vboBindState.bindVertex(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getVertexOffsetBytes());
+        } else {
+            Renderable.vboBindState.bindVertex(0, 0, 0);
         }
         if (hasIndexes) {
             Renderable.vboBindState.bindVertexIndex(vboInterleaved.getVboID());
+        } else {
+            Renderable.vboBindState.bindVertexIndex(0);
         }
 
         drawCall.render();

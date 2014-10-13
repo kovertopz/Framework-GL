@@ -93,12 +93,13 @@ public class ObjectPool<T> {
         return -1;
     }
 
-    public void remove(String filename) {
-        if (objectPool.remove(filename) == null) {
-            throw new IllegalArgumentException("Tried to remove a object that does not exist from the pool: " + filename);
+    public T remove(String filename) {
+        T existingObject = objectPool.remove(filename);
+        if (existingObject != null) {
+            int uniqueID = filenameToUniqueID.remove(filename);
+            uniqueIDToObjectPool.remove(uniqueID);
         }
-        int uniqueID = filenameToUniqueID.remove(filename);
-        uniqueIDToObjectPool.remove(uniqueID);
+        return existingObject;
     }
 
     public static class ObjectDestroyer<T> {

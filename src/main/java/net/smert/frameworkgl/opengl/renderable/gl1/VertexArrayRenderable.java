@@ -111,15 +111,23 @@ public class VertexArrayRenderable extends AbstractRenderable {
         // Bind each vertex array
         if (vaColor != null) {
             Renderable.vaBindState.bindColor(vaColor.getByteBuffer());
+        } else {
+            Renderable.vaBindState.bindColor(null);
         }
         if (vaNormal != null) {
             Renderable.vaBindState.bindNormal(vaNormal.getByteBuffer());
+        } else {
+            Renderable.vaBindState.bindNormal(null);
         }
         if (vaTexCoord != null) {
             Renderable.vaBindState.bindTextureCoordinate(vaTexCoord.getByteBuffer());
+        } else {
+            Renderable.vaBindState.bindTextureCoordinate(null);
         }
         if (vaVertex != null) {
             Renderable.vaBindState.bindVertex(vaVertex.getByteBuffer());
+        } else {
+            Renderable.vaBindState.bindVertex(null);
         }
 
         drawCall.render();
