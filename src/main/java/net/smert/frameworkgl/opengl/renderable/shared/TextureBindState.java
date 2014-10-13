@@ -165,6 +165,7 @@ public class TextureBindState {
 
     public void bindTextures(TextureTypeMapping[] textures) {
         if (textures == null) {
+            unbindModel();
             return;
         }
         for (TextureTypeMapping mapping : textures) {
