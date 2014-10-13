@@ -243,6 +243,11 @@ public class LegacyRenderer implements TextRenderer {
     }
 
     @Override
+    public void colorText(Color color) {
+        GL.o1.color(color.getR(), color.getG(), color.getB(), color.getA());
+    }
+
+    @Override
     public AbstractRenderable createGlyphRenderable() {
         return createVertexBufferObjectInterleavedRenderable();
     }

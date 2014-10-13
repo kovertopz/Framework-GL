@@ -96,6 +96,7 @@ public class GLFontRenderer {
             GLFont.Glyph glyph = font.getGlyph(codePoint);
             createGlyphRenderable(glyph, renderer);
             renderer.translateText(glyph.w / 2, 0f);
+            renderer.colorText(color);
             glyph.renderable.render();
             renderer.translateText((glyph.w / 2) + fontSpacing, 0f);
             position.addX(glyph.w + fontSpacing);

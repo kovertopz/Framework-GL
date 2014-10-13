@@ -13,12 +13,15 @@
 package net.smert.frameworkgl.opengl.renderer;
 
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public interface TextRenderer {
+
+    public void colorText(Color color);
 
     public AbstractRenderable createGlyphRenderable();
 

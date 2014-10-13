@@ -269,12 +269,16 @@ public class FontRendering extends Screen {
             GL.legacyRenderer.set2DMode();
             GL.legacyRenderer.resetFontRendering();
             GL.legacyRenderer.textNewHalfLine();
+            GL.legacyRenderer.setTextColor("red");
             GL.legacyRenderer.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?");
             GL.legacyRenderer.textNewLine();
+            GL.legacyRenderer.setTextColor("green");
             GL.legacyRenderer.drawString("the quick brown fox jumps over the lazy dog!");
             GL.legacyRenderer.textNewLine();
+            GL.legacyRenderer.setTextColor("blue");
             GL.legacyRenderer.drawString("0123456789!@#$%^&*()-_=+[]{}\\|;':\",./<>?");
             GL.legacyRenderer.textNewLine();
+            GL.legacyRenderer.setTextColor("yellow");
             GL.legacyRenderer.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
             GL.o1.disableBlending();
 
