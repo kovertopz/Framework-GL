@@ -12,6 +12,7 @@ Framework-GL has the following features :
 - Builders (Frame buffer object & textures)
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.
+- Bitmap font rendering (using Java2D)
 - Frustum culling in clip space.
 - Math library (AABBs, matrices, quaternions and vectors)
 - Model loading (OBJ & MTL)
