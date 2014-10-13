@@ -43,6 +43,7 @@ import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
 import net.smert.frameworkgl.opengl.factory.GLFactory;
+import net.smert.frameworkgl.opengl.font.GLFontBuilder;
 import net.smert.frameworkgl.opengl.helpers.BufferHelper;
 import net.smert.frameworkgl.opengl.helpers.DisplayListHelper;
 import net.smert.frameworkgl.opengl.helpers.FrameBufferObjectHelper;
@@ -110,6 +111,7 @@ import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawArrays;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawRangeElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
+import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
@@ -296,6 +298,9 @@ public class BootStrap {
         // OpenGL factory
         container.as(Characteristics.USE_NAMES).addComponent(GLFactory.class);
 
+        // OpenGL font
+        container.addComponent(GLFontBuilder.class);
+
         // OpenGL helpers
         container.addComponent(BufferHelper.class);
         container.addComponent(DisplayListHelper.class);
@@ -356,6 +361,7 @@ public class BootStrap {
         container.as(Characteristics.USE_NAMES).addComponent(VBODrawCallFactory.class);
 
         // Renderers
+        container.addComponent(GLFontRenderer.class);
         container.addComponent(LegacyRenderer.class);
 
         // Texture
@@ -385,6 +391,7 @@ public class BootStrap {
         GL.dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         GL.fboHelper = container.getComponent(FrameBufferObjectHelper.class);
         GL.glFactory = container.getComponent(GLFactory.class);
+        GL.glFontBuilder = container.getComponent(GLFontBuilder.class);
         GL.legacyRenderer = container.getComponent(LegacyRenderer.class);
         GL.meshReader = container.getComponent(MeshReader.class);
         GL.meshFactory = container.getComponent(MeshFactory.class);

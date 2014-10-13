@@ -24,12 +24,14 @@ import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
 
 /**
  *
@@ -38,6 +40,13 @@ import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
 public class Graphics {
 
     private static RenderableComparison renderableComparison = new RenderableComparison();
+
+    private GLFont defaultFont;
+    private final GLFontRenderer glFontRenderer;
+
+    public Graphics(GLFontRenderer glFontRenderer) {
+        this.glFontRenderer = glFontRenderer;
+    }
 
     public Mesh createMesh(DrawCommands drawCommands) {
 
@@ -108,8 +117,27 @@ public class Graphics {
         Graphics.renderableComparison = renderableComparison;
     }
 
+    public GLFont getDefaultFont() {
+        return defaultFont;
+    }
+
     public Texture getTexture(String filename) {
         return Renderable.texturePool.get(filename);
+    }
+
+    public void init() {
+        GL.legacyRenderer.init();
+        defaultFont = GL.glFontBuilder.
+                addUsAsciiGlyphs().
+                setAntiAliasing(true).
+                setBold(true).
+                setFamily("Dialog").
+                setLeftToRight(true).
+                setSize(16).
+                buildFont().
+                createFont(true);
+        glFontRenderer.setDefaultFont(defaultFont);
+        glFontRenderer.reset();
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {

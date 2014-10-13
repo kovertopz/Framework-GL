@@ -65,6 +65,7 @@ public class Application {
 
         // Initialization of OpenGL must happen here since we are in a new thread
         Fw.window.create();
+        Fw.graphics.init();
         Fw.input.init();
         screen.init();
         Fw.timer.reset();

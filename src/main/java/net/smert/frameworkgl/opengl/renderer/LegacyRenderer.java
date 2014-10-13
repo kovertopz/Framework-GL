@@ -14,9 +14,13 @@ package net.smert.frameworkgl.opengl.renderer;
 
 import java.nio.FloatBuffer;
 import java.util.List;
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
+import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
@@ -26,12 +30,29 @@ import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class LegacyRenderer {
+public class LegacyRenderer implements TextRenderer {
+
+    private FloatBuffer viewMatrixFloatBuffer;
+    private FloatBuffer transformWorldFloatBuffer;
+    private FloatBuffer projectionMatrixFloatBuffer;
+    private final GLFontRenderer glFontRenderer;
+
+    public LegacyRenderer(GLFontRenderer glFontRenderer) {
+        this.glFontRenderer = glFontRenderer;
+    }
+
+    private void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
+        GL.o1.pushMatrix();
+        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
+        renderable.render();
+        GL.o1.popMatrix();
+    }
 
     public DisplayListRenderable createDisplayListRenderable() {
         return GL.rf1.createDisplayList();
@@ -66,6 +87,28 @@ public class LegacyRenderer {
         Renderable.vboBindState.reset();
     }
 
+    public void drawString(String text, float x, float y) {
+        glFontRenderer.drawString(text, x, y, this);
+    }
+
+    public void drawString(String text, float x, float y, GLFont font) {
+        glFontRenderer.drawString(text, x, y, font, this);
+    }
+
+    public void drawString(String text) {
+        glFontRenderer.drawString(text, this);
+    }
+
+    public void drawString(String text, GLFont font) {
+        glFontRenderer.drawString(text, font, this);
+    }
+
+    public void init() {
+        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+    }
+
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);
@@ -73,11 +116,9 @@ public class LegacyRenderer {
         GL.o1.popMatrix();
     }
 
-    public void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
-        GL.o1.pushMatrix();
-        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
-        renderable.render();
-        GL.o1.popMatrix();
+    public void render(AbstractRenderable renderable, Transform4f transform) {
+        transform.toFloatBuffer(transformWorldFloatBuffer);
+        render(renderable, transformWorldFloatBuffer);
     }
 
     public void render(AbstractRenderable renderable, Vector3f position) {
@@ -87,19 +128,19 @@ public class LegacyRenderer {
         GL.o1.popMatrix();
     }
 
-    public void render(GameObject gameObject, FloatBuffer transformWorldFloatBuffer) {
+    public void render(GameObject gameObject) {
         gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
         transformWorldFloatBuffer.flip();
         render(gameObject.getRenderable(), transformWorldFloatBuffer);
     }
 
-    public void render(List<GameObject> gameObjects, FloatBuffer transformWorldFloatBuffer) {
+    public void render(List<GameObject> gameObjects) {
         for (GameObject gameObject : gameObjects) {
-            render(gameObject, transformWorldFloatBuffer);
+            render(gameObject);
         }
     }
 
-    public void renderBlend(GameObject gameObject, FloatBuffer transformWorldFloatBuffer) {
+    public void renderBlend(GameObject gameObject) {
         if (gameObject.getRenderableState().isOpaque()) {
             return;
         }
@@ -110,7 +151,7 @@ public class LegacyRenderer {
         GL.o1.disableBlending();
     }
 
-    public void renderBlend(List<GameObject> gameObjects, FloatBuffer transformWorldFloatBuffer) {
+    public void renderBlend(List<GameObject> gameObjects) {
         GL.o1.enableBlending();
         for (GameObject gameObject : gameObjects) {
             if (gameObject.getRenderableState().isOpaque()) {
@@ -123,7 +164,7 @@ public class LegacyRenderer {
         GL.o1.disableBlending();
     }
 
-    public void renderOpaque(GameObject gameObject, FloatBuffer transformWorldFloatBuffer) {
+    public void renderOpaque(GameObject gameObject) {
         if (!gameObject.getRenderableState().isOpaque()) {
             return;
         }
@@ -132,7 +173,7 @@ public class LegacyRenderer {
         render(gameObject.getRenderable(), transformWorldFloatBuffer);
     }
 
-    public void renderOpaque(List<GameObject> gameObjects, FloatBuffer transformWorldFloatBuffer) {
+    public void renderOpaque(List<GameObject> gameObjects) {
         for (GameObject gameObject : gameObjects) {
             if (!gameObject.getRenderableState().isOpaque()) {
                 continue;
@@ -141,6 +182,84 @@ public class LegacyRenderer {
             transformWorldFloatBuffer.flip();
             render(gameObject.getRenderable(), transformWorldFloatBuffer);
         }
+    }
+
+    public void resetFontRendering() {
+        glFontRenderer.reset();
+    }
+
+    public void set2DMode() {
+        GL.o1.setProjectionOrtho(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
+        GL.o1.setModelViewIdentity();
+    }
+
+    public void set2DMode(int width, int height) {
+        GL.o1.setProjectionOrtho(0f, width, 0f, height, -1f, 1f);
+        GL.o1.setModelViewIdentity();
+    }
+
+    public void setCamera(Camera camera) {
+        camera.updateViewMatrix();
+        camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
+        camera.getViewMatrix().toFloatBuffer(viewMatrixFloatBuffer);
+        projectionMatrixFloatBuffer.flip();
+        viewMatrixFloatBuffer.flip();
+        GL.o1.switchProjection();
+        GL.o1.loadMatrix(projectionMatrixFloatBuffer);
+        GL.o1.switchModelView();
+        GL.o1.loadMatrix(viewMatrixFloatBuffer);
+    }
+
+    public void setTextColor(float r, float g, float b, float a) {
+        glFontRenderer.setColor(r, g, b, a);
+    }
+
+    public void setTextColor(Color color) {
+        glFontRenderer.setColor(color);
+    }
+
+    public void setTextColor(String colorName) {
+        glFontRenderer.setColor(colorName);
+    }
+
+    public void setTextColorHex(String hexCode) {
+        glFontRenderer.setColorHex(hexCode);
+    }
+
+    public void textNewHalfLine() {
+        glFontRenderer.newHalfLine();
+    }
+
+    public void textNewHalfLine(GLFont font) {
+        glFontRenderer.newHalfLine(font);
+    }
+
+    public void textNewLine() {
+        glFontRenderer.newLine();
+    }
+
+    public void textNewLine(GLFont font) {
+        glFontRenderer.newLine(font);
+    }
+
+    @Override
+    public AbstractRenderable createGlyphRenderable() {
+        return createVertexBufferObjectInterleavedRenderable();
+    }
+
+    @Override
+    public void popMatrix() {
+        GL.o1.popMatrix();
+    }
+
+    @Override
+    public void pushMatrix() {
+        GL.o1.pushMatrix();
+    }
+
+    @Override
+    public void translateText(float x, float y) {
+        GL.o1.translate(x, y, 0f);
     }
 
 }

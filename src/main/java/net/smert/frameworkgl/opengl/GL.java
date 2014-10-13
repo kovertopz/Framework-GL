@@ -14,6 +14,7 @@ package net.smert.frameworkgl.opengl;
 
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
 import net.smert.frameworkgl.opengl.factory.GLFactory;
+import net.smert.frameworkgl.opengl.font.GLFontBuilder;
 import net.smert.frameworkgl.opengl.helpers.BufferHelper;
 import net.smert.frameworkgl.opengl.helpers.DisplayListHelper;
 import net.smert.frameworkgl.opengl.helpers.FrameBufferObjectHelper;
@@ -44,6 +45,7 @@ public class GL {
     public static DynamicMeshBuilder dynamicMeshBuilder;
     public static FrameBufferObjectHelper fboHelper;
     public static GLFactory glFactory;
+    public static GLFontBuilder glFontBuilder;
     public static LegacyRenderer legacyRenderer;
     public static MeshFactory meshFactory;
     public static MeshReader meshReader;
