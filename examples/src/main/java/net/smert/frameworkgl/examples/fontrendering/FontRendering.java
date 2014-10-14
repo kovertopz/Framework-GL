@@ -20,6 +20,7 @@ import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
+import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
@@ -50,14 +51,12 @@ public class FontRendering extends Screen {
     private AABBGameObject aabbGameObject;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
-    private FloatBuffer viewMatrixFloatBuffer;
-    private FloatBuffer projectionMatrixFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
     private FpsTimer fpsTimer;
     private Camera camera;
     private CameraController cameraController;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
+    private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private ViewFrustumGameObject viewFrustumGameObject;
 
@@ -140,9 +139,6 @@ public class FontRendering extends Screen {
 
         // Float buffer for light and matrices
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
@@ -152,6 +148,10 @@ public class FontRendering extends Screen {
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
+
+        // Render statistics game object
+        renderStatisticsGameObject = new RenderStatisticsGameObject();
+        renderStatisticsGameObject.init(GL.legacyRenderer);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -216,6 +216,7 @@ public class FontRendering extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
+        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -267,7 +268,7 @@ public class FontRendering extends Screen {
             // Render 2D
             GL.o1.enableBlending();
             GL.legacyRenderer.set2DMode();
-            GL.legacyRenderer.resetFontRendering();
+            GL.legacyRenderer.resetTextRendering();
             GL.legacyRenderer.textNewHalfLine();
             GL.legacyRenderer.setTextColor("red");
             GL.legacyRenderer.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?");
@@ -280,6 +281,8 @@ public class FontRendering extends Screen {
             GL.legacyRenderer.textNewLine();
             GL.legacyRenderer.setTextColor("yellow");
             GL.legacyRenderer.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
+            GL.legacyRenderer.textNewLine();
+            renderStatisticsGameObject.render(); // Game object has no renderable
             GL.o1.disableBlending();
 
             // Restore lighting

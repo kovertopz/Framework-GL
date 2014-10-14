@@ -44,7 +44,7 @@ public class GLFontRenderer {
         tempPosition = new Vector2f();
     }
 
-    private void createGlyphRenderable(GLFont.Glyph glyph, TextRenderer renderer) {
+    private void createGlyphRenderable(GLFont.Glyph glyph, TextHelperRenderer renderer) {
         if (glyph.renderable == null) {
             int fontHeight = glyph.codePage.getImage().getHeight();
             int fontWidth = glyph.codePage.getImage().getWidth();
@@ -84,7 +84,7 @@ public class GLFontRenderer {
         }
     }
 
-    private void drawString(String text, Vector2f position, GLFont font, TextRenderer renderer) {
+    private void drawString(String text, Vector2f position, GLFont font, TextHelperRenderer renderer) {
         renderer.pushMatrix();
         renderer.translateText(position.getX(), position.getY());
         for (int i = 0; i < text.length(); i++) {
@@ -105,20 +105,20 @@ public class GLFontRenderer {
         renderer.popMatrix();
     }
 
-    public void drawString(String text, float x, float y, TextRenderer renderer) {
+    public void drawString(String text, float x, float y, TextHelperRenderer renderer) {
         drawString(text, x, y, defaultFont, renderer);
     }
 
-    public void drawString(String text, float x, float y, GLFont font, TextRenderer renderer) {
+    public void drawString(String text, float x, float y, GLFont font, TextHelperRenderer renderer) {
         tempPosition.set(x, y);
         drawString(text, tempPosition, font, renderer);
     }
 
-    public void drawString(String text, TextRenderer renderer) {
+    public void drawString(String text, TextHelperRenderer renderer) {
         drawString(text, position, defaultFont, renderer);
     }
 
-    public void drawString(String text, GLFont font, TextRenderer renderer) {
+    public void drawString(String text, GLFont font, TextHelperRenderer renderer) {
         drawString(text, position, font, renderer);
     }
 

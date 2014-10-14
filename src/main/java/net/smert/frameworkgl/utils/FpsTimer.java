@@ -36,8 +36,8 @@ public class FpsTimer {
 
     public void update() {
         currentFps++;
-        long deltatime = fpsTimeSpan.diffNowToLastUpdate();
-        if (deltatime < 1000000000L) {
+        long delta = fpsTimeSpan.diffNowToLastUpdate();
+        if (delta < 1000000000L) {
             return;
         }
 

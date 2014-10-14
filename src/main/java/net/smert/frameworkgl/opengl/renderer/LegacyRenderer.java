@@ -36,7 +36,7 @@ import net.smert.frameworkgl.utils.Color;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class LegacyRenderer implements TextRenderer {
+public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
 
     private FloatBuffer viewMatrixFloatBuffer;
     private FloatBuffer transformWorldFloatBuffer;
@@ -85,22 +85,6 @@ public class LegacyRenderer implements TextRenderer {
     public void destroy() {
         Renderable.vaBindState.reset();
         Renderable.vboBindState.reset();
-    }
-
-    public void drawString(String text, float x, float y) {
-        glFontRenderer.drawString(text, x, y, this);
-    }
-
-    public void drawString(String text, float x, float y, GLFont font) {
-        glFontRenderer.drawString(text, x, y, font, this);
-    }
-
-    public void drawString(String text) {
-        glFontRenderer.drawString(text, this);
-    }
-
-    public void drawString(String text, GLFont font) {
-        glFontRenderer.drawString(text, font, this);
     }
 
     public void init() {
@@ -184,10 +168,6 @@ public class LegacyRenderer implements TextRenderer {
         }
     }
 
-    public void resetFontRendering() {
-        glFontRenderer.reset();
-    }
-
     public void set2DMode() {
         GL.o1.setProjectionOrtho(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
         GL.o1.setModelViewIdentity();
@@ -208,38 +188,6 @@ public class LegacyRenderer implements TextRenderer {
         GL.o1.loadMatrix(projectionMatrixFloatBuffer);
         GL.o1.switchModelView();
         GL.o1.loadMatrix(viewMatrixFloatBuffer);
-    }
-
-    public void setTextColor(float r, float g, float b, float a) {
-        glFontRenderer.setColor(r, g, b, a);
-    }
-
-    public void setTextColor(Color color) {
-        glFontRenderer.setColor(color);
-    }
-
-    public void setTextColor(String colorName) {
-        glFontRenderer.setColor(colorName);
-    }
-
-    public void setTextColorHex(String hexCode) {
-        glFontRenderer.setColorHex(hexCode);
-    }
-
-    public void textNewHalfLine() {
-        glFontRenderer.newHalfLine();
-    }
-
-    public void textNewHalfLine(GLFont font) {
-        glFontRenderer.newHalfLine(font);
-    }
-
-    public void textNewLine() {
-        glFontRenderer.newLine();
-    }
-
-    public void textNewLine(GLFont font) {
-        glFontRenderer.newLine(font);
     }
 
     @Override
@@ -265,6 +213,71 @@ public class LegacyRenderer implements TextRenderer {
     @Override
     public void translateText(float x, float y) {
         GL.o1.translate(x, y, 0f);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y) {
+        glFontRenderer.drawString(text, x, y, this);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, GLFont font) {
+        glFontRenderer.drawString(text, x, y, font, this);
+    }
+
+    @Override
+    public void drawString(String text) {
+        glFontRenderer.drawString(text, this);
+    }
+
+    @Override
+    public void drawString(String text, GLFont font) {
+        glFontRenderer.drawString(text, font, this);
+    }
+
+    @Override
+    public void resetTextRendering() {
+        glFontRenderer.reset();
+    }
+
+    @Override
+    public void setTextColor(float r, float g, float b, float a) {
+        glFontRenderer.setColor(r, g, b, a);
+    }
+
+    @Override
+    public void setTextColor(Color color) {
+        glFontRenderer.setColor(color);
+    }
+
+    @Override
+    public void setTextColor(String colorName) {
+        glFontRenderer.setColor(colorName);
+    }
+
+    @Override
+    public void setTextColorHex(String hexCode) {
+        glFontRenderer.setColorHex(hexCode);
+    }
+
+    @Override
+    public void textNewHalfLine() {
+        glFontRenderer.newHalfLine();
+    }
+
+    @Override
+    public void textNewHalfLine(GLFont font) {
+        glFontRenderer.newHalfLine(font);
+    }
+
+    @Override
+    public void textNewLine() {
+        glFontRenderer.newLine();
+    }
+
+    @Override
+    public void textNewLine(GLFont font) {
+        glFontRenderer.newLine(font);
     }
 
 }

@@ -42,6 +42,11 @@ public class RenderableConfigurationPool {
         return uniqueID;
     }
 
+    public void destroy() {
+        // Don't reset currentUniqueID
+        uniqueIDToRenderableConfiguration.clear();
+    }
+
     public int getOrAdd(RenderableConfiguration config) {
         int uniqueID = getUniqueID(config);
         if (uniqueID == -1) {

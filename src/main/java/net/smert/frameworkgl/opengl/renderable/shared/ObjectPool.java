@@ -26,16 +26,16 @@ import net.smert.frameworkgl.utils.HashMapStringInt;
 public class ObjectPool<T> {
 
     private int currentUniqueID;
-    private final Map<String, T> objectPool;
     private final HashMapIntGeneric<T> uniqueIDToObjectPool;
     private final HashMapStringInt filenameToUniqueID;
+    private final Map<String, T> objectPool;
     private ObjectDestroyer<T> objectDestroyer;
 
     public ObjectPool() {
         currentUniqueID = 1;
-        objectPool = new HashMap<>();
         uniqueIDToObjectPool = new HashMapIntGeneric<>();
         filenameToUniqueID = new HashMapStringInt();
+        objectPool = new HashMap<>();
     }
 
     private ObjectDestroyer<T> getObjectDestroyer() {
@@ -60,6 +60,9 @@ public class ObjectPool<T> {
     }
 
     public void destroy() {
+        // Don't reset currentUniqueID
+        uniqueIDToObjectPool.clear();
+        filenameToUniqueID.clear();
         ObjectDestroyer<T> od = getObjectDestroyer();
         Iterator<T> iterator = objectPool.values().iterator();
         while (iterator.hasNext()) {
