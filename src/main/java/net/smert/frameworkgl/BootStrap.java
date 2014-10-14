@@ -68,6 +68,7 @@ import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
+import net.smert.frameworkgl.opengl.mesh.dynamic.CubeMap;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
@@ -196,6 +197,7 @@ public class BootStrap {
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
             meshFactoryContainer.addComponent(AABB.class);
+            meshFactoryContainer.addComponent(CubeMap.class);
             meshFactoryContainer.addComponent(PrimitiveCapsule.class);
             meshFactoryContainer.addComponent(PrimitiveCone.class);
             meshFactoryContainer.addComponent(PrimitiveCube.class);
@@ -437,6 +439,7 @@ public class BootStrap {
         dynamicMeshBuilder.register("capsule", GL.meshFactory.createDynamicPrimitiveCapsule());
         dynamicMeshBuilder.register("cone", GL.meshFactory.createDynamicPrimitiveCone());
         dynamicMeshBuilder.register("cube", GL.meshFactory.createDynamicPrimitiveCube());
+        dynamicMeshBuilder.register("cube_map", GL.meshFactory.createDynamicCubeMap());
         dynamicMeshBuilder.register("cylinder", GL.meshFactory.createDynamicPrimitiveCylinder());
         dynamicMeshBuilder.register("frustum", GL.meshFactory.createDynamicPrimitiveFrustum());
         dynamicMeshBuilder.register("grid", GL.meshFactory.createDynamicPrimitiveGrid());

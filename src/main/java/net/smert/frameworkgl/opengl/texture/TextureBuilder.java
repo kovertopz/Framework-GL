@@ -341,6 +341,7 @@ public class TextureBuilder {
 
         texture = GL.glFactory.createTexture();
         texture.create();
+        texture.setTextureTarget(textureType);
 
         switch (textureType) {
             case TextureTargets.TEXTURE_2D:

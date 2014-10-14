@@ -17,6 +17,7 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
+import net.smert.frameworkgl.opengl.mesh.dynamic.CubeMap;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCapsule;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCone;
 import net.smert.frameworkgl.opengl.mesh.dynamic.PrimitiveCube;
@@ -46,6 +47,10 @@ public class MeshFactory {
 
     public AABB createDynamicAABB() {
         return container.getComponent(AABB.class);
+    }
+
+    public CubeMap createDynamicCubeMap() {
+        return container.getComponent(CubeMap.class);
     }
 
     public PrimitiveCapsule createDynamicPrimitiveCapsule() {

@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,7 +25,9 @@ import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import net.smert.frameworkgl.opengl.font.GLFont;
+import net.smert.frameworkgl.opengl.image.ImageReader;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
@@ -142,6 +145,35 @@ public class Graphics {
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
         GL.meshReader.load(filename, mesh);
+    }
+
+    public void loadCubeMapTexture(String folderName, String fileExtension) throws IOException {
+        ImageReader imageReader = GL.textureReader.getImageReader("." + fileExtension);
+        String filename;
+        filename = folderName + "/xpos.png";
+        BufferedImage xPosBufferedImage = imageReader.load(filename);
+        filename = folderName + "/xneg.png";
+        BufferedImage xNegBufferedImage = imageReader.load(filename);
+        filename = folderName + "/ypos.png";
+        BufferedImage yPosBufferedImage = imageReader.load(filename);
+        filename = folderName + "/yneg.png";
+        BufferedImage yNegBufferedImage = imageReader.load(filename);
+        filename = folderName + "/zpos.png";
+        BufferedImage zPosBufferedImage = imageReader.load(filename);
+        filename = folderName + "/zneg.png";
+        BufferedImage zNegBufferedImage = imageReader.load(filename);
+        GL.textureBuilder.
+                setLoadFlipVertically(false)
+                .loadCube(xPosBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_X)
+                .loadCube(xNegBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_X)
+                .loadCube(yPosBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Y)
+                .loadCube(yNegBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Y)
+                .loadCube(zPosBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_Z)
+                .loadCube(zNegBufferedImage, TextureTargets.TEXTURE_CUBE_MAP_NEGATIVE_Z)
+                .setClampingWrapRClampToEdge().setClampingWrapSClampToEdge().setClampingWrapTClampToEdge()
+                .setFilterMagLinear().setFilterMinLinear().setTextureTargetCubeMap().buildTexture();
+        Texture texture = GL.textureBuilder.createTexture(true);
+        Renderable.texturePool.add(folderName + "/cubemap." + fileExtension, texture);
     }
 
     public void loadTexture(String filename) throws IOException {
