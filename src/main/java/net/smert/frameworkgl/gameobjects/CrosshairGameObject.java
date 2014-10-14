@@ -14,10 +14,10 @@ package net.smert.frameworkgl.gameobjects;
 
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.texture.TextureType;
 
 /**
  *

@@ -17,9 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.smert.frameworkgl.math.AABB;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.texture.TextureType;
 
 /**
  *

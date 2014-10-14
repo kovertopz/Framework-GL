@@ -14,13 +14,13 @@ package net.smert.frameworkgl.opengl.renderable.shared;
 
 import java.util.Iterator;
 import java.util.Map;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.constants.GLTypes;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.texture.TextureType;
 import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
 
 /**

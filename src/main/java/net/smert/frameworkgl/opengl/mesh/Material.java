@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import net.smert.frameworkgl.math.Vector4f;
 import net.smert.frameworkgl.opengl.LightParameterType;
-import net.smert.frameworkgl.opengl.texture.TextureType;
+import net.smert.frameworkgl.opengl.TextureType;
 
 /**
  *

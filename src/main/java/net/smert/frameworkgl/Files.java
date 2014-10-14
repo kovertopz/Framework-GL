@@ -47,12 +47,14 @@ public class Files {
 
     private boolean foundAsset;
     private boolean isInternal;
+    private boolean useGlslPrefix;
     private FileType fileType;
     private final Map<String, FileAsset> assets;
 
     public Files() {
         foundAsset = false;
         isInternal = false;
+        useGlslPrefix = true;
         assets = new HashMap<>();
         try {
             registerAssets(DEFAULT_ASSETS_LOCATION, true);
@@ -267,6 +269,14 @@ public class Files {
         }
     }
 
+    public boolean isUseGlslPrefix() {
+        return useGlslPrefix;
+    }
+
+    public void setUseGlslPrefix(boolean useGlslPrefix) {
+        this.useGlslPrefix = useGlslPrefix;
+    }
+
     public FileAsset get(String resourceType, String filename) {
         String key = resourceType + INTERNAL_FILE_SEPARATOR + filename;
         if (!assets.containsKey(key)) {
@@ -288,7 +298,10 @@ public class Files {
     }
 
     public FileAsset getShader(String filename) {
-        return get(SHADER_LOCATION, Fw.config.glslVersion + INTERNAL_FILE_SEPARATOR + filename);
+        if (useGlslPrefix) {
+            filename = Fw.config.glslVersion + INTERNAL_FILE_SEPARATOR + filename;
+        }
+        return get(SHADER_LOCATION, filename);
     }
 
     public FileAsset getTexture(String filename) {

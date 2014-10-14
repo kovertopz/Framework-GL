@@ -15,10 +15,10 @@ package net.smert.frameworkgl.opengl.renderer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.texture.TextureType;
 import net.smert.frameworkgl.utils.Color;
 
 /**

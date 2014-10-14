@@ -10,28 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.texture;
+package net.smert.frameworkgl.opengl;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public enum TextureType {
+public enum ShadowType {
 
-    AMBIENT_OCCLUSION,
-    BUMP,
-    DETAIL,
-    DIFFUSE,
-    DISPLACEMENT,
-    ENVIRONMENT,
-    GLOW,
-    HEIGHT,
-    NORMAL,
-    PARALLAX,
-    SPECULAR,
-    SPECULAR_EXPONENT,
-    TRANSLUCENT,
-    TRANSPARENCY,
-    MAX_TEXTURE_TYPES
+    ESM,
+    LINEAR_SSM,
+    SSM,
+    VSM
 
 }
