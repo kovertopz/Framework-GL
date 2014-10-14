@@ -57,7 +57,8 @@ public class GLFontRenderer {
             float minY = (float) (glyph.y) / fontHeight;
 
             // Create quad
-            Mesh mesh = GL.dynamicMeshBuilder.
+            Mesh mesh = GL.meshFactory.createMesh();
+            GL.dynamicMeshBuilder.
                     setColor(0, "white").
                     setLocalPosition(0f, 0f, 1f).
                     setQuality(1, 1, 1).
@@ -65,7 +66,7 @@ public class GLFontRenderer {
                     setTexCoordMinMaxX(minX, maxX).
                     setTexCoordMinMaxY(1f - maxY, 1f - minY).
                     build("quad").
-                    createMesh(true);
+                    createMesh(true, mesh);
 
             // Create material
             Material material = mesh.getSegment(0).getMaterial();

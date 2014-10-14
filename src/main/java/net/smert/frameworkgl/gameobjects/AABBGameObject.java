@@ -12,7 +12,6 @@
  */
 package net.smert.frameworkgl.gameobjects;
 
-import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
