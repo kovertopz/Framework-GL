@@ -55,7 +55,7 @@ public class SimpleOrientationAxisGameObject extends GameObject {
                 setColor(1, color1).
                 setColor(2, color2).
                 build("simple_orientation_axis").
-                createMesh(false, mesh);
+                createMesh(true, mesh);
         VertexBufferObjectRenderable simpleOrientationAxisRenderable
                 = GL.legacyRenderer.createVertexBufferObjectRenderable();
         simpleOrientationAxisRenderable.create(mesh);

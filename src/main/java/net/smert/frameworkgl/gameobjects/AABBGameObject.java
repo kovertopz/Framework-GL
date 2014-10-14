@@ -43,7 +43,7 @@ public class AABBGameObject extends GameObject {
                 setColor(0, color0).
                 setCustomData(0, aabb).
                 build("aabb").
-                createMesh(false, mesh);
+                createMesh(true, mesh);
         aabbRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
         aabbRenderable.create(mesh);
 

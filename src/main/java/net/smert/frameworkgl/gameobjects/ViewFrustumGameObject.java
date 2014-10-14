@@ -69,7 +69,7 @@ public class ViewFrustumGameObject extends GameObject {
                 setCustomData(2, zNear).
                 setCustomData(3, zFar).
                 build("view_frustum").
-                createMesh(false, mesh);
+                createMesh(true, mesh);
         viewFrustumRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
         viewFrustumRenderable.create(mesh);
 
