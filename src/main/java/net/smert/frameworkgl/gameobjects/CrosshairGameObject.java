@@ -48,7 +48,7 @@ public class CrosshairGameObject extends GameObject {
 
         // Create renderable from mesh
         AbstractRenderable renderable = GL.legacyRenderer.createVertexBufferObjectInterleavedRenderable();
-        renderable.create(mesh);
+        renderable.create(mesh); // Texture must be loaded before renderable is created
 
         // Attach to game object
         setMesh(mesh);
