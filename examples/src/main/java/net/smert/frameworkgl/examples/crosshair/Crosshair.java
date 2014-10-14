@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
@@ -284,11 +283,13 @@ public class Crosshair extends Screen {
 
             // Render 2D
             GL.o1.enableBlending();
+            GL.o1.disableDepthTest();
             GL.legacyRenderer.set2DMode();
             GL.legacyRenderer.resetTextRendering();
             GL.legacyRenderer.textNewHalfLine();
             renderStatisticsGameObject.render(); // Game object has no renderable
             GL.legacyRenderer.render(crosshairGameObject);
+            GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 
             // Restore lighting

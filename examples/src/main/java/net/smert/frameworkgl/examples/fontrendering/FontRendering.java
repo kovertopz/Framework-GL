@@ -267,6 +267,7 @@ public class FontRendering extends Screen {
 
             // Render 2D
             GL.o1.enableBlending();
+            GL.o1.disableDepthTest();
             GL.legacyRenderer.set2DMode();
             GL.legacyRenderer.resetTextRendering();
             GL.legacyRenderer.textNewHalfLine();
@@ -283,6 +284,7 @@ public class FontRendering extends Screen {
             GL.legacyRenderer.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
             GL.legacyRenderer.textNewLine();
             renderStatisticsGameObject.render(); // Game object has no renderable
+            GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 
             // Restore lighting
