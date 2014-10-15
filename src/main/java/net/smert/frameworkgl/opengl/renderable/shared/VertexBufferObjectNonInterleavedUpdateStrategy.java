@@ -10,10 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.gl1;
+package net.smert.frameworkgl.opengl.renderable.shared;
 
 import net.smert.frameworkgl.opengl.GL;
-import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
@@ -22,17 +21,12 @@ import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DynamicVertexBufferObjectRenderable extends VertexBufferObjectRenderable {
+public class VertexBufferObjectNonInterleavedUpdateStrategy {
 
-    public DynamicVertexBufferObjectRenderable() {
-        super();
-        bufferUsage = VertexBufferObjectTypes.DYNAMIC_DRAW;
-    }
-
-    public void update(Mesh mesh) {
+    public void update(Mesh mesh, VertexBufferObjectNonInterleavedData data) {
 
         // Get configuration
-        RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
+        RenderableConfiguration config = Renderable.configPool.get(data.renderableConfigID);
 
         // Create non interleaved buffer data
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
@@ -40,35 +34,35 @@ public class DynamicVertexBufferObjectRenderable extends VertexBufferObjectRende
         }
 
         // Send byte buffer data for colors
-        if ((mesh.hasColors()) && (vboColor != null)) {
-            GL.vboHelper.updateBufferData(vboColor.getVboID(), 0, Renderable.byteBuffers.getColor());
+        if ((mesh.hasColors()) && (data.vboColor != null)) {
+            GL.vboHelper.updateBufferData(data.vboColor.getVboID(), 0, Renderable.byteBuffers.getColor());
         }
 
         // Send byte buffer data for normals
-        if ((mesh.hasNormals()) && (vboNormal != null)) {
-            GL.vboHelper.updateBufferData(vboNormal.getVboID(), 0, Renderable.byteBuffers.getNormal());
+        if ((mesh.hasNormals()) && (data.vboNormal != null)) {
+            GL.vboHelper.updateBufferData(data.vboNormal.getVboID(), 0, Renderable.byteBuffers.getNormal());
         }
 
         // Send byte buffer data for texture coordinates
-        if ((mesh.hasTexCoords()) && (vboTexCoord != null)) {
-            GL.vboHelper.updateBufferData(vboTexCoord.getVboID(), 0, Renderable.byteBuffers.getTexCoord());
+        if ((mesh.hasTexCoords()) && (data.vboTexCoord != null)) {
+            GL.vboHelper.updateBufferData(data.vboTexCoord.getVboID(), 0, Renderable.byteBuffers.getTexCoord());
         }
 
         // Send byte buffer data for vertices
-        if ((mesh.hasVertices()) && (vboVertex != null)) {
-            GL.vboHelper.updateBufferData(vboVertex.getVboID(), 0, Renderable.byteBuffers.getVertex());
+        if ((mesh.hasVertices()) && (data.vboVertex != null)) {
+            GL.vboHelper.updateBufferData(data.vboVertex.getVboID(), 0, Renderable.byteBuffers.getVertex());
         }
 
         // Create byte buffer data and send byte buffer data for indexes
-        if ((mesh.hasIndexes()) && (vboVertexIndex != null)) {
+        if ((mesh.hasIndexes()) && (data.vboVertexIndex != null)) {
             Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
-            GL.vboHelper.updateBufferElementData(vboVertexIndex.getVboID(), 0, Renderable.byteBuffers.getVertexIndex());
+            GL.vboHelper.updateBufferElementData(data.vboVertexIndex.getVboID(), 0, Renderable.byteBuffers.getVertexIndex());
         }
 
         GL.vboHelper.unbind();
 
         // Create draw call
-        drawCall = Renderable.vboBuilder.createDrawCall(mesh, config);
+        data.drawCall = Renderable.vboBuilder.createDrawCall(mesh, config);
     }
 
 }

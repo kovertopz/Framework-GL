@@ -10,23 +10,31 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable;
+package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractRenderable {
+public class VertexBufferObjectDynamicInterleavedRenderable extends VertexBufferObjectInterleavedRenderable {
 
-    public abstract void create(Mesh mesh);
+    private final VertexBufferObjectInterleavedUpdateStrategy update;
 
-    public abstract void destroy();
+    public VertexBufferObjectDynamicInterleavedRenderable(
+            VertexBufferObjectInterleavedCreateStrategy create,
+            VertexBufferObjectInterleavedRenderStrategy render,
+            VertexBufferObjectInterleavedUpdateStrategy update) {
+        super(create, render);
+        this.update = update;
+        data.bufferUsage = VertexBufferObjectTypes.DYNAMIC_DRAW;
+    }
 
-    public abstract void render();
-
+    @Override
     public void update(Mesh mesh) {
+        update.update(mesh, data);
     }
 
 }

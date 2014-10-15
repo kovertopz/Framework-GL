@@ -10,23 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable;
+package net.smert.frameworkgl.opengl.renderable.shared;
 
-import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractRenderable {
-
-    public abstract void create(Mesh mesh);
-
-    public abstract void destroy();
-
-    public abstract void render();
-
-    public void update(Mesh mesh) {
-    }
+public abstract class InterleavedRenderable extends AbstractRenderable {
 
 }
