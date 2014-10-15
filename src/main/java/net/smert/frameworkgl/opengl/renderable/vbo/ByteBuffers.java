@@ -107,9 +107,4 @@ public class ByteBuffers implements MultipleBuffers {
         return vertexIndex;
     }
 
-    @Override
-    public void setInterleavedBufferToOthers() {
-        color = normal = texCoord = vertex = interleaved;
-    }
-
 }

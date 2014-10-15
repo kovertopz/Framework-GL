@@ -18,10 +18,12 @@ import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderPool;
 import net.smert.frameworkgl.opengl.renderable.shared.TextureBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.TexturePool;
+import net.smert.frameworkgl.opengl.renderable.va.VA2BindState;
 import net.smert.frameworkgl.opengl.renderable.va.VABindState;
 import net.smert.frameworkgl.opengl.renderable.va.VABuilder;
 import net.smert.frameworkgl.opengl.renderable.va.VertexArrays;
 import net.smert.frameworkgl.opengl.renderable.vbo.ByteBuffers;
+import net.smert.frameworkgl.opengl.renderable.vbo.VBO2BindState;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBOBindState;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBOBuilder;
 
@@ -39,8 +41,10 @@ public class Renderable {
     public static TextureBindState textureBindState;
     public static TexturePool texturePool;
     public static VABindState vaBindState;
+    public static VA2BindState va2BindState;
     public static VABuilder vaBuilder;
     public static VBOBindState vboBindState;
+    public static VBO2BindState vbo2BindState;
     public static VBOBuilder vboBuilder;
     public static VertexArrays vertexArrays;
 

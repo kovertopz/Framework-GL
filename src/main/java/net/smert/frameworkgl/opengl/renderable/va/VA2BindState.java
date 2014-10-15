@@ -16,21 +16,26 @@ import java.nio.ByteBuffer;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VABindState {
+public class VA2BindState {
 
     private boolean colorEnabled;
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
+    private int colorIndex;
+    private int normalIndex;
+    private int texCoord0Index;
+    private int vertexIndex;
     private int renderableConfigID;
     private RenderableConfiguration config;
 
-    public VABindState() {
+    public VA2BindState() {
         reset();
     }
 
@@ -40,9 +45,9 @@ public class VABindState {
         }
         colorEnabled = enabled;
         if (enabled) {
-            GL.vaHelper.enableColors();
+            GL.vaHelper.enableVertexAttribArray(colorIndex);
         } else {
-            GL.vaHelper.disableColors();
+            GL.vaHelper.disableVertexAttribArray(colorIndex);
         }
     }
 
@@ -52,9 +57,9 @@ public class VABindState {
         }
         normalEnabled = enabled;
         if (enabled) {
-            GL.vaHelper.enableNormals();
+            GL.vaHelper.enableVertexAttribArray(normalIndex);
         } else {
-            GL.vaHelper.disableNormals();
+            GL.vaHelper.disableVertexAttribArray(normalIndex);
         }
     }
 
@@ -64,9 +69,9 @@ public class VABindState {
         }
         texCoordEnabled = enabled;
         if (enabled) {
-            GL.vaHelper.enableTexCoords();
+            GL.vaHelper.enableVertexAttribArray(texCoord0Index);
         } else {
-            GL.vaHelper.disableTexCoords();
+            GL.vaHelper.disableVertexAttribArray(texCoord0Index);
         }
     }
 
@@ -76,9 +81,9 @@ public class VABindState {
         }
         vertexEnabled = enabled;
         if (enabled) {
-            GL.vaHelper.enableVertices();
+            GL.vaHelper.enableVertexAttribArray(vertexIndex);
         } else {
-            GL.vaHelper.disableVertices();
+            GL.vaHelper.disableVertexAttribArray(vertexIndex);
         }
     }
 
@@ -88,7 +93,7 @@ public class VABindState {
             return;
         }
         setColorEnabled(true);
-        GL.vaHelper.bindColors(config.getColorSize(), config.getColorType(), colorByteBuffer);
+        GL.vaHelper.bindVertexAttrib(colorIndex, config.getColorSize(), config.getColorType(), colorByteBuffer);
     }
 
     public void bindNormal(ByteBuffer normalByteBuffer) {
@@ -97,7 +102,7 @@ public class VABindState {
             return;
         }
         setNormalEnabled(true);
-        GL.vaHelper.bindNormals(config.getNormalType(), normalByteBuffer);
+        GL.vaHelper.bindVertexAttrib(normalIndex, config.getNormalSize(), config.getNormalType(), normalByteBuffer);
     }
 
     public void bindTexCoord(ByteBuffer texCoordByteBuffer) {
@@ -106,7 +111,8 @@ public class VABindState {
             return;
         }
         setTexCoordEnabled(true);
-        GL.vaHelper.bindTexCoords(config.getTexCoordSize(), config.getTexCoordType(), texCoordByteBuffer);
+        GL.vaHelper.bindVertexAttrib(texCoord0Index, config.getTexCoordSize(), config.getTexCoordType(),
+                texCoordByteBuffer);
     }
 
     public void bindVertex(ByteBuffer vertexByteBuffer) {
@@ -115,7 +121,7 @@ public class VABindState {
             return;
         }
         setVertexEnabled(true);
-        GL.vaHelper.bindVertices(config.getVertexSize(), config.getVertexType(), vertexByteBuffer);
+        GL.vaHelper.bindVertexAttrib(vertexIndex, config.getVertexSize(), config.getVertexType(), vertexByteBuffer);
     }
 
     public final void reset() {
@@ -123,8 +129,19 @@ public class VABindState {
         normalEnabled = false;
         texCoordEnabled = false;
         vertexEnabled = false;
+        colorIndex = -1;
+        normalIndex = -1;
+        texCoord0Index = -1;
+        vertexIndex = -1;
         renderableConfigID = Integer.MIN_VALUE; // Default is -1 elsewhere
         config = null;
+    }
+
+    public void setAttribLocations(DefaultAttribLocations defaultAttribLocations) {
+        colorIndex = defaultAttribLocations.getIndex("color");
+        normalIndex = defaultAttribLocations.getIndex("normal");
+        texCoord0Index = defaultAttribLocations.getIndex("texCoord0");
+        vertexIndex = defaultAttribLocations.getIndex("color");
     }
 
     public void switchRenderableConfiguration(int renderableConfigID) {

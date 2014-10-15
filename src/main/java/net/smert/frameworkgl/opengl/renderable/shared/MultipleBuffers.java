@@ -44,6 +44,4 @@ public interface MultipleBuffers {
 
     public ByteBuffer getVertexIndex();
 
-    public void setInterleavedBufferToOthers();
-
 }

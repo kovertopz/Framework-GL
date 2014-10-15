@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Map;
 import net.smert.frameworkgl.opengl.TextureType;
@@ -29,7 +30,8 @@ import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
  */
 public abstract class AbstractBuilder {
 
-    private void createBufferData(Mesh mesh, MultipleBuffers multipleBuffers, RenderableConfiguration config) {
+    private void createBufferData(Mesh mesh, RenderableConfiguration config, ByteBuffer colorByteBuffer,
+            ByteBuffer normalByteBuffer, ByteBuffer texCoordByteBuffer, ByteBuffer vertexByteBuffer) {
 
         // For each segment in the mesh
         for (int i = 0; i < mesh.getTotalSegments(); i++) {
@@ -45,16 +47,16 @@ public abstract class AbstractBuilder {
 
                 // For each type convert the data and add to the byte buffer
                 if (mesh.hasColors()) {
-                    config.convertColorToByteBuffer(colors, j, multipleBuffers.getColor());
+                    config.convertColorToByteBuffer(colors, j, colorByteBuffer);
                 }
                 if (mesh.hasNormals()) {
-                    config.convertNormalToByteBuffer(normals, j, multipleBuffers.getNormal());
+                    config.convertNormalToByteBuffer(normals, j, normalByteBuffer);
                 }
                 if (mesh.hasTexCoords()) {
-                    config.convertTexCoordToByteBuffer(texCoords, j, multipleBuffers.getTexCoord());
+                    config.convertTexCoordToByteBuffer(texCoords, j, texCoordByteBuffer);
                 }
                 if (mesh.hasVertices()) {
-                    config.convertVertexToByteBuffer(vertices, j, multipleBuffers.getVertex());
+                    config.convertVertexToByteBuffer(vertices, j, vertexByteBuffer);
                 }
             }
         }
@@ -160,10 +162,8 @@ public abstract class AbstractBuilder {
         int bufferSize = strideBytes * mesh.getTotalVerticies();
         multipleBuffers.createInterleaved(bufferSize);
 
-        // Set all other buffers to point to the interleaved buffer
-        multipleBuffers.setInterleavedBufferToOthers();
-
-        createBufferData(mesh, multipleBuffers, config);
+        createBufferData(mesh, config, multipleBuffers.getInterleaved(), multipleBuffers.getInterleaved(),
+                multipleBuffers.getInterleaved(), multipleBuffers.getInterleaved());
 
         // Missy Elliott that shit
         multipleBuffers.getInterleaved().flip();
@@ -202,7 +202,8 @@ public abstract class AbstractBuilder {
             multipleBuffers.createVertex(bufferSize);
         }
 
-        createBufferData(mesh, multipleBuffers, config);
+        createBufferData(mesh, config, multipleBuffers.getColor(), multipleBuffers.getNormal(),
+                multipleBuffers.getTexCoord(), multipleBuffers.getVertex());
 
         if (mesh.hasColors()) {
             multipleBuffers.getColor().flip();

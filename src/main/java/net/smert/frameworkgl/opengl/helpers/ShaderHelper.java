@@ -29,6 +29,10 @@ public class ShaderHelper {
         GL20.glUseProgram(programID);
     }
 
+    public void bindAttribLocation(int programID, int index, CharSequence chars) {
+        GL20.glBindAttribLocation(programID, index, chars);
+    }
+
     public void compile(int shaderID) {
         GL20.glCompileShader(shaderID);
     }
@@ -47,6 +51,10 @@ public class ShaderHelper {
 
     public void deleteShader(int shaderID) {
         GL20.glDeleteShader(shaderID);
+    }
+
+    public void detach(int programID, int shaderID) {
+        GL20.glDetachShader(programID, shaderID);
     }
 
     public boolean getCompileStatus(int shaderID) {

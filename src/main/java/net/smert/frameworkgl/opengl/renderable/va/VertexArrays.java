@@ -23,6 +23,11 @@ import net.smert.frameworkgl.opengl.renderable.shared.MultipleBuffers;
  */
 public class VertexArrays implements MultipleBuffers {
 
+    private ByteBuffer colorByteBuffer;
+    private ByteBuffer normalByteBuffer;
+    private ByteBuffer texCoordByteBuffer;
+    private ByteBuffer vertexByteBuffer;
+    private ByteBuffer vertexIndexByteBuffer;
     private VertexArray color;
     private VertexArray normal;
     private VertexArray texCoord;
@@ -33,6 +38,7 @@ public class VertexArrays implements MultipleBuffers {
     public void createColor(int bufferSize) {
         color = GL.glFactory.createVertexArray();
         color.create(bufferSize);
+        colorByteBuffer = color.getByteBuffer();
     }
 
     @Override
@@ -44,29 +50,33 @@ public class VertexArrays implements MultipleBuffers {
     public void createNormal(int bufferSize) {
         normal = GL.glFactory.createVertexArray();
         normal.create(bufferSize);
+        normalByteBuffer = normal.getByteBuffer();
     }
 
     @Override
     public void createTexCoord(int bufferSize) {
         texCoord = GL.glFactory.createVertexArray();
         texCoord.create(bufferSize);
+        texCoordByteBuffer = texCoord.getByteBuffer();
     }
 
     @Override
     public void createVertex(int bufferSize) {
         vertex = GL.glFactory.createVertexArray();
         vertex.create(bufferSize);
+        vertexByteBuffer = vertex.getByteBuffer();
     }
 
     @Override
     public void createVertexIndex(int bufferSize) {
         vertexIndex = GL.glFactory.createVertexArray();
         vertexIndex.create(bufferSize);
+        vertexIndexByteBuffer = vertexIndex.getByteBuffer();
     }
 
     @Override
     public ByteBuffer getColor() {
-        return color.getByteBuffer();
+        return colorByteBuffer;
     }
 
     @Override
@@ -76,27 +86,22 @@ public class VertexArrays implements MultipleBuffers {
 
     @Override
     public ByteBuffer getNormal() {
-        return normal.getByteBuffer();
+        return normalByteBuffer;
     }
 
     @Override
     public ByteBuffer getTexCoord() {
-        return texCoord.getByteBuffer();
+        return texCoordByteBuffer;
     }
 
     @Override
     public ByteBuffer getVertex() {
-        return vertex.getByteBuffer();
+        return vertexByteBuffer;
     }
 
     @Override
     public ByteBuffer getVertexIndex() {
-        return vertexIndex.getByteBuffer();
-    }
-
-    @Override
-    public void setInterleavedBufferToOthers() {
-        throw new UnsupportedOperationException("Not supported.");
+        return vertexIndexByteBuffer;
     }
 
     public VertexArray getColorVertexArray() {

@@ -14,6 +14,7 @@ package net.smert.frameworkgl.opengl.helpers;
 
 import java.nio.ByteBuffer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 /**
  *
@@ -29,11 +30,19 @@ public class VertexArrayHelper {
         GL11.glNormalPointer(type, 0, byteBuffer);
     }
 
+    public void bindVertexAttrib(int index, int size, int type, ByteBuffer byteBuffer) {
+        GL20.glVertexAttribPointer(index, size, type, false, 0, byteBuffer);
+    }
+
+    public void bindVertexAttribNormalized(int index, int size, int type, ByteBuffer byteBuffer) {
+        GL20.glVertexAttribPointer(index, size, type, true, 0, byteBuffer);
+    }
+
     public void bindVertices(int size, int type, ByteBuffer byteBuffer) {
         GL11.glVertexPointer(size, type, 0, byteBuffer);
     }
 
-    public void bindTextureCoordinates(int size, int type, ByteBuffer byteBuffer) {
+    public void bindTexCoords(int size, int type, ByteBuffer byteBuffer) {
         GL11.glTexCoordPointer(size, type, 0, byteBuffer);
     }
 
@@ -45,8 +54,12 @@ public class VertexArrayHelper {
         GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void disableTextureCoordinates() {
+    public void disableTexCoords() {
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+    }
+
+    public void disableVertexAttribArray(int index) {
+        GL20.glDisableVertexAttribArray(index);
     }
 
     public void disableVertices() {
@@ -69,8 +82,12 @@ public class VertexArrayHelper {
         GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void enableTextureCoordinates() {
+    public void enableTexCoords() {
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+    }
+
+    public void enableVertexAttribArray(int index) {
+        GL20.glEnableVertexAttribArray(index);
     }
 
     public void enableVertices() {

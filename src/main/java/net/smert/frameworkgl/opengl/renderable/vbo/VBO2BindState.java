@@ -15,17 +15,22 @@ package net.smert.frameworkgl.opengl.renderable.vbo;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBOBindState {
+public class VBO2BindState {
 
     private boolean colorEnabled;
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
+    private int colorIndex;
+    private int normalIndex;
+    private int texCoord0Index;
+    private int vertexIndex;
     private int renderableConfigID;
     private int vboColorID;
     private int vboNormalID;
@@ -34,7 +39,7 @@ public class VBOBindState {
     private int vboVertexIndexID;
     private RenderableConfiguration config;
 
-    public VBOBindState() {
+    public VBO2BindState() {
         reset();
     }
 
@@ -44,9 +49,9 @@ public class VBOBindState {
         }
         colorEnabled = enabled;
         if (enabled) {
-            GL.vboHelper.enableColors();
+            GL.vboHelper.enableVertexAttribArray(colorIndex);
         } else {
-            GL.vboHelper.disableColors();
+            GL.vboHelper.disableVertexAttribArray(colorIndex);
         }
     }
 
@@ -56,9 +61,9 @@ public class VBOBindState {
         }
         normalEnabled = enabled;
         if (enabled) {
-            GL.vboHelper.enableNormals();
+            GL.vboHelper.enableVertexAttribArray(normalIndex);
         } else {
-            GL.vboHelper.disableNormals();
+            GL.vboHelper.disableVertexAttribArray(normalIndex);
         }
     }
 
@@ -68,9 +73,9 @@ public class VBOBindState {
         }
         texCoordEnabled = enabled;
         if (enabled) {
-            GL.vboHelper.enableTexCoords();
+            GL.vboHelper.enableVertexAttribArray(texCoord0Index);
         } else {
-            GL.vboHelper.disableTexCoords();
+            GL.vboHelper.disableVertexAttribArray(texCoord0Index);
         }
     }
 
@@ -80,9 +85,9 @@ public class VBOBindState {
         }
         vertexEnabled = enabled;
         if (enabled) {
-            GL.vboHelper.enableVertices();
+            GL.vboHelper.enableVertexAttribArray(vertexIndex);
         } else {
-            GL.vboHelper.disableVertices();
+            GL.vboHelper.disableVertexAttribArray(vertexIndex);
         }
     }
 
@@ -96,7 +101,8 @@ public class VBOBindState {
             return;
         }
         setColorEnabled(true);
-        GL.vboHelper.bindColors(vboID, config.getColorSize(), config.getColorType(), strideBytes, colorOffsetBytes);
+        GL.vboHelper.bindVertexAttrib(vboID, colorIndex, config.getColorSize(), config.getColorType(), strideBytes,
+                colorOffsetBytes);
     }
 
     public void bindNormal(int vboID, int strideBytes, int normalOffsetBytes) {
@@ -109,7 +115,8 @@ public class VBOBindState {
             return;
         }
         setNormalEnabled(true);
-        GL.vboHelper.bindNormals(vboID, config.getNormalType(), strideBytes, normalOffsetBytes);
+        GL.vboHelper.bindVertexAttrib(vboID, normalIndex, config.getNormalSize(), config.getNormalType(), strideBytes,
+                normalOffsetBytes);
     }
 
     public void bindTexCoord(int vboID, int strideBytes, int texCoordOffsetBytes) {
@@ -122,8 +129,8 @@ public class VBOBindState {
             return;
         }
         setTexCoordEnabled(true);
-        GL.vboHelper.bindTexCoords(
-                vboID, config.getTexCoordSize(), config.getTexCoordType(), strideBytes, texCoordOffsetBytes);
+        GL.vboHelper.bindVertexAttrib(vboID, texCoord0Index, config.getTexCoordSize(), config.getTexCoordType(),
+                strideBytes, texCoordOffsetBytes);
     }
 
     public void bindVertex(int vboID, int strideBytes, int vertexOffsetBytes) {
@@ -136,7 +143,8 @@ public class VBOBindState {
             return;
         }
         setVertexEnabled(true);
-        GL.vboHelper.bindVertices(vboID, config.getVertexSize(), config.getVertexType(), strideBytes, vertexOffsetBytes);
+        GL.vboHelper.bindVertexAttrib(vboID, vertexIndex, config.getVertexSize(), config.getVertexType(), strideBytes,
+                vertexOffsetBytes);
     }
 
     public void bindVertexIndex(int vboID) {
@@ -155,6 +163,10 @@ public class VBOBindState {
         normalEnabled = false;
         texCoordEnabled = false;
         vertexEnabled = false;
+        colorIndex = -1;
+        normalIndex = -1;
+        texCoord0Index = -1;
+        vertexIndex = -1;
         renderableConfigID = Integer.MIN_VALUE; // Default is -1 elsewhere
         vboColorID = 0;
         vboNormalID = 0;
@@ -162,6 +174,13 @@ public class VBOBindState {
         vboVertexID = 0;
         vboVertexIndexID = 0;
         config = null;
+    }
+
+    public void setAttribLocations(DefaultAttribLocations defaultAttribLocations) {
+        colorIndex = defaultAttribLocations.getIndex("color");
+        normalIndex = defaultAttribLocations.getIndex("normal");
+        texCoord0Index = defaultAttribLocations.getIndex("texCoord0");
+        vertexIndex = defaultAttribLocations.getIndex("color");
     }
 
     public void switchRenderableConfiguration(int renderableConfigID) {

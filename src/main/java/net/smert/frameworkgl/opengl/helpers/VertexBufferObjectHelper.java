@@ -19,6 +19,7 @@ import java.nio.ShortBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
 
 /**
  *
@@ -36,6 +37,16 @@ public class VertexBufferObjectHelper {
         GL11.glNormalPointer(type, strideBytes, offsetBytes);
     }
 
+    public void bindVertexAttrib(int vboID, int index, int size, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL20.glVertexAttribPointer(index, size, type, false, strideBytes, offsetBytes);
+    }
+
+    public void bindVertexAttribNormalized(int vboID, int index, int size, int type, int strideBytes, int offsetBytes) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+        GL20.glVertexAttribPointer(index, size, type, true, strideBytes, offsetBytes);
+    }
+
     public void bindVertices(int vboID, int size, int type, int strideBytes, int offsetBytes) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         GL11.glVertexPointer(size, type, strideBytes, offsetBytes);
@@ -45,7 +56,7 @@ public class VertexBufferObjectHelper {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
     }
 
-    public void bindTextureCoordinates(int vboID, int size, int type, int strideBytes, int offsetBytes) {
+    public void bindTexCoords(int vboID, int size, int type, int strideBytes, int offsetBytes) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         GL11.glTexCoordPointer(size, type, strideBytes, offsetBytes);
     }
@@ -66,8 +77,12 @@ public class VertexBufferObjectHelper {
         GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void disableTextureCoordinates() {
+    public void disableTexCoords() {
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+    }
+
+    public void disableVertexAttribArray(int index) {
+        GL20.glDisableVertexAttribArray(index);
     }
 
     public void disableVertices() {
@@ -94,8 +109,12 @@ public class VertexBufferObjectHelper {
         GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
     }
 
-    public void enableTextureCoordinates() {
+    public void enableTexCoords() {
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+    }
+
+    public void enableVertexAttribArray(int index) {
+        GL20.glEnableVertexAttribArray(index);
     }
 
     public void enableVertices() {
