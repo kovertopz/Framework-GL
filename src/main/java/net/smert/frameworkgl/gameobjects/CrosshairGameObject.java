@@ -47,7 +47,7 @@ public class CrosshairGameObject extends GameObject {
         mesh.getSegment(0).getMaterial().setTexture(TextureType.DIFFUSE, textureFilename);
 
         // Create renderable from mesh
-        AbstractRenderable renderable = GL.legacyRenderer.createVertexBufferObjectInterleavedRenderable();
+        AbstractRenderable renderable = Fw.graphics.createInterleavedRenderable();
         renderable.create(mesh); // Texture must be loaded before renderable is created
 
         // Attach to game object

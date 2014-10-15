@@ -31,7 +31,6 @@ public class Configuration {
     boolean pauseNotInFocus;
     boolean vSyncEnabled;
     boolean vSyncRequested;
-    float glslVersion;
     float mouseMoveSensitivity;
     float mouseWheelSensitivity;
     int backgroundFrameRate;
@@ -46,6 +45,7 @@ public class Configuration {
     int fullscreenFreq;
     int fullscreenHeight;
     int fullscreenWidth;
+    int glslVersion;
     int gameTicksPerSecond;
     int openglMajorVersion;
     int openglMinorVersion;
@@ -179,7 +179,7 @@ public class Configuration {
      *
      * @return
      */
-    public float getGlslVersion() {
+    public int getGlslVersion() {
         return glslVersion;
     }
 
@@ -448,7 +448,7 @@ public class Configuration {
      * 10.7 or 10.8.
      */
     public final void withOpenGL32ProfileCore() {
-        glslVersion = 1.5f;
+        glslVersion = 150;
         openglMajorVersion = 3;
         openglMinorVersion = 2;
         contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
@@ -461,7 +461,7 @@ public class Configuration {
      * This gives us a compatibility context and you should only stick to OpenGL 1.X and 2.X features.
      */
     public final void withOpenGL33ProfileCompatibility() {
-        glslVersion = 1.2f;
+        glslVersion = 120;
         openglMajorVersion = 2;
         openglMinorVersion = 1;
         contextAttribs = new ContextAttribs(3, 3)
@@ -474,7 +474,7 @@ public class Configuration {
      * been removed. This is the recommended profile for the framework. This supports Mac OSX 10.9 and later.
      */
     public final void withOpenGL33ProfileCore() {
-        glslVersion = 3.3f;
+        glslVersion = 330;
         openglMajorVersion = 3;
         openglMinorVersion = 3;
         contextAttribs = new ContextAttribs(3, 3)

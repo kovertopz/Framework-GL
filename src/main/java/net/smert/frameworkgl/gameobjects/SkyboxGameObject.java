@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.gameobjects;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.mesh.Material;
@@ -46,7 +47,7 @@ public class SkyboxGameObject extends GameObject {
         mesh.getSegment(0).getMaterial().setTexture(TextureType.ENVIRONMENT, skyboxTexture);
 
         // Create renderable from mesh
-        AbstractRenderable renderable = GL.legacyRenderer.createVertexBufferObjectInterleavedRenderable();
+        AbstractRenderable renderable = Fw.graphics.createInterleavedRenderable();
         renderable.create(mesh); // Texture must be loaded before renderable is created
 
         // Attach to game object

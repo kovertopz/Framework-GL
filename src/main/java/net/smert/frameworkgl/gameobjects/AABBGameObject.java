@@ -12,10 +12,11 @@
  */
 package net.smert.frameworkgl.gameobjects;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -25,7 +26,6 @@ import net.smert.frameworkgl.utils.Color;
 public class AABBGameObject extends GameObject {
 
     private final Color color0;
-    private DynamicVertexBufferObjectRenderable aabbRenderable;
 
     public AABBGameObject() {
         color0 = new Color();
@@ -44,12 +44,12 @@ public class AABBGameObject extends GameObject {
                 setCustomData(0, aabb).
                 build("aabb").
                 createMesh(true, mesh);
-        aabbRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
-        aabbRenderable.create(mesh);
+        AbstractRenderable renderable = Fw.graphics.createDynamicNonInterleavedRenderable();
+        renderable.create(mesh);
 
         // Attach to game object
         setMesh(mesh);
-        setRenderable(aabbRenderable);
+        setRenderable(renderable);
     }
 
     public void update(AABB aabb) {
@@ -60,7 +60,7 @@ public class AABBGameObject extends GameObject {
                 setCustomData(0, aabb).
                 build("aabb").
                 createMesh(false, getMesh());
-        aabbRenderable.update(getMesh());
+        getRenderable().update(getMesh());
     }
 
 }

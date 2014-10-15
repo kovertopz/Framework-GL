@@ -12,9 +12,10 @@
  */
 package net.smert.frameworkgl.gameobjects;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -56,13 +57,12 @@ public class SimpleOrientationAxisGameObject extends GameObject {
                 setColor(2, color2).
                 build("simple_orientation_axis").
                 createMesh(true, mesh);
-        VertexBufferObjectRenderable simpleOrientationAxisRenderable
-                = GL.legacyRenderer.createVertexBufferObjectRenderable();
-        simpleOrientationAxisRenderable.create(mesh);
+        AbstractRenderable renderable = Fw.graphics.createInterleavedRenderable();
+        renderable.create(mesh);
 
         // Attach to game object
         setMesh(mesh);
-        setRenderable(simpleOrientationAxisRenderable);
+        setRenderable(renderable);
     }
 
 }

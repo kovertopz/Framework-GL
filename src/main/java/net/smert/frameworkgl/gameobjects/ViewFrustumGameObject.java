@@ -12,9 +12,10 @@
  */
 package net.smert.frameworkgl.gameobjects;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -27,7 +28,6 @@ public class ViewFrustumGameObject extends GameObject {
     private final Color color1;
     private final Color color2;
     private final Color color3;
-    private DynamicVertexBufferObjectRenderable viewFrustumRenderable;
 
     public ViewFrustumGameObject() {
         color0 = new Color();
@@ -70,12 +70,12 @@ public class ViewFrustumGameObject extends GameObject {
                 setCustomData(3, zFar).
                 build("view_frustum").
                 createMesh(true, mesh);
-        viewFrustumRenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
-        viewFrustumRenderable.create(mesh);
+        AbstractRenderable renderable = Fw.graphics.createDynamicInterleavedRenderable();
+        renderable.create(mesh);
 
         // Attach to game object
         setMesh(mesh);
-        setRenderable(viewFrustumRenderable);
+        setRenderable(renderable);
     }
 
     public void update(float aspectRatio, float fieldOfView, float zNear, float zFar) {
@@ -92,7 +92,7 @@ public class ViewFrustumGameObject extends GameObject {
                 setCustomData(3, zFar).
                 build("view_frustum").
                 createMesh(false, getMesh());
-        viewFrustumRenderable.update(getMesh());
+        getRenderable().update(getMesh());
     }
 
 }
