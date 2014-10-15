@@ -29,7 +29,14 @@ import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
-import net.smert.frameworkgl.opengl.renderer.LegacyRenderer;
+import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL2;
+import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL3;
+import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.RendererGL1;
+import net.smert.frameworkgl.opengl.renderer.RendererGL2;
+import net.smert.frameworkgl.opengl.renderer.RendererGL3;
+import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
+import net.smert.frameworkgl.opengl.shader.ShaderBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
 
@@ -41,12 +48,13 @@ public class GL {
 
     public static CameraFactory cameraFactory;
     public static BufferHelper bufferHelper;
+    public static DefaultAttribLocations defaultAttribLocations;
     public static DisplayListHelper displayListHelper;
     public static DynamicMeshBuilder dynamicMeshBuilder;
     public static FrameBufferObjectHelper fboHelper;
     public static GLFactory glFactory;
     public static GLFontBuilder glFontBuilder;
-    public static LegacyRenderer legacyRenderer;
+    public static GLFontRenderer glFontRenderer;
     public static MeshFactory meshFactory;
     public static MeshReader meshReader;
     public static OpenGL1 o1;
@@ -54,7 +62,13 @@ public class GL {
     public static OpenGL3 o3;
     public static LegacyRenderHelper renderHelper;
     public static RenderableFactoryGL1 rf1;
+    public static RenderableFactoryGL2 rf2;
+    public static RenderableFactoryGL3 rf3;
+    public static RendererGL1 renderer1;
+    public static RendererGL2 renderer2;
+    public static RendererGL3 renderer3;
     public static RenderBufferObjectHelper rboHelper;
+    public static ShaderBuilder shaderBuilder;
     public static ShaderHelper shaderHelper;
     public static Tessellator tessellator;
     public static TextureBuilder textureBuilder;

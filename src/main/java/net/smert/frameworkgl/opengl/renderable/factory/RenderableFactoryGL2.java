@@ -12,10 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.renderable.factory;
 
-import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayBindStrategy;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectBindStrategy;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategy;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategy;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
@@ -27,26 +25,18 @@ import org.picocontainer.MutablePicoContainer;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RenderableFactoryGL1 implements RenderableFactory {
+public class RenderableFactoryGL2 implements RenderableFactory {
 
     private final MutablePicoContainer container;
     private final VertexArrayBindStrategy vertexArrayBindStrategy;
     private final VertexBufferObjectBindStrategy vertexBufferObjectBindStrategy;
 
-    public RenderableFactoryGL1(MutablePicoContainer renderableFactoryGL1Container,
+    public RenderableFactoryGL2(MutablePicoContainer renderableFactoryGL2Container,
             VertexArrayBindStrategy vertexArrayBindStrategy,
             VertexBufferObjectBindStrategy vertexBufferObjectBindStrategy) {
-        container = renderableFactoryGL1Container;
+        container = renderableFactoryGL2Container;
         this.vertexArrayBindStrategy = vertexArrayBindStrategy;
         this.vertexBufferObjectBindStrategy = vertexBufferObjectBindStrategy;
-    }
-
-    public DisplayListRenderable createDisplayList() {
-        return container.getComponent(DisplayListRenderable.class);
-    }
-
-    public ImmediateModeRenderable createImmediateMode() {
-        return container.getComponent(ImmediateModeRenderable.class);
     }
 
     @Override

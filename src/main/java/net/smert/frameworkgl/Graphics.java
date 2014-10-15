@@ -31,24 +31,39 @@ import net.smert.frameworkgl.opengl.image.ImageReader;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactory;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
-import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.Renderer;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Graphics {
+public class Graphics implements Renderer {
 
     private static RenderableComparison renderableComparison = new RenderableComparison();
 
     private GLFont defaultFont;
-    private final GLFontRenderer glFontRenderer;
+    private RenderableFactory renderableFactory;
+    private Renderer renderer;
 
-    public Graphics(GLFontRenderer glFontRenderer) {
-        this.glFontRenderer = glFontRenderer;
+    public AbstractRenderable createArrayRenderable() {
+        return renderableFactory.createArrayRenderable();
+    }
+
+    public AbstractRenderable createDynamicInterleavedRenderable() {
+        return renderableFactory.createDynamicInterleavedRenderable();
+    }
+
+    public AbstractRenderable createDynamicNonInterleavedRenderable() {
+        return renderableFactory.createDynamicNonInterleavedRenderable();
+    }
+
+    public AbstractRenderable createInterleavedRenderable() {
+        return renderableFactory.createInterleavedRenderable();
     }
 
     public Mesh createMesh(DrawCommands drawCommands) {
@@ -97,12 +112,18 @@ public class Graphics {
         return mesh;
     }
 
+    public AbstractRenderable createNonInterleavedRenderable() {
+        return renderableFactory.createNonInterleavedRenderable();
+    }
+
     /**
      * This method should be called just before the Display is destroyed. This is automatically called in Application
      * during the normal shutdown process.
      */
     public void destroy() {
-        GL.legacyRenderer.destroy();
+        GL.renderer1.destroy();
+        GL.renderer2.destroy();
+        GL.renderer3.destroy();
         Renderable.shaderBindState.reset();
         Renderable.textureBindState.reset();
         GL.fboHelper.unbind();
@@ -124,12 +145,18 @@ public class Graphics {
         return defaultFont;
     }
 
+    public void setDefaultFont(GLFont defaultFont) {
+        this.defaultFont = defaultFont;
+    }
+
     public Texture getTexture(String filename) {
         return Renderable.texturePool.get(filename);
     }
 
     public void init() {
-        GL.legacyRenderer.init();
+        GL.renderer1.init();
+        GL.renderer2.init();
+        GL.renderer3.init();
         defaultFont = GL.glFontBuilder.
                 addUsAsciiGlyphs().
                 setAntiAliasing(true).
@@ -139,8 +166,8 @@ public class Graphics {
                 setSize(16).
                 buildFont().
                 createFont(true);
-        glFontRenderer.setDefaultFont(defaultFont);
-        glFontRenderer.reset();
+        switchDefaultFont();
+        switchRenderableFactoryAndRenderer(1);
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
@@ -209,6 +236,29 @@ public class Graphics {
         Collections.sort(gameObjects, renderableComparison);
     }
 
+    public void switchDefaultFont() {
+        GL.glFontRenderer.setDefaultFont(defaultFont);
+    }
+
+    public void switchRenderableFactoryAndRenderer(int openglMajorVersion) {
+        switch (openglMajorVersion) {
+            case 1:
+                renderableFactory = GL.rf1;
+                renderer = GL.renderer1;
+                break;
+            case 2:
+                renderableFactory = GL.rf2;
+                renderer = GL.renderer2;
+                break;
+            case 3:
+                renderableFactory = GL.rf3;
+                renderer = GL.renderer3;
+                break;
+            default:
+                throw new RuntimeException("Unknown OpenGL version: " + openglMajorVersion);
+        }
+    }
+
     public void updateAabb(GameObject gameObject) {
         AABB localAabb = gameObject.getMesh().getAabb();
         AABB worldAabb = gameObject.getWorldAabb();
@@ -233,6 +283,66 @@ public class Graphics {
         for (GameObject gameObject : gameObjects) {
             updateAabb(gameObject, margin);
         }
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable, float x, float y, float z) {
+        renderer.render(renderable, x, y, z);
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable, Transform4f transform) {
+        renderer.render(renderable, transform);
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable, Vector3f position) {
+        renderer.render(renderable, position);
+    }
+
+    @Override
+    public void render(GameObject gameObject) {
+        renderer.render(gameObject);
+    }
+
+    @Override
+    public void render(List<GameObject> gameObjects) {
+        renderer.render(gameObjects);
+    }
+
+    @Override
+    public void renderBlend(GameObject gameObject) {
+        renderer.renderBlend(gameObject);
+    }
+
+    @Override
+    public void renderBlend(List<GameObject> gameObjects) {
+        renderer.renderBlend(gameObjects);
+    }
+
+    @Override
+    public void renderOpaque(GameObject gameObject) {
+        renderer.renderOpaque(gameObject);
+    }
+
+    @Override
+    public void renderOpaque(List<GameObject> gameObjects) {
+        renderer.renderOpaque(gameObjects);
+    }
+
+    @Override
+    public void set2DMode() {
+        renderer.set2DMode();
+    }
+
+    @Override
+    public void set2DMode(int width, int height) {
+        renderer.set2DMode(width, height);
+    }
+
+    @Override
+    public void setCamera(Camera camera) {
+        renderer.setCamera(camera);
     }
 
     public static class RenderableComparison implements Comparator<GameObject> {

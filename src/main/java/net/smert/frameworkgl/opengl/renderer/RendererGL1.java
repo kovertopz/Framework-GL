@@ -24,26 +24,26 @@ import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderableInterleaved;
 import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectRenderableInterleaved;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
 import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
+public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
 
     private FloatBuffer viewMatrixFloatBuffer;
     private FloatBuffer transformWorldFloatBuffer;
     private FloatBuffer projectionMatrixFloatBuffer;
     private final GLFontRenderer glFontRenderer;
 
-    public LegacyRenderer(GLFontRenderer glFontRenderer) {
+    public RendererGL1(GLFontRenderer glFontRenderer) {
         this.glFontRenderer = glFontRenderer;
     }
 
@@ -54,32 +54,32 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         GL.o1.popMatrix();
     }
 
+    public VertexArrayRenderable createArrayRenderable() {
+        return GL.rf1.createArrayRenderable();
+    }
+
     public DisplayListRenderable createDisplayListRenderable() {
         return GL.rf1.createDisplayList();
     }
 
-    public DynamicVertexBufferObjectRenderable createDynamicVertexBufferObjectRenderable() {
-        return GL.rf1.createDynamicVertexBufferObject();
+    public VertexBufferObjectDynamicInterleavedRenderable createDynamicInterleavedRenderable() {
+        return GL.rf1.createDynamicInterleavedRenderable();
     }
 
-    public DynamicVertexBufferObjectRenderableInterleaved createDynamicVertexBufferObjectInterleavedRenderable() {
-        return GL.rf1.createDynamicVertexBufferObjectInterleaved();
+    public VertexBufferObjectDynamicNonInterleavedRenderable createDynamicNonInterleavedRenderable() {
+        return GL.rf1.createDynamicNonInterleavedRenderable();
     }
 
     public ImmediateModeRenderable createImmediateModeRenderable() {
         return GL.rf1.createImmediateMode();
     }
 
-    public VertexArrayRenderable createVertexArrayRenderable() {
-        return GL.rf1.createVertexArray();
+    public VertexBufferObjectInterleavedRenderable createInterleavedRenderable() {
+        return GL.rf1.createInterleavedRenderable();
     }
 
-    public VertexBufferObjectRenderable createVertexBufferObjectRenderable() {
-        return GL.rf1.createVertexBufferObject();
-    }
-
-    public VertexBufferObjectRenderableInterleaved createVertexBufferObjectInterleavedRenderable() {
-        return GL.rf1.createVertexBufferObjectInterleaved();
+    public VertexBufferObjectNonInterleavedRenderable createNonInterleavedRenderable() {
+        return GL.rf1.createNonInterleavedRenderable();
     }
 
     public void destroy() {
@@ -93,6 +93,7 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
     }
 
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);
@@ -100,11 +101,13 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         GL.o1.popMatrix();
     }
 
+    @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
         transform.toFloatBuffer(transformWorldFloatBuffer);
         render(renderable, transformWorldFloatBuffer);
     }
 
+    @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
         GL.o1.pushMatrix();
         GL.o1.translate(position.getX(), position.getY(), position.getZ());
@@ -112,18 +115,21 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         GL.o1.popMatrix();
     }
 
+    @Override
     public void render(GameObject gameObject) {
         gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
         transformWorldFloatBuffer.flip();
         render(gameObject.getRenderable(), transformWorldFloatBuffer);
     }
 
+    @Override
     public void render(List<GameObject> gameObjects) {
         for (GameObject gameObject : gameObjects) {
             render(gameObject);
         }
     }
 
+    @Override
     public void renderBlend(GameObject gameObject) {
         if (gameObject.getRenderableState().isOpaque()) {
             return;
@@ -135,6 +141,7 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         GL.o1.disableBlending();
     }
 
+    @Override
     public void renderBlend(List<GameObject> gameObjects) {
         GL.o1.enableBlending();
         for (GameObject gameObject : gameObjects) {
@@ -148,6 +155,7 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         GL.o1.disableBlending();
     }
 
+    @Override
     public void renderOpaque(GameObject gameObject) {
         if (!gameObject.getRenderableState().isOpaque()) {
             return;
@@ -157,6 +165,7 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         render(gameObject.getRenderable(), transformWorldFloatBuffer);
     }
 
+    @Override
     public void renderOpaque(List<GameObject> gameObjects) {
         for (GameObject gameObject : gameObjects) {
             if (!gameObject.getRenderableState().isOpaque()) {
@@ -168,16 +177,19 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
         }
     }
 
+    @Override
     public void set2DMode() {
         GL.o1.setProjectionOrtho(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
         GL.o1.setModelViewIdentity();
     }
 
+    @Override
     public void set2DMode(int width, int height) {
         GL.o1.setProjectionOrtho(0f, width, 0f, height, -1f, 1f);
         GL.o1.setModelViewIdentity();
     }
 
+    @Override
     public void setCamera(Camera camera) {
         camera.updateViewMatrix();
         camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
@@ -197,7 +209,7 @@ public class LegacyRenderer implements TextHelperRenderer, TextRenderer {
 
     @Override
     public AbstractRenderable createGlyphRenderable() {
-        return createVertexBufferObjectInterleavedRenderable();
+        return createInterleavedRenderable();
     }
 
     @Override
