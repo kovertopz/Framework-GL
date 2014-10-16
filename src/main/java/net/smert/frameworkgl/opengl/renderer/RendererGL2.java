@@ -40,16 +40,14 @@ public class RendererGL2 implements Renderer, TextHelperRenderer, TextRenderer {
     }
 
     public void destroy() {
-        Renderable.va2BindState.reset();
-        Renderable.vbo2BindState.reset();
+        Renderable.bindState2.reset();
     }
 
     public void init() {
         viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
         transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
         projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        Renderable.va2BindState.setAttribLocations(GL.defaultAttribLocations);
-        Renderable.vbo2BindState.setAttribLocations(GL.defaultAttribLocations);
+        Renderable.bindState2.setAttribLocations(GL.defaultAttribLocations);
     }
 
     @Override

@@ -19,35 +19,38 @@ import net.smert.frameworkgl.opengl.renderable.Renderable;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayBindStrategy implements net.smert.frameworkgl.opengl.renderable.shared.VertexArrayBindStrategy {
+public class VertexArrayBindStrategyGL1 implements net.smert.frameworkgl.opengl.renderable.shared.VertexArrayBindStrategy {
 
     @Override
     public void bind(int renderableConfigID, VertexArray vaColor, VertexArray vaNormal, VertexArray vaTexCoord,
             VertexArray vaVertex) {
 
+        // Must unbind any VBOs
+        Renderable.bindState1.unbindVBO();
+
         // Switch the renderable configuration first
-        Renderable.vaBindState.switchRenderableConfiguration(renderableConfigID);
+        Renderable.bindState1.switchRenderableConfiguration(renderableConfigID);
 
         // Bind each vertex array
         if (vaColor != null) {
-            Renderable.vaBindState.bindColor(vaColor.getByteBuffer());
+            Renderable.bindState1.bindColor(vaColor.getByteBuffer());
         } else {
-            Renderable.vaBindState.bindColor(null);
+            Renderable.bindState1.bindColor(null);
         }
         if (vaNormal != null) {
-            Renderable.vaBindState.bindNormal(vaNormal.getByteBuffer());
+            Renderable.bindState1.bindNormal(vaNormal.getByteBuffer());
         } else {
-            Renderable.vaBindState.bindNormal(null);
+            Renderable.bindState1.bindNormal(null);
         }
         if (vaTexCoord != null) {
-            Renderable.vaBindState.bindTexCoord(vaTexCoord.getByteBuffer());
+            Renderable.bindState1.bindTexCoord(vaTexCoord.getByteBuffer());
         } else {
-            Renderable.vaBindState.bindTexCoord(null);
+            Renderable.bindState1.bindTexCoord(null);
         }
         if (vaVertex != null) {
-            Renderable.vaBindState.bindVertex(vaVertex.getByteBuffer());
+            Renderable.bindState1.bindVertex(vaVertex.getByteBuffer());
         } else {
-            Renderable.vaBindState.bindVertex(null);
+            Renderable.bindState1.bindVertex(null);
         }
     }
 

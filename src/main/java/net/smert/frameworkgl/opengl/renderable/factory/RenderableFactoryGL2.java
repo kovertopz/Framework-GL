@@ -12,8 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.renderable.factory;
 
-import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategy;
-import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategy;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategyGL2;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategyGL2;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
@@ -28,12 +28,12 @@ import org.picocontainer.MutablePicoContainer;
 public class RenderableFactoryGL2 implements RenderableFactory {
 
     private final MutablePicoContainer container;
-    private final VertexArrayBindStrategy vertexArrayBindStrategy;
-    private final VertexBufferObjectBindStrategy vertexBufferObjectBindStrategy;
+    private final VertexArrayBindStrategyGL2 vertexArrayBindStrategy;
+    private final VertexBufferObjectBindStrategyGL2 vertexBufferObjectBindStrategy;
 
     public RenderableFactoryGL2(MutablePicoContainer renderableFactoryGL2Container,
-            VertexArrayBindStrategy vertexArrayBindStrategy,
-            VertexBufferObjectBindStrategy vertexBufferObjectBindStrategy) {
+            VertexArrayBindStrategyGL2 vertexArrayBindStrategy,
+            VertexBufferObjectBindStrategyGL2 vertexBufferObjectBindStrategy) {
         container = renderableFactoryGL2Container;
         this.vertexArrayBindStrategy = vertexArrayBindStrategy;
         this.vertexBufferObjectBindStrategy = vertexBufferObjectBindStrategy;

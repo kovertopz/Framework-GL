@@ -20,7 +20,7 @@ import net.smert.frameworkgl.opengl.renderable.Renderable;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexBufferObjectBindStrategy
+public class VertexBufferObjectBindStrategyGL2
         implements net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectBindStrategy {
 
     @Override
@@ -28,33 +28,33 @@ public class VertexBufferObjectBindStrategy
             VertexBufferObject vboTexCoord, VertexBufferObject vboVertex, VertexBufferObject vboVertexIndex) {
 
         // Switch the renderable configuration first
-        Renderable.vbo2BindState.switchRenderableConfiguration(renderableConfigID);
+        Renderable.bindState2.switchRenderableConfiguration(renderableConfigID);
 
         // Bind each VBO
         if (vboColor != null) {
-            Renderable.vbo2BindState.bindColor(vboColor.getVboID(), 0, 0);
+            Renderable.bindState2.bindColor(vboColor.getVboID(), 0, 0);
         } else {
-            Renderable.vbo2BindState.bindColor(0, 0, 0);
+            Renderable.bindState2.bindColor(0, 0, 0);
         }
         if (vboNormal != null) {
-            Renderable.vbo2BindState.bindNormal(vboNormal.getVboID(), 0, 0);
+            Renderable.bindState2.bindNormal(vboNormal.getVboID(), 0, 0);
         } else {
-            Renderable.vbo2BindState.bindNormal(0, 0, 0);
+            Renderable.bindState2.bindNormal(0, 0, 0);
         }
         if (vboTexCoord != null) {
-            Renderable.vbo2BindState.bindTexCoord(vboTexCoord.getVboID(), 0, 0);
+            Renderable.bindState2.bindTexCoord(vboTexCoord.getVboID(), 0, 0);
         } else {
-            Renderable.vbo2BindState.bindTexCoord(0, 0, 0);
+            Renderable.bindState2.bindTexCoord(0, 0, 0);
         }
         if (vboVertex != null) {
-            Renderable.vbo2BindState.bindVertex(vboVertex.getVboID(), 0, 0);
+            Renderable.bindState2.bindVertex(vboVertex.getVboID(), 0, 0);
         } else {
-            Renderable.vbo2BindState.bindVertex(0, 0, 0);
+            Renderable.bindState2.bindVertex(0, 0, 0);
         }
         if (vboVertexIndex != null) {
-            Renderable.vbo2BindState.bindVertexIndex(vboVertexIndex.getVboID());
+            Renderable.bindState2.bindVertexIndex(vboVertexIndex.getVboID());
         } else {
-            Renderable.vbo2BindState.bindVertexIndex(0);
+            Renderable.bindState2.bindVertexIndex(0);
         }
     }
 
@@ -65,37 +65,37 @@ public class VertexBufferObjectBindStrategy
         int strideBytes = vboInterleaved.getStrideBytes();
 
         // Switch the renderable configuration first
-        Renderable.vbo2BindState.switchRenderableConfiguration(renderableConfigID);
+        Renderable.bindState2.switchRenderableConfiguration(renderableConfigID);
 
         // Bind VBO for each type
         if (hasColors) {
-            Renderable.vbo2BindState.bindColor(
+            Renderable.bindState2.bindColor(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getColorOffsetBytes());
         } else {
-            Renderable.vbo2BindState.bindColor(0, 0, 0);
+            Renderable.bindState2.bindColor(0, 0, 0);
         }
         if (hasNormals) {
-            Renderable.vbo2BindState.bindNormal(
+            Renderable.bindState2.bindNormal(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getNormalOffsetBytes());
         } else {
-            Renderable.vbo2BindState.bindNormal(0, 0, 0);
+            Renderable.bindState2.bindNormal(0, 0, 0);
         }
         if (hasTexCoords) {
-            Renderable.vbo2BindState.bindTexCoord(
+            Renderable.bindState2.bindTexCoord(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getTexCoordOffsetBytes());
         } else {
-            Renderable.vbo2BindState.bindTexCoord(0, 0, 0);
+            Renderable.bindState2.bindTexCoord(0, 0, 0);
         }
         if (hasVertices) {
-            Renderable.vbo2BindState.bindVertex(
+            Renderable.bindState2.bindVertex(
                     vboInterleaved.getVboID(), strideBytes, vboInterleaved.getVertexOffsetBytes());
         } else {
-            Renderable.vbo2BindState.bindVertex(0, 0, 0);
+            Renderable.bindState2.bindVertex(0, 0, 0);
         }
         if (hasIndexes) {
-            Renderable.vbo2BindState.bindVertexIndex(vboVertexIndex.getVboID());
+            Renderable.bindState2.bindVertexIndex(vboVertexIndex.getVboID());
         } else {
-            Renderable.vbo2BindState.bindVertexIndex(0);
+            Renderable.bindState2.bindVertexIndex(0);
         }
     }
 

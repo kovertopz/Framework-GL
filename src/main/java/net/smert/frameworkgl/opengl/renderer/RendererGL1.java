@@ -83,8 +83,7 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
     }
 
     public void destroy() {
-        Renderable.vaBindState.reset();
-        Renderable.vboBindState.reset();
+        Renderable.bindState1.reset();
     }
 
     public void init() {

@@ -1,31 +1,22 @@
-/**
- * Copyright 2012 Jason Sorensen (sorensenj@smert.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-package net.smert.frameworkgl.opengl.renderable.vbo;
+package net.smert.frameworkgl.opengl.renderable.gl2;
 
+import java.nio.ByteBuffer;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBOBindState {
+public class BindStateGL2 {
 
     private boolean colorEnabled;
     private boolean normalEnabled;
     private boolean texCoordEnabled;
     private boolean vertexEnabled;
+    private boolean vboUnbinded;
     private int renderableConfigID;
     private int vboColorID;
     private int vboNormalID;
@@ -34,7 +25,7 @@ public class VBOBindState {
     private int vboVertexIndexID;
     private RenderableConfiguration config;
 
-    public VBOBindState() {
+    public BindStateGL2() {
         reset();
     }
 
@@ -90,6 +81,7 @@ public class VBOBindState {
         if (vboColorID == vboID) {
             return;
         }
+        vboUnbinded = false;
         vboColorID = vboID;
         if (vboID == 0) {
             setColorEnabled(false);
@@ -99,10 +91,20 @@ public class VBOBindState {
         GL.vboHelper.bindColors(vboID, config.getColorSize(), config.getColorType(), strideBytes, colorOffsetBytes);
     }
 
+    public void bindColor(ByteBuffer colorByteBuffer) {
+        if (colorByteBuffer == null) {
+            setColorEnabled(false);
+            return;
+        }
+        setColorEnabled(true);
+        GL.vaHelper.bindColors(config.getColorSize(), config.getColorType(), colorByteBuffer);
+    }
+
     public void bindNormal(int vboID, int strideBytes, int normalOffsetBytes) {
         if (vboNormalID == vboID) {
             return;
         }
+        vboUnbinded = false;
         vboNormalID = vboID;
         if (vboID == 0) {
             setNormalEnabled(false);
@@ -112,31 +114,61 @@ public class VBOBindState {
         GL.vboHelper.bindNormals(vboID, config.getNormalType(), strideBytes, normalOffsetBytes);
     }
 
+    public void bindNormal(ByteBuffer normalByteBuffer) {
+        if (normalByteBuffer == null) {
+            setNormalEnabled(false);
+            return;
+        }
+        setNormalEnabled(true);
+        GL.vaHelper.bindNormals(config.getNormalType(), normalByteBuffer);
+    }
+
     public void bindTexCoord(int vboID, int strideBytes, int texCoordOffsetBytes) {
         if (vboTexCoordID == vboID) {
             return;
         }
+        vboUnbinded = false;
         vboTexCoordID = vboID;
         if (vboID == 0) {
             setTexCoordEnabled(false);
             return;
         }
         setTexCoordEnabled(true);
-        GL.vboHelper.bindTexCoords(
-                vboID, config.getTexCoordSize(), config.getTexCoordType(), strideBytes, texCoordOffsetBytes);
+        GL.vboHelper.bindTexCoords(vboID, config.getTexCoordSize(), config.getTexCoordType(), strideBytes,
+                texCoordOffsetBytes);
+    }
+
+    public void bindTexCoord(ByteBuffer texCoordByteBuffer) {
+        if (texCoordByteBuffer == null) {
+            setTexCoordEnabled(false);
+            return;
+        }
+        setTexCoordEnabled(true);
+        GL.vaHelper.bindTexCoords(config.getTexCoordSize(), config.getTexCoordType(), texCoordByteBuffer);
     }
 
     public void bindVertex(int vboID, int strideBytes, int vertexOffsetBytes) {
         if (vboVertexID == vboID) {
             return;
         }
+        vboUnbinded = false;
         vboVertexID = vboID;
         if (vboID == 0) {
             setVertexEnabled(false);
             return;
         }
         setVertexEnabled(true);
-        GL.vboHelper.bindVertices(vboID, config.getVertexSize(), config.getVertexType(), strideBytes, vertexOffsetBytes);
+        GL.vboHelper.bindVertices(vboID, config.getVertexSize(), config.getVertexType(), strideBytes,
+                vertexOffsetBytes);
+    }
+
+    public void bindVertex(ByteBuffer vertexByteBuffer) {
+        if (vertexByteBuffer == null) {
+            setVertexEnabled(false);
+            return;
+        }
+        setVertexEnabled(true);
+        GL.vaHelper.bindVertices(config.getVertexSize(), config.getVertexType(), vertexByteBuffer);
     }
 
     public void bindVertexIndex(int vboID) {
@@ -144,9 +176,6 @@ public class VBOBindState {
             return;
         }
         vboVertexIndexID = vboID;
-        if (vboID == 0) {
-            return;
-        }
         GL.vboHelper.bindVerticesIndex(vboID);
     }
 
@@ -155,6 +184,7 @@ public class VBOBindState {
         normalEnabled = false;
         texCoordEnabled = false;
         vertexEnabled = false;
+        vboUnbinded = true;
         renderableConfigID = Integer.MIN_VALUE; // Default is -1 elsewhere
         vboColorID = 0;
         vboNormalID = 0;
@@ -162,6 +192,9 @@ public class VBOBindState {
         vboVertexID = 0;
         vboVertexIndexID = 0;
         config = null;
+    }
+
+    public void setAttribLocations(DefaultAttribLocations defaultAttribLocations) {
     }
 
     public void switchRenderableConfiguration(int renderableConfigID) {
@@ -172,13 +205,16 @@ public class VBOBindState {
         config = Renderable.configPool.get(renderableConfigID);
     }
 
-    public void unbind() {
-        bindColor(0, 0, 0);
-        bindNormal(0, 0, 0);
-        bindTexCoord(0, 0, 0);
-        bindVertex(0, 0, 0);
-        bindVertexIndex(0);
-        GL.vboHelper.unbind();
+    public void unbindVBO() {
+        if (!vboUnbinded) {
+            vboUnbinded = true;
+            vboColorID = 0;
+            vboNormalID = 0;
+            vboTexCoordID = 0;
+            vboVertexID = 0;
+            vboVertexIndexID = 0;
+            GL.vboHelper.unbind();
+        }
     }
 
 }
