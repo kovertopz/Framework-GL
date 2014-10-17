@@ -103,11 +103,6 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
-    public void switchShader(AbstractShader shader, Camera camera) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void unbindShader() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

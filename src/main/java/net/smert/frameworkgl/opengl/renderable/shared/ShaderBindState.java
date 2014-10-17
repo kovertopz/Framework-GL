@@ -13,9 +13,6 @@
 package net.smert.frameworkgl.opengl.renderable.shared;
 
 import java.nio.FloatBuffer;
-import net.smert.frameworkgl.Fw;
-import net.smert.frameworkgl.math.Matrix4f;
-import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.camera.Camera;
@@ -83,21 +80,6 @@ public class ShaderBindState {
         shader = defaultDoNothingShader;
     }
 
-    public void popMatrix() {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.pop();
-    }
-
-    public void pushMatrix() {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
-    }
-
-    public void rotateModelMatrix(float angle, float x, float y, float z) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.rotate(angle, x, y, z);
-    }
-
     public void sendUniformMatrices() {
         if (doNothingShaderActive) {
             return;
@@ -105,37 +87,14 @@ public class ShaderBindState {
         shader.sendUniformMatrices(matrixFloatBuffer);
     }
 
-    public void set2DMode() {
+    public void setCamera(Camera camera) {
+        camera.updateViewMatrix();
         GL.matrixHelper.setModeProjection();
-        GL.matrixHelper.setOrthogonal(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
+        GL.matrixHelper.load(camera.getProjectionMatrix());
         GL.matrixHelper.setModeView();
-        GL.matrixHelper.loadIdentity();
+        GL.matrixHelper.load(camera.getViewMatrix());
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();
-    }
-
-    public void set2DMode(int width, int height) {
-        GL.matrixHelper.setModeProjection();
-        GL.matrixHelper.setOrthogonal(0f, width, 0f, height, -1f, 1f);
-        GL.matrixHelper.setModeView();
-        GL.matrixHelper.loadIdentity();
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.loadIdentity();
-    }
-
-    public void setModelIdentity() {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.loadIdentity();
-    }
-
-    public void setModelMatrix(Matrix4f worldTransform) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.load(worldTransform);
-    }
-
-    public void setModelMatrix(Transform4f worldTransform) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.load(worldTransform);
     }
 
     public void setTextureFlag(float flag) {
@@ -159,22 +118,6 @@ public class ShaderBindState {
         doNothingShaderActive = false;
         this.shader = shader;
         shader.bind();
-    }
-
-    public void switchShader(AbstractShader shader, Camera camera) {
-        switchShader(shader);
-        camera.updateViewMatrix();
-        GL.matrixHelper.setModeProjection();
-        GL.matrixHelper.load(camera.getProjectionMatrix());
-        GL.matrixHelper.setModeView();
-        GL.matrixHelper.load(camera.getViewMatrix());
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.loadIdentity();
-    }
-
-    public void translateModelMatrix(float x, float y, float z) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.translate(x, y, z);
     }
 
     public void unbindShader() {

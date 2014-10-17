@@ -52,8 +52,6 @@ public interface Renderer {
 
     public void switchShader(AbstractShader shader);
 
-    public void switchShader(AbstractShader shader, Camera camera);
-
     public void unbindShader();
 
 }

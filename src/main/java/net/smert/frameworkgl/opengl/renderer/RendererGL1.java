@@ -46,12 +46,6 @@ public class RendererGL1 extends AbstractRendererGL {
         super(glFontRenderer);
     }
 
-    public void init() {
-        modelMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-    }
-
     private void render(AbstractRenderable renderable, FloatBuffer modelMatrixFloatBuffer) {
         GL.o1.pushMatrix();
         GL.o1.multiplyMatrix(modelMatrixFloatBuffer);
@@ -89,6 +83,12 @@ public class RendererGL1 extends AbstractRendererGL {
 
     public void destroy() {
         Renderable.bindState1.reset();
+    }
+
+    public void init() {
+        modelMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
     }
 
     @Override
@@ -194,11 +194,6 @@ public class RendererGL1 extends AbstractRendererGL {
 
     @Override
     public void switchShader(AbstractShader shader) {
-        throw new UnsupportedOperationException("Not supported by this renderer");
-    }
-
-    @Override
-    public void switchShader(AbstractShader shader, Camera camera) {
         throw new UnsupportedOperationException("Not supported by this renderer");
     }
 

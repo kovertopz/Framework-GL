@@ -365,11 +365,6 @@ public class Graphics implements Renderer {
     }
 
     @Override
-    public void switchShader(AbstractShader shader, Camera camera) {
-        renderer.switchShader(shader, camera);
-    }
-
-    @Override
     public void unbindShader() {
         renderer.unbindShader();
     }
