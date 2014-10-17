@@ -21,6 +21,8 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
@@ -51,12 +53,20 @@ public class RendererGL2 extends AbstractRendererGL {
         return GL.rf2.createArrayRenderable();
     }
 
+    public DisplayListRenderable createDisplayListRenderable() {
+        return GL.rf2.createDisplayList();
+    }
+
     public VertexBufferObjectDynamicInterleavedRenderable createDynamicInterleavedRenderable() {
         return GL.rf2.createDynamicInterleavedRenderable();
     }
 
     public VertexBufferObjectDynamicNonInterleavedRenderable createDynamicNonInterleavedRenderable() {
         return GL.rf2.createDynamicNonInterleavedRenderable();
+    }
+
+    public ImmediateModeRenderable createImmediateModeRenderable() {
+        return GL.rf2.createImmediateMode();
     }
 
     public VertexBufferObjectInterleavedRenderable createInterleavedRenderable() {

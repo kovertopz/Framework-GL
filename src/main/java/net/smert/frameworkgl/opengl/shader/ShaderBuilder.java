@@ -59,7 +59,7 @@ public class ShaderBuilder {
         GL.shaderHelper.compile(shaderID);
 
         if (GL.shaderHelper.getCompileStatus(shaderID) == false) {
-            log.error("Shader souce code error: Name: {} Info Log: {}",
+            log.error("Shader souce code error: Name: {} Info Log:\n{}",
                     shaderName, GL.shaderHelper.getInfoLog(shaderID));
             throw new RuntimeException("Shader \"" + shaderName + "\" had compile errors");
         }
@@ -115,7 +115,7 @@ public class ShaderBuilder {
         // Link shaders
         GL.shaderHelper.link(programID);
         if (GL.shaderHelper.getLinkStatus(programID) == false) {
-            log.error("Program linking errors: Name: {} Info Log: {}",
+            log.error("Program linking errors: Name: {} Info Log:\n{}",
                     programName, GL.shaderHelper.getInfoLog(programID));
             throw new RuntimeException("Program \"" + programName + "\" had linking errors");
         }
@@ -123,7 +123,7 @@ public class ShaderBuilder {
         // Validate program
         GL.shaderHelper.validate(programID);
         if (GL.shaderHelper.getValidateStatus(programID) == false) {
-            log.error("Program validate errors: Name: {} Info Log: {}",
+            log.error("Program validate errors: Name: {} Info Log:\n{}",
                     programName, GL.shaderHelper.getInfoLog(programID));
             throw new RuntimeException("Program \"" + programName + "\" had validate errors");
         }
