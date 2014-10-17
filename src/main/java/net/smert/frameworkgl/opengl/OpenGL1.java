@@ -563,6 +563,15 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 setProjectionFrustum(double left, double right, double bottom, double top, double zNear,
+            double zFar) {
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity(); // glFrustum sadly doesn't set all rows and columns
+        GL11.glFrustum(left, right, bottom, top, zNear, zFar);
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+        return this;
+    }
+
     public OpenGL1 setProjectionOrtho(double left, double right, double bottom, double top, double zNear, double zFar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity(); // glOrtho sadly doesn't set all rows and columns

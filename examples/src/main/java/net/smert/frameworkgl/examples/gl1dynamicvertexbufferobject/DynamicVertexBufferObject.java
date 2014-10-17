@@ -144,6 +144,11 @@ public class DynamicVertexBufferObject extends Screen {
 
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+        lightFloatBuffer.put(0f);
+        lightFloatBuffer.put(15f);
+        lightFloatBuffer.put(10f);
+        lightFloatBuffer.put(1f);
+        lightFloatBuffer.flip();
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
@@ -184,6 +189,7 @@ public class DynamicVertexBufferObject extends Screen {
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
 
+        // OpenGL settings
         GL.o1.setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha();
         GL.o1.enableCulling();
         GL.o1.cullBackFaces();
@@ -197,17 +203,9 @@ public class DynamicVertexBufferObject extends Screen {
         GL.o1.setSmoothLighting(true);
         GL.o1.clear();
 
-        GL.o1.setModelViewIdentity();
-
-        // Light position
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
-
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
 
+        // Add camera controller to input
         Fw.input.addInputProcessor(cameraController);
         Fw.input.grabMouseCursor();
     }

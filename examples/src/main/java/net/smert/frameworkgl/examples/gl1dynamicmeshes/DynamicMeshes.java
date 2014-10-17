@@ -82,6 +82,10 @@ public class DynamicMeshes extends Screen {
 
         // Setup camera and controller
         camera = GL.cameraFactory.createLegacyCamera();
+        camera.setPerspectiveProjection(
+                70f,
+                (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
+                .05f, 128f);
         camera.setPosition(0f, 2f, 5f);
         cameraController = GL.cameraFactory.createLegacyCameraController();
         cameraController.setCamera(camera);
@@ -91,11 +95,17 @@ public class DynamicMeshes extends Screen {
 
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+        lightFloatBuffer.put(0f);
+        lightFloatBuffer.put(15f);
+        lightFloatBuffer.put(10f);
+        lightFloatBuffer.put(1f);
+        lightFloatBuffer.flip();
 
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
 
+        // OpenGL settings
         GL.o1.enableCulling();
         GL.o1.cullBackFaces();
         GL.o1.enableDepthTest();
@@ -108,21 +118,9 @@ public class DynamicMeshes extends Screen {
         GL.o1.setSmoothLighting(true);
         GL.o1.clear();
 
-        GL.o1.setProjectionPerspective(
-                70f,
-                (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
-                .05f, 128f);
-        GL.o1.setModelViewIdentity();
-
-        // Light position
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
-
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
 
+        // Add camera controller to input
         Fw.input.addInputProcessor(cameraController);
         Fw.input.grabMouseCursor();
     }

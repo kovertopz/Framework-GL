@@ -73,6 +73,10 @@ public class VertexBufferObjectInterleaved extends Screen {
 
         // Setup camera and controller
         camera = GL.cameraFactory.createLegacyCamera();
+        camera.setPerspectiveProjection(
+                70f,
+                (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
+                .05f, 128f);
         camera.setPosition(0f, 0f, 5f);
         cameraController = GL.cameraFactory.createLegacyCameraController();
         cameraController.setCamera(camera);
@@ -90,23 +94,18 @@ public class VertexBufferObjectInterleaved extends Screen {
         renderableTriangles = GL.renderer1.createInterleavedRenderable();
         renderableTriangles.create(meshTriangles);
 
+        // OpenGL settings
         GL.o1.enableCulling();
         GL.o1.cullBackFaces();
         GL.o1.enableDepthTest();
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
         GL.o1.setClearDepth(1f);
-        GL.o1.setSmoothLighting(true);
         GL.o1.clear();
-
-        GL.o1.setProjectionPerspective(
-                70f,
-                (float) Fw.config.getCurrentWidth() / (float) Fw.config.getCurrentHeight(),
-                .05f, 128f);
-        GL.o1.setModelViewIdentity();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
 
+        // Add camera controller to input
         Fw.input.addInputProcessor(cameraController);
         Fw.input.grabMouseCursor();
     }

@@ -29,10 +29,6 @@ public class LegacyCamera {
         position = new Vector3f();
     }
 
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
     public Vector3f getPosition() {
         return position;
     }
@@ -53,6 +49,10 @@ public class LegacyCamera {
         position.setZ(z);
     }
 
+    public Vector3f getRotation() {
+        return rotation;
+    }
+
     public void setRotation(float x, float y, float z) {
         rotation.set(x, y, z);
     }
@@ -67,6 +67,18 @@ public class LegacyCamera {
 
     public void setRotationZ(float z) {
         rotation.setZ(z);
+    }
+
+    public void setFrustum(float left, float right, float bottom, float top, float zNear, float zFar) {
+        GL.o1.setProjectionFrustum(left, right, bottom, top, zNear, zFar);
+    }
+
+    public void setOrthogonalProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
+        GL.o1.setProjectionOrtho(left, right, bottom, top, zNear, zFar);
+    }
+
+    public void setPerspectiveProjection(float fieldOfViewY, float aspectRatio, float zNear, float zFar) {
+        GL.o1.setProjectionPerspective(fieldOfViewY, aspectRatio, zNear, zFar);
     }
 
     public void updateOpenGL() {
