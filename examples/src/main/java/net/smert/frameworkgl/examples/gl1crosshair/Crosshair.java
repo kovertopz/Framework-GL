@@ -28,12 +28,15 @@ import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
+import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.GLLight;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.constants.Light;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import org.slf4j.Logger;
@@ -51,13 +54,16 @@ public class Crosshair extends Screen {
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
     private AABBGameObject aabbGameObject;
+    private AmbientLight ambientLight;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
     private Camera camera;
     private CameraController cameraController;
     private CrosshairGameObject crosshairGameObject;
+    private GLLight glLight;
     private final List<GameObject> gameObjectsToRender;
+    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
@@ -148,13 +154,14 @@ public class Crosshair extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
+        // Create ambient light, glLight and material light
+        ambientLight = GL.glFactory.createAmbientLight();
+        glLight = GL.glFactory.createGLLight();
+        glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
+        materialLight = GL.glFactory.createMaterialLight();
+
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
@@ -245,8 +252,10 @@ public class Crosshair extends Screen {
             // Update camera
             GL.renderer1.setCamera(camera);
 
-            // Update light position
-            GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
+            // Update ambient light, light and material light
+            ambientLight.updateOpenGL(lightFloatBuffer);
+            glLight.updateOpenGL(lightFloatBuffer);
+            materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
             GL.renderer1.render(gameObjectsToRender);

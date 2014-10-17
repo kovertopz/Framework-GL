@@ -19,11 +19,14 @@ import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
 import net.smert.frameworkgl.helpers.Keyboard;
+import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.GLLight;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.constants.Light;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import org.slf4j.Logger;
@@ -38,11 +41,14 @@ public class DynamicMeshes extends Screen {
     private final static Logger log = LoggerFactory.getLogger(DynamicMeshes.class);
 
     private boolean wireframe;
+    private AmbientLight ambientLight;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
+    private GLLight glLight;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
+    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
 
     public DynamicMeshes(String[] args) {
@@ -93,13 +99,14 @@ public class DynamicMeshes extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
+        // Create ambient light, glLight and material light
+        ambientLight = GL.glFactory.createAmbientLight();
+        glLight = GL.glFactory.createGLLight();
+        glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
+        materialLight = GL.glFactory.createMaterialLight();
+
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
 
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
@@ -147,8 +154,10 @@ public class DynamicMeshes extends Screen {
             // Update camera
             camera.updateOpenGL();
 
-            // Update light position
-            GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
+            // Update ambient light, light and material light
+            ambientLight.updateOpenGL(lightFloatBuffer);
+            glLight.updateOpenGL(lightFloatBuffer);
+            materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
             List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();

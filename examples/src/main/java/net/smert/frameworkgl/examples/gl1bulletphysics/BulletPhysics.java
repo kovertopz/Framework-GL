@@ -30,11 +30,14 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
+import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.GLLight;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.constants.Light;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import net.smert.frameworkgl.utils.RandomUtils;
@@ -50,13 +53,16 @@ public class BulletPhysics extends Screen {
     private final static Logger log = LoggerFactory.getLogger(BulletPhysics.class);
 
     private float spawnTimer;
+    private AmbientLight ambientLight;
     private BulletWrapper bulletWrapper;
     private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
+    private GLLight glLight;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
     private final List<GameObject> gameObjects;
     private final Map<Integer, String> randomObjects;
+    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
 
     public BulletPhysics(String[] args) {
@@ -101,13 +107,14 @@ public class BulletPhysics extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
+        // Create ambient light, glLight and material light
+        ambientLight = GL.glFactory.createAmbientLight();
+        glLight = GL.glFactory.createGLLight();
+        glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
+        materialLight = GL.glFactory.createMaterialLight();
+
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
 
         // Create ground
         BulletGameObject groundGameObject
@@ -187,8 +194,10 @@ public class BulletPhysics extends Screen {
             // Update camera
             camera.updateOpenGL();
 
-            // Update light position
-            GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
+            // Update ambient light, light and material light
+            ambientLight.updateOpenGL(lightFloatBuffer);
+            glLight.updateOpenGL(lightFloatBuffer);
+            materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
             Fw.graphics.render(gameObjects);

@@ -12,10 +12,39 @@
  */
 package net.smert.frameworkgl.opengl;
 
+import java.nio.FloatBuffer;
+import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.constants.LightModel;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class AmbientLight {
+
+    private final Vector4f ambient;
+
+    public AmbientLight() {
+        ambient = new Vector4f();
+        reset();
+    }
+
+    public Vector4f getAmbient() {
+        return ambient;
+    }
+
+    public void setAmbient(Vector4f ambient) {
+        this.ambient.set(ambient);
+    }
+
+    public final void reset() {
+        ambient.set(.2f, .2f, .2f, 1f);
+    }
+
+    public void updateOpenGL(FloatBuffer lightFloatBuffer) {
+        ambient.toFloatBuffer(lightFloatBuffer);
+        lightFloatBuffer.flip();
+        GL.o1.lightModel(LightModel.AMBIENT, lightFloatBuffer);
+    }
 
 }

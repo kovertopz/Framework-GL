@@ -15,7 +15,7 @@ package net.smert.frameworkgl.opengl.factory;
 import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.DisplayList;
 import net.smert.frameworkgl.opengl.FrameBufferObject;
-import net.smert.frameworkgl.opengl.Light;
+import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.RenderBufferObject;
 import net.smert.frameworkgl.opengl.Shader;
@@ -51,8 +51,8 @@ public class GLFactory {
         return container.getComponent(FrameBufferObject.class);
     }
 
-    public Light createLight() {
-        return container.getComponent(Light.class);
+    public GLLight createGLLight() {
+        return container.getComponent(GLLight.class);
     }
 
     public MaterialLight createMaterialLight() {

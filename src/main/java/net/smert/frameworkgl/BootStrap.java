@@ -22,7 +22,7 @@ import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.DisplayList;
 import net.smert.frameworkgl.opengl.FrameBufferObject;
 import net.smert.frameworkgl.opengl.GL;
-import net.smert.frameworkgl.opengl.Light;
+import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.OpenGL1;
 import net.smert.frameworkgl.opengl.OpenGL2;
@@ -179,7 +179,7 @@ public class BootStrap {
             glFactoryContainer.addComponent(AmbientLight.class);
             glFactoryContainer.addComponent(DisplayList.class);
             glFactoryContainer.addComponent(FrameBufferObject.class);
-            glFactoryContainer.addComponent(Light.class);
+            glFactoryContainer.addComponent(GLLight.class);
             glFactoryContainer.addComponent(MaterialLight.class);
             glFactoryContainer.addComponent(RenderBufferObject.class);
             glFactoryContainer.addComponent(Shader.class);

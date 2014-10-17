@@ -335,30 +335,55 @@ public class OpenGL1 {
         return GL11.glGetError();
     }
 
-    public String getString(int getstring) {
-        return GL11.glGetString(getstring);
+    public String getString(int getString) {
+        return GL11.glGetString(getString);
     }
 
-    public void getProjectionMatrix(FloatBuffer fb) {
-        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, fb);
+    public void getProjectionMatrix(FloatBuffer matrix) {
+        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, matrix);
     }
 
-    public void getModelViewMatrix(FloatBuffer fb) {
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, fb);
+    public void getModelViewMatrix(FloatBuffer matrix) {
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
     }
 
-    public OpenGL1 light(int lightnumber, int light, FloatBuffer fb) {
-        GL11.glLight(lightnumber, light, fb);
+    public OpenGL1 light(int lightNumber, int light, float value) {
+        GL11.glLightf(lightNumber, light, value);
         return this;
     }
 
-    public OpenGL1 loadMatrix(FloatBuffer fb) {
-        GL11.glLoadMatrix(fb);
+    public OpenGL1 light(int lightNumber, int light, int value) {
+        GL11.glLighti(lightNumber, light, value);
         return this;
     }
 
-    public OpenGL1 material(int face, int material, FloatBuffer fb) {
-        GL11.glMaterial(face, material, fb);
+    public OpenGL1 light(int lightNumber, int light, FloatBuffer vector) {
+        GL11.glLight(lightNumber, light, vector);
+        return this;
+    }
+
+    public OpenGL1 lightModel(int lightModel, float value) {
+        GL11.glLightModelf(lightModel, value);
+        return this;
+    }
+
+    public OpenGL1 lightModel(int lightModel, int value) {
+        GL11.glLightModeli(lightModel, value);
+        return this;
+    }
+
+    public OpenGL1 lightModel(int lightModel, FloatBuffer vector) {
+        GL11.glLightModel(lightModel, vector);
+        return this;
+    }
+
+    public OpenGL1 loadMatrix(FloatBuffer matrix) {
+        GL11.glLoadMatrix(matrix);
+        return this;
+    }
+
+    public OpenGL1 material(int face, int material, float value) {
+        GL11.glMaterialf(face, material, value);
         return this;
     }
 
@@ -367,8 +392,13 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 multiplyMatrix(FloatBuffer fb) {
-        GL11.glMultMatrix(fb);
+    public OpenGL1 material(int face, int material, FloatBuffer vector) {
+        GL11.glMaterial(face, material, vector);
+        return this;
+    }
+
+    public OpenGL1 multiplyMatrix(FloatBuffer matrix) {
+        GL11.glMultMatrix(matrix);
         return this;
     }
 
@@ -432,8 +462,8 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setClearBits(int clearbits) {
-        clearBits = clearbits;
+    public OpenGL1 setClearBits(int clearBits) {
+        this.clearBits = clearBits;
         return this;
     }
 
@@ -467,8 +497,8 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setDefaultLineWidth(float linewidth) {
-        defaultLineWidth = linewidth;
+    public OpenGL1 setDefaultLineWidth(float lineWidth) {
+        defaultLineWidth = lineWidth;
         return this;
     }
 
@@ -522,8 +552,8 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setLineWidth(float linewidth) {
-        GL11.glLineWidth(linewidth);
+    public OpenGL1 setLineWidth(float lineWidth) {
+        GL11.glLineWidth(lineWidth);
         return this;
     }
 

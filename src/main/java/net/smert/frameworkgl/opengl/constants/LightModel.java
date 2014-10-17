@@ -10,12 +10,21 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl;
+package net.smert.frameworkgl.opengl.constants;
+
+import org.lwjgl.opengl.GL11;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Light {
+public class LightModel {
+
+    public final static int AMBIENT = GL11.GL_LIGHT_MODEL_AMBIENT;
+    public final static int LOCAL_VIEWER = GL11.GL_LIGHT_MODEL_LOCAL_VIEWER;
+    public final static int TWO_SIDE = GL11.GL_LIGHT_MODEL_TWO_SIDE;
+
+    private LightModel() {
+    }
 
 }

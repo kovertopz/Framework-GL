@@ -17,11 +17,14 @@ import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.helpers.Keyboard;
+import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.GLLight;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.constants.Light;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.utils.FpsTimer;
@@ -44,10 +47,13 @@ public class MeshReader extends Screen {
     private AbstractRenderable renderableIcoSphere;
     private AbstractRenderable renderableTorus;
     private AbstractRenderable renderableUvSphere;
+    private AmbientLight ambientLight;
     private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
+    private GLLight glLight;
     private LegacyCamera camera;
     private LegacyCameraController cameraController;
+    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private Mesh meshCapsule;
     private Mesh meshCone;
@@ -99,13 +105,14 @@ public class MeshReader extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
+        // Create ambient light, glLight and material light
+        ambientLight = GL.glFactory.createAmbientLight();
+        glLight = GL.glFactory.createGLLight();
+        glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
+        materialLight = GL.glFactory.createMaterialLight();
+
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
-        lightFloatBuffer.put(0f);
-        lightFloatBuffer.put(15f);
-        lightFloatBuffer.put(10f);
-        lightFloatBuffer.put(1f);
-        lightFloatBuffer.flip();
 
         // Create meshes
         meshCapsule = GL.meshFactory.createMesh();
@@ -201,8 +208,10 @@ public class MeshReader extends Screen {
             // Update camera
             camera.updateOpenGL();
 
-            // Update light position
-            GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
+            // Update ambient light, light and material light
+            ambientLight.updateOpenGL(lightFloatBuffer);
+            glLight.updateOpenGL(lightFloatBuffer);
+            materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
             GL.renderer1.render(renderableCapsule, -3f, 0f, 3f);
