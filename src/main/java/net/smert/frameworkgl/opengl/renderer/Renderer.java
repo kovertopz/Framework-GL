@@ -18,6 +18,7 @@ import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
  *
@@ -48,5 +49,11 @@ public interface Renderer {
     public void set2DMode(int width, int height);
 
     public void setCamera(Camera camera);
+
+    public void switchShader(AbstractShader shader);
+
+    public void switchShader(AbstractShader shader, Camera camera);
+
+    public void unbindShader();
 
 }

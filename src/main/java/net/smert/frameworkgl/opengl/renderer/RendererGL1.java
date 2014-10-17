@@ -20,7 +20,6 @@ import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
-import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
@@ -30,26 +29,32 @@ import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicI
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
+public class RendererGL1 extends AbstractRendererGL {
 
-    private FloatBuffer viewMatrixFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
+    private FloatBuffer modelMatrixFloatBuffer;
     private FloatBuffer projectionMatrixFloatBuffer;
-    private final GLFontRenderer glFontRenderer;
+    private FloatBuffer viewMatrixFloatBuffer;
 
     public RendererGL1(GLFontRenderer glFontRenderer) {
-        this.glFontRenderer = glFontRenderer;
+        super(glFontRenderer);
     }
 
-    private void render(AbstractRenderable renderable, FloatBuffer transformWorldFloatBuffer) {
+    public void init() {
+        modelMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
+    }
+
+    private void render(AbstractRenderable renderable, FloatBuffer modelMatrixFloatBuffer) {
         GL.o1.pushMatrix();
-        GL.o1.multiplyMatrix(transformWorldFloatBuffer);
+        GL.o1.multiplyMatrix(modelMatrixFloatBuffer);
         renderable.render();
         GL.o1.popMatrix();
     }
@@ -86,12 +91,6 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
         Renderable.bindState1.reset();
     }
 
-    public void init() {
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-    }
-
     @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
@@ -102,8 +101,8 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
 
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
-        transform.toFloatBuffer(transformWorldFloatBuffer);
-        render(renderable, transformWorldFloatBuffer);
+        transform.toFloatBuffer(modelMatrixFloatBuffer);
+        render(renderable, modelMatrixFloatBuffer);
     }
 
     @Override
@@ -116,9 +115,9 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
 
     @Override
     public void render(GameObject gameObject) {
-        gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-        transformWorldFloatBuffer.flip();
-        render(gameObject.getRenderable(), transformWorldFloatBuffer);
+        gameObject.getWorldTransform().toFloatBuffer(modelMatrixFloatBuffer);
+        modelMatrixFloatBuffer.flip();
+        render(gameObject.getRenderable(), modelMatrixFloatBuffer);
     }
 
     @Override
@@ -134,9 +133,7 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
             return;
         }
         GL.o1.enableBlending();
-        gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-        transformWorldFloatBuffer.flip();
-        render(gameObject.getRenderable(), transformWorldFloatBuffer);
+        render(gameObject);
         GL.o1.disableBlending();
     }
 
@@ -147,9 +144,7 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
             if (gameObject.getRenderableState().isOpaque()) {
                 continue;
             }
-            gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-            transformWorldFloatBuffer.flip();
-            render(gameObject.getRenderable(), transformWorldFloatBuffer);
+            render(gameObject);
         }
         GL.o1.disableBlending();
     }
@@ -159,9 +154,7 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
         if (!gameObject.getRenderableState().isOpaque()) {
             return;
         }
-        gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-        transformWorldFloatBuffer.flip();
-        render(gameObject.getRenderable(), transformWorldFloatBuffer);
+        render(gameObject);
     }
 
     @Override
@@ -170,9 +163,7 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
             if (!gameObject.getRenderableState().isOpaque()) {
                 continue;
             }
-            gameObject.getWorldTransform().toFloatBuffer(transformWorldFloatBuffer);
-            transformWorldFloatBuffer.flip();
-            render(gameObject.getRenderable(), transformWorldFloatBuffer);
+            render(gameObject);
         }
     }
 
@@ -202,6 +193,21 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
     }
 
     @Override
+    public void switchShader(AbstractShader shader) {
+        throw new UnsupportedOperationException("Not supported by this renderer");
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader, Camera camera) {
+        throw new UnsupportedOperationException("Not supported by this renderer");
+    }
+
+    @Override
+    public void unbindShader() {
+        throw new UnsupportedOperationException("Not supported by this renderer");
+    }
+
+    @Override
     public void colorText(Color color) {
         GL.o1.color(color.getR(), color.getG(), color.getB(), color.getA());
     }
@@ -224,71 +230,6 @@ public class RendererGL1 implements Renderer, TextHelperRenderer, TextRenderer {
     @Override
     public void translateText(float x, float y) {
         GL.o1.translate(x, y, 0f);
-    }
-
-    @Override
-    public void drawString(String text, float x, float y) {
-        glFontRenderer.drawString(text, x, y, this);
-    }
-
-    @Override
-    public void drawString(String text, float x, float y, GLFont font) {
-        glFontRenderer.drawString(text, x, y, font, this);
-    }
-
-    @Override
-    public void drawString(String text) {
-        glFontRenderer.drawString(text, this);
-    }
-
-    @Override
-    public void drawString(String text, GLFont font) {
-        glFontRenderer.drawString(text, font, this);
-    }
-
-    @Override
-    public void resetTextRendering() {
-        glFontRenderer.reset();
-    }
-
-    @Override
-    public void setTextColor(float r, float g, float b, float a) {
-        glFontRenderer.setColor(r, g, b, a);
-    }
-
-    @Override
-    public void setTextColor(Color color) {
-        glFontRenderer.setColor(color);
-    }
-
-    @Override
-    public void setTextColor(String colorName) {
-        glFontRenderer.setColor(colorName);
-    }
-
-    @Override
-    public void setTextColorHex(String hexCode) {
-        glFontRenderer.setColorHex(hexCode);
-    }
-
-    @Override
-    public void textNewHalfLine() {
-        glFontRenderer.newHalfLine();
-    }
-
-    @Override
-    public void textNewHalfLine(GLFont font) {
-        glFontRenderer.newHalfLine(font);
-    }
-
-    @Override
-    public void textNewLine() {
-        glFontRenderer.newLine();
-    }
-
-    @Override
-    public void textNewLine(GLFont font) {
-        glFontRenderer.newLine(font);
     }
 
 }

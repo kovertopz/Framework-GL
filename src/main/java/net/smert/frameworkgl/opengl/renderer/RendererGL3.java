@@ -12,39 +12,29 @@
  */
 package net.smert.frameworkgl.opengl.renderer;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
-import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RendererGL3 implements Renderer, TextHelperRenderer, TextRenderer {
-
-    private FloatBuffer viewMatrixFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
-    private FloatBuffer projectionMatrixFloatBuffer;
-    private final GLFontRenderer glFontRenderer;
+public class RendererGL3 extends AbstractRendererGL {
 
     public RendererGL3(GLFontRenderer glFontRenderer) {
-        this.glFontRenderer = glFontRenderer;
+        super(glFontRenderer);
     }
 
     public void destroy() {
     }
 
     public void init() {
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
     }
 
     @Override
@@ -108,6 +98,21 @@ public class RendererGL3 implements Renderer, TextHelperRenderer, TextRenderer {
     }
 
     @Override
+    public void switchShader(AbstractShader shader) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader, Camera camera) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void unbindShader() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void colorText(Color color) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -129,71 +134,6 @@ public class RendererGL3 implements Renderer, TextHelperRenderer, TextRenderer {
 
     @Override
     public void translateText(float x, float y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, float x, float y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, float x, float y, GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void resetTextRendering() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(float r, float g, float b, float a) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(String colorName) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColorHex(String hexCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewHalfLine() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewHalfLine(GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewLine() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewLine(GLFont font) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -12,31 +12,59 @@
  */
 package net.smert.frameworkgl.opengl.renderer;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 import net.smert.frameworkgl.gameobjects.GameObject;
+import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
-import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RendererGL2 implements Renderer, TextHelperRenderer, TextRenderer {
+public class RendererGL2 extends AbstractRendererGL {
 
-    private FloatBuffer viewMatrixFloatBuffer;
-    private FloatBuffer transformWorldFloatBuffer;
-    private FloatBuffer projectionMatrixFloatBuffer;
-    private final GLFontRenderer glFontRenderer;
+    private final Matrix4f modelMatrix;
 
     public RendererGL2(GLFontRenderer glFontRenderer) {
-        this.glFontRenderer = glFontRenderer;
+        super(glFontRenderer);
+        modelMatrix = new Matrix4f();
+    }
+
+    private void render(AbstractRenderable renderable) {
+        Renderable.shaderBindState.sendUniformMatrices();
+        renderable.render();
+    }
+
+    public VertexArrayRenderable createArrayRenderable() {
+        return GL.rf2.createArrayRenderable();
+    }
+
+    public VertexBufferObjectDynamicInterleavedRenderable createDynamicInterleavedRenderable() {
+        return GL.rf2.createDynamicInterleavedRenderable();
+    }
+
+    public VertexBufferObjectDynamicNonInterleavedRenderable createDynamicNonInterleavedRenderable() {
+        return GL.rf2.createDynamicNonInterleavedRenderable();
+    }
+
+    public VertexBufferObjectInterleavedRenderable createInterleavedRenderable() {
+        return GL.rf2.createInterleavedRenderable();
+    }
+
+    public VertexBufferObjectNonInterleavedRenderable createNonInterleavedRenderable() {
+        return GL.rf2.createNonInterleavedRenderable();
     }
 
     public void destroy() {
@@ -44,160 +72,136 @@ public class RendererGL2 implements Renderer, TextHelperRenderer, TextRenderer {
     }
 
     public void init() {
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        transformWorldFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
         Renderable.bindState2.setAttribLocations(GL.defaultAttribLocations);
     }
 
     @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        modelMatrix.setPosition(x, y, z);
+        Renderable.shaderBindState.setModelMatrix(modelMatrix);
+        render(renderable);
     }
 
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.setModelMatrix(transform);
+        render(renderable);
     }
 
     @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        modelMatrix.setPosition(position);
+        Renderable.shaderBindState.setModelMatrix(modelMatrix);
+        render(renderable);
     }
 
     @Override
     public void render(GameObject gameObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Transform4f worldTransform = gameObject.getWorldTransform();
+        Renderable.shaderBindState.setModelMatrix(worldTransform);
+        render(gameObject.getRenderable());
     }
 
     @Override
     public void render(List<GameObject> gameObjects) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (GameObject gameObject : gameObjects) {
+            render(gameObject);
+        }
     }
 
     @Override
     public void renderBlend(GameObject gameObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (gameObject.getRenderableState().isOpaque()) {
+            return;
+        }
+        GL.o1.enableBlending();
+        render(gameObject);
+        GL.o1.disableBlending();
     }
 
     @Override
     public void renderBlend(List<GameObject> gameObjects) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GL.o1.enableBlending();
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject.getRenderableState().isOpaque()) {
+                continue;
+            }
+            render(gameObject);
+        }
+        GL.o1.disableBlending();
     }
 
     @Override
     public void renderOpaque(GameObject gameObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!gameObject.getRenderableState().isOpaque()) {
+            return;
+        }
+        render(gameObject);
     }
 
     @Override
     public void renderOpaque(List<GameObject> gameObjects) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (GameObject gameObject : gameObjects) {
+            if (!gameObject.getRenderableState().isOpaque()) {
+                continue;
+            }
+            render(gameObject);
+        }
     }
 
     @Override
     public void set2DMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.set2DMode();
     }
 
     @Override
     public void set2DMode(int width, int height) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.set2DMode(width, height);
     }
 
     @Override
     public void setCamera(Camera camera) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported by this renderer");
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader) {
+        Renderable.shaderBindState.switchShader(shader);
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader, Camera camera) {
+        Renderable.shaderBindState.switchShader(shader, camera);
+    }
+
+    @Override
+    public void unbindShader() {
+        Renderable.shaderBindState.unbindShader();
     }
 
     @Override
     public void colorText(Color color) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GL.o1.color(color.getR(), color.getG(), color.getB(), color.getA());
     }
 
     @Override
     public AbstractRenderable createGlyphRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return createInterleavedRenderable();
     }
 
     @Override
     public void popMatrix() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.popMatrix();
     }
 
     @Override
     public void pushMatrix() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.pushMatrix();
     }
 
     @Override
     public void translateText(float x, float y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, float x, float y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, float x, float y, GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void drawString(String text, GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void resetTextRendering() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(float r, float g, float b, float a) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColor(String colorName) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setTextColorHex(String hexCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewHalfLine() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewHalfLine(GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewLine() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void textNewLine(GLFont font) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Renderable.shaderBindState.translateModelMatrix(x, y, 0f);
     }
 
 }
