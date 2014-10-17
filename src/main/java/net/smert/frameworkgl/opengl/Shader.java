@@ -12,13 +12,36 @@
  */
 package net.smert.frameworkgl.opengl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class Shader {
 
+    private final static Logger log = LoggerFactory.getLogger(Shader.class);
+
+    private int programID;
+
+    public void create() {
+        destroy();
+        programID = GL.shaderHelper.createProgram();
+        log.debug("Created a new program with ID: {}", programID);
+    }
+
     public void destroy() {
+        if (programID == 0) {
+            return;
+        }
+        GL.shaderHelper.deleteProgram(programID);
+        log.debug("Deleted a program with ID: {}", programID);
+        programID = 0;
+    }
+
+    public int getProgramID() {
+        return programID;
     }
 
 }
