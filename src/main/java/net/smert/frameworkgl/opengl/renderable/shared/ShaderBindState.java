@@ -12,8 +12,17 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import java.nio.FloatBuffer;
+import net.smert.frameworkgl.Fw;
+import net.smert.frameworkgl.math.Matrix4f;
+import net.smert.frameworkgl.math.Transform4f;
+import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
+import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
+import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
 
 /**
  *
@@ -21,18 +30,112 @@ import net.smert.frameworkgl.opengl.constants.TextureUnit;
  */
 public class ShaderBindState {
 
+    private boolean doNothingShaderActive;
+    private boolean shaderBinded;
     private float textureFlag;
-    private Shader shader;
+    private int uniqueShaderID;
+    private final AbstractShader defaultDoNothingShader;
+    private AbstractShader defaultShader;
+    private AbstractShader shader;
+    private FloatBuffer matrixFloatBuffer;
 
     public ShaderBindState() {
+        defaultDoNothingShader = new DefaultDoNothingShader();
         reset();
     }
 
-    private void setShaderUniformTextureFlag(float flag) {
-        //shader.setUniformTextureFlag(flag);
+    public void bindShader(int uniqueShaderID) {
+        if (this.uniqueShaderID == uniqueShaderID) {
+            return;
+        }
+        this.uniqueShaderID = uniqueShaderID;
+        if (uniqueShaderID != -1) {
+            AbstractShader abstractShader = Renderable.shaderPool.get(uniqueShaderID);
+            switchShader(abstractShader);
+        } else {
+            switchShader(defaultShader);
+        }
+    }
+
+    public int getTextureUnit(int textureTypeID) {
+        return TextureUnit.TEXTURE0;
+    }
+
+    public AbstractShader getDefaultShader() {
+        return defaultShader;
+    }
+
+    public void setDefaultShader(AbstractShader defaultShader) {
+        this.defaultShader = defaultShader;
+    }
+
+    public void init() {
+        matrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
     }
 
     public final void reset() {
+        doNothingShaderActive = true;
+        shaderBinded = false;
+        textureFlag = 0f;
+        uniqueShaderID = Integer.MIN_VALUE; // Default is -1 elsewhere
+        defaultShader = null;
+        defaultShader = defaultDoNothingShader;
+        shader = defaultDoNothingShader;
+    }
+
+    public void popMatrix() {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.pop();
+    }
+
+    public void pushMatrix() {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+    }
+
+    public void rotateModelMatrix(float angle, float x, float y, float z) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.rotate(angle, x, y, z);
+    }
+
+    public void sendUniformMatrices() {
+        if (doNothingShaderActive) {
+            return;
+        }
+        shader.sendUniformMatrices(matrixFloatBuffer);
+    }
+
+    public void set2DMode() {
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.setOrthogonal(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.loadIdentity();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
+    }
+
+    public void set2DMode(int width, int height) {
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.setOrthogonal(0f, width, 0f, height, -1f, 1f);
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.loadIdentity();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
+    }
+
+    public void setModelIdentity() {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
+    }
+
+    public void setModelMatrix(Matrix4f worldTransform) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.load(worldTransform);
+    }
+
+    public void setModelMatrix(Transform4f worldTransform) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.load(worldTransform);
     }
 
     public void setTextureFlag(float flag) {
@@ -40,14 +143,61 @@ public class ShaderBindState {
             return;
         }
         textureFlag = flag;
-        setShaderUniformTextureFlag(flag);
+        if (doNothingShaderActive) {
+            return;
+        }
+        shader.sendUniformTextureFlag(flag);
     }
 
-    public void bindShader(int shader) {
+    public void switchShader(AbstractShader shader) {
+        if (this.shader == shader) {
+            if (!shaderBinded) {
+                shader.bind();
+            }
+            return;
+        }
+        doNothingShaderActive = false;
+        this.shader = shader;
+        shader.bind();
     }
 
-    public int getTextureUnit(int textureTypeID) {
-        return TextureUnit.TEXTURE0;
+    public void switchShader(AbstractShader shader, Camera camera) {
+        switchShader(shader);
+        camera.updateViewMatrix();
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.load(camera.getProjectionMatrix());
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.load(camera.getViewMatrix());
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
+    }
+
+    public void translateModelMatrix(float x, float y, float z) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.translate(x, y, z);
+    }
+
+    public void unbindShader() {
+        if (shader != null) {
+            shader.unbind();
+        }
+        shaderBinded = false;
+    }
+
+    private static class DefaultDoNothingShader extends AbstractShader {
+
+        public DefaultDoNothingShader() {
+            super(new DefaultShaderUniforms(0), new Shader());
+        }
+
+        @Override
+        public void bind() {
+        }
+
+        @Override
+        public void unbind() {
+        }
+
     }
 
 }
