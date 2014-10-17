@@ -9,7 +9,10 @@ Framework-GL has the following features :
 
 - Basic rendering for immediate mode, display lists, vertex arrays,
   vertex buffer objects (dynamic & interleaved) using OpenGL 1.X.
-- Builders (Frame buffer object & textures)
+- Basic rendering for vertex arrays, vertex buffer objects
+  (dynamic & interleaved) and shaders using OpenGL 2.X.
+- Builders (FBOs, shaders & textures)
+- Cube maps
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.
 - Bitmap font rendering (using Java2D)
@@ -20,6 +23,7 @@ Framework-GL has the following features :
 - OpenGL helpers for display lists, frame buffer objects, legacy
   rendering, render buffer objects, shaders, textures, vertex arrays
   and vertex buffer objects.
+- Shader loading
 - Texture loading (BMP, GIF, JPG, PNG, TGA, and TIFF)
 - Multi-platform (Windows, Linux, Mac OS X)
 - Examples
