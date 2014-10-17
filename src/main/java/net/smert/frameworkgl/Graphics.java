@@ -23,8 +23,10 @@ import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
+import net.smert.frameworkgl.opengl.constants.ShaderTypes;
 import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.opengl.image.ImageReader;
@@ -37,6 +39,7 @@ import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactory;
 import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
 import net.smert.frameworkgl.opengl.renderer.Renderer;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
  *
@@ -49,6 +52,16 @@ public class Graphics implements Renderer {
     private GLFont defaultFont;
     private RenderableFactory renderableFactory;
     private Renderer renderer;
+
+    public Shader buildShader(String fragmentShaderFilename, String vertexShaderFilename, String shaderName)
+            throws IOException {
+        return GL.shaderBuilder.
+                load(fragmentShaderFilename, ShaderTypes.FRAGMENT_SHADER).
+                load(vertexShaderFilename, ShaderTypes.VERTEX_SHADER).
+                compileShaders().
+                buildProgram(shaderName).
+                createShader(true);
+    }
 
     public AbstractRenderable createArrayRenderable() {
         return renderableFactory.createArrayRenderable();
@@ -157,6 +170,7 @@ public class Graphics implements Renderer {
         GL.renderer1.init();
         GL.renderer2.init();
         GL.renderer3.init();
+        Renderable.shaderBindState.init();
         defaultFont = GL.glFontBuilder.
                 addUsAsciiGlyphs().
                 setAntiAliasing(true).
@@ -343,6 +357,21 @@ public class Graphics implements Renderer {
     @Override
     public void setCamera(Camera camera) {
         renderer.setCamera(camera);
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader) {
+        renderer.switchShader(shader);
+    }
+
+    @Override
+    public void switchShader(AbstractShader shader, Camera camera) {
+        renderer.switchShader(shader, camera);
+    }
+
+    @Override
+    public void unbindShader() {
+        renderer.unbindShader();
     }
 
     public static class RenderableComparison implements Comparator<GameObject> {
