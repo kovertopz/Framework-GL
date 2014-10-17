@@ -106,6 +106,7 @@
                         <exclude>APACHE-2.txt</exclude>
                         <exclude>examples/**</exclude>
                         <exclude>LICENSE.txt</exclude>
+                        <exclude>NOTES.txt</exclude>
                         <exclude>nbactions.xml</exclude>
                         <exclude>pom.xml</exclude>
                         <exclude>src/main/java/net/smert/frameworkgl/opengl/image/tga/LEDataInputStream.java</exclude>
