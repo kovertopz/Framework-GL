@@ -137,17 +137,17 @@ public class BulletGameObjectFactory {
         }
 
         // Create vertex buffer object renderables
-        renderableBox = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableBox = Fw.graphics.createInterleavedRenderable();
         renderableBox.create(meshBox);
-        renderableCapsule = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCapsule = Fw.graphics.createInterleavedRenderable();
         renderableCapsule.create(meshCapsule);
-        renderableCone = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCone = Fw.graphics.createInterleavedRenderable();
         renderableCone.create(meshCone);
-        renderableCylinder = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCylinder = Fw.graphics.createInterleavedRenderable();
         renderableCylinder.create(meshCylinder);
-        renderableGround = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableGround = Fw.graphics.createInterleavedRenderable();
         renderableGround.create(meshGround);
-        renderableSphere = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableSphere = Fw.graphics.createInterleavedRenderable();
         renderableSphere.create(meshSphere);
 
         // Scaling transforms

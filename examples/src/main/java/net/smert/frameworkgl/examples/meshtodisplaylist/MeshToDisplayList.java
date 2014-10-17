@@ -83,11 +83,11 @@ public class MeshToDisplayList extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create display list renderables
-        renderableQuads = GL.legacyRenderer.createDisplayListRenderable();
+        renderableQuads = GL.renderer1.createDisplayListRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.legacyRenderer.createDisplayListRenderable();
+        renderableQuadsWithPerVertexColors = GL.renderer1.createDisplayListRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.legacyRenderer.createDisplayListRenderable();
+        renderableTriangles = GL.renderer1.createDisplayListRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -133,9 +133,9 @@ public class MeshToDisplayList extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
-            GL.legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
-            GL.legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            GL.renderer1.render(renderableTriangles, -2f, 0f, 0f);
+            GL.renderer1.render(renderableQuads, 2f, 0f, 0f);
+            GL.renderer1.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

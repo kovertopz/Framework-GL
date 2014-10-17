@@ -135,19 +135,19 @@ public class MeshReader extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCapsule = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCapsule = GL.renderer1.createNonInterleavedRenderable();
         renderableCapsule.create(meshCapsule);
-        renderableCone = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCone = GL.renderer1.createNonInterleavedRenderable();
         renderableCone.create(meshCone);
-        renderableCube = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCube = GL.renderer1.createNonInterleavedRenderable();
         renderableCube.create(meshCube);
-        renderableCylinder = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCylinder = GL.renderer1.createNonInterleavedRenderable();
         renderableCylinder.create(meshCylinder);
-        renderableIcoSphere = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableIcoSphere = GL.renderer1.createNonInterleavedRenderable();
         renderableIcoSphere.create(meshIcoSphere);
-        renderableTorus = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableTorus = GL.renderer1.createNonInterleavedRenderable();
         renderableTorus.create(meshTorus);
-        renderableUvSphere = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableUvSphere = GL.renderer1.createNonInterleavedRenderable();
         renderableUvSphere.create(meshUvSphere);
 
         GL.o1.enableCulling();
@@ -206,13 +206,13 @@ public class MeshReader extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(renderableCapsule, -3f, 0f, 3f);
-            GL.legacyRenderer.render(renderableCone, 3f, 0f, 3f);
-            GL.legacyRenderer.render(renderableCube, -3f, 0f, 0f);
-            GL.legacyRenderer.render(renderableCylinder, 3f, 0f, 0f);
-            GL.legacyRenderer.render(renderableIcoSphere, -3f, 0f, -3f);
-            GL.legacyRenderer.render(renderableUvSphere, 3f, 0f, -3f);
-            GL.legacyRenderer.render(renderableTorus, 0f, 3f, 0f);
+            GL.renderer1.render(renderableCapsule, -3f, 0f, 3f);
+            GL.renderer1.render(renderableCone, 3f, 0f, 3f);
+            GL.renderer1.render(renderableCube, -3f, 0f, 0f);
+            GL.renderer1.render(renderableCylinder, 3f, 0f, 0f);
+            GL.renderer1.render(renderableIcoSphere, -3f, 0f, -3f);
+            GL.renderer1.render(renderableUvSphere, 3f, 0f, -3f);
+            GL.renderer1.render(renderableTorus, 0f, 3f, 0f);
         }
     }
 

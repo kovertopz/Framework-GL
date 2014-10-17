@@ -141,7 +141,7 @@ public class DynamicVertexBufferObject extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Float buffer for light and matrices
+        // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         // AABB game object
@@ -237,19 +237,19 @@ public class DynamicVertexBufferObject extends Screen {
             Fw.graphics.updateAabb(dynamicSphereGameObject);
 
             // Update camera
-            GL.legacyRenderer.setCamera(camera);
+            GL.renderer1.setCamera(camera);
 
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(gameObjectsToRender);
+            GL.renderer1.render(gameObjectsToRender);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                GL.legacyRenderer.renderBlend(viewFrustumGameObject);
+                GL.renderer1.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -259,7 +259,7 @@ public class DynamicVertexBufferObject extends Screen {
                     // Updating AABBs this way is costly
                     aabbGameObject.update(worldAabb);
                     // AABB is already in world coordinates so we don't translate
-                    GL.legacyRenderer.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                    GL.renderer1.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
                 }
             }
 
@@ -268,7 +268,7 @@ public class DynamicVertexBufferObject extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    GL.legacyRenderer.render(simpleOrientationAxisGameObject);
+                    GL.renderer1.render(simpleOrientationAxisGameObject);
                 }
                 GL.o1.enableDepthTest();
             }

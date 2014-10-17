@@ -98,7 +98,7 @@ public class MeshReaderTextured extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCrateAndBarrel = GL.legacyRenderer.createVertexBufferObjectRenderable();
+        renderableCrateAndBarrel = GL.renderer1.createNonInterleavedRenderable();
         renderableCrateAndBarrel.create(meshCrateAndBarrel);
 
         GL.o1.enableCulling();
@@ -157,7 +157,7 @@ public class MeshReaderTextured extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
+            GL.renderer1.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
         }
     }
 

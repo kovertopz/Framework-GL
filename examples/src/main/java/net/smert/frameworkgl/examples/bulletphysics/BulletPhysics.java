@@ -94,7 +94,7 @@ public class BulletPhysics extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Float buffer for light and matrices
+        // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         BulletGameObject groundGameObject
@@ -186,7 +186,7 @@ public class BulletPhysics extends Screen {
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
-            GL.legacyRenderer.render(gameObjects);
+            Fw.graphics.render(gameObjects);
         }
     }
 

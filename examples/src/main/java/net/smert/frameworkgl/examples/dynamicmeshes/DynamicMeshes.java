@@ -89,7 +89,7 @@ public class DynamicMeshes extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Float buffer for light and matrices
+        // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         // Create dynamic mesh world
@@ -153,7 +153,7 @@ public class DynamicMeshes extends Screen {
 
             // Render directly
             List<GameObject> gameObjects = dynamicMeshesWorld.getGameObjects();
-            GL.legacyRenderer.render(gameObjects);
+            GL.renderer1.render(gameObjects);
         }
     }
 

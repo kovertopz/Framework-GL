@@ -91,11 +91,11 @@ public class ImmediateMode extends Screen {
         meshTriangles = Fw.graphics.createMesh(cubeTriangles);
 
         // Create immediate mode renderables
-        renderableQuads = GL.legacyRenderer.createImmediateModeRenderable();
+        renderableQuads = GL.renderer1.createImmediateModeRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.legacyRenderer.createImmediateModeRenderable();
+        renderableQuadsWithPerVertexColors = GL.renderer1.createImmediateModeRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.legacyRenderer.createImmediateModeRenderable();
+        renderableTriangles = GL.renderer1.createImmediateModeRenderable();
         renderableTriangles.create(meshTriangles);
 
         GL.o1.enableCulling();
@@ -141,9 +141,9 @@ public class ImmediateMode extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.legacyRenderer.render(renderableTriangles, -2f, 0f, 0f);
-            GL.legacyRenderer.render(renderableQuads, 2f, 0f, 0f);
-            GL.legacyRenderer.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            GL.renderer1.render(renderableTriangles, -2f, 0f, 0f);
+            GL.renderer1.render(renderableQuads, 2f, 0f, 0f);
+            GL.renderer1.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

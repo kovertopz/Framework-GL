@@ -77,7 +77,7 @@ public class FansAndStrips extends Screen {
         meshFansAndStrips = Fw.graphics.createMesh(fansAndStrips);
 
         // Create immediate mode renderable
-        renderableFansAndStrips = GL.legacyRenderer.createImmediateModeRenderable();
+        renderableFansAndStrips = GL.renderer1.createImmediateModeRenderable();
         renderableFansAndStrips.create(meshFansAndStrips);
 
         GL.o1.enableCulling();
@@ -123,7 +123,7 @@ public class FansAndStrips extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.legacyRenderer.render(renderableFansAndStrips, 0f, 0f, 0f);
+            GL.renderer1.render(renderableFansAndStrips, 0f, 0f, 0f);
         }
     }
 

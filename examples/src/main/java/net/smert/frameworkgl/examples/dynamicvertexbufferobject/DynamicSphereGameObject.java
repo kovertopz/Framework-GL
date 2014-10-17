@@ -17,7 +17,7 @@ import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectRenderable;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 
 /**
  *
@@ -34,7 +34,6 @@ public class DynamicSphereGameObject extends GameObject {
     private float sphereRadiusY;
     private float sphereRadiusZ;
     private float sphereUpdateTimer;
-    private DynamicVertexBufferObjectRenderable dynamicVBORenderable;
 
     @Override
     public void init() {
@@ -51,23 +50,21 @@ public class DynamicSphereGameObject extends GameObject {
         // Set position
         getWorldTransform().setPosition(0f, 10f, 0f);
 
-        // Create initial mesh
-        Mesh dynamicMesh = GL.meshFactory.createMesh();
+        // Create mesh and renderable
+        Mesh mesh = GL.meshFactory.createMesh();
         GL.dynamicMeshBuilder.
                 setColor(0, "medium_purple").
                 setQuality(8, 1, 1).
                 setRadius(sphereRadiusX, sphereRadiusY, sphereRadiusZ).
                 setSize(0f, 0f, 0f).
                 build("sphere").
-                createMesh(false, dynamicMesh);
-
-        // Create renderable
-        dynamicVBORenderable = GL.legacyRenderer.createDynamicVertexBufferObjectRenderable();
-        dynamicVBORenderable.create(dynamicMesh);
+                createMesh(false, mesh);
+        AbstractRenderable renderable = GL.renderer1.createDynamicNonInterleavedRenderable();
+        renderable.create(mesh);
 
         // Attach to game object
-        setMesh(dynamicMesh);
-        setRenderable(dynamicVBORenderable);
+        setMesh(mesh);
+        setRenderable(renderable);
     }
 
     @Override
@@ -101,7 +98,7 @@ public class DynamicSphereGameObject extends GameObject {
                     createMesh(false, getMesh());
 
             // Update renderable with new mesh
-            dynamicVBORenderable.update(getMesh());
+            getRenderable().update(getMesh());
         }
     }
 
