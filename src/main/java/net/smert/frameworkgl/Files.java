@@ -299,7 +299,7 @@ public class Files {
 
     public FileAsset getShader(String filename) {
         if (useGlslPrefix) {
-            filename = Fw.config.glslVersion + INTERNAL_FILE_SEPARATOR + filename;
+            filename = "v" + Fw.config.glslVersion + INTERNAL_FILE_SEPARATOR + filename;
         }
         return get(SHADER_LOCATION, filename);
     }
