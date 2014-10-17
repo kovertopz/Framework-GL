@@ -221,7 +221,7 @@ public class BindStateGL2 {
         colorIndex = defaultAttribLocations.getIndex("color");
         normalIndex = defaultAttribLocations.getIndex("normal");
         texCoord0Index = defaultAttribLocations.getIndex("texCoord0");
-        vertexIndex = defaultAttribLocations.getIndex("color");
+        vertexIndex = defaultAttribLocations.getIndex("vertex");
     }
 
     public void switchRenderableConfiguration(int renderableConfigID) {
