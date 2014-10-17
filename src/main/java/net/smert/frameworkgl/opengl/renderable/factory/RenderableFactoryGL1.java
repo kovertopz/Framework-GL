@@ -12,10 +12,10 @@
  */
 package net.smert.frameworkgl.opengl.renderable.factory;
 
-import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayBindStrategyGL1;
 import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectBindStrategyGL1;
+import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;

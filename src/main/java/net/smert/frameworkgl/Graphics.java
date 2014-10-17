@@ -37,7 +37,7 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactory;
-import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderer.Renderer;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 

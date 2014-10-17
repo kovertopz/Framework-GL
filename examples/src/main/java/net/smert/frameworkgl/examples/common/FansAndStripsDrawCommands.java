@@ -15,7 +15,7 @@ package net.smert.frameworkgl.examples.common;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
 /**
  *

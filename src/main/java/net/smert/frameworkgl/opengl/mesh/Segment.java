@@ -13,7 +13,7 @@
 package net.smert.frameworkgl.opengl.mesh;
 
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
 /**
  *

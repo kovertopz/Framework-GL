@@ -17,7 +17,7 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.constants.GLTypes;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
 /**
  *

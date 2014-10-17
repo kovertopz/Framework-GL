@@ -13,8 +13,8 @@
 package net.smert.frameworkgl.opengl.renderable;
 
 import net.smert.frameworkgl.opengl.renderable.gl1.BindStateGL1;
-import net.smert.frameworkgl.opengl.renderable.gl1.DrawCommands;
 import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderPool;

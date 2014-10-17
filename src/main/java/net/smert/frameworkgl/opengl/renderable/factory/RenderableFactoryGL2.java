@@ -14,6 +14,8 @@ package net.smert.frameworkgl.opengl.renderable.factory;
 
 import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategyGL2;
 import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategyGL2;
+import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
@@ -37,6 +39,14 @@ public class RenderableFactoryGL2 implements RenderableFactory {
         container = renderableFactoryGL2Container;
         this.vertexArrayBindStrategy = vertexArrayBindStrategy;
         this.vertexBufferObjectBindStrategy = vertexBufferObjectBindStrategy;
+    }
+
+    public DisplayListRenderable createDisplayList() {
+        return container.getComponent(DisplayListRenderable.class);
+    }
+
+    public ImmediateModeRenderable createImmediateMode() {
+        return container.getComponent(ImmediateModeRenderable.class);
     }
 
     @Override
