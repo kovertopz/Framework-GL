@@ -81,7 +81,7 @@ public abstract class AbstractBuilder {
         // Convert shaders for each segment
         int[] shaders = new int[totalSegments];
         for (int i = 0; i < shaders.length; i++) {
-            shaders[i] = 0;
+            shaders[i] = -1;
 
             Material material = mesh.getSegment(i).getMaterial();
             if (material == null) {
