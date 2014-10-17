@@ -12,23 +12,23 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
-import net.smert.frameworkgl.opengl.Shader;
+import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class ShaderPool extends ObjectPool<Shader> {
+public class ShaderPool extends ObjectPool<AbstractShader> {
 
     @Override
-    protected ObjectDestroyer<Shader> createObjectDestroyer() {
+    protected ObjectDestroyer<AbstractShader> createObjectDestroyer() {
         return new ShaderDestroyer();
     }
 
-    private static class ShaderDestroyer extends ObjectDestroyer<Shader> {
+    private static class ShaderDestroyer extends ObjectDestroyer<AbstractShader> {
 
         @Override
-        public void destroy(Shader shader) {
+        public void destroy(AbstractShader shader) {
             shader.destroy();
         }
 
