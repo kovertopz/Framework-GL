@@ -82,6 +82,7 @@ public class LegacyCamera {
     }
 
     public void updateOpenGL() {
+        GL.o1.setModelViewIdentity();
         // Positive rotation turns clockwise...which is counterintuitive since OpenGL uses the right-hand rule
         GL.o1.rotate(rotation.getX(), 1f, 0f, 0f); // Positive CW
         GL.o1.rotate(360f - rotation.getY(), 0f, 1f, 0f); // Positive CW

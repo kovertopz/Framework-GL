@@ -133,10 +133,10 @@ public class ImmediateMode extends Screen {
         if (Fw.timer.isRenderTick()) {
             handleInput();
 
-            // Clear screen and reset modelview matrix
+            // Clear screen
             GL.o1.clear();
-            GL.o1.setModelViewIdentity();
 
+            // Update camera
             camera.updateOpenGL();
 
             // Render directly

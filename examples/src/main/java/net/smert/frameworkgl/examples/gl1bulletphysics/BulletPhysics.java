@@ -166,9 +166,11 @@ public class BulletPhysics extends Screen {
         if (Fw.timer.isRenderTick()) {
             handleInput();
 
+            // Update dynamics world
             float delta = Fw.timer.getDelta();
             bulletWrapper.stepSimulation(delta);
 
+            // Spawn new object
             if ((spawnTimer -= delta) < 0f) {
                 int random = RandomUtils.NextInt(0, randomObjects.size() - 1);
                 String randomObject = randomObjects.get(random);
@@ -179,12 +181,13 @@ public class BulletPhysics extends Screen {
                 spawnTimer += .5f;
             }
 
-            // Clear screen and reset modelview matrix
+            // Clear screen
             GL.o1.clear();
-            GL.o1.setModelViewIdentity();
 
+            // Update camera
             camera.updateOpenGL();
 
+            // Update light position
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly

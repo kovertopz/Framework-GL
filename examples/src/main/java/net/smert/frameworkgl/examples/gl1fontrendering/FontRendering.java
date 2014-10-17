@@ -229,6 +229,7 @@ public class FontRendering extends Screen {
             // Update camera
             GL.renderer1.setCamera(camera);
 
+            // Update light position
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly

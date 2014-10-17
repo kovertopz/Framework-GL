@@ -195,12 +195,13 @@ public class MeshReader extends Screen {
         if (Fw.timer.isRenderTick()) {
             handleInput();
 
-            // Clear screen and reset modelview matrix
+            // Clear screen
             GL.o1.clear();
-            GL.o1.setModelViewIdentity();
 
+            // Update camera
             camera.updateOpenGL();
 
+            // Update light position
             GL.o1.light(Light.LIGHT0, Light.POSITION, lightFloatBuffer);
 
             // Render directly
