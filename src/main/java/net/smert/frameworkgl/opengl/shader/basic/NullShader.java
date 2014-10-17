@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.shader.basic;
 
+import java.io.IOException;
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
@@ -35,7 +37,8 @@ public class NullShader extends AbstractShader {
 
     public static class Factory {
 
-        public static NullShader Create(Shader shader) {
+        public static NullShader Create() throws IOException {
+            Shader shader = Fw.graphics.buildShader("basic/null.fsh", "basic/null.vsh", "null");
             return new NullShader(new Uniforms(shader.getProgramID()), shader);
         }
 
