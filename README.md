@@ -7,11 +7,13 @@ modern practices using OpenGL 3.3.
 
 Framework-GL has the following features :
 
-- Basic rendering for immediate mode, display lists, vertex arrays,
+- Basic rendering with immediate mode, display lists, vertex arrays,
   vertex buffer objects (dynamic & interleaved) using OpenGL 1.X.
-- Basic rendering for vertex arrays, vertex buffer objects
-  (dynamic & interleaved) and shaders using OpenGL 2.X.
+- Basic rendering with immediate mode, display lists, vertex arrays,
+  vertex buffer objects (dynamic & interleaved) and shaders using
+  OpenGL 2.X.
 - Builders (FBOs, shaders & textures)
+- Built-in shaders (Blinn-Phong vertex lit)
 - Cube maps
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.

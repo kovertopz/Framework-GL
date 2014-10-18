@@ -1,0 +1,41 @@
+OpenGL 1.X
+========================================
+  - You must choose withOpenGL33ProfileCompatibility() in your Configuration.
+  - This is the default mode for Graphics.
+  - Shaders cannot be used.
+  - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
+  - You must not attach any shaders to a mesh material.
+
+OpenGL 2.1
+========================================
+  - You must choose withOpenGL33ProfileCompatibility() in your Configuration.
+  - You need to enable the correct renderer and renderable factory with Fw.graphics.switchRenderableFactoryAndRenderer(2).
+  - You must render all objects with a shader.
+  - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
+  - All shaders reference a global DefaultAttribLocations by default for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
+  - If you make changes to the global DefaultAttribLocations then you must update the bind state.
+  - Texture type (defined in net.smert.frameworkgl.opengl.TextureType) which is used in Mesh Material has to be mapped to a texture unit. This is mapped on a per shader basis.
+  - Shaders still rely completely on built-in uniforms and variables.
+
+OpenGL 3.2
+========================================
+  - You must choose withOpenGL32ProfileCore() in your Configuration.
+  - You need to enable the correct renderer and renderable factory with Fw.graphics.switchRenderableFactoryAndRenderer(3).
+  - There are no built-in shaders for this version.
+  - You must render all objects with a shader.
+  - You can render objects using Vertex Arrays and VAOs.
+  - All shaders reference a global DefaultAttribLocations by default for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
+  - If you make changes to the global DefaultAttribLocations then you must update the bind state.
+  - Texture type (defined in net.smert.frameworkgl.opengl.TextureType) which is used in Mesh Material has to be mapped to a texture unit. This is mapped on a per shader basis.
+  - Shaders to not rely on built-in uniforms and variables.
+
+OpenGL 3.3
+========================================
+  - You must choose withOpenGL33ProfileCore() in your Configuration.
+  - You need to enable the correct renderer and renderable factory with Fw.graphics.switchRenderableFactoryAndRenderer(3).
+  - You must render all objects with a shader.
+  - You can render objects using Vertex Arrays and VAOs.
+  - All shaders reference a global DefaultAttribLocations by default for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
+  - If you make changes to the global DefaultAttribLocations then you must update the bind state.
+  - Texture type (defined in net.smert.frameworkgl.opengl.TextureType) which is used in Mesh Material has to be mapped to a texture unit. This is mapped on a per shader basis.
+  - Shaders to not rely on built-in uniforms and variables.
