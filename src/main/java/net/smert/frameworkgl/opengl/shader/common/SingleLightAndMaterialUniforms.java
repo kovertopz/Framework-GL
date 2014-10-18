@@ -1,7 +1,8 @@
-package net.smert.frameworkgl.opengl.shader.vertexlit.single;
+package net.smert.frameworkgl.opengl.shader.common;
 
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
@@ -10,7 +11,7 @@ import net.smert.frameworkgl.opengl.MaterialLight;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class LightAndMaterialUniforms {
+public class SingleLightAndMaterialUniforms {
 
     private final static Vector3f eyePosition = new Vector3f();
     private final static Vector3f spotEyeDirection = new Vector3f();
@@ -18,13 +19,20 @@ public class LightAndMaterialUniforms {
     private final static Vector3f worldPosition = new Vector3f();
 
     private final int programID;
+    private int uniformGlobalAmbientLightID;
     private final int[] uniformLightIDs;
     private final int[] uniformMaterialLightIDs;
 
-    public LightAndMaterialUniforms(int programID) {
+    public SingleLightAndMaterialUniforms(int programID) {
         this.programID = programID;
         uniformLightIDs = new int[12];
         uniformMaterialLightIDs = new int[5];
+    }
+
+    public void setAmbientLight(AmbientLight ambientLight) {
+        Vector4f ambient = ambientLight.getAmbient();
+        GL.shaderUniformHelper.setUniform(uniformGlobalAmbientLightID,
+                ambient.getX(), ambient.getY(), ambient.getZ(), ambient.getW());
     }
 
     public void setLight(GLLight glLight) {
@@ -79,6 +87,8 @@ public class LightAndMaterialUniforms {
     }
 
     public void updateUniformLocations() {
+        uniformGlobalAmbientLightID = GL.shaderUniformHelper.getUniformLocation(programID, "uGlobalAmbientLight");
+
         uniformLightIDs[0] = GL.shaderUniformHelper.getUniformLocation(programID, "uLight.constantAttenuation");
         uniformLightIDs[1] = GL.shaderUniformHelper.getUniformLocation(programID, "uLight.linearAttenuation");
         uniformLightIDs[2] = GL.shaderUniformHelper.getUniformLocation(programID, "uLight.quadraticAttenuation");

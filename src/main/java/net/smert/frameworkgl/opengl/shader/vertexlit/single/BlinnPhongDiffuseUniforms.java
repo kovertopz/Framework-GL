@@ -54,10 +54,6 @@ public class BlinnPhongDiffuseUniforms extends DefaultShaderUniforms {
         diffuseUniforms.setMaterialLight(materialLight);
     }
 
-    public void setRadius(float radius) {
-        diffuseUniforms.setRadius(radius);
-    }
-
     @Override
     public void updateUniformLocations() {
         super.updateUniformLocations();
