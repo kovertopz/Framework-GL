@@ -89,7 +89,7 @@ public class GLLight {
     }
 
     public void setSpotCutoff(float spotCutoff) {
-        this.spotOuterCutoff = spotCutoff;
+        setSpotOuterCutoff(spotCutoff);
     }
 
     public float getSpotInnerCutoff() {
@@ -97,8 +97,8 @@ public class GLLight {
     }
 
     public void setSpotInnerCutoff(float spotInnerCutoff) {
-        spotInnerCutoffCos = MathHelper.Cos(spotInnerCutoff * MathHelper.DEG_TO_RAD);
         this.spotInnerCutoff = spotInnerCutoff;
+        spotInnerCutoffCos = MathHelper.Cos(spotInnerCutoff * MathHelper.DEG_TO_RAD);
     }
 
     public float getSpotOuterCutoff() {
