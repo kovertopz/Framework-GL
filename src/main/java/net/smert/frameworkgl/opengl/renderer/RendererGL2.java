@@ -12,7 +12,6 @@
  */
 package net.smert.frameworkgl.opengl.renderer;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
@@ -38,19 +37,13 @@ import net.smert.frameworkgl.utils.Color;
  */
 public class RendererGL2 extends AbstractRendererGL {
 
-    private FloatBuffer modelMatrixFloatBuffer;
-    private FloatBuffer projectionMatrixFloatBuffer;
-    private FloatBuffer viewMatrixFloatBuffer;
-
     public RendererGL2(GLFontRenderer glFontRenderer) {
         super(glFontRenderer);
     }
 
-    private void render(AbstractRenderable renderable, FloatBuffer modelMatrixFloatBuffer) {
-        GL.o1.pushMatrix();
-        GL.o1.multiplyMatrix(modelMatrixFloatBuffer);
+    private void render(AbstractRenderable renderable) {
+        Renderable.shaderBindState.sendUniformMatrices();
         renderable.render();
-        GL.o1.popMatrix();
     }
 
     public VertexArrayRenderable createArrayRenderable() {
@@ -86,39 +79,43 @@ public class RendererGL2 extends AbstractRendererGL {
     }
 
     public void init() {
-        modelMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        projectionMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
-        viewMatrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
         Renderable.bindState2.setAttribLocations(GL.defaultAttribLocations);
     }
 
     @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(x, y, z);
-        renderable.render();
-        GL.o1.popMatrix();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+        GL.matrixHelper.translate(x, y, z);
+        render(renderable);
+        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
-        transform.toFloatBuffer(modelMatrixFloatBuffer);
-        render(renderable, modelMatrixFloatBuffer);
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+        GL.matrixHelper.load(transform);
+        render(renderable);
+        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(position.getX(), position.getY(), position.getZ());
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+        GL.matrixHelper.translate(position.getX(), position.getY(), position.getZ());
         renderable.render();
-        GL.o1.popMatrix();
+        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(GameObject gameObject) {
-        gameObject.getWorldTransform().toFloatBuffer(modelMatrixFloatBuffer);
-        modelMatrixFloatBuffer.flip();
-        render(gameObject.getRenderable(), modelMatrixFloatBuffer);
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+        GL.matrixHelper.load(gameObject.getWorldTransform());
+        render(gameObject.getRenderable());
+        GL.matrixHelper.pop();
     }
 
     @Override
@@ -170,27 +167,32 @@ public class RendererGL2 extends AbstractRendererGL {
 
     @Override
     public void set2DMode() {
-        GL.o1.setProjectionOrtho(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
-        GL.o1.setModelViewIdentity();
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.setOrthogonal(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.loadIdentity();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
     }
 
     @Override
     public void set2DMode(int width, int height) {
-        GL.o1.setProjectionOrtho(0f, width, 0f, height, -1f, 1f);
-        GL.o1.setModelViewIdentity();
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.setOrthogonal(0f, width, 0f, height, -1f, 1f);
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.loadIdentity();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
     }
 
     @Override
     public void setCamera(Camera camera) {
         camera.updateViewMatrix();
-        camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
-        camera.getViewMatrix().toFloatBuffer(viewMatrixFloatBuffer);
-        projectionMatrixFloatBuffer.flip();
-        viewMatrixFloatBuffer.flip();
-        GL.o1.switchProjection();
-        GL.o1.loadMatrix(projectionMatrixFloatBuffer);
-        GL.o1.switchModelView();
-        GL.o1.loadMatrix(viewMatrixFloatBuffer);
+        GL.matrixHelper.setModeProjection();
+        GL.matrixHelper.load(camera.getProjectionMatrix());
+        GL.matrixHelper.setModeView();
+        GL.matrixHelper.load(camera.getViewMatrix());
+        GL.matrixHelper.setModeModel();
     }
 
     @Override
@@ -215,17 +217,25 @@ public class RendererGL2 extends AbstractRendererGL {
 
     @Override
     public void popMatrix() {
-        GL.o1.popMatrix();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.pop();
     }
 
     @Override
     public void pushMatrix() {
-        GL.o1.pushMatrix();
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+    }
+
+    @Override
+    public void renderGlyph(AbstractRenderable renderable) {
+        render(renderable);
     }
 
     @Override
     public void translateText(float x, float y) {
-        GL.o1.translate(x, y, 0f);
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.translate(x, y, 0f);
     }
 
 }

@@ -128,6 +128,11 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
+    public void renderGlyph(AbstractRenderable renderable) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void translateText(float x, float y) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

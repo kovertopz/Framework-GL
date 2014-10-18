@@ -223,6 +223,11 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
+    public void renderGlyph(AbstractRenderable renderable) {
+        renderable.render();
+    }
+
+    @Override
     public void translateText(float x, float y) {
         GL.o1.translate(x, y, 0f);
     }

@@ -78,6 +78,7 @@ public class DefaultShaderUniforms {
 
     public void updateUniformLocations() {
         uniformModelMatrixID = GL.shaderUniformHelper.getUniformLocation(programID, "uModelMatrix");
+        uniformNormalMatrixID = GL.shaderUniformHelper.getUniformLocation(programID, "uNormalMatrix");
         uniformProjectionMatrixID = GL.shaderUniformHelper.getUniformLocation(programID, "uProjectionMatrix");
         uniformProjectionViewMatrixID = GL.shaderUniformHelper.getUniformLocation(programID, "uProjectionViewMatrix");
         uniformProjectionViewModelMatrixID

@@ -75,7 +75,7 @@ public class GLFontRenderer {
                 mesh.getSegment(0).setMaterial(material);
             }
 
-            // Set the diffuse texture 
+            // Set the diffuse texture
             mesh.getSegment(0).getMaterial().setTexture(TextureType.DIFFUSE, fontTextureFilename);
 
             // Create renderable from mesh
@@ -98,7 +98,7 @@ public class GLFontRenderer {
             createGlyphRenderable(glyph, renderer);
             renderer.translateText(glyph.w / 2, 0f);
             renderer.colorText(color);
-            glyph.renderable.render();
+            renderer.renderGlyph(glyph.renderable);
             renderer.translateText((glyph.w / 2) + fontSpacing, 0f);
             position.addX(glyph.w + fontSpacing);
         }

@@ -29,6 +29,8 @@ public interface TextHelperRenderer {
 
     public void pushMatrix();
 
+    public void renderGlyph(AbstractRenderable renderable);
+
     public void translateText(float x, float y);
 
 }
