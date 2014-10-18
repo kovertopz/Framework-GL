@@ -152,6 +152,13 @@ public class Vector4f {
         return this;
     }
 
+    public void add(float x, float y, float z, float w) {
+        this.w += w;
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+
     public void add(Vector4f vector) {
         this.w += vector.w;
         this.x += vector.x;

@@ -222,16 +222,13 @@ public class MeshReader extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
-            // Update ambient light, light and material light
-            ambientLight.updateOpenGL(lightFloatBuffer);
-            glLight.updateOpenGL(lightFloatBuffer);
-            materialLight.updateOpenGL(lightFloatBuffer);
-
             // Bind shader
             Fw.graphics.switchShader(vertexLitSingleBlinnPhongDiffusePoint);
 
             // Update uniforms
-            vertexLitSingleBlinnPhongDiffusePoint.getUniforms().setRadius(glLight.getRadius());
+            vertexLitSingleBlinnPhongDiffusePoint.getUniforms().setAmbientLight(ambientLight);
+            vertexLitSingleBlinnPhongDiffusePoint.getUniforms().setLight(glLight);
+            vertexLitSingleBlinnPhongDiffusePoint.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             GL.renderer1.render(renderableCapsule, -3f, 0f, 3f);

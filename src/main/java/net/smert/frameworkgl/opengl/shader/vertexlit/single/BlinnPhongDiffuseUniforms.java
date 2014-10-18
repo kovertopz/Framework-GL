@@ -12,7 +12,9 @@
  */
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
-import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.AmbientLight;
+import net.smert.frameworkgl.opengl.GLLight;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
 
 /**
@@ -21,38 +23,45 @@ import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
  */
 public class BlinnPhongDiffuseUniforms extends DefaultShaderUniforms {
 
-    private int uniformColorMaterialAmbientID;
-    private int uniformColorMaterialDiffuseID;
-    private int uniformColorMaterialEmissionID;
-    private int uniformRadiusID;
+    private final DiffuseUniforms diffuseUniforms;
 
     public BlinnPhongDiffuseUniforms(int programID) {
         super(programID);
+        diffuseUniforms = new DiffuseUniforms(programID);
     }
 
     public void setColorMaterialAmbient(float colorMaterialAmbient) {
-        GL.shaderUniformHelper.setUniform(uniformColorMaterialAmbientID, colorMaterialAmbient);
+        diffuseUniforms.setColorMaterialAmbient(colorMaterialAmbient);
     }
 
     public void setColorMaterialDiffuse(float colorMaterialDiffuse) {
-        GL.shaderUniformHelper.setUniform(uniformColorMaterialDiffuseID, colorMaterialDiffuse);
+        diffuseUniforms.setColorMaterialDiffuse(colorMaterialDiffuse);
     }
 
     public void setColorMaterialEmission(float colorMaterialEmission) {
-        GL.shaderUniformHelper.setUniform(uniformColorMaterialEmissionID, colorMaterialEmission);
+        diffuseUniforms.setColorMaterialEmission(colorMaterialEmission);
+    }
+
+    public void setAmbientLight(AmbientLight ambientLight) {
+        diffuseUniforms.setAmbientLight(ambientLight);
+    }
+
+    public void setLight(GLLight glLight) {
+        diffuseUniforms.setLight(glLight);
+    }
+
+    public void setMaterialLight(MaterialLight materialLight) {
+        diffuseUniforms.setMaterialLight(materialLight);
     }
 
     public void setRadius(float radius) {
-        GL.shaderUniformHelper.setUniform(uniformRadiusID, radius);
+        diffuseUniforms.setRadius(radius);
     }
 
     @Override
     public void updateUniformLocations() {
         super.updateUniformLocations();
-        uniformColorMaterialAmbientID = GL.shaderUniformHelper.getUniformLocation(programID, "uColorMaterialAmbient");
-        uniformColorMaterialDiffuseID = GL.shaderUniformHelper.getUniformLocation(programID, "uColorMaterialDiffuse");
-        uniformColorMaterialEmissionID = GL.shaderUniformHelper.getUniformLocation(programID, "uColorMaterialEmission");
-        uniformRadiusID = GL.shaderUniformHelper.getUniformLocation(programID, "uRadius");
+        diffuseUniforms.updateUniformLocations();
     }
 
 }
