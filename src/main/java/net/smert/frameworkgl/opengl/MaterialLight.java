@@ -88,7 +88,7 @@ public class MaterialLight {
 
     public final void reset() {
         face = Face.FRONT_AND_BACK;
-        shininess = 0;
+        shininess = 0; // Bigger number smaller the specular point
         ambient.set(.2f, .2f, .2f, 1f);
         diffuse.set(.8f, .8f, .8f, 1f);
         emission.set(0f, 0f, 0f, 1f);

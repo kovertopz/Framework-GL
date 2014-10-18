@@ -78,8 +78,8 @@ public class GLLight {
     }
 
     public void setRadius(float radius) {
-        if (radius < 0.001f) {
-            radius = 0.001f; // 1CM
+        if (radius < 0.01f) {
+            radius = 0.01f; // 10CM
         }
         this.radius = radius;
     }

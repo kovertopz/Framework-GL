@@ -22,7 +22,6 @@ import net.smert.frameworkgl.opengl.renderable.Renderable;
  */
 public class DefaultShaderUniforms {
 
-    private final int programID;
     private int uniformModelMatrixID;
     private int uniformNormalMatrixID;
     private int uniformProjectionMatrixID;
@@ -31,6 +30,7 @@ public class DefaultShaderUniforms {
     private int uniformTextureFlagID;
     private int uniformViewMatrixID;
     private int uniformViewModelMatrixID;
+    protected final int programID;
 
     public DefaultShaderUniforms(int programID) {
         this.programID = programID;
