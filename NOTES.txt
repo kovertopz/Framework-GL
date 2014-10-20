@@ -1,10 +1,21 @@
+Meshes
+========================================
+  - Meshes can have multiple segments each with their own material (SegmentMaterial) and primitive type (GL_TRIANGLES, GL_QUADS, etc.)
+  - Each segment material can have their own lighting parameters and textures.
+  - All mesh segments must define the same data in all segments. If normals are supplied in one segment then all segments are required to have them defined.
+  - A mesh has indexes that are shared by all segments.
+  - The mesh has a renderable configuration which defines how the data will be sent to OpenGL. For example colors can have a size 3 (RGB) or 4 (RGBA) and can be GL_BYTE, GL_FLOAT or GL_UNSIGNED_BYTE.
+  - An AABB is attached to a mesh which represents a bounding box in object coordinates.
+  - A mesh can have a material (MeshMaterial) which overrides which shader it is rendered with.
+
 OpenGL 1.X
 ========================================
   - You must choose withOpenGL33ProfileCompatibility() in your Configuration.
   - This is the default mode for Graphics.
-  - Shaders cannot be used. The bind state uses glEnableClientState and gl*Pointer calls.
+  - Shaders cannot be used.
   - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
   - You must not attach any shaders to a mesh material.
+  - The bind state uses gl*ClientState and gl*Pointer calls.
 
 OpenGL 2.1
 ========================================
@@ -13,6 +24,7 @@ OpenGL 2.1
   - You must render all objects with a shader.
   - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
   - You must use the matrix helper instead of OpenGL matrix functions.
+  - The bind state uses gl*VertexAttribArray and glVertexAttribPointer.
 
 OpenGL 3.2
 ========================================
@@ -22,6 +34,7 @@ OpenGL 3.2
   - You must render all objects with a shader.
   - You can render objects using Vertex Arrays and VAOs.
   - You must use the matrix helper instead of OpenGL matrix functions.
+  - The bind state uses gl*VertexAttribArray (glVertexAttribPointer is used when the VBO is created and is saved by the VAO).
 
 OpenGL 3.3
 ========================================
@@ -30,14 +43,21 @@ OpenGL 3.3
   - You must render all objects with a shader.
   - You can render objects using Vertex Arrays and VAOs.
   - You must use the matrix helper instead of OpenGL matrix functions.
+  - The bind state uses gl*VertexAttribArray (glVertexAttribPointer is used when the VBO is created and is saved by the VAO).
+
+Renderables
+========================================
+  - These are created from a mesh and represents how OpenGL will be rendering the object (Display list, VBO, etc.).
+  - Vertex arrays, vertex buffer objects and vertex array objects have a bind state which is called once before the render call. This bind state sets up gl*ClientState, gl*Pointer, gl*VertexAttribArray and glVertexAttribPointer depending on the OpenGL version.
 
 Shaders
 ========================================
-  - GLSL 120, 150 & 330 shaders do not rely on built-in attributes, uniforms and variables.
-  - All shaders reference a global DefaultAttribLocations by default for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
-  - If you make changes to the global DefaultAttribLocations then you must update the bind state.
+  - GLSL 120 & 330 shaders do not rely on built-in attributes, uniforms and variables.
+  - All shaders reference a global DefaultAttribLocations by default (during compiling) for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
+  - If you make changes to the global DefaultAttribLocations then you must update the bind state (Renderable.bindState[2 or 3].setAttribLocations(GL.defaultAttribLocations)).
   - Vertex lit shaders emulate glEnable(GL_COLOR_MATERIAL) and glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE) by default.
+  - The current shader is changed by calling Fw.graphics.switchShader() and all Fw.render* methods will use it unless a mesh material has a shader assigned to it.
 
 Textures
 ========================================
-  - Textures attached to a mesh material have a texture type (defined in net.smert.frameworkgl.opengl.TextureType) and each type has to be mapped to a texture unit (GL_TEXTURE0). This is mapped on a per shader basis.
+  - Textures attached to a mesh's segment material have a texture type (defined in net.smert.frameworkgl.opengl.TextureType) and each type has to be mapped to a texture unit (GL_TEXTURE0, etc.). This mapping is defined on a per shader basis.
