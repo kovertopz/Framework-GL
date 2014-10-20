@@ -32,6 +32,6 @@ public enum TextureType {
     SPECULAR_EXPONENT,
     TRANSLUCENT,
     TRANSPARENCY,
-    MAX_TEXTURE_TYPES
+    MAX_TEXTURE_TYPE
 
 }

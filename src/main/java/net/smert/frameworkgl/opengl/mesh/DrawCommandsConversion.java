@@ -42,10 +42,10 @@ public class DrawCommandsConversion implements DrawCommands {
             // Begin
             GL.renderHelper.begin(segment.getPrimitiveMode());
 
-            float[] colors = segment.getColors();
-            float[] normals = segment.getNormals();
-            float[] texCoords = segment.getTexCoords();
-            float[] vertices = segment.getVertices();
+            float[] colors = segment.getData(SegmentDataType.COLOR);
+            float[] normals = segment.getData(SegmentDataType.NORMAL);
+            float[] texCoords = segment.getData(SegmentDataType.TEX_COORD0);
+            float[] vertices = segment.getData(SegmentDataType.VERTEX);
 
             // For each vertex in the segment
             for (int j = 0; j < segment.getElementCount(); j++) {

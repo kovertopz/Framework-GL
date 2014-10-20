@@ -50,34 +50,36 @@ public class Mesh {
         if (segments.contains(segment)) {
             throw new IllegalArgumentException("The segment already exists");
         }
+
+        float[] colors = segment.getData(SegmentDataType.COLOR);
+        float[] normals = segment.getData(SegmentDataType.NORMAL);
+        float[] texCoords = segment.getData(SegmentDataType.TEX_COORD0);
+        float[] vertices = segment.getData(SegmentDataType.VERTEX);
         int elementCount = segment.getElementCount();
         RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
+
         if ((elementCount == 0) && !segment.hasDrawCommands()) {
             throw new IllegalArgumentException("The segment must contain at least 1 vertex or have draw commands");
         }
-        if ((segment.getColors().length != 0)
-                && (segment.getColors().length != elementCount * config.getColorSize())) {
+        if ((colors != null) && (colors.length != elementCount * config.getColorSize())) {
             throw new IllegalArgumentException(
                     "There needs to be one color for every element in the segment. Colors: "
-                    + segment.getColors().length + " Expected: " + elementCount * config.getColorSize());
+                    + colors.length + " Expected: " + elementCount * config.getColorSize());
         }
-        if ((segment.getNormals().length != 0)
-                && (segment.getNormals().length != elementCount * config.getNormalSize())) {
+        if ((normals != null) && (normals.length != elementCount * config.getNormalSize())) {
             throw new IllegalArgumentException(
                     "There needs to be one normal for every element in the segment. Normals: "
-                    + segment.getNormals().length + " Expected: " + elementCount * config.getNormalSize());
+                    + normals.length + " Expected: " + elementCount * config.getNormalSize());
         }
-        if ((segment.getTexCoords().length != 0)
-                && (segment.getTexCoords().length != elementCount * config.getTexCoordSize())) {
+        if ((texCoords != null) && (texCoords.length != elementCount * config.getTexCoordSize())) {
             throw new IllegalArgumentException(
                     "There needs to be one texture coord for every element in the segment. Texture Coords: "
-                    + segment.getTexCoords().length + " Expected: " + elementCount * config.getTexCoordSize());
+                    + texCoords.length + " Expected: " + elementCount * config.getTexCoordSize());
         }
-        if ((segment.getVertices().length != 0)
-                && (segment.getVertices().length != elementCount * config.getVertexSize())) {
+        if ((vertices != null) && (vertices.length != elementCount * config.getVertexSize())) {
             throw new IllegalArgumentException(
                     "There needs to be one vertex for every element in the segment. Vertices: "
-                    + segment.getVertices().length + " Expected: " + elementCount * config.getVertexSize());
+                    + vertices.length + " Expected: " + elementCount * config.getVertexSize());
         }
 
         // Add segment and update totals
@@ -230,7 +232,9 @@ public class Mesh {
                 colors[offset + 3] = a;
             }
         }
-        segment.setColors(colors);
+
+        // Set color data
+        segment.setData(SegmentDataType.COLOR, colors);
     }
 
     public void updateBooleansFromSegment() {
@@ -242,10 +246,14 @@ public class Mesh {
 
         // Update booleans
         for (Segment segment : segments) {
-            hasColors |= ((segment.getColors() != null) && (segment.getColors().length > 0));
-            hasNormals |= ((segment.getNormals() != null) && (segment.getNormals().length > 0));
-            hasTexCoords |= ((segment.getTexCoords() != null) && (segment.getTexCoords().length > 0));
-            hasVertices |= ((segment.getVertices() != null) && (segment.getVertices().length > 0));
+            float[] colors = segment.getData(SegmentDataType.COLOR);
+            float[] normals = segment.getData(SegmentDataType.NORMAL);
+            float[] texCoords = segment.getData(SegmentDataType.TEX_COORD0);
+            float[] vertices = segment.getData(SegmentDataType.VERTEX);
+            hasColors |= (colors != null);
+            hasNormals |= (normals != null);
+            hasTexCoords |= (texCoords != null);
+            hasVertices |= (vertices != null);
             hasIndexes |= ((getIndexes() != null) && (getIndexes().length > 0));
         }
     }

@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.mesh;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
@@ -25,11 +27,8 @@ public class Segment {
     private int maxIndex;
     private int minIndex;
     private int primitiveMode;
-    private float[] colors;
-    private float[] normals;
-    private float[] texCoords;
-    private float[] vertices;
     private DrawCommands drawCommands;
+    private Map<Integer, float[]> data;
     private SegmentMaterial material;
     private String name;
 
@@ -38,11 +37,8 @@ public class Segment {
         maxIndex = 0;
         minIndex = 0;
         primitiveMode = -1; // GL_POINTS = 0 :(
-        colors = new float[0];
-        normals = new float[0];
-        texCoords = new float[0];
-        vertices = new float[0];
         drawCommands = null;
+        data = new HashMap<>();
         material = null;
         name = "";
     }
@@ -52,36 +48,20 @@ public class Segment {
         this.drawCommands = drawCommands;
     }
 
-    public float[] getColors() {
-        return colors;
+    public float[] getData(int type) {
+        return data.get(type);
     }
 
-    public void setColors(float[] colors) {
-        this.colors = colors;
+    public float[] getData(SegmentDataType segmentDataType) {
+        return data.get(segmentDataType.ordinal());
     }
 
-    public float[] getNormals() {
-        return normals;
+    public void setData(int type, float[] data) {
+        this.data.put(type, data);
     }
 
-    public void setNormals(float[] normals) {
-        this.normals = normals;
-    }
-
-    public float[] getTexCoords() {
-        return texCoords;
-    }
-
-    public void setTexCoords(float[] texCoords) {
-        this.texCoords = texCoords;
-    }
-
-    public float[] getVertices() {
-        return vertices;
-    }
-
-    public void setVertices(float[] vertices) {
-        this.vertices = vertices;
+    public void setData(SegmentDataType segmentDataType, float[] data) {
+        this.data.put(segmentDataType.ordinal(), data);
     }
 
     public int getElementCount() {

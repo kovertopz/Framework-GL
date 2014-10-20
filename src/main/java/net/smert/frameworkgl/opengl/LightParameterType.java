@@ -21,6 +21,7 @@ public enum LightParameterType {
     AMBIENT,
     DIFFUSE,
     EMISSIVE,
-    SPECULAR
+    SPECULAR,
+    MAX_LIGHT_PARAMETER_TYPE
 
 }

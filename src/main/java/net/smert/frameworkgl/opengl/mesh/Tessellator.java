@@ -288,19 +288,19 @@ public class Tessellator {
         segment.setPrimitiveMode(primitiveMode);
 
         if (colors.size() > 0) {
-            segment.setColors(getColors());
+            segment.setData(SegmentDataType.COLOR, getColors());
             colors.clear();
         }
         if (normals.size() > 0) {
-            segment.setNormals(getNormals());
+            segment.setData(SegmentDataType.NORMAL, getNormals());
             normals.clear();
         }
         if (texCoords.size() > 0) {
-            segment.setTexCoords(getTexCoords());
+            segment.setData(SegmentDataType.TEX_COORD0, getTexCoords());
             texCoords.clear();
         }
         if (vertices.size() > 0) {
-            segment.setVertices(getVertices());
+            segment.setData(SegmentDataType.VERTEX, getVertices());
             vertices.clear();
         }
 

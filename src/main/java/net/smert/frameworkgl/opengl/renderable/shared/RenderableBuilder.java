@@ -17,6 +17,7 @@ import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.constants.GLTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentDataType;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 
 /**
@@ -32,10 +33,10 @@ public class RenderableBuilder {
         for (int i = 0; i < mesh.getTotalSegments(); i++) {
             Segment segment = mesh.getSegment(i);
 
-            float[] colors = segment.getColors();
-            float[] normals = segment.getNormals();
-            float[] texCoords = segment.getTexCoords();
-            float[] vertices = segment.getVertices();
+            float[] colors = segment.getData(SegmentDataType.COLOR);
+            float[] normals = segment.getData(SegmentDataType.NORMAL);
+            float[] texCoords = segment.getData(SegmentDataType.TEX_COORD0);
+            float[] vertices = segment.getData(SegmentDataType.VERTEX);
 
             // For each vertex in the segment
             for (int j = 0; j < segment.getElementCount(); j++) {
