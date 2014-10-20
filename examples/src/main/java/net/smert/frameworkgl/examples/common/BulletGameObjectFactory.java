@@ -116,22 +116,22 @@ public class BulletGameObjectFactory {
         try {
             Fw.graphics.loadMesh("primitives/cube.obj", meshBox);
             meshBox.setAllColors(0f, .5f, 1f, 1f);
-            meshBox.updateBooleansFromSegment();
+            meshBox.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/capsule.obj", meshCapsule);
             meshCapsule.setAllColors(0f, .5f, 1f, 1f);
-            meshCapsule.updateBooleansFromSegment();
+            meshCapsule.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cone.obj", meshCone);
             meshCone.setAllColors(0f, .5f, 1f, 1f);
-            meshCone.updateBooleansFromSegment();
+            meshCone.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cylinder.obj", meshCylinder);
             meshCylinder.setAllColors(0f, .5f, 1f, 1f);
-            meshCylinder.updateBooleansFromSegment();
+            meshCylinder.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cube.obj", meshGround);
             meshGround.setAllColors(.3f, .3f, .3f, 1f);
-            meshGround.updateBooleansFromSegment();
+            meshGround.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/uvsphere.obj", meshSphere);
             meshSphere.setAllColors(0f, .5f, 1f, 1f);
-            meshSphere.updateBooleansFromSegment();
+            meshSphere.updateHasBooleansFromSegment();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

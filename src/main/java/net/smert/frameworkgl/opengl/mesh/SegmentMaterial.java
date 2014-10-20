@@ -14,8 +14,8 @@ package net.smert.frameworkgl.opengl.mesh;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.LightParameterType;
+import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.TextureType;
 
 /**
@@ -25,15 +25,13 @@ import net.smert.frameworkgl.opengl.TextureType;
 public class SegmentMaterial {
 
     private boolean isOpaque;
-    private int shininess;
     private final Map<TextureType, String> textures;
-    private final Map<LightParameterType, Vector4f> lighting;
+    private MaterialLight materialLight;
 
     public SegmentMaterial() {
         isOpaque = true;
-        shininess = 0;
         textures = new HashMap<>();
-        lighting = new HashMap<>();
+        materialLight = GL.glFactory.createMaterialLight();
     }
 
     public boolean isIsOpaque() {
@@ -44,12 +42,12 @@ public class SegmentMaterial {
         this.isOpaque = isOpaque;
     }
 
-    public int getShininess() {
-        return shininess;
+    public MaterialLight getMaterialLight() {
+        return materialLight;
     }
 
-    public void setShininess(int shininess) {
-        this.shininess = shininess;
+    public void setMaterialLight(MaterialLight materialLight) {
+        this.materialLight = materialLight;
     }
 
     public String getTexture(TextureType textureType) {
@@ -62,18 +60,6 @@ public class SegmentMaterial {
 
     public Map<TextureType, String> getTextures() {
         return textures;
-    }
-
-    public Map<LightParameterType, Vector4f> getLighting() {
-        return lighting;
-    }
-
-    public Vector4f getLighting(LightParameterType lightParameterType) {
-        return lighting.get(lightParameterType);
-    }
-
-    public Vector4f setLighting(LightParameterType lightParameterType, Vector4f value) {
-        return lighting.put(lightParameterType, value);
     }
 
 }

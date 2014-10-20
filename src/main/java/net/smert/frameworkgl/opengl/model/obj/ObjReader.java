@@ -26,7 +26,7 @@ import net.smert.frameworkgl.Files.FileAsset;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.Vector4f;
 import net.smert.frameworkgl.opengl.GL;
-import net.smert.frameworkgl.opengl.LightParameterType;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
@@ -151,26 +151,25 @@ public class ObjReader implements ModelReader {
     }
 
     private SegmentMaterial convertMaterialToSegmentMaterial(Material material) {
+        int specularExponent = material.convertSpecularExponent();
         Color ambient = material.getAmbient();
         Color diffuse = material.getDiffuse();
         Color specular = material.getSpecular();
 
         SegmentMaterial segmentMaterial = GL.meshFactory.createSegmentMaterial();
+        MaterialLight materialLight = segmentMaterial.getMaterialLight();
 
         // Lighting
         if (ambient.hasBeenSet()) {
-            segmentMaterial.setLighting(LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(),
-                    ambient.getB(), 1f));
+            materialLight.setAmbient(new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1f));
         }
         if (diffuse.hasBeenSet()) {
-            segmentMaterial.setLighting(LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(),
-                    diffuse.getB(), 1f));
+            materialLight.setDiffuse(new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1f));
         }
         if (specular.hasBeenSet()) {
-            segmentMaterial.setLighting(LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(),
-                    specular.getB(), 1f));
+            materialLight.setSpecular(new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1f));
         }
-        segmentMaterial.setShininess(material.convertSpecularExponent());
+        materialLight.setShininess(specularExponent);
 
         // Textures
         String filename;

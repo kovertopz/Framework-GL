@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.mesh.factory;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.MeshMaterial;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
@@ -51,6 +52,14 @@ public class MeshFactory {
 
     public CubeMap createDynamicCubeMap() {
         return container.getComponent(CubeMap.class);
+    }
+
+    public Mesh createMesh() {
+        return container.getComponent(Mesh.class);
+    }
+
+    public MeshMaterial createMeshMaterial() {
+        return container.getComponent(MeshMaterial.class);
     }
 
     public PrimitiveCapsule createDynamicPrimitiveCapsule() {
@@ -93,18 +102,6 @@ public class MeshFactory {
         return container.getComponent(PrimitiveToriod.class);
     }
 
-    public SimpleOrientationAxis createDynamicSimpleOrientationAxis() {
-        return container.getComponent(SimpleOrientationAxis.class);
-    }
-
-    public ViewFrustum createDynamicViewFrustum() {
-        return container.getComponent(ViewFrustum.class);
-    }
-
-    public Mesh createMesh() {
-        return container.getComponent(Mesh.class);
-    }
-
     public RenderableConfiguration createRenderableConfiguration() {
         return container.getComponent(RenderableConfiguration.class);
     }
@@ -117,8 +114,16 @@ public class MeshFactory {
         return container.getComponent(SegmentMaterial.class);
     }
 
+    public SimpleOrientationAxis createDynamicSimpleOrientationAxis() {
+        return container.getComponent(SimpleOrientationAxis.class);
+    }
+
     public Tessellator createTessellator() {
         return container.getComponent(Tessellator.class);
+    }
+
+    public ViewFrustum createDynamicViewFrustum() {
+        return container.getComponent(ViewFrustum.class);
     }
 
 }

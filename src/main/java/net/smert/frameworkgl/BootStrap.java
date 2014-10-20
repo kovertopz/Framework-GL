@@ -65,6 +65,7 @@ import net.smert.frameworkgl.opengl.image.tiff.TIFFReader;
 import net.smert.frameworkgl.opengl.mesh.DrawCommandsConversion;
 import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.MeshMaterial;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
@@ -225,6 +226,7 @@ public class BootStrap {
 
             // Mesh
             meshFactoryContainer.addComponent(Mesh.class);
+            meshFactoryContainer.addComponent(MeshMaterial.class);
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
             meshFactoryContainer.addComponent(SegmentMaterial.class);

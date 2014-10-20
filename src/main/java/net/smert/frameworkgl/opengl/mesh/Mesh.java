@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.smert.frameworkgl.math.AABB;
+import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
@@ -35,12 +36,14 @@ public class Mesh {
     private int renderableConfigID;
     private int totalVertices;
     private int[] indexes;
-    private final List<Segment> segments;
     private final AABB aabb;
+    private final List<Segment> segments;
+    private MeshMaterial material;
 
     public Mesh() {
-        segments = new ArrayList<>();
         aabb = new AABB();
+        segments = new ArrayList<>();
+        material = GL.meshFactory.createMeshMaterial();
         reset();
     }
 
@@ -87,7 +90,7 @@ public class Mesh {
         totalVertices += segment.getElementCount();
 
         // Update booleans
-        updateBooleansFromSegment();
+        updateHasBooleansFromSegment();
     }
 
     public int getRenderableConfigID() {
@@ -116,6 +119,14 @@ public class Mesh {
 
     public AABB getAabb() {
         return aabb;
+    }
+
+    public MeshMaterial getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(MeshMaterial material) {
+        this.material = material;
     }
 
     /**
@@ -237,7 +248,7 @@ public class Mesh {
         segment.setData(SegmentDataType.COLOR, colors);
     }
 
-    public void updateBooleansFromSegment() {
+    public void updateHasBooleansFromSegment() {
         hasColors = false;
         hasIndexes = false;
         hasNormals = false;

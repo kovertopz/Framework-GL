@@ -127,25 +127,25 @@ public class MeshReader extends Screen {
         try {
             Fw.graphics.loadMesh("primitives/capsule.obj", meshCapsule);
             meshCapsule.setAllColors(.5f, 0f, 0f, 1f);
-            meshCapsule.updateBooleansFromSegment();
+            meshCapsule.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cone.obj", meshCone);
             meshCone.setAllColors(1f, .5f, .32f, 1f);
-            meshCone.updateBooleansFromSegment();
+            meshCone.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cube.obj", meshCube);
             meshCube.setAllColors(0f, .5f, 1f, 1f);
-            meshCube.updateBooleansFromSegment();
+            meshCube.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/cylinder.obj", meshCylinder);
             meshCylinder.setAllColors(1f, .843f, 0f, 1f);
-            meshCylinder.updateBooleansFromSegment();
+            meshCylinder.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/icosphere.obj", meshIcoSphere);
             meshIcoSphere.setAllColors(1f, .271f, 0f, 1f);
-            meshIcoSphere.updateBooleansFromSegment();
+            meshIcoSphere.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/torus.obj", meshTorus);
             meshTorus.setAllColors(.5f, 1f, .831f, 1f);
-            meshTorus.updateBooleansFromSegment();
+            meshTorus.updateHasBooleansFromSegment();
             Fw.graphics.loadMesh("primitives/uvsphere.obj", meshUvSphere);
             meshUvSphere.setAllColors(.576f, .439f, .859f, 1f);
-            meshUvSphere.updateBooleansFromSegment();
+            meshUvSphere.updateHasBooleansFromSegment();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
