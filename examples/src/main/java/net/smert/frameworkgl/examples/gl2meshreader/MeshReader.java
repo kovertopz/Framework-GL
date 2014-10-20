@@ -28,7 +28,6 @@ import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.shader.vertexlit.single.BlinnPhongDiffusePoint;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
@@ -181,9 +180,6 @@ public class MeshReader extends Screen {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
-        // Since we have not assigned a shader to the mesh material we must set the default for all
-        Renderable.shaderBindState.setDefaultShader(vertexLitSingleBlinnPhongDiffusePoint);
 
         // OpenGL settings
         GL.o1.enableCulling();
