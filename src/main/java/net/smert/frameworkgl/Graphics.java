@@ -38,20 +38,23 @@ import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
+import net.smert.frameworkgl.opengl.renderer.AbstractRendererGL;
 import net.smert.frameworkgl.opengl.renderer.Renderer;
+import net.smert.frameworkgl.opengl.renderer.TextRenderer;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
+import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Graphics implements Renderer {
+public class Graphics implements Renderer, TextRenderer {
 
     private static RenderableComparison renderableComparison = new RenderableComparison();
 
+    private AbstractRendererGL renderer;
     private GLFont defaultFont;
     private RenderableFactory renderableFactory;
-    private Renderer renderer;
 
     public Shader buildShader(String fragmentShaderFilename, String vertexShaderFilename, String shaderName)
             throws IOException {
@@ -144,6 +147,10 @@ public class Graphics implements Renderer {
         GL.vboHelper.unbind();
         Renderable.shaderPool.destroy();
         Renderable.texturePool.destroy();
+    }
+
+    public AbstractRendererGL getRenderer() {
+        return renderer;
     }
 
     public Comparator<GameObject> getRenderableComparison() {
@@ -367,6 +374,71 @@ public class Graphics implements Renderer {
     @Override
     public void unbindShader() {
         renderer.unbindShader();
+    }
+
+    @Override
+    public void drawString(String text, float x, float y) {
+        renderer.drawString(text, x, y);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, GLFont font) {
+        renderer.drawString(text, x, y, font);
+    }
+
+    @Override
+    public void drawString(String text) {
+        renderer.drawString(text);
+    }
+
+    @Override
+    public void drawString(String text, GLFont font) {
+        renderer.drawString(text, font);
+    }
+
+    @Override
+    public void resetTextRendering() {
+        renderer.resetTextRendering();
+    }
+
+    @Override
+    public void setTextColor(float r, float g, float b, float a) {
+        renderer.setTextColor(r, g, b, a);
+    }
+
+    @Override
+    public void setTextColor(Color color) {
+        renderer.setTextColor(color);
+    }
+
+    @Override
+    public void setTextColor(String colorName) {
+        renderer.setTextColor(colorName);
+    }
+
+    @Override
+    public void setTextColorHex(String hexCode) {
+        renderer.setTextColorHex(hexCode);
+    }
+
+    @Override
+    public void textNewHalfLine() {
+        renderer.textNewHalfLine();
+    }
+
+    @Override
+    public void textNewHalfLine(GLFont font) {
+        renderer.textNewHalfLine(font);
+    }
+
+    @Override
+    public void textNewLine() {
+        renderer.textNewLine();
+    }
+
+    @Override
+    public void textNewLine(GLFont font) {
+        renderer.textNewLine(font);
     }
 
     public static class RenderableComparison implements Comparator<GameObject> {

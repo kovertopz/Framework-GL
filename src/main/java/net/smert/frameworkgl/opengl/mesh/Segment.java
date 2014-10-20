@@ -28,7 +28,7 @@ public class Segment {
     private int minIndex;
     private int primitiveMode;
     private DrawCommands drawCommands;
-    private Map<Integer, float[]> data;
+    private Map<Integer, float[]> segmentDataTypeToFloatArray;
     private SegmentMaterial material;
     private String name;
 
@@ -38,7 +38,7 @@ public class Segment {
         minIndex = 0;
         primitiveMode = -1; // GL_POINTS = 0 :(
         drawCommands = null;
-        data = new HashMap<>();
+        segmentDataTypeToFloatArray = new HashMap<>();
         material = null;
         name = "";
     }
@@ -49,19 +49,19 @@ public class Segment {
     }
 
     public float[] getData(int type) {
-        return data.get(type);
+        return segmentDataTypeToFloatArray.get(type);
     }
 
     public float[] getData(SegmentDataType segmentDataType) {
-        return data.get(segmentDataType.ordinal());
+        return segmentDataTypeToFloatArray.get(segmentDataType.ordinal());
     }
 
     public void setData(int type, float[] data) {
-        this.data.put(type, data);
+        segmentDataTypeToFloatArray.put(type, data);
     }
 
     public void setData(SegmentDataType segmentDataType, float[] data) {
-        this.data.put(segmentDataType.ordinal(), data);
+        segmentDataTypeToFloatArray.put(segmentDataType.ordinal(), data);
     }
 
     public int getElementCount() {

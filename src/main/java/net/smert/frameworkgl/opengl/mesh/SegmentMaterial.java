@@ -25,21 +25,23 @@ import net.smert.frameworkgl.opengl.TextureType;
 public class SegmentMaterial {
 
     private boolean isOpaque;
-    private final Map<TextureType, String> textures;
+    private float textureFlag;
+    private final Map<TextureType, String> textureTypeToFilename;
     private MaterialLight materialLight;
 
     public SegmentMaterial() {
         isOpaque = true;
-        textures = new HashMap<>();
+        textureFlag = 1f;
+        textureTypeToFilename = new HashMap<>();
         materialLight = GL.glFactory.createMaterialLight();
     }
 
-    public boolean isIsOpaque() {
-        return isOpaque;
+    public float getTextureFlag() {
+        return textureFlag;
     }
 
-    public void setIsOpaque(boolean isOpaque) {
-        this.isOpaque = isOpaque;
+    public void setTextureFlag(float textureFlag) {
+        this.textureFlag = textureFlag;
     }
 
     public MaterialLight getMaterialLight() {
@@ -51,15 +53,23 @@ public class SegmentMaterial {
     }
 
     public String getTexture(TextureType textureType) {
-        return textures.get(textureType);
+        return textureTypeToFilename.get(textureType);
     }
 
     public String setTexture(TextureType textureType, String filename) {
-        return textures.put(textureType, filename);
+        return textureTypeToFilename.put(textureType, filename);
     }
 
     public Map<TextureType, String> getTextures() {
-        return textures;
+        return textureTypeToFilename;
+    }
+
+    public boolean isIsOpaque() {
+        return isOpaque;
+    }
+
+    public void setIsOpaque(boolean isOpaque) {
+        this.isOpaque = isOpaque;
     }
 
 }

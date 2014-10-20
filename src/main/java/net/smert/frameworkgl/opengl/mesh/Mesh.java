@@ -143,8 +143,8 @@ public class Mesh {
                 continue;
             }
 
-            Map<TextureType, String> textures = segmentMaterial.getTextures();
-            Iterator<String> iterator = textures.values().iterator();
+            Map<TextureType, String> textureTypeToFilename = segmentMaterial.getTextures();
+            Iterator<String> iterator = textureTypeToFilename.values().iterator();
             while (iterator.hasNext()) {
                 String texture = iterator.next();
                 if (newTextures.contains(texture)) {

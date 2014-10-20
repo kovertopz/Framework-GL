@@ -17,7 +17,7 @@ import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall.TextureTypeMapping;
 import net.smert.frameworkgl.utils.HashMapIntInt;
 
 /**
@@ -31,6 +31,7 @@ public class TextureBindState {
     private int maxModelTextureUnitsWithTextureFlag;
     private int maxShaderTextureUnits;
     private int maxTextureUnits;
+    private float textureFlagOn;
     private final HashMapIntInt textureUnitToTextureID;
 
     public TextureBindState() {
@@ -83,7 +84,7 @@ public class TextureBindState {
 
         if (flagChanged) {
             if (textureID != 0) {
-                Renderable.shaderBindState.sendUniformTextureFlag(1f);
+                Renderable.shaderBindState.sendUniformTextureFlag(textureFlagOn);
             } else {
                 Renderable.shaderBindState.sendUniformTextureFlag(0f);
             }
@@ -169,6 +170,7 @@ public class TextureBindState {
             return;
         }
         for (TextureTypeMapping mapping : textures) {
+            textureFlagOn = mapping.getTextureFlag();
             int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureTypeID());
             Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());
             bindTexture(textureUnit, texture);
@@ -208,6 +210,7 @@ public class TextureBindState {
     }
 
     public final void reset() {
+        textureFlagOn = 1f;
         activeTextureUnit = -1;
     }
 

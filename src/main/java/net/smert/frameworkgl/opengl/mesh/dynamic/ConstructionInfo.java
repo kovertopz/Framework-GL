@@ -23,9 +23,9 @@ import net.smert.frameworkgl.utils.HashMapIntGeneric;
  */
 public class ConstructionInfo {
 
+    private final HashMapIntGeneric<Color> indexToColor;
+    private final HashMapIntGeneric<Object> indexToCustomData;
     boolean convertToTriangles;
-    final HashMapIntGeneric<Color> colors;
-    final HashMapIntGeneric<Object> customData;
     final Quality quality;
     final Vector2f texCoordMinMaxX;
     final Vector2f texCoordMinMaxY;
@@ -35,8 +35,8 @@ public class ConstructionInfo {
     final Vector3f size;
 
     public ConstructionInfo() {
-        colors = new HashMapIntGeneric<>();
-        customData = new HashMapIntGeneric<>();
+        indexToColor = new HashMapIntGeneric<>();
+        indexToCustomData = new HashMapIntGeneric<>();
         quality = new Quality();
         texCoordMinMaxX = new Vector2f();
         texCoordMinMaxY = new Vector2f();
@@ -56,10 +56,10 @@ public class ConstructionInfo {
     }
 
     public Color getColor(int index) {
-        Color color = colors.get(index);
+        Color color = indexToColor.get(index);
         if (color == null) {
             color = new Color();
-            colors.put(index, color);
+            indexToColor.put(index, color);
         }
         return color;
     }
@@ -90,11 +90,11 @@ public class ConstructionInfo {
     }
 
     public Object getCustomData(int index) {
-        return customData.get(index);
+        return indexToCustomData.get(index);
     }
 
     public void setCustomData(int index, Object object) {
-        customData.put(index, object);
+        indexToCustomData.put(index, object);
     }
 
     public Quality getQuality() {
@@ -155,11 +155,11 @@ public class ConstructionInfo {
 
     public final void reset() {
         convertToTriangles = true;
-        colors.clear();
-        colors.put(0, new Color());
-        colors.put(1, new Color());
-        colors.put(2, new Color());
-        customData.clear();
+        indexToColor.clear();
+        indexToColor.put(0, new Color());
+        indexToColor.put(1, new Color());
+        indexToColor.put(2, new Color());
+        indexToCustomData.clear();
         quality.set(1, 1, 1);
         texCoordMinMaxX.set(0.0f, 1.0f);
         texCoordMinMaxY.set(0.0f, 1.0f);

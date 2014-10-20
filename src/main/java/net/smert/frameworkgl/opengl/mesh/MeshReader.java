@@ -23,10 +23,10 @@ import net.smert.frameworkgl.opengl.model.ModelReader;
  */
 public class MeshReader {
 
-    private final Map<String, ModelReader> modelReaders;
+    private final Map<String, ModelReader> extensionToModelReader;
 
     public MeshReader() {
-        modelReaders = new HashMap<>();
+        extensionToModelReader = new HashMap<>();
     }
 
     public ModelReader getModelReader(String filename) {
@@ -39,12 +39,12 @@ public class MeshReader {
         String extension = filename.substring(posOfLastPeriod + 1).toLowerCase();
 
         // Does the model reader for this extension exist?
-        if (!modelReaders.containsKey(extension)) {
+        if (!extensionToModelReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
 
         // Load the filename using the model reader
-        return modelReaders.get(extension);
+        return extensionToModelReader.get(extension);
     }
 
     public void load(String filename, Mesh mesh) throws IOException {
@@ -54,18 +54,18 @@ public class MeshReader {
 
     public void registerExtension(String extension, ModelReader modelReader) {
         extension = extension.toLowerCase();
-        if (modelReaders.containsKey(extension)) {
+        if (extensionToModelReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has already been registered: " + extension);
         }
-        modelReaders.put(extension, modelReader);
+        extensionToModelReader.put(extension, modelReader);
     }
 
     public void unregisterExtension(String extension) {
         extension = extension.toLowerCase();
-        if (!modelReaders.containsKey(extension)) {
+        if (!extensionToModelReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
-        modelReaders.remove(extension);
+        extensionToModelReader.remove(extension);
     }
 
 }

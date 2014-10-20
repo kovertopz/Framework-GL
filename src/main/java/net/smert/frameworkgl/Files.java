@@ -49,13 +49,13 @@ public class Files {
     private boolean isInternal;
     private boolean useGlslPrefix;
     private FileType fileType;
-    private final Map<String, FileAsset> assets;
+    private final Map<String, FileAsset> filenameToFileAsset;
 
     public Files() {
         foundAsset = false;
         isInternal = false;
         useGlslPrefix = true;
-        assets = new HashMap<>();
+        filenameToFileAsset = new HashMap<>();
         try {
             registerAssets(DEFAULT_ASSETS_LOCATION, true);
         } catch (IOException | URISyntaxException ex) {
@@ -87,7 +87,7 @@ public class Files {
         String key = directory + INTERNAL_FILE_SEPARATOR + filename.replace(separator, INTERNAL_FILE_SEPARATOR);
 
         // Save the file asset
-        FileAsset oldFileAsset = assets.put(key, fileAsset);
+        FileAsset oldFileAsset = filenameToFileAsset.put(key, fileAsset);
 
         if (oldFileAsset != null) {
             log.warn("Overwrote a entry in the hash table for the Key: {} New File Asset: {} Old File Asset: {}",
@@ -279,10 +279,10 @@ public class Files {
 
     public FileAsset get(String resourceType, String filename) {
         String key = resourceType + INTERNAL_FILE_SEPARATOR + filename;
-        if (!assets.containsKey(key)) {
+        if (!filenameToFileAsset.containsKey(key)) {
             throw new IllegalArgumentException("Unable to find asset for type: " + resourceType + " and path: " + filename);
         }
-        return assets.get(key);
+        return filenameToFileAsset.get(key);
     }
 
     public FileAsset getAudio(String filename) {
@@ -338,7 +338,7 @@ public class Files {
     }
 
     public void unregisterAssets(String fullPath) {
-        Iterator<FileAsset> fileAssetIterator = assets.values().iterator();
+        Iterator<FileAsset> fileAssetIterator = filenameToFileAsset.values().iterator();
 
         while (fileAssetIterator.hasNext()) {
             FileAsset fileAsset = fileAssetIterator.next();

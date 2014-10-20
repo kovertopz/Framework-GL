@@ -55,12 +55,12 @@ public class Crosshair extends Screen {
     private boolean wireframe;
     private AABBGameObject aabbGameObject;
     private AmbientLight ambientLight;
-    private DynamicMeshWorld dynamicMeshesWorld;
-    private FloatBuffer lightFloatBuffer;
-    private FpsTimer fpsTimer;
     private Camera camera;
     private CameraController cameraController;
     private CrosshairGameObject crosshairGameObject;
+    private DynamicMeshWorld dynamicMeshesWorld;
+    private FloatBuffer lightFloatBuffer;
+    private FpsTimer fpsTimer;
     private GLLight glLight;
     private final List<GameObject> gameObjectsToRender;
     private MaterialLight materialLight;

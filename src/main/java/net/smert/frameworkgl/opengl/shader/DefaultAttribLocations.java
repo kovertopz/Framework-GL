@@ -21,70 +21,70 @@ import java.util.Map;
  */
 public class DefaultAttribLocations {
 
-    private final Map<Integer, String> attribLocations;
-    private final Map<String, Integer> indexes;
+    private final Map<Integer, String> indexToAttributeLocation;
+    private final Map<String, Integer> nameToIndex;
 
     public DefaultAttribLocations() {
-        attribLocations = new HashMap<>();
-        indexes = new HashMap<>();
+        indexToAttributeLocation = new HashMap<>();
+        nameToIndex = new HashMap<>();
         reset();
     }
 
     public int getIndex(String name) {
-        return indexes.get(name);
+        return nameToIndex.get(name);
     }
 
     public Map<Integer, String> getAttribLocations() {
-        return attribLocations;
+        return indexToAttributeLocation;
     }
 
     public String getAttribLocation(int index) {
-        return attribLocations.get(index);
+        return indexToAttributeLocation.get(index);
     }
 
     public final void reset() {
 
         // Indexes
-        indexes.clear();
-        indexes.put("vertex", 0);
+        nameToIndex.clear();
+        nameToIndex.put("vertex", 0);
         // 1 Unused
-        indexes.put("normal", 2);
-        indexes.put("color", 3);
-        indexes.put("color2", 4); // Could reuse
+        nameToIndex.put("normal", 2);
+        nameToIndex.put("color", 3);
+        nameToIndex.put("color2", 4); // Could reuse
         // 5 gl_FogCoord
         // 6 Unused
         // 7 Unused
-        indexes.put("texCoord0", 8);
-        indexes.put("texCoord1", 9);
-        indexes.put("texCoord2", 10);
-        indexes.put("texCoord3", 11);
-        indexes.put("texCoord4", 12); // Could reuse
-        indexes.put("texCoord5", 13); // Could reuse
-        indexes.put("binormal", 14);
-        indexes.put("tangent", 15);
+        nameToIndex.put("texCoord0", 8);
+        nameToIndex.put("texCoord1", 9);
+        nameToIndex.put("texCoord2", 10);
+        nameToIndex.put("texCoord3", 11);
+        nameToIndex.put("texCoord4", 12); // Could reuse
+        nameToIndex.put("texCoord5", 13); // Could reuse
+        nameToIndex.put("binormal", 14);
+        nameToIndex.put("tangent", 15);
 
         // Attribute locations
-        attribLocations.clear();
-        attribLocations.put(indexes.get("vertex"), "in_Vertex");
-        attribLocations.put(indexes.get("normal"), "in_Normal");
-        attribLocations.put(indexes.get("color"), "in_Color");
-        attribLocations.put(indexes.get("color2"), "in_Color2");
-        attribLocations.put(indexes.get("texCoord0"), "in_TexCoord0");
-        attribLocations.put(indexes.get("texCoord1"), "in_TexCoord1");
-        attribLocations.put(indexes.get("texCoord2"), "in_TexCoord2");
-        attribLocations.put(indexes.get("texCoord3"), "in_TexCoord3");
-        attribLocations.put(indexes.get("texCoord4"), "in_TexCoord4");
-        attribLocations.put(indexes.get("texCoord5"), "in_TexCoord5");
-        attribLocations.put(indexes.get("binormal"), "in_Binormal");
-        attribLocations.put(indexes.get("tangent"), "in_Tangent");
+        indexToAttributeLocation.clear();
+        indexToAttributeLocation.put(nameToIndex.get("vertex"), "in_Vertex");
+        indexToAttributeLocation.put(nameToIndex.get("normal"), "in_Normal");
+        indexToAttributeLocation.put(nameToIndex.get("color"), "in_Color");
+        indexToAttributeLocation.put(nameToIndex.get("color2"), "in_Color2");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord0"), "in_TexCoord0");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord1"), "in_TexCoord1");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord2"), "in_TexCoord2");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord3"), "in_TexCoord3");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord4"), "in_TexCoord4");
+        indexToAttributeLocation.put(nameToIndex.get("texCoord5"), "in_TexCoord5");
+        indexToAttributeLocation.put(nameToIndex.get("binormal"), "in_Binormal");
+        indexToAttributeLocation.put(nameToIndex.get("tangent"), "in_Tangent");
     }
 
     public void setAttribLocations(int index, String name) {
-        attribLocations.put(index, name);
+        indexToAttributeLocation.put(index, name);
     }
 
     public void setIndex(String name, int index) {
-        indexes.put(name, index);
+        nameToIndex.put(name, index);
     }
 
 }

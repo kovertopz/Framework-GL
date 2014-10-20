@@ -44,7 +44,7 @@ public class GLFont {
 
     private final Builder builder;
     private Glyph missingGlyph;
-    private final HashMapIntGeneric<CodePage> codePages;
+    private final HashMapIntGeneric<CodePage> codePageIndexToCodePage;
     private final List<CodePointRange> glyphsToLoad;
 
     public GLFont(Font font) {
@@ -58,7 +58,7 @@ public class GLFont {
     public GLFont(boolean antiAliasing, boolean leftToRight, Font font) {
         builder = new Builder(antiAliasing, leftToRight, font);
         builder.createDefault();
-        codePages = new HashMapIntGeneric<>();
+        codePageIndexToCodePage = new HashMapIntGeneric<>();
         glyphsToLoad = new ArrayList<>();
     }
 
@@ -79,12 +79,12 @@ public class GLFont {
     }
 
     public void destroy() {
-        Iterator<CodePage> iterator = codePages.values().iterator();
+        Iterator<CodePage> iterator = codePageIndexToCodePage.values().iterator();
         while (iterator.hasNext()) {
             CodePage codePage = iterator.next();
             codePage.destroy();
         }
-        codePages.clear();
+        codePageIndexToCodePage.clear();
         glyphsToLoad.clear();
     }
 
@@ -124,7 +124,7 @@ public class GLFont {
 
         // Get the code page for the code point
         int codePageIndex = CodePage.GetPageIndex(codePoint);
-        CodePage codePage = codePages.get(codePageIndex);
+        CodePage codePage = codePageIndexToCodePage.get(codePageIndex);
         if (codePage == null) {
             return missingGlyph;
         }
@@ -148,7 +148,7 @@ public class GLFont {
     }
 
     public HashMapIntGeneric<CodePage> getCodePages() {
-        return codePages;
+        return codePageIndexToCodePage;
     }
 
     public Glyph getMissingGlyph() {
@@ -193,10 +193,10 @@ public class GLFont {
 
                     // Create a code page if it does not exist
                     int codePageIndex = CodePage.GetPageIndex(fontCodePoint);
-                    CodePage codePage = codePages.get(codePageIndex);
+                    CodePage codePage = codePageIndexToCodePage.get(codePageIndex);
                     if (codePage == null) {
                         codePage = new CodePage(builder);
-                        codePages.put(codePageIndex, codePage);
+                        codePageIndexToCodePage.put(codePageIndex, codePage);
                     }
 
                     // Create a glphy if it does not exist
@@ -230,7 +230,7 @@ public class GLFont {
     }
 
     public void showBufferedImagesFromCodePages() {
-        Iterator<CodePage> iterator = codePages.values().iterator();
+        Iterator<CodePage> iterator = codePageIndexToCodePage.values().iterator();
         while (iterator.hasNext()) {
             CodePage codePage = iterator.next();
             JFrame frame = new JFrame();
@@ -443,7 +443,7 @@ public class GLFont {
         private int imageY;
         private BufferedImage image;
         private Graphics2D graphics;
-        private final HashMapIntGeneric<Glyph> glyphs;
+        private final HashMapIntGeneric<Glyph> indexToGlyph;
         private String fontTextureFilename;
 
         public CodePage(Builder builder) {
@@ -451,7 +451,7 @@ public class GLFont {
             imageY = 0;
             image = builder.createImage();
             graphics = builder.createGraphics(image);
-            glyphs = new HashMapIntGeneric<>();
+            indexToGlyph = new HashMapIntGeneric<>();
         }
 
         public void destroy() {
@@ -464,12 +464,12 @@ public class GLFont {
         }
 
         public void destroyGlyphsAndTexture() {
-            Iterator<Glyph> iterator = glyphs.values().iterator();
+            Iterator<Glyph> iterator = indexToGlyph.values().iterator();
             while (iterator.hasNext()) {
                 Glyph glyph = iterator.next();
                 glyph.destroy();
             }
-            glyphs.clear();
+            indexToGlyph.clear();
             fontTextureFilename = null;
         }
 
@@ -515,11 +515,11 @@ public class GLFont {
         }
 
         public Glyph getGlyph(int index) {
-            return glyphs.get(index);
+            return indexToGlyph.get(index);
         }
 
         public void setGlyph(int index, Glyph glyph) {
-            glyphs.put(index, glyph);
+            indexToGlyph.put(index, glyph);
         }
 
         public String getFontTextureFilename() {

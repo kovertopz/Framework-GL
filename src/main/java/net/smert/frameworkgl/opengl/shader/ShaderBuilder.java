@@ -37,12 +37,12 @@ public class ShaderBuilder {
     private final static Logger log = LoggerFactory.getLogger(ShaderBuilder.class);
 
     private final List<Integer> shaderIDs;
-    private final Map<Integer, List<ShaderNameAndSource>> shaderSources;
+    private final Map<Integer, List<ShaderNameAndSource>> shaderTypeToShaderNameAndSources;
     private Shader shader;
 
     public ShaderBuilder() {
         shaderIDs = new ArrayList<>();
-        shaderSources = new HashMap<>();
+        shaderTypeToShaderNameAndSources = new HashMap<>();
         shader = null;
     }
 
@@ -140,7 +140,8 @@ public class ShaderBuilder {
     }
 
     public ShaderBuilder compileShaders() {
-        Iterator<Map.Entry<Integer, List<ShaderNameAndSource>>> iterator = shaderSources.entrySet().iterator();
+        Iterator<Map.Entry<Integer, List<ShaderNameAndSource>>> iterator
+                = shaderTypeToShaderNameAndSources.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, List<ShaderNameAndSource>> entry = iterator.next();
             int shaderType = entry.getKey();
@@ -165,10 +166,10 @@ public class ShaderBuilder {
 
     public ShaderBuilder load(String shaderName, int shaderType) throws IOException {
         String shaderSource = read(shaderName);
-        List<ShaderNameAndSource> shaderNamesAndSources = shaderSources.get(shaderType);
+        List<ShaderNameAndSource> shaderNamesAndSources = shaderTypeToShaderNameAndSources.get(shaderType);
         if (shaderNamesAndSources == null) {
             shaderNamesAndSources = new ArrayList<>();
-            shaderSources.put(shaderType, shaderNamesAndSources);
+            shaderTypeToShaderNameAndSources.put(shaderType, shaderNamesAndSources);
         }
         shaderNamesAndSources.add(new ShaderNameAndSource(shaderName, shaderSource));
         return this;
@@ -176,7 +177,7 @@ public class ShaderBuilder {
 
     public final void reset() {
         shaderIDs.clear();
-        shaderSources.clear();
+        shaderTypeToShaderNameAndSources.clear();
         shader = null;
     }
 

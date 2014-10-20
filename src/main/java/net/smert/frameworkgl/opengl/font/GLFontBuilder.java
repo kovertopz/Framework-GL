@@ -87,8 +87,8 @@ public class GLFontBuilder {
         glFont.loadGlyphs();
 
         // Get each image from the code pages so we can create textures
-        HashMapIntGeneric<GLFont.CodePage> codePages = glFont.getCodePages();
-        Iterator<Entry<CodePage>> iterator = codePages.entrySet().iterator();
+        HashMapIntGeneric<GLFont.CodePage> codePageIndexToCodePage = glFont.getCodePages();
+        Iterator<Entry<CodePage>> iterator = codePageIndexToCodePage.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<CodePage> entry = iterator.next();
             int key = entry.getKey();

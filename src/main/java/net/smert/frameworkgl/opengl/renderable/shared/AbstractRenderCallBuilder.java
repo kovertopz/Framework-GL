@@ -18,7 +18,7 @@ import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall.TextureTypeMapping;
 
 /**
  *
@@ -39,18 +39,19 @@ public abstract class AbstractRenderCallBuilder {
                 continue;
             }
 
+            float textureFlag = segmentMaterial.getTextureFlag();
             int j = 0;
-            Map<TextureType, String> textures = segmentMaterial.getTextures();
-            textureTypeMappings[i] = new TextureTypeMapping[textures.size()];
+            Map<TextureType, String> textureTypeToFilename = segmentMaterial.getTextures();
+            textureTypeMappings[i] = new TextureTypeMapping[textureTypeToFilename.size()];
 
-            Iterator<Map.Entry<TextureType, String>> entries = textures.entrySet().iterator();
+            Iterator<Map.Entry<TextureType, String>> entries = textureTypeToFilename.entrySet().iterator();
             while (entries.hasNext()) {
                 Map.Entry<TextureType, String> entry = entries.next();
                 TextureType textureType = entry.getKey();
                 String filename = entry.getValue();
                 int textureTypeID = textureType.ordinal();
                 int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
-                textureTypeMappings[i][j++] = new TextureTypeMapping(textureTypeID, uniqueTextureID);
+                textureTypeMappings[i][j++] = new TextureTypeMapping(textureFlag, textureTypeID, uniqueTextureID);
             }
         }
 

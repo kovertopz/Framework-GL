@@ -27,11 +27,11 @@ import net.smert.frameworkgl.opengl.image.ImageReader;
 public class TextureReader {
 
     private boolean useFlipDefaults;
-    private final Map<String, ImageReader> imageReaders;
+    private final Map<String, ImageReader> extensionToImageReader;
 
     public TextureReader() {
         useFlipDefaults = true;
-        imageReaders = new HashMap<>();
+        extensionToImageReader = new HashMap<>();
     }
 
     public ImageReader getImageReader(String filename) {
@@ -44,12 +44,12 @@ public class TextureReader {
         String extension = filename.substring(posOfLastPeriod + 1).toLowerCase();
 
         // Does the image reader for this extension exist?
-        if (!imageReaders.containsKey(extension)) {
+        if (!extensionToImageReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
 
         // Load the filename using the image reader
-        return imageReaders.get(extension);
+        return extensionToImageReader.get(extension);
     }
 
     public boolean isUseFlipDefaults() {
@@ -79,18 +79,18 @@ public class TextureReader {
 
     public void registerExtension(String extension, ImageReader imageReader) {
         extension = extension.toLowerCase();
-        if (imageReaders.containsKey(extension)) {
+        if (extensionToImageReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has already been registered: " + extension);
         }
-        imageReaders.put(extension, imageReader);
+        extensionToImageReader.put(extension, imageReader);
     }
 
     public void unregisterExtension(String extension) {
         extension = extension.toLowerCase();
-        if (!imageReaders.containsKey(extension)) {
+        if (!extensionToImageReader.containsKey(extension)) {
             throw new IllegalArgumentException("The extension has not been registered: " + extension);
         }
-        imageReaders.remove(extension);
+        extensionToImageReader.remove(extension);
     }
 
 }

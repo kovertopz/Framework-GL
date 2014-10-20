@@ -26,16 +26,16 @@ import net.smert.frameworkgl.utils.HashMapStringInt;
 public class ObjectPool<T> {
 
     private int currentUniqueID;
-    private final HashMapIntGeneric<T> uniqueIDToObjectPool;
+    private final HashMapIntGeneric<T> uniqueIDToObject;
     private final HashMapStringInt filenameToUniqueID;
-    private final Map<String, T> objectPool;
+    private final Map<String, T> filenameToObject;
     private ObjectDestroyer<T> objectDestroyer;
 
     public ObjectPool() {
         currentUniqueID = 1;
-        uniqueIDToObjectPool = new HashMapIntGeneric<>();
+        uniqueIDToObject = new HashMapIntGeneric<>();
         filenameToUniqueID = new HashMapStringInt();
-        objectPool = new HashMap<>();
+        filenameToObject = new HashMap<>();
     }
 
     private ObjectDestroyer<T> getObjectDestroyer() {
@@ -48,32 +48,32 @@ public class ObjectPool<T> {
     }
 
     public void add(String filename, T object) {
-        if (objectPool.containsKey(filename)) {
+        if (filenameToObject.containsKey(filename)) {
             throw new IllegalArgumentException("Tried to add a " + object.getClass().getSimpleName()
                     + " that already exists to the pool: " + filename);
         }
         int uniqueID = currentUniqueID++;
         assert (uniqueID < Integer.MAX_VALUE); // Unique IDs must be positive
         filenameToUniqueID.put(filename, uniqueID);
-        objectPool.put(filename, object);
-        uniqueIDToObjectPool.put(uniqueID, object);
+        filenameToObject.put(filename, object);
+        uniqueIDToObject.put(uniqueID, object);
     }
 
     public void destroy() {
         // Don't reset currentUniqueID
-        uniqueIDToObjectPool.clear();
+        uniqueIDToObject.clear();
         filenameToUniqueID.clear();
         ObjectDestroyer<T> od = getObjectDestroyer();
-        Iterator<T> iterator = objectPool.values().iterator();
+        Iterator<T> iterator = filenameToObject.values().iterator();
         while (iterator.hasNext()) {
             T object = iterator.next();
             od.destroy(object);
         }
-        objectPool.clear();
+        filenameToObject.clear();
     }
 
     public T get(int uniqueID) {
-        T object = uniqueIDToObjectPool.get(uniqueID);
+        T object = uniqueIDToObject.get(uniqueID);
         if (object == null) {
             throw new IllegalArgumentException("Tried to get a object that does not exist from the pool: " + uniqueID);
         }
@@ -81,7 +81,7 @@ public class ObjectPool<T> {
     }
 
     public T get(String filename) {
-        T object = objectPool.get(filename);
+        T object = filenameToObject.get(filename);
         if (object == null) {
             throw new IllegalArgumentException("Tried to get a object that does not exist from the pool: " + filename);
         }
@@ -97,10 +97,10 @@ public class ObjectPool<T> {
     }
 
     public T remove(String filename) {
-        T existingObject = objectPool.remove(filename);
+        T existingObject = filenameToObject.remove(filename);
         if (existingObject != null) {
             int uniqueID = filenameToUniqueID.remove(filename);
-            uniqueIDToObjectPool.remove(uniqueID);
+            uniqueIDToObject.remove(uniqueID);
         }
         return existingObject;
     }

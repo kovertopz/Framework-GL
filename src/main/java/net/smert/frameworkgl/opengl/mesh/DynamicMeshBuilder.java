@@ -28,15 +28,15 @@ import net.smert.frameworkgl.utils.Color;
 public class DynamicMeshBuilder {
 
     private final ConstructionInfo constructionInfo;
-    private final Map<String, AbstractDynamicMesh> dynamicMeshes;
+    private final Map<String, AbstractDynamicMesh> nameToDynamicMesh;
 
     public DynamicMeshBuilder() {
         constructionInfo = new ConstructionInfo();
-        dynamicMeshes = new HashMap<>();
+        nameToDynamicMesh = new HashMap<>();
     }
 
     public DynamicMeshBuilder append(String name) {
-        AbstractDynamicMesh dynamicMesh = dynamicMeshes.get(name);
+        AbstractDynamicMesh dynamicMesh = nameToDynamicMesh.get(name);
         if (dynamicMesh == null) {
             throw new IllegalArgumentException("The requested dynamic mesh: " + name + " does not exist");
         }
@@ -45,7 +45,7 @@ public class DynamicMeshBuilder {
     }
 
     public DynamicMeshBuilder build(String name) {
-        AbstractDynamicMesh dynamicMesh = dynamicMeshes.get(name);
+        AbstractDynamicMesh dynamicMesh = nameToDynamicMesh.get(name);
         if (dynamicMesh == null) {
             throw new IllegalArgumentException("The requested dynamic mesh: " + name + " does not exist");
         }
@@ -71,7 +71,7 @@ public class DynamicMeshBuilder {
     }
 
     public AbstractDynamicMesh register(String name, AbstractDynamicMesh dynamicMesh) {
-        return dynamicMeshes.put(name, dynamicMesh);
+        return nameToDynamicMesh.put(name, dynamicMesh);
     }
 
     public final DynamicMeshBuilder reset() {
@@ -151,7 +151,7 @@ public class DynamicMeshBuilder {
     }
 
     public AbstractDynamicMesh unregister(String name) {
-        return dynamicMeshes.remove(name);
+        return nameToDynamicMesh.remove(name);
     }
 
 }
