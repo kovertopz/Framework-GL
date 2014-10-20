@@ -31,6 +31,7 @@ public class ShaderBindState {
     private float textureFlag;
     private int uniqueShaderID;
     private final AbstractShader defaultDoNothingShader;
+    private AbstractShader defaultShader;
     private AbstractShader shader;
     private FloatBuffer matrixFloatBuffer;
 
@@ -44,11 +45,12 @@ public class ShaderBindState {
             return;
         }
         this.uniqueShaderID = uniqueShaderID;
+        // If the segment's material has a shader use it, otherwise use the shader set by switchShader
         if (uniqueShaderID != -1) {
             AbstractShader abstractShader = Renderable.shaderPool.get(uniqueShaderID);
             switchShader(abstractShader);
         } else {
-            switchShader(shader);
+            switchShader(defaultShader);
         }
     }
 
@@ -64,6 +66,7 @@ public class ShaderBindState {
         shaderBinded = false;
         textureFlag = Float.MIN_VALUE; // So that the first call to sendUniformTextureFlag does an update
         uniqueShaderID = Integer.MIN_VALUE; // Default is -1 elsewhere
+        defaultShader = defaultDoNothingShader;
         shader = defaultDoNothingShader;
     }
 
@@ -87,6 +90,10 @@ public class ShaderBindState {
         GL.matrixHelper.load(camera.getViewMatrix());
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();
+    }
+
+    public void setDefaultShader(AbstractShader defaultShader) {
+        this.defaultShader = defaultShader;
     }
 
     public void switchShader(AbstractShader shader) {
