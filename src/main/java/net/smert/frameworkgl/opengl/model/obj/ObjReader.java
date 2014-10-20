@@ -31,6 +31,7 @@ import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.model.ModelReader;
 import net.smert.frameworkgl.opengl.model.obj.MaterialReader.Color;
@@ -149,49 +150,49 @@ public class ObjReader implements ModelReader {
         addNormalOrVertex(tokenizer, vertices);
     }
 
-    private net.smert.frameworkgl.opengl.mesh.Material convertMaterialToMeshMaterial(Material material) {
+    private SegmentMaterial convertMaterialToSegmentMaterial(Material material) {
         Color ambient = material.getAmbient();
         Color diffuse = material.getDiffuse();
         Color specular = material.getSpecular();
 
-        net.smert.frameworkgl.opengl.mesh.Material meshMaterial = GL.meshFactory.createMaterial();
+        SegmentMaterial segmentMaterial = GL.meshFactory.createSegmentMaterial();
 
         // Lighting
         if (ambient.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1f));
+            segmentMaterial.setLighting(LightParameterType.AMBIENT, new Vector4f(ambient.getR(), ambient.getG(),
+                    ambient.getB(), 1f));
         }
         if (diffuse.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1f));
+            segmentMaterial.setLighting(LightParameterType.DIFFUSE, new Vector4f(diffuse.getR(), diffuse.getG(),
+                    diffuse.getB(), 1f));
         }
         if (specular.hasBeenSet()) {
-            meshMaterial.setLighting(
-                    LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1f));
+            segmentMaterial.setLighting(LightParameterType.SPECULAR, new Vector4f(specular.getR(), specular.getG(),
+                    specular.getB(), 1f));
         }
-        meshMaterial.setShininess(material.convertSpecularExponent());
+        segmentMaterial.setShininess(material.convertSpecularExponent());
 
         // Textures
         String filename;
 
         filename = material.getAmbientMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
+            segmentMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
         }
         filename = material.getDiffuseMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.DIFFUSE, filename);
+            segmentMaterial.setTexture(TextureType.DIFFUSE, filename);
         }
         filename = material.getSpecularMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.SPECULAR, filename);
+            segmentMaterial.setTexture(TextureType.SPECULAR, filename);
         }
         filename = material.getSpecularExponentMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
-            meshMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
+            segmentMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
         }
 
-        return meshMaterial;
+        return segmentMaterial;
     }
 
     private void convertToMesh(Mesh mesh) {
@@ -358,9 +359,8 @@ public class ObjReader implements ModelReader {
             // Convert the material if it exists
             Material material = materialNameToMaterial.get(name);
             if (material != null) {
-                net.smert.frameworkgl.opengl.mesh.Material meshMaterial
-                        = convertMaterialToMeshMaterial(material);
-                segment.setMaterial(meshMaterial);
+                SegmentMaterial segmentMaterial = convertMaterialToSegmentMaterial(material);
+                segment.setMaterial(segmentMaterial);
             }
 
             // Add the segment to the mesh

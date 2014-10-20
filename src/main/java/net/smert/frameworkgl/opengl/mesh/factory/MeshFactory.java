@@ -12,9 +12,9 @@
  */
 package net.smert.frameworkgl.opengl.mesh.factory;
 
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
 import net.smert.frameworkgl.opengl.mesh.dynamic.CubeMap;
@@ -101,10 +101,6 @@ public class MeshFactory {
         return container.getComponent(ViewFrustum.class);
     }
 
-    public Material createMaterial() {
-        return container.getComponent(Material.class);
-    }
-
     public Mesh createMesh() {
         return container.getComponent(Mesh.class);
     }
@@ -115,6 +111,10 @@ public class MeshFactory {
 
     public Segment createSegment() {
         return container.getComponent(Segment.class);
+    }
+
+    public SegmentMaterial createSegmentMaterial() {
+        return container.getComponent(SegmentMaterial.class);
     }
 
     public Tessellator createTessellator() {

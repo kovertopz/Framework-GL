@@ -46,7 +46,7 @@ public class ImmediateModeRenderCall extends AbstractRenderCall {
     public void render() {
         for (int i = 0; i < drawCommands.length; i++) {
             DrawCommands drawCommand = drawCommands[i];
-            Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
+            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             drawCommand.execCommands(mesh);
         }
     }

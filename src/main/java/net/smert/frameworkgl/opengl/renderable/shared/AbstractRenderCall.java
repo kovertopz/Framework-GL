@@ -20,16 +20,7 @@ import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
  */
 public abstract class AbstractRenderCall implements RenderCall {
 
-    protected int[] uniqueShaderIDs;
     protected TextureTypeMapping[][] textureTypeMappings;
-
-    public int[] getUniqueShaderIDs() {
-        return uniqueShaderIDs;
-    }
-
-    public void setUniqueShaderIDs(int[] uniqueShaderIDs) {
-        this.uniqueShaderIDs = uniqueShaderIDs;
-    }
 
     public TextureTypeMapping[][] getTextureTypeMappings() {
         return textureTypeMappings;

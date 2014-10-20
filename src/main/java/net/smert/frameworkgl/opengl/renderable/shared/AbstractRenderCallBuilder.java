@@ -15,8 +15,8 @@ package net.smert.frameworkgl.opengl.renderable.shared;
 import java.util.Iterator;
 import java.util.Map;
 import net.smert.frameworkgl.opengl.TextureType;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
 
@@ -34,13 +34,13 @@ public abstract class AbstractRenderCallBuilder {
         TextureTypeMapping[][] textureTypeMappings = new TextureTypeMapping[totalSegments][];
         for (int i = 0; i < textureTypeMappings.length; i++) {
 
-            Material material = mesh.getSegment(i).getMaterial();
-            if (material == null) {
+            SegmentMaterial segmentMaterial = mesh.getSegment(i).getMaterial();
+            if (segmentMaterial == null) {
                 continue;
             }
 
             int j = 0;
-            Map<TextureType, String> textures = material.getTextures();
+            Map<TextureType, String> textures = segmentMaterial.getTextures();
             textureTypeMappings[i] = new TextureTypeMapping[textures.size()];
 
             Iterator<Map.Entry<TextureType, String>> entries = textures.entrySet().iterator();
@@ -54,25 +54,7 @@ public abstract class AbstractRenderCallBuilder {
             }
         }
 
-        // Convert shaders for each segment
-        int[] uniqueShaderIDs = new int[totalSegments];
-        for (int i = 0; i < uniqueShaderIDs.length; i++) {
-            uniqueShaderIDs[i] = -1;
-
-            Material material = mesh.getSegment(i).getMaterial();
-            if (material == null) {
-                continue;
-            }
-            String shader = material.getShader();
-            if (shader == null) {
-                continue;
-            }
-
-            uniqueShaderIDs[i] = Renderable.shaderPool.getUniqueID(shader);
-        }
-
         renderCall.setTextureTypeMappings(textureTypeMappings);
-        renderCall.setUniqueShaderIDs(uniqueShaderIDs);
     }
 
 }

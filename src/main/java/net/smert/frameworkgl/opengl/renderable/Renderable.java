@@ -17,7 +17,6 @@ import net.smert.frameworkgl.opengl.renderable.gl1.BindStateGL1;
 import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
-import net.smert.frameworkgl.opengl.renderable.shared.RenderCallBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
@@ -43,7 +42,6 @@ public class Renderable {
     public static ImmediateModeRenderCallBuilder immediateModeRenderCallBuilder;
     public static RenderableBuilder renderableBuilder;
     public static RenderableConfigurationPool configPool;
-    public static RenderCallBindState renderCallBindState;
     public static ShaderBindState shaderBindState;
     public static ShaderPool shaderPool;
     public static TextureBindState textureBindState;

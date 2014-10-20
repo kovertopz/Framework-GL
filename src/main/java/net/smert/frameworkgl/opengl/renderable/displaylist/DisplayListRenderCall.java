@@ -36,7 +36,7 @@ public class DisplayListRenderCall extends AbstractRenderCall {
     public void render() {
         for (int i = 0; i < displayListIDs.length; i++) {
             int displayListID = displayListIDs[i];
-            Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
+            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.displayListHelper.call(displayListID);
         }
     }

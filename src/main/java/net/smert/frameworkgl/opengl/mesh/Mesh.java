@@ -124,13 +124,13 @@ public class Mesh {
     public List<String> getTextures() {
         List<String> newTextures = new ArrayList<>();
         for (Segment segment : segments) {
-            Material material = segment.getMaterial();
+            SegmentMaterial segmentMaterial = segment.getMaterial();
 
-            if (material == null) {
+            if (segmentMaterial == null) {
                 continue;
             }
 
-            Map<TextureType, String> textures = material.getTextures();
+            Map<TextureType, String> textures = segmentMaterial.getTextures();
             Iterator<String> iterator = textures.values().iterator();
             while (iterator.hasNext()) {
                 String texture = iterator.next();

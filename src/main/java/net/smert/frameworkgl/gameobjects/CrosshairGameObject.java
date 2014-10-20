@@ -15,8 +15,8 @@ package net.smert.frameworkgl.gameobjects;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 
 /**
@@ -36,11 +36,11 @@ public class CrosshairGameObject extends GameObject {
                 build("quad").
                 createMesh(true, mesh);
 
-        // Create material
-        Material material = mesh.getSegment(0).getMaterial();
-        if (material == null) {
-            material = GL.meshFactory.createMaterial();
-            mesh.getSegment(0).setMaterial(material);
+        // Create segment material
+        SegmentMaterial segmentMaterial = mesh.getSegment(0).getMaterial();
+        if (segmentMaterial == null) {
+            segmentMaterial = GL.meshFactory.createSegmentMaterial();
+            mesh.getSegment(0).setMaterial(segmentMaterial);
         }
 
         // Set the diffuse texture 

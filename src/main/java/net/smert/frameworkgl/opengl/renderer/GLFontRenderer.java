@@ -17,8 +17,8 @@ import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.font.GLFont;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -68,11 +68,11 @@ public class GLFontRenderer {
                     build("quad").
                     createMesh(true, mesh);
 
-            // Create material
-            Material material = mesh.getSegment(0).getMaterial();
-            if (material == null) {
-                material = GL.meshFactory.createMaterial();
-                mesh.getSegment(0).setMaterial(material);
+            // Create segment material
+            SegmentMaterial segmentMaterial = mesh.getSegment(0).getMaterial();
+            if (segmentMaterial == null) {
+                segmentMaterial = GL.meshFactory.createSegmentMaterial();
+                mesh.getSegment(0).setMaterial(segmentMaterial);
             }
 
             // Set the diffuse texture

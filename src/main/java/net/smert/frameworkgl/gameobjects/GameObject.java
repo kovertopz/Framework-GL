@@ -16,7 +16,6 @@ import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableState;
 
@@ -30,7 +29,6 @@ public class GameObject {
     private AbstractRenderable renderable;
     private Object collisionShape;
     private Mesh mesh;
-    private Material meshMaterial;
     private final RenderableState renderableState;
     private Object rigidBody;
     private Transform4f scalingTransform;
@@ -59,14 +57,6 @@ public class GameObject {
 
     public void setRenderable(AbstractRenderable renderable) {
         this.renderable = renderable;
-    }
-
-    public Material getMeshMaterial() {
-        return meshMaterial;
-    }
-
-    public void setMeshMaterial(Material meshMaterial) {
-        this.meshMaterial = meshMaterial;
     }
 
     public Mesh getMesh() {

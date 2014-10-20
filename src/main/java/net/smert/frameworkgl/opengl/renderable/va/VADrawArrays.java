@@ -35,7 +35,7 @@ public class VADrawArrays extends AbstractDrawCall {
     @Override
     public void render() {
         for (int i = 0; i < primitiveModes.length; i++) {
-            Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
+            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.vaHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
         }
     }

@@ -30,7 +30,7 @@ public class Segment {
     private float[] texCoords;
     private float[] vertices;
     private DrawCommands drawCommands;
-    private Material material;
+    private SegmentMaterial material;
     private String name;
 
     public Segment() {
@@ -127,11 +127,11 @@ public class Segment {
         this.drawCommands = drawCommands;
     }
 
-    public Material getMaterial() {
+    public SegmentMaterial getMaterial() {
         return material;
     }
 
-    public void setMaterial(Material material) {
+    public void setMaterial(SegmentMaterial material) {
         this.material = material;
     }
 

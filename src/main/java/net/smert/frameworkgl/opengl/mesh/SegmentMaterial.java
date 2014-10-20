@@ -22,15 +22,14 @@ import net.smert.frameworkgl.opengl.TextureType;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Material {
+public class SegmentMaterial {
 
     private boolean isOpaque;
     private int shininess;
-    private String shader;
     private final Map<TextureType, String> textures;
     private final Map<LightParameterType, Vector4f> lighting;
 
-    public Material() {
+    public SegmentMaterial() {
         isOpaque = true;
         shininess = 0;
         textures = new HashMap<>();
@@ -51,14 +50,6 @@ public class Material {
 
     public void setShininess(int shininess) {
         this.shininess = shininess;
-    }
-
-    public String getShader() {
-        return shader;
-    }
-
-    public void setShader(String shader) {
-        this.shader = shader;
     }
 
     public String getTexture(TextureType textureType) {

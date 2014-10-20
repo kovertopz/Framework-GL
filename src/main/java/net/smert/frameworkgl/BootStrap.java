@@ -64,10 +64,10 @@ import net.smert.frameworkgl.opengl.image.tga.TGAReader;
 import net.smert.frameworkgl.opengl.image.tiff.TIFFReader;
 import net.smert.frameworkgl.opengl.mesh.DrawCommandsConversion;
 import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.dynamic.AABB;
 import net.smert.frameworkgl.opengl.mesh.dynamic.CubeMap;
@@ -105,7 +105,6 @@ import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRender
 import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.RenderCallBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
@@ -225,10 +224,13 @@ public class BootStrap {
             meshFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
 
             // Mesh
-            meshFactoryContainer.addComponent(Material.class);
             meshFactoryContainer.addComponent(Mesh.class);
             meshFactoryContainer.addComponent(RenderableConfiguration.class);
             meshFactoryContainer.addComponent(Segment.class);
+            meshFactoryContainer.addComponent(SegmentMaterial.class);
+            meshFactoryContainer.addComponent(Tessellator.class);
+
+            // Mesh dynamic
             meshFactoryContainer.addComponent(AABB.class);
             meshFactoryContainer.addComponent(CubeMap.class);
             meshFactoryContainer.addComponent(PrimitiveCapsule.class);
@@ -243,7 +245,6 @@ public class BootStrap {
             meshFactoryContainer.addComponent(PrimitiveToriod.class);
             meshFactoryContainer.addComponent(SimpleOrientationAxis.class);
             meshFactoryContainer.addComponent(ViewFrustum.class);
-            meshFactoryContainer.addComponent(Tessellator.class);
 
             // Add container for MeshFactory
             parentContainer.addComponent("meshFactoryContainer", meshFactoryContainer);
@@ -448,7 +449,6 @@ public class BootStrap {
         // Renderable shared
         container.addComponent(RenderableBuilder.class);
         container.addComponent(RenderableConfigurationPool.class);
-        container.addComponent(RenderCallBindState.class);
         container.addComponent(ShaderBindState.class);
         container.addComponent(ShaderPool.class);
         container.addComponent(TextureBindState.class);
@@ -551,7 +551,6 @@ public class BootStrap {
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
         Renderable.immediateModeRenderCallBuilder = container.getComponent(ImmediateModeRenderCallBuilder.class);
         Renderable.renderableBuilder = container.getComponent(RenderableBuilder.class);
-        Renderable.renderCallBindState = container.getComponent(RenderCallBindState.class);
         Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
         Renderable.shaderPool = container.getComponent(ShaderPool.class);
         Renderable.textureBindState = container.getComponent(TextureBindState.class);
