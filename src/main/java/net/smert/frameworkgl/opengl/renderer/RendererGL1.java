@@ -102,6 +102,7 @@ public class RendererGL1 extends AbstractRendererGL {
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
         transform.toFloatBuffer(modelMatrixFloatBuffer);
+        modelMatrixFloatBuffer.flip();
         render(renderable, modelMatrixFloatBuffer);
     }
 

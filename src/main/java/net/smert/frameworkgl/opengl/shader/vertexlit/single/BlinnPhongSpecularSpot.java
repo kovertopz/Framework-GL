@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -23,15 +24,28 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class BlinnPhongSpecularSpot extends AbstractShader {
 
-    private final BlinnPhongSpecularUniforms uniforms;
+    private final SpecularUniforms uniforms;
 
-    public BlinnPhongSpecularSpot(BlinnPhongSpecularUniforms uniforms, Shader shader) {
+    public BlinnPhongSpecularSpot(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public BlinnPhongSpecularUniforms getUniforms() {
+    public SpecularUniforms getUniforms() {
         return uniforms;
+    }
+
+    @Override
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
+        viewModelMatrix.toMatrix3f(normalMatrix);
+        normalMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setNormalMatrix(false, matrixFloatBuffer);
+        matrixFloatBuffer.clear();
+        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
@@ -41,7 +55,7 @@ public class BlinnPhongSpecularSpot extends AbstractShader {
                     "vertexlit/single/blinn_phong_specular_spot.fsh",
                     "vertexlit/single/blinn_phong_specular_spot.vsh",
                     "vertexLitSingleBlinnPhongSpecularSpot");
-            return new BlinnPhongSpecularSpot(new BlinnPhongSpecularUniforms(shader.getProgramID()), shader);
+            return new BlinnPhongSpecularSpot(new SpecularUniforms(shader.getProgramID()), shader);
         }
 
     }

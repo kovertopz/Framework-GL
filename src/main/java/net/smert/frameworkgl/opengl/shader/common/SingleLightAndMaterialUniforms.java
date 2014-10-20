@@ -69,7 +69,7 @@ public class SingleLightAndMaterialUniforms {
         GL.shaderUniformHelper.setUniform(uniformLightIDs[3], glLight.getRadius());
         GL.shaderUniformHelper.setUniform(uniformLightIDs[4], glLight.getSpotInnerCutoffCos());
         GL.shaderUniformHelper.setUniform(uniformLightIDs[5], glLight.getSpotOuterCutoffCos());
-        GL.shaderUniformHelper.setUniform(uniformLightIDs[6], glLight.getSpotExponent());
+        GL.shaderUniformHelper.setUniform(uniformLightIDs[6], (float) glLight.getSpotExponent());
         GL.shaderUniformHelper.setUniform(uniformLightIDs[7],
                 spotEyeDirection.getX(), spotEyeDirection.getY(), spotEyeDirection.getZ());
         GL.shaderUniformHelper.setUniform(uniformLightIDs[8],
@@ -87,7 +87,7 @@ public class SingleLightAndMaterialUniforms {
         Vector4f diffuse = materialLight.getDiffuse();
         Vector4f emission = materialLight.getEmission();
         Vector4f specular = materialLight.getSpecular();
-        GL.shaderUniformHelper.setUniform(uniformMaterialLightIDs[0], materialLight.getShininess());
+        GL.shaderUniformHelper.setUniform(uniformMaterialLightIDs[0], (float) materialLight.getShininess());
         GL.shaderUniformHelper.setUniform(uniformMaterialLightIDs[1],
                 ambient.getX(), ambient.getY(), ambient.getZ(), ambient.getW());
         GL.shaderUniformHelper.setUniform(uniformMaterialLightIDs[2],

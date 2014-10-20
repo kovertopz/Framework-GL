@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -23,15 +24,25 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class BlinnPhongDiffuseDirectional extends AbstractShader {
 
-    private final BlinnPhongDiffuseUniforms uniforms;
+    private final DiffuseUniforms uniforms;
 
-    public BlinnPhongDiffuseDirectional(BlinnPhongDiffuseUniforms uniforms, Shader shader) {
+    public BlinnPhongDiffuseDirectional(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public BlinnPhongDiffuseUniforms getUniforms() {
+    public DiffuseUniforms getUniforms() {
         return uniforms;
+    }
+
+    @Override
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
+        viewModelMatrix.toMatrix3f(normalMatrix);
+        normalMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setNormalMatrix(false, matrixFloatBuffer);
+        matrixFloatBuffer.clear();
     }
 
     public static class Factory {
@@ -41,7 +52,7 @@ public class BlinnPhongDiffuseDirectional extends AbstractShader {
                     "vertexlit/single/blinn_phong_diffuse_directional.fsh",
                     "vertexlit/single/blinn_phong_diffuse_directional.vsh",
                     "vertexLitSingleBlinnPhongDiffuseDirectional");
-            return new BlinnPhongDiffuseDirectional(new BlinnPhongDiffuseUniforms(shader.getProgramID()), shader);
+            return new BlinnPhongDiffuseDirectional(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

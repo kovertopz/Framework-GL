@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -23,15 +24,28 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class BlinnPhongDiffuseSpot extends AbstractShader {
 
-    private final BlinnPhongDiffuseUniforms uniforms;
+    private final DiffuseUniforms uniforms;
 
-    public BlinnPhongDiffuseSpot(BlinnPhongDiffuseUniforms uniforms, Shader shader) {
+    public BlinnPhongDiffuseSpot(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public BlinnPhongDiffuseUniforms getUniforms() {
+    public DiffuseUniforms getUniforms() {
         return uniforms;
+    }
+
+    @Override
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
+        viewModelMatrix.toMatrix3f(normalMatrix);
+        normalMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setNormalMatrix(false, matrixFloatBuffer);
+        matrixFloatBuffer.clear();
+        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
@@ -41,7 +55,7 @@ public class BlinnPhongDiffuseSpot extends AbstractShader {
                     "vertexlit/single/blinn_phong_diffuse_spot.fsh",
                     "vertexlit/single/blinn_phong_diffuse_spot.vsh",
                     "vertexLitSingleBlinnPhongDiffuseSpot");
-            return new BlinnPhongDiffuseSpot(new BlinnPhongDiffuseUniforms(shader.getProgramID()), shader);
+            return new BlinnPhongDiffuseSpot(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

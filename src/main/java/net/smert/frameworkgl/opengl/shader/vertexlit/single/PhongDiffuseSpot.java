@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -23,15 +24,28 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class PhongDiffuseSpot extends AbstractShader {
 
-    private final PhongDiffuseUniforms uniforms;
+    private final DiffuseUniforms uniforms;
 
-    public PhongDiffuseSpot(PhongDiffuseUniforms uniforms, Shader shader) {
+    public PhongDiffuseSpot(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public PhongDiffuseUniforms getUniforms() {
+    public DiffuseUniforms getUniforms() {
         return uniforms;
+    }
+
+    @Override
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
+        viewModelMatrix.toMatrix3f(normalMatrix);
+        normalMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setNormalMatrix(false, matrixFloatBuffer);
+        matrixFloatBuffer.clear();
+        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
@@ -41,7 +55,7 @@ public class PhongDiffuseSpot extends AbstractShader {
                     "vertexlit/single/phong_diffuse_spot.fsh",
                     "vertexlit/single/phong_diffuse_spot.vsh",
                     "vertexLitSinglePhongDiffuseSpot");
-            return new PhongDiffuseSpot(new PhongDiffuseUniforms(shader.getProgramID()), shader);
+            return new PhongDiffuseSpot(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

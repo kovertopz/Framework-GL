@@ -17,22 +17,26 @@ import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
+import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DiffuseUniforms {
+public class DiffuseUniforms extends DefaultShaderUniforms {
 
-    private final int programID;
     private int uniformColorMaterialAmbientID;
     private int uniformColorMaterialDiffuseID;
     private int uniformColorMaterialEmissionID;
     private final SingleLightAndMaterialUniforms singleLightAndMaterialUniforms;
 
     public DiffuseUniforms(int programID) {
-        this.programID = programID;
+        super(programID);
         singleLightAndMaterialUniforms = new SingleLightAndMaterialUniforms(programID);
+    }
+
+    public void setAmbientLight(AmbientLight ambientLight) {
+        singleLightAndMaterialUniforms.setAmbientLight(ambientLight);
     }
 
     public void setColorMaterialAmbient(float colorMaterialAmbient) {
@@ -47,10 +51,6 @@ public class DiffuseUniforms {
         GL.shaderUniformHelper.setUniform(uniformColorMaterialEmissionID, colorMaterialEmission);
     }
 
-    public void setAmbientLight(AmbientLight ambientLight) {
-        singleLightAndMaterialUniforms.setAmbientLight(ambientLight);
-    }
-
     public void setLight(GLLight glLight) {
         singleLightAndMaterialUniforms.setLight(glLight);
     }
@@ -59,7 +59,9 @@ public class DiffuseUniforms {
         singleLightAndMaterialUniforms.setMaterialLight(materialLight);
     }
 
+    @Override
     public void updateUniformLocations() {
+        super.updateUniformLocations();
         singleLightAndMaterialUniforms.updateUniformLocations();
         uniformColorMaterialAmbientID = GL.shaderUniformHelper.getUniformLocation(programID, "uColorMaterialAmbient");
         uniformColorMaterialDiffuseID = GL.shaderUniformHelper.getUniformLocation(programID, "uColorMaterialDiffuse");

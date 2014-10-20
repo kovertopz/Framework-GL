@@ -41,7 +41,7 @@ public class DefaultShaderUniforms {
     }
 
     public void setNormalMatrix(boolean transpose, FloatBuffer matrix) {
-        GL.shaderUniformHelper.setUniformMatrix4(uniformNormalMatrixID, transpose, matrix);
+        GL.shaderUniformHelper.setUniformMatrix3(uniformNormalMatrixID, transpose, matrix);
     }
 
     public void setProjectionMatrix(boolean transpose, FloatBuffer matrix) {

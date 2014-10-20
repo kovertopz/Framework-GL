@@ -53,7 +53,6 @@ public class MeshReader extends Screen {
     private BlinnPhongDiffusePoint vertexLitSingleBlinnPhongDiffusePoint;
     private Camera camera;
     private CameraController cameraController;
-    private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private MaterialLight materialLight;
@@ -117,9 +116,6 @@ public class MeshReader extends Screen {
         glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLight.setRadius(256f); // Shader uses this value and OpenGL does not
         materialLight = GL.glFactory.createMaterialLight();
-
-        // Float buffer for light
-        lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
 
         // Create meshes
         meshCapsule = GL.meshFactory.createMesh();

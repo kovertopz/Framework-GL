@@ -18,11 +18,11 @@ import net.smert.frameworkgl.opengl.GL;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BlinnPhongSpecularUniforms extends BlinnPhongDiffuseUniforms {
+public class SpecularUniforms extends DiffuseUniforms {
 
     private int uniformColorMaterialSpecularID;
 
-    public BlinnPhongSpecularUniforms(int programID) {
+    public SpecularUniforms(int programID) {
         super(programID);
     }
 

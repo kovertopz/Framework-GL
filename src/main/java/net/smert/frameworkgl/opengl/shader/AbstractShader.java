@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader;
 
 import java.nio.FloatBuffer;
+import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
@@ -23,8 +24,10 @@ import net.smert.frameworkgl.opengl.Shader;
  */
 public abstract class AbstractShader {
 
-    private final static Matrix4f projectionViewModelMatrix = new Matrix4f();
-    private final static Matrix4f viewModelMatrix = new Matrix4f();
+    protected final static Matrix3f normalMatrix = new Matrix3f();
+    protected final static Matrix4f projectionViewMatrix = new Matrix4f();
+    protected final static Matrix4f projectionViewModelMatrix = new Matrix4f();
+    protected final static Matrix4f viewModelMatrix = new Matrix4f();
 
     private final DefaultShaderUniforms shaderUniforms;
     private final Shader shader;

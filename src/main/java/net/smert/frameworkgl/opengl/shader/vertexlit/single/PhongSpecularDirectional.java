@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -23,15 +24,28 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class PhongSpecularDirectional extends AbstractShader {
 
-    private final PhongSpecularUniforms uniforms;
+    private final SpecularUniforms uniforms;
 
-    public PhongSpecularDirectional(PhongSpecularUniforms uniforms, Shader shader) {
+    public PhongSpecularDirectional(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public PhongSpecularUniforms getUniforms() {
+    public SpecularUniforms getUniforms() {
         return uniforms;
+    }
+
+    @Override
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
+        viewModelMatrix.toMatrix3f(normalMatrix);
+        normalMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setNormalMatrix(false, matrixFloatBuffer);
+        matrixFloatBuffer.clear();
+        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
@@ -41,7 +55,7 @@ public class PhongSpecularDirectional extends AbstractShader {
                     "vertexlit/single/phong_specular_directional.fsh",
                     "vertexlit/single/phong_specular_directional.vsh",
                     "vertexLitSinglePhongSpecularDirectional");
-            return new PhongSpecularDirectional(new PhongSpecularUniforms(shader.getProgramID()), shader);
+            return new PhongSpecularDirectional(new SpecularUniforms(shader.getProgramID()), shader);
         }
 
     }
