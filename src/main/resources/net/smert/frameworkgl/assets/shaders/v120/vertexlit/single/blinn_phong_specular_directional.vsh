@@ -100,8 +100,8 @@ void main(void)
         // Transform the vertex into eye space
         vec4 eyeVertex = uViewModelMatrix * in_Vertex;
         vec3 eyeLightDir = uLight.eyePosition.xyz - eyeVertex.xyz;
-        vec3 halfVector = normalize(vec3(0.0, 0.0, 1.0) + eyeLightDir);
-        float NdotHV = max(dot(eyeNormal, uLight.halfVector.xyz), 0.000001);
+        vec3 halfVector = normalize(eyeLightDir - eyeVertex.xyz);
+        float NdotHV = max(dot(eyeNormal, uLight.halfVector.xyz), 0.0);
         lightSpecular = pow(NdotHV, uMaterialLight.shininess) * (uLight.specular * matSpecular);
     }
 

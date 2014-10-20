@@ -106,8 +106,8 @@ void main(void)
     vec4 lightSpecular = vec4(0.0);
     if ( NdotL > 0.0 )
     {
-        vec3 halfVector = normalize(vec3(0.0, 0.0, 1.0) + eyeLightDir);
-        float NdotHV = max(dot(eyeNormal, halfVector), 0.000001);
+        vec3 halfVector = normalize(eyeLightDir - eyeVertex.xyz);
+        float NdotHV = max(dot(eyeNormal, halfVector), 0.0);
         lightSpecular = pow(NdotHV, uMaterialLight.shininess) * (uLight.specular * matSpecular);
     }
 
