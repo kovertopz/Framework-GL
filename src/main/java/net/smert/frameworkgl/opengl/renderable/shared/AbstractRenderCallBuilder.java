@@ -49,9 +49,8 @@ public abstract class AbstractRenderCallBuilder {
                 Map.Entry<TextureType, String> entry = entries.next();
                 TextureType textureType = entry.getKey();
                 String filename = entry.getValue();
-                int textureTypeID = textureType.ordinal();
                 int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
-                textureTypeMappings[i][j++] = new TextureTypeMapping(textureFlag, textureTypeID, uniqueTextureID);
+                textureTypeMappings[i][j++] = new TextureTypeMapping(textureFlag, uniqueTextureID, textureType);
             }
         }
 

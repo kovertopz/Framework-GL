@@ -13,10 +13,13 @@
 package net.smert.frameworkgl.opengl.shader;
 
 import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
+import net.smert.frameworkgl.opengl.TextureType;
 
 /**
  *
@@ -30,10 +33,12 @@ public abstract class AbstractShader {
     protected final static Matrix4f viewModelMatrix = new Matrix4f();
 
     private final DefaultShaderUniforms shaderUniforms;
+    private final Map<TextureType, Integer> textureTypeToTextureUnit;
     private final Shader shader;
 
     public AbstractShader(DefaultShaderUniforms shaderUniforms, Shader shader) {
         this.shaderUniforms = shaderUniforms;
+        textureTypeToTextureUnit = new HashMap<>();
         this.shader = shader;
     }
 
@@ -43,6 +48,18 @@ public abstract class AbstractShader {
 
     public void destroy() {
         shader.destroy();
+    }
+
+    public int getTextureUnit(TextureType textureType) {
+        Integer textureUnit = textureTypeToTextureUnit.get(textureType);
+        if (textureUnit == null) {
+            throw new RuntimeException("The shader does not support the texture type: " + textureType);
+        }
+        return textureUnit;
+    }
+
+    public void setTextureUnit(TextureType textureType, int textureUnit) {
+        textureTypeToTextureUnit.put(textureType, textureUnit);
     }
 
     public DefaultShaderUniforms getDefaultShaderUniforms() {

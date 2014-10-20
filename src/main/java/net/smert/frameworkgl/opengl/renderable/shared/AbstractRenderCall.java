@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.TextureType;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -31,25 +33,25 @@ public abstract class AbstractRenderCall implements RenderCall {
     public static class TextureTypeMapping {
 
         private final float textureFlag;
-        private final int textureTypeID;
         private final int uniqueTextureID;
+        private final TextureType textureType;
 
-        public TextureTypeMapping(float textureFlag, int textureTypeID, int uniqueTextureID) {
+        public TextureTypeMapping(float textureFlag, int uniqueTextureID, TextureType textureType) {
             this.textureFlag = textureFlag;
-            this.textureTypeID = textureTypeID;
             this.uniqueTextureID = uniqueTextureID;
+            this.textureType = textureType;
         }
 
         public float getTextureFlag() {
             return textureFlag;
         }
 
-        public int getTextureTypeID() {
-            return textureTypeID;
-        }
-
         public int getUniqueTextureID() {
             return uniqueTextureID;
+        }
+
+        public TextureType getTextureType() {
+            return textureType;
         }
 
     }

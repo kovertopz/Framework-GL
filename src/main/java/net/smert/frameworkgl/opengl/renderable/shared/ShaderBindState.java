@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl.renderable.shared;
 import java.nio.FloatBuffer;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -37,8 +38,8 @@ public class ShaderBindState {
         reset();
     }
 
-    public int getTextureUnit(int textureTypeID) {
-        return TextureUnit.TEXTURE0;
+    public int getTextureUnit(TextureType textureType) {
+        return shader.getTextureUnit(textureType);
     }
 
     public void init() {
@@ -96,6 +97,22 @@ public class ShaderBindState {
 
         public DefaultDoNothingShader() {
             super(new DefaultShaderUniforms(0), new Shader());
+            setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.AMBIENT_OCCLUSION, TextureUnit.TEXTURE1);
+            setTextureUnit(TextureType.DETAIL, TextureUnit.TEXTURE2);
+            setTextureUnit(TextureType.ENVIRONMENT, TextureUnit.TEXTURE3);
+            setTextureUnit(TextureType.HEIGHT, TextureUnit.TEXTURE4);
+            setTextureUnit(TextureType.SPECULAR, TextureUnit.TEXTURE5);
+            setTextureUnit(TextureType.TEXTURE0, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.TEXTURE1, TextureUnit.TEXTURE1);
+            setTextureUnit(TextureType.TEXTURE2, TextureUnit.TEXTURE2);
+            setTextureUnit(TextureType.TEXTURE3, TextureUnit.TEXTURE3);
+            setTextureUnit(TextureType.TEXTURE4, TextureUnit.TEXTURE4);
+            setTextureUnit(TextureType.TEXTURE5, TextureUnit.TEXTURE5);
+            setTextureUnit(TextureType.TEXTURE6, TextureUnit.TEXTURE6);
+            setTextureUnit(TextureType.TEXTURE7, TextureUnit.TEXTURE7);
+            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE6);
+            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE7);
         }
 
         @Override

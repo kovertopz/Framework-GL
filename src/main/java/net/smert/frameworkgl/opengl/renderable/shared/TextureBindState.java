@@ -171,7 +171,7 @@ public class TextureBindState {
         }
         for (TextureTypeMapping mapping : textures) {
             textureFlagOn = mapping.getTextureFlag();
-            int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureTypeID());
+            int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureType());
             Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());
             bindTexture(textureUnit, texture);
         }
