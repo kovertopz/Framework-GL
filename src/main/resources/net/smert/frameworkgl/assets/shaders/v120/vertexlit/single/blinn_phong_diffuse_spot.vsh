@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // In/Out Variables                                                           //
 ////////////////////////////////////////////////////////////////////////////////
+attribute vec3 in_Normal;
 attribute vec4 in_Vertex;
 attribute vec4 in_Color;
 varying vec4 pass_Color;
@@ -20,7 +21,9 @@ varying vec4 pass_Color;
 ////////////////////////////////////////////////////////////////////////////////
 // Default Uniforms                                                           //
 ////////////////////////////////////////////////////////////////////////////////
+uniform mat3 uNormalMatrix;
 uniform mat4 uProjectionViewModelMatrix;
+uniform mat4 uViewModelMatrix;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Structs                                                                    //
@@ -69,9 +72,9 @@ void main(void)
     vec4 matDiffuse = mix(uMaterialLight.diffuse, in_Color, uColorMaterialDiffuse);
     vec4 matEmission = mix(uMaterialLight.emission, in_Color, uColorMaterialEmission);
 
-    // Transform normal into eye space. gl_NormalMatrix is the transpose of the
-    // inverse of the upper leftmost 3x3 of gl_ModelViewMatrix.
-    vec3 eyeNormal = normalize(gl_NormalMatrix * gl_Normal);
+    // Transform normal into eye space. uNormalMatrix is the transpose of the
+    // inverse of the upper leftmost 3x3 of uViewModelMatrix.
+    vec3 eyeNormal = normalize(uNormalMatrix * in_Normal);
 
     // Calculate emission and global ambient light
     vec4 emissionAmbient = matEmission + (uGlobalAmbientLight * matAmbient);
@@ -80,7 +83,7 @@ void main(void)
     vec4 lightAmbient = uLight.ambient * matAmbient;
 
     // Transform the vertex into eye space
-    vec4 eyeVertex = gl_ModelViewMatrix * in_Vertex;
+    vec4 eyeVertex = uViewModelMatrix * in_Vertex;
     vec3 eyeLightDir = uLight.eyePosition.xyz - eyeVertex.xyz;
     float dist = length(eyeLightDir);
     eyeLightDir = normalize(eyeLightDir);
@@ -89,7 +92,7 @@ void main(void)
     float attenuationFactor = 1.0 / (uLight.constantAttenuation
                                    + uLight.linearAttenuation * dist
                                    + uLight.quadraticAttenuation * dist * dist);
-    attenuationFactor *= clamp(1.0 - (dist * dist) / (uRadius * uRadius), 0.0, 1.0);
+    attenuationFactor *= clamp(1.0 - (dist * dist) / (uLight.radius * uLight.radius), 0.0, 1.0);
 
     // Calculate cone's light influence
     float coneCosAngle = dot(-eyeLightDir, normalize(uLight.spotEyeDirection));

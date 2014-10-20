@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // In/Out Variables                                                           //
 ////////////////////////////////////////////////////////////////////////////////
+attribute vec3 in_Normal;
 attribute vec4 in_Vertex;
 attribute vec4 in_Color;
 varying vec4 pass_Color;
@@ -20,7 +21,9 @@ varying vec4 pass_Color;
 ////////////////////////////////////////////////////////////////////////////////
 // Default Uniforms                                                           //
 ////////////////////////////////////////////////////////////////////////////////
+uniform mat3 uNormalMatrix;
 uniform mat4 uProjectionViewModelMatrix;
+uniform mat4 uViewModelMatrix;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Structs                                                                    //
@@ -36,7 +39,6 @@ struct CustomLightSourceParameters
     float spotExponent;
     vec3 spotEyeDirection;
     vec4 ambient;
-    vec4 cameraEyePosition;
     vec4 diffuse;
     vec4 eyePosition;
     vec4 specular;
@@ -72,9 +74,9 @@ void main(void)
     vec4 matEmission = mix(uMaterialLight.emission, in_Color, uColorMaterialEmission);
     vec4 matSpecular = mix(uMaterialLight.specular, in_Color, uColorMaterialSpecular);
 
-    // Transform normal into eye space. gl_NormalMatrix is the transpose of the
-    // inverse of the upper leftmost 3x3 of gl_ModelViewMatrix.
-    vec3 eyeNormal = normalize(gl_NormalMatrix * gl_Normal);
+    // Transform normal into eye space. uNormalMatrix is the transpose of the
+    // inverse of the upper leftmost 3x3 of uViewModelMatrix.
+    vec3 eyeNormal = normalize(uNormalMatrix * in_Normal);
 
     // Calculate emission and global ambient light
     vec4 emissionAmbient = matEmission + (uGlobalAmbientLight * matAmbient);
@@ -96,8 +98,9 @@ void main(void)
     if ( NdotL > 0.0 )
     {
         // Transform the vertex into eye space
-        vec4 eyeVertex = gl_ModelViewMatrix * in_Vertex;
-
+        vec4 eyeVertex = uViewModelMatrix * in_Vertex;
+        vec3 eyeLightDir = uLight.eyePosition.xyz - eyeVertex.xyz;
+        vec3 halfVector = normalize(vec3(0.0, 0.0, 1.0) + eyeLightDir);
         float NdotHV = max(dot(eyeNormal, uLight.halfVector.xyz), 0.000001);
         lightSpecular = pow(NdotHV, uMaterialLight.shininess) * (uLight.specular * matSpecular);
     }
