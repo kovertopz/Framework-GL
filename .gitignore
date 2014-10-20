@@ -1,3 +1,4 @@
 /examples/target/
 /examples/framework.log.*
+/examples/hs_err_*.log
 /target/
