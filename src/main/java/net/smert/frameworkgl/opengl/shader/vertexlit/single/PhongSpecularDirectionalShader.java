@@ -22,11 +22,11 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BlinnPhongSpecularDirectional extends AbstractShader {
+public class PhongSpecularDirectionalShader extends AbstractShader {
 
     private final SpecularUniforms uniforms;
 
-    public BlinnPhongSpecularDirectional(SpecularUniforms uniforms, Shader shader) {
+    public PhongSpecularDirectionalShader(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
@@ -50,12 +50,12 @@ public class BlinnPhongSpecularDirectional extends AbstractShader {
 
     public static class Factory {
 
-        public static BlinnPhongSpecularDirectional Create() throws IOException {
+        public static PhongSpecularDirectionalShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/blinn_phong_specular_directional.fsh",
-                    "vertexlit/single/blinn_phong_specular_directional.vsh",
-                    "vertexLitSingleBlinnPhongSpecularDirectional");
-            return new BlinnPhongSpecularDirectional(new SpecularUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/phong_specular_directional.fsh",
+                    "vertexlit/single/phong_specular_directional.vsh",
+                    "vertexLitSinglePhongSpecularDirectional");
+            return new PhongSpecularDirectionalShader(new SpecularUniforms(shader.getProgramID()), shader);
         }
 
     }

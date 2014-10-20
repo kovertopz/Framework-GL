@@ -22,11 +22,11 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DiffusePoint extends AbstractShader {
+public class DiffuseDirectionalShader extends AbstractShader {
 
     private final DiffuseUniforms uniforms;
 
-    public DiffusePoint(DiffuseUniforms uniforms, Shader shader) {
+    public DiffuseDirectionalShader(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
@@ -43,19 +43,16 @@ public class DiffusePoint extends AbstractShader {
         matrixFloatBuffer.flip();
         uniforms.setNormalMatrix(false, matrixFloatBuffer);
         matrixFloatBuffer.clear();
-        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
 
-        public static DiffusePoint Create() throws IOException {
+        public static DiffuseDirectionalShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/diffuse_point.fsh",
-                    "vertexlit/single/diffuse_point.vsh",
-                    "vertexLitSingleDiffusePoint");
-            return new DiffusePoint(new DiffuseUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/diffuse_directional.fsh",
+                    "vertexlit/single/diffuse_directional.vsh",
+                    "vertexLitSingleDiffuseDirectional");
+            return new DiffuseDirectionalShader(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

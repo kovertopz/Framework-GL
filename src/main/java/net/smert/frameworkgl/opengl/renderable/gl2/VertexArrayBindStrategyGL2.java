@@ -26,7 +26,7 @@ public class VertexArrayBindStrategyGL2 implements net.smert.frameworkgl.opengl.
             VertexArray vaVertex) {
 
         // Must unbind any VBOs
-        Renderable.bindState1.unbindVBO();
+        Renderable.bindState2.unbindVBO();
 
         // Switch the renderable configuration first
         Renderable.bindState2.switchRenderableConfiguration(renderableConfigID);

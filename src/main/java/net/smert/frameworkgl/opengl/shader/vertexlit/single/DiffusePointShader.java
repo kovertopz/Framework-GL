@@ -22,16 +22,16 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BlinnPhongSpecularPoint extends AbstractShader {
+public class DiffusePointShader extends AbstractShader {
 
-    private final SpecularUniforms uniforms;
+    private final DiffuseUniforms uniforms;
 
-    public BlinnPhongSpecularPoint(SpecularUniforms uniforms, Shader shader) {
+    public DiffusePointShader(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public SpecularUniforms getUniforms() {
+    public DiffuseUniforms getUniforms() {
         return uniforms;
     }
 
@@ -50,12 +50,12 @@ public class BlinnPhongSpecularPoint extends AbstractShader {
 
     public static class Factory {
 
-        public static BlinnPhongSpecularPoint Create() throws IOException {
+        public static DiffusePointShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/blinn_phong_specular_point.fsh",
-                    "vertexlit/single/blinn_phong_specular_point.vsh",
-                    "vertexLitSingleBlinnPhongSpecularPoint");
-            return new BlinnPhongSpecularPoint(new SpecularUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/diffuse_point.fsh",
+                    "vertexlit/single/diffuse_point.vsh",
+                    "vertexLitSingleDiffusePoint");
+            return new DiffusePointShader(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

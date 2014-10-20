@@ -27,7 +27,7 @@ import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.shader.vertexlit.single.DiffusePoint;
+import net.smert.frameworkgl.opengl.shader.vertexlit.single.DiffusePointShader;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class MeshReader extends Screen {
     private AmbientLight ambientLight;
     private Camera camera;
     private CameraController cameraController;
-    private DiffusePoint vertexLitSingleDiffusePoint;
+    private DiffusePointShader vertexLitSingleDiffusePointShader;
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private MaterialLight materialLight;
@@ -170,8 +170,8 @@ public class MeshReader extends Screen {
 
         // Build shaders
         try {
-            vertexLitSingleDiffusePoint = DiffusePoint.Factory.Create();
-            vertexLitSingleDiffusePoint.init();
+            vertexLitSingleDiffusePointShader = DiffusePointShader.Factory.Create();
+            vertexLitSingleDiffusePointShader.init();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -215,12 +215,12 @@ public class MeshReader extends Screen {
             Fw.graphics.setCamera(camera);
 
             // Bind shader
-            Fw.graphics.switchShader(vertexLitSingleDiffusePoint);
+            Fw.graphics.switchShader(vertexLitSingleDiffusePointShader);
 
             // Update uniforms
-            vertexLitSingleDiffusePoint.getUniforms().setAmbientLight(ambientLight);
-            vertexLitSingleDiffusePoint.getUniforms().setLight(glLight);
-            vertexLitSingleDiffusePoint.getUniforms().setMaterialLight(materialLight);
+            vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
+            vertexLitSingleDiffusePointShader.getUniforms().setLight(glLight);
+            vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             Fw.graphics.render(renderableCapsule, -3f, 0f, 3f);

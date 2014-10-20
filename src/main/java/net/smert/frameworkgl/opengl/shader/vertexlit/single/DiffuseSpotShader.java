@@ -22,16 +22,16 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class PhongSpecularDirectional extends AbstractShader {
+public class DiffuseSpotShader extends AbstractShader {
 
-    private final SpecularUniforms uniforms;
+    private final DiffuseUniforms uniforms;
 
-    public PhongSpecularDirectional(SpecularUniforms uniforms, Shader shader) {
+    public DiffuseSpotShader(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public SpecularUniforms getUniforms() {
+    public DiffuseUniforms getUniforms() {
         return uniforms;
     }
 
@@ -50,12 +50,12 @@ public class PhongSpecularDirectional extends AbstractShader {
 
     public static class Factory {
 
-        public static PhongSpecularDirectional Create() throws IOException {
+        public static DiffuseSpotShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/phong_specular_directional.fsh",
-                    "vertexlit/single/phong_specular_directional.vsh",
-                    "vertexLitSinglePhongSpecularDirectional");
-            return new PhongSpecularDirectional(new SpecularUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/diffuse_spot.fsh",
+                    "vertexlit/single/diffuse_spot.vsh",
+                    "vertexLitSingleDiffuseSpot");
+            return new DiffuseSpotShader(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

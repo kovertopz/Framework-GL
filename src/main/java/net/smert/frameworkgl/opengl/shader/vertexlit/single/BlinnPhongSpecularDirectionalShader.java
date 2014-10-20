@@ -22,16 +22,16 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DiffuseDirectional extends AbstractShader {
+public class BlinnPhongSpecularDirectionalShader extends AbstractShader {
 
-    private final DiffuseUniforms uniforms;
+    private final SpecularUniforms uniforms;
 
-    public DiffuseDirectional(DiffuseUniforms uniforms, Shader shader) {
+    public BlinnPhongSpecularDirectionalShader(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
 
-    public DiffuseUniforms getUniforms() {
+    public SpecularUniforms getUniforms() {
         return uniforms;
     }
 
@@ -43,16 +43,19 @@ public class DiffuseDirectional extends AbstractShader {
         matrixFloatBuffer.flip();
         uniforms.setNormalMatrix(false, matrixFloatBuffer);
         matrixFloatBuffer.clear();
+        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
+        matrixFloatBuffer.flip();
+        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
 
-        public static DiffuseDirectional Create() throws IOException {
+        public static BlinnPhongSpecularDirectionalShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/diffuse_directional.fsh",
-                    "vertexlit/single/diffuse_directional.vsh",
-                    "vertexLitSingleDiffuseDirectional");
-            return new DiffuseDirectional(new DiffuseUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/blinn_phong_specular_directional.fsh",
+                    "vertexlit/single/blinn_phong_specular_directional.vsh",
+                    "vertexLitSingleBlinnPhongSpecularDirectional");
+            return new BlinnPhongSpecularDirectionalShader(new SpecularUniforms(shader.getProgramID()), shader);
         }
 
     }

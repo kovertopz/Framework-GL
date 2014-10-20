@@ -22,11 +22,11 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class PhongSpecularSpot extends AbstractShader {
+public class BlinnPhongSpecularPointShader extends AbstractShader {
 
     private final SpecularUniforms uniforms;
 
-    public PhongSpecularSpot(SpecularUniforms uniforms, Shader shader) {
+    public BlinnPhongSpecularPointShader(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
@@ -50,12 +50,12 @@ public class PhongSpecularSpot extends AbstractShader {
 
     public static class Factory {
 
-        public static PhongSpecularSpot Create() throws IOException {
+        public static BlinnPhongSpecularPointShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/phong_specular_spot.fsh",
-                    "vertexlit/single/phong_specular_spot.vsh",
-                    "vertexLitSinglePhongSpecularSpot");
-            return new PhongSpecularSpot(new SpecularUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/blinn_phong_specular_point.fsh",
+                    "vertexlit/single/blinn_phong_specular_point.vsh",
+                    "vertexLitSingleBlinnPhongSpecularPoint");
+            return new BlinnPhongSpecularPointShader(new SpecularUniforms(shader.getProgramID()), shader);
         }
 
     }
