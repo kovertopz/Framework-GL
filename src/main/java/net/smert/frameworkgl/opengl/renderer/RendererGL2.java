@@ -85,37 +85,31 @@ public class RendererGL2 extends AbstractRendererGL {
     @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
+        GL.matrixHelper.loadIdentity();
         GL.matrixHelper.translate(x, y, z);
         render(renderable);
-        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
         GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
         GL.matrixHelper.load(transform);
         render(renderable);
-        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
         GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
+        GL.matrixHelper.loadIdentity();
         GL.matrixHelper.translate(position.getX(), position.getY(), position.getZ());
         renderable.render();
-        GL.matrixHelper.pop();
     }
 
     @Override
     public void render(GameObject gameObject) {
         GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
         GL.matrixHelper.load(gameObject.getWorldTransform());
         render(gameObject.getRenderable());
-        GL.matrixHelper.pop();
     }
 
     @Override

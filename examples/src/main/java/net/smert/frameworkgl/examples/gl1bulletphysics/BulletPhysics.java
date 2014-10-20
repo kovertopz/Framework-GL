@@ -87,10 +87,6 @@ public class BulletPhysics extends Screen {
     @Override
     public void init() {
 
-        // Initialize Bullet
-        bulletWrapper = new BulletWrapper();
-        bulletWrapper.init();
-
         // Create timer
         fpsTimer = new FpsTimer();
 
@@ -106,6 +102,10 @@ public class BulletPhysics extends Screen {
 
         // Memory usage
         memoryUsage = new MemoryUsage();
+
+        // Initialize Bullet
+        bulletWrapper = new BulletWrapper();
+        bulletWrapper.init();
 
         // Create ambient light, glLight and material light
         ambientLight = GL.glFactory.createAmbientLight();

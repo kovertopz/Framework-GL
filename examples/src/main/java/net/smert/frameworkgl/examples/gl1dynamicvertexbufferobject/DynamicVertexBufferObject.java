@@ -96,8 +96,8 @@ public class DynamicVertexBufferObject extends Screen {
             viewFrustumGameObject.getRenderableState().setInFrustum(true);
             viewFrustumGameObject.getWorldTransform().getRotation().set(camera.getRotationMatrix());
             viewFrustumGameObject.setWorldPosition(camera.getPosition());
-            viewFrustumGameObject.update(
-                    camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+            viewFrustumGameObject.update(camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(),
+                    camera.getZFar());
             Fw.graphics.updateAabb(viewFrustumGameObject);
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             Fw.graphics.performCulling(camera, dynamicSphereGameObject);
@@ -185,8 +185,8 @@ public class DynamicVertexBufferObject extends Screen {
         viewFrustumGameObject.getColor3().set("white");
         viewFrustumGameObject.getColor3().setA(.4f);
         viewFrustumGameObject.getRenderableState().setInFrustum(false);
-        viewFrustumGameObject.init(
-                camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+        viewFrustumGameObject.init(camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(),
+                camera.getZFar());
 
         // Frustum culling
         FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();
