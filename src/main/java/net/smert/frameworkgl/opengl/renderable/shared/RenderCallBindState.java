@@ -12,12 +12,18 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface DrawCall {
+public class RenderCallBindState {
 
-    public void render();
+    public void bind(int uniqueShaderID, TextureTypeMapping[] textureTypeMapping) {
+        Renderable.shaderBindState.bindShader(uniqueShaderID);
+        Renderable.textureBindState.bindTextures(textureTypeMapping);
+    }
 
 }

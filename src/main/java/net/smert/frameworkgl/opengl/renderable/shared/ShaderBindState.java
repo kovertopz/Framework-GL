@@ -27,12 +27,10 @@ import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
  */
 public class ShaderBindState {
 
-    private boolean doNothingShaderActive;
     private boolean shaderBinded;
     private float textureFlag;
     private int uniqueShaderID;
     private final AbstractShader defaultDoNothingShader;
-    private AbstractShader defaultShader;
     private AbstractShader shader;
     private FloatBuffer matrixFloatBuffer;
 
@@ -50,7 +48,7 @@ public class ShaderBindState {
             AbstractShader abstractShader = Renderable.shaderPool.get(uniqueShaderID);
             switchShader(abstractShader);
         } else {
-            switchShader(defaultShader);
+            switchShader(shader);
         }
     }
 
@@ -58,33 +56,27 @@ public class ShaderBindState {
         return TextureUnit.TEXTURE0;
     }
 
-    public AbstractShader getDefaultShader() {
-        return defaultShader;
-    }
-
-    public void setDefaultShader(AbstractShader defaultShader) {
-        this.defaultShader = defaultShader;
-    }
-
     public void init() {
         matrixFloatBuffer = GL.bufferHelper.createFloatBuffer(16);
     }
 
     public final void reset() {
-        doNothingShaderActive = true;
         shaderBinded = false;
-        textureFlag = 0f;
+        textureFlag = Float.MIN_VALUE; // So that the first call to sendUniformTextureFlag does an update
         uniqueShaderID = Integer.MIN_VALUE; // Default is -1 elsewhere
-        defaultShader = null;
-        defaultShader = defaultDoNothingShader;
         shader = defaultDoNothingShader;
     }
 
     public void sendUniformMatrices() {
-        if (doNothingShaderActive) {
+        shader.sendUniformMatrices(matrixFloatBuffer);
+    }
+
+    public void sendUniformTextureFlag(float flag) {
+        if (textureFlag == flag) {
             return;
         }
-        shader.sendUniformMatrices(matrixFloatBuffer);
+        textureFlag = flag;
+        shader.sendUniformTextureFlag(flag);
     }
 
     public void setCamera(Camera camera) {
@@ -97,33 +89,22 @@ public class ShaderBindState {
         GL.matrixHelper.loadIdentity();
     }
 
-    public void setTextureFlag(float flag) {
-        if (textureFlag == flag) {
-            return;
-        }
-        textureFlag = flag;
-        if (doNothingShaderActive) {
-            return;
-        }
-        shader.sendUniformTextureFlag(flag);
-    }
-
     public void switchShader(AbstractShader shader) {
         if (this.shader == shader) {
             if (!shaderBinded) {
                 shader.bind();
+                shaderBinded = true;
             }
             return;
         }
-        doNothingShaderActive = false;
         this.shader = shader;
         shader.bind();
+        shaderBinded = true;
+        textureFlag = Float.MIN_VALUE; // Reset the flag
     }
 
     public void unbindShader() {
-        if (shader != null) {
-            shader.unbind();
-        }
+        shader.unbind();
         shaderBinded = false;
     }
 
@@ -135,6 +116,14 @@ public class ShaderBindState {
 
         @Override
         public void bind() {
+        }
+
+        @Override
+        public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        }
+
+        @Override
+        public void sendUniformTextureFlag(float flag) {
         }
 
         @Override

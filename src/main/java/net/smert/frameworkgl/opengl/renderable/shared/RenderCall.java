@@ -16,25 +16,8 @@ package net.smert.frameworkgl.opengl.renderable.shared;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractDrawCall extends AbstractRenderCall {
+public interface RenderCall {
 
-    protected int[] elementCounts;
-    protected int[] primitiveModes;
-
-    public int[] getElementCounts() {
-        return elementCounts;
-    }
-
-    public void setElementCounts(int[] elementCounts) {
-        this.elementCounts = elementCounts;
-    }
-
-    public int[] getPrimitiveModes() {
-        return primitiveModes;
-    }
-
-    public void setPrimitiveModes(int[] primitiveModes) {
-        this.primitiveModes = primitiveModes;
-    }
+    public void render();
 
 }

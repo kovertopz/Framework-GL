@@ -16,17 +16,18 @@ import java.nio.ByteBuffer;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.va.factory.VADrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VABuilder extends net.smert.frameworkgl.opengl.renderable.shared.AbstractBuilder {
+public class VADrawCallBuilder extends AbstractDrawCallBuilder {
 
     private final VADrawCallFactory vaDrawCallFactory;
 
-    public VABuilder(VADrawCallFactory vaDrawCallFactory) {
+    public VADrawCallBuilder(VADrawCallFactory vaDrawCallFactory) {
         this.vaDrawCallFactory = vaDrawCallFactory;
     }
 

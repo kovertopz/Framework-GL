@@ -28,7 +28,7 @@ public class VertexBufferObjectInterleavedData {
     public boolean hasVertices;
     public int bufferUsage;
     public int renderableConfigID;
-    public AbstractDrawCall drawCall;
+    public RenderCall drawCall;
     public VertexBufferObject vboVertexIndex;
     public VertexBufferObjectInterleaved vboInterleaved;
 

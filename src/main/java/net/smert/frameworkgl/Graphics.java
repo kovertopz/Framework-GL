@@ -181,7 +181,7 @@ public class Graphics implements Renderer {
                 buildFont().
                 createFont(true);
         switchDefaultFont();
-        switchRenderableFactoryAndRenderer(1);
+        switchRenderableFactoryAndRenderer(1); // Switch to OpenGL 1.X
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {

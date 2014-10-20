@@ -12,55 +12,24 @@
  */
 package net.smert.frameworkgl.opengl.renderable.vbo;
 
-import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBOBuilder extends net.smert.frameworkgl.opengl.renderable.shared.AbstractBuilder {
+public class VBODrawCallBuilder extends AbstractDrawCallBuilder {
 
     private boolean canRenderRanged;
     private final VBODrawCallFactory vboDrawCallFactory;
 
-    public VBOBuilder(VBODrawCallFactory vboDrawCallFactory) {
+    public VBODrawCallBuilder(VBODrawCallFactory vboDrawCallFactory) {
         canRenderRanged = false;
         this.vboDrawCallFactory = vboDrawCallFactory;
-    }
-
-    public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved,
-            RenderableConfiguration config) {
-
-        int total = 0;
-
-        // Calculate byte size of each type and add to the total. Save the total as
-        // the current offset before increasing it.
-        if (mesh.hasColors()) {
-            vboInterleaved.setColorOffsetBytes(total);
-            int byteSize = config.convertGLTypeToByteSize(config.getColorType());
-            total += config.getColorSize() * byteSize;
-        }
-        if (mesh.hasNormals()) {
-            vboInterleaved.setNormalOffsetBytes(total);
-            int byteSize = config.convertGLTypeToByteSize(config.getNormalType());
-            total += config.getNormalSize() * byteSize;
-        }
-        if (mesh.hasTexCoords()) {
-            vboInterleaved.setTexCoordOffsetBytes(total);
-            int byteSize = config.convertGLTypeToByteSize(config.getTexCoordType());
-            total += config.getTexCoordSize() * byteSize;
-        }
-        if (mesh.hasVertices()) {
-            vboInterleaved.setVertexOffsetBytes(total);
-            int byteSize = config.convertGLTypeToByteSize(config.getVertexType());
-            total += config.getVertexSize() * byteSize;
-        }
-
-        vboInterleaved.setStrideBytes(total);
     }
 
     public AbstractDrawCall createDrawCall(Mesh mesh, RenderableConfiguration config) {

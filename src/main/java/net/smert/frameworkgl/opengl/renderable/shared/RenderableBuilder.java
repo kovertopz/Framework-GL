@@ -13,22 +13,17 @@
 package net.smert.frameworkgl.opengl.renderable.shared;
 
 import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.Map;
-import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.constants.GLTypes;
-import net.smert.frameworkgl.opengl.mesh.Material;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractBuilder {
+public class RenderableBuilder {
 
     private void createBufferData(Mesh mesh, RenderableConfiguration config, ByteBuffer colorByteBuffer,
             ByteBuffer normalByteBuffer, ByteBuffer texCoordByteBuffer, ByteBuffer vertexByteBuffer) {
@@ -62,67 +57,35 @@ public abstract class AbstractBuilder {
         }
     }
 
-    public void createDrawCall(Mesh mesh, AbstractDrawCall drawCall) {
+    public void calculateOffsetsAndStride(Mesh mesh, VertexBufferObjectInterleaved vboInterleaved,
+            RenderableConfiguration config) {
 
-        int totalSegments = mesh.getTotalSegments();
+        int total = 0;
 
-        // Convert element counts from each segment
-        int[] elementCounts = new int[totalSegments];
-        for (int i = 0; i < elementCounts.length; i++) {
-            elementCounts[i] = mesh.getSegment(i).getElementCount();
+        // Calculate byte size of each type and add to the total. Save the total as
+        // the current offset before increasing it.
+        if (mesh.hasColors()) {
+            vboInterleaved.setColorOffsetBytes(total);
+            int byteSize = config.convertGLTypeToByteSize(config.getColorType());
+            total += config.getColorSize() * byteSize;
+        }
+        if (mesh.hasNormals()) {
+            vboInterleaved.setNormalOffsetBytes(total);
+            int byteSize = config.convertGLTypeToByteSize(config.getNormalType());
+            total += config.getNormalSize() * byteSize;
+        }
+        if (mesh.hasTexCoords()) {
+            vboInterleaved.setTexCoordOffsetBytes(total);
+            int byteSize = config.convertGLTypeToByteSize(config.getTexCoordType());
+            total += config.getTexCoordSize() * byteSize;
+        }
+        if (mesh.hasVertices()) {
+            vboInterleaved.setVertexOffsetBytes(total);
+            int byteSize = config.convertGLTypeToByteSize(config.getVertexType());
+            total += config.getVertexSize() * byteSize;
         }
 
-        // Convert primitive modes from each segment
-        int[] primitiveModes = new int[totalSegments];
-        for (int i = 0; i < primitiveModes.length; i++) {
-            primitiveModes[i] = mesh.getSegment(i).getPrimitiveMode();
-        }
-
-        // Convert shaders for each segment
-        int[] shaders = new int[totalSegments];
-        for (int i = 0; i < shaders.length; i++) {
-            shaders[i] = -1;
-
-            Material material = mesh.getSegment(i).getMaterial();
-            if (material == null) {
-                continue;
-            }
-            String shader = material.getShader();
-            if (shader == null) {
-                continue;
-            }
-
-            shaders[i] = Renderable.shaderPool.getUniqueID(shader);
-        }
-
-        // Convert textures for each segment
-        TextureTypeMapping[][] textureTypeMappings = new TextureTypeMapping[totalSegments][];
-        for (int i = 0; i < textureTypeMappings.length; i++) {
-
-            Material material = mesh.getSegment(i).getMaterial();
-            if (material == null) {
-                continue;
-            }
-
-            int j = 0;
-            Map<TextureType, String> textures = material.getTextures();
-            textureTypeMappings[i] = new TextureTypeMapping[textures.size()];
-
-            Iterator<Map.Entry<TextureType, String>> entries = textures.entrySet().iterator();
-            while (entries.hasNext()) {
-                Map.Entry<TextureType, String> entry = entries.next();
-                TextureType textureType = entry.getKey();
-                String filename = entry.getValue();
-                int textureTypeID = textureType.ordinal();
-                int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
-                textureTypeMappings[i][j++] = new TextureTypeMapping(textureTypeID, uniqueTextureID);
-            }
-        }
-
-        drawCall.setElementCounts(elementCounts);
-        drawCall.setPrimitiveModes(primitiveModes);
-        drawCall.setShaders(shaders);
-        drawCall.setTextureTypeMappings(textureTypeMappings);
+        vboInterleaved.setStrideBytes(total);
     }
 
     public void createIndexBufferData(Mesh mesh, MultipleBuffers multipleBuffers, RenderableConfiguration config) {

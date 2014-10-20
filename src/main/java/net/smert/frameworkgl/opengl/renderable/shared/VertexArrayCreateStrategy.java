@@ -34,7 +34,7 @@ public class VertexArrayCreateStrategy {
 
         // Create vertex arrays
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            Renderable.vaBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays, config);
+            Renderable.renderableBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays, config);
         }
 
         ByteBuffer vertexIndexBuffer = null;
@@ -53,13 +53,13 @@ public class VertexArrayCreateStrategy {
             data.vaVertex = Renderable.vertexArrays.getVertexVertexArray();
         }
         if (mesh.hasIndexes()) {
-            Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.vertexArrays, config);
+            Renderable.renderableBuilder.createIndexBufferData(mesh, Renderable.vertexArrays, config);
             data.vaVertexIndex = Renderable.vertexArrays.getVertexIndexVertexArray();
             vertexIndexBuffer = data.vaVertexIndex.getByteBuffer();
         }
 
         // Create draw call
-        data.drawCall = Renderable.vaBuilder.createDrawCall(mesh, config, vertexIndexBuffer);
+        data.drawCall = Renderable.vaDrawCallBuilder.createDrawCall(mesh, config, vertexIndexBuffer);
     }
 
 }

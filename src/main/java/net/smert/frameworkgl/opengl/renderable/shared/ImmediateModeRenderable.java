@@ -14,6 +14,7 @@ package net.smert.frameworkgl.opengl.renderable.shared;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
 
 /**
  *
@@ -21,11 +22,17 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
  */
 public class ImmediateModeRenderable extends AbstractRenderable {
 
-    private Mesh mesh;
+    private RenderCall renderCall;
+
+    public ImmediateModeRenderable() {
+        renderCall = null;
+    }
 
     @Override
     public void create(Mesh mesh) {
-        this.mesh = mesh;
+
+        // Create render call
+        renderCall = Renderable.immediateModeRenderCallBuilder.createRenderCall(mesh);
     }
 
     @Override
@@ -34,10 +41,7 @@ public class ImmediateModeRenderable extends AbstractRenderable {
 
     @Override
     public void render() {
-        for (int i = 0; i < mesh.getTotalSegments(); i++) {
-            DrawCommands drawCommands = mesh.getSegment(i).getDrawCommands();
-            drawCommands.execCommands(mesh);
-        }
+        renderCall.render();
     }
 
 }

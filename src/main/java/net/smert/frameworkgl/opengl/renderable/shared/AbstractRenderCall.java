@@ -12,29 +12,31 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.texture.TextureTypeMapping;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractDrawCall extends AbstractRenderCall {
+public abstract class AbstractRenderCall implements RenderCall {
 
-    protected int[] elementCounts;
-    protected int[] primitiveModes;
+    protected int[] uniqueShaderIDs;
+    protected TextureTypeMapping[][] textureTypeMappings;
 
-    public int[] getElementCounts() {
-        return elementCounts;
+    public int[] getUniqueShaderIDs() {
+        return uniqueShaderIDs;
     }
 
-    public void setElementCounts(int[] elementCounts) {
-        this.elementCounts = elementCounts;
+    public void setUniqueShaderIDs(int[] uniqueShaderIDs) {
+        this.uniqueShaderIDs = uniqueShaderIDs;
     }
 
-    public int[] getPrimitiveModes() {
-        return primitiveModes;
+    public TextureTypeMapping[][] getTextureTypeMappings() {
+        return textureTypeMappings;
     }
 
-    public void setPrimitiveModes(int[] primitiveModes) {
-        this.primitiveModes = primitiveModes;
+    public void setTextureTypeMappings(TextureTypeMapping[][] textureTypeMappings) {
+        this.textureTypeMappings = textureTypeMappings;
     }
 
 }

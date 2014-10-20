@@ -83,9 +83,9 @@ public class TextureBindState {
 
         if (flagChanged) {
             if (textureID != 0) {
-                Renderable.shaderBindState.setTextureFlag(1f);
+                Renderable.shaderBindState.sendUniformTextureFlag(1f);
             } else {
-                Renderable.shaderBindState.setTextureFlag(0f);
+                Renderable.shaderBindState.sendUniformTextureFlag(0f);
             }
         }
     }
@@ -229,7 +229,7 @@ public class TextureBindState {
         textureUnitToTextureID.put(activeTextureUnit, 0);
         if ((activeTextureUnit >= TextureUnit.TEXTURE0)
                 && (activeTextureUnit < TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag)) {
-            Renderable.shaderBindState.setTextureFlag(0f);
+            Renderable.shaderBindState.sendUniformTextureFlag(0f);
         }
 
         // Unbind all texture targets

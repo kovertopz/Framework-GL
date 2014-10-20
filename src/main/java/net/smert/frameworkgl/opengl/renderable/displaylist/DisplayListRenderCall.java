@@ -10,33 +10,34 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.vbo;
+package net.smert.frameworkgl.opengl.renderable.displaylist;
 
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBODrawElements extends AbstractDrawCall {
+public class DisplayListRenderCall extends AbstractRenderCall {
 
-    private int indexType;
+    private int[] displayListIDs;
 
-    public int getIndexType() {
-        return indexType;
+    public int[] getDisplayListIDs() {
+        return displayListIDs;
     }
 
-    public void setIndexType(int indexType) {
-        this.indexType = indexType;
+    public void setDisplayListIDs(int[] displayListIDs) {
+        this.displayListIDs = displayListIDs;
     }
 
     @Override
     public void render() {
-        for (int i = 0; i < primitiveModes.length; i++) {
+        for (int i = 0; i < displayListIDs.length; i++) {
+            int displayListID = displayListIDs[i];
             Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], indexType);
+            GL.displayListHelper.call(displayListID);
         }
     }
 

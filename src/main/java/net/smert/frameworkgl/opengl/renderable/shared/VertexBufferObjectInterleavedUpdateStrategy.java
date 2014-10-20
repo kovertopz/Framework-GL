@@ -31,8 +31,8 @@ public class VertexBufferObjectInterleavedUpdateStrategy {
 
         // Create interleaved buffer data and send interleaved buffer data
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            Renderable.vboBuilder.calculateOffsetsAndStride(mesh, data.vboInterleaved, config);
-            Renderable.vboBuilder.createInterleavedBufferData(
+            Renderable.renderableBuilder.calculateOffsetsAndStride(mesh, data.vboInterleaved, config);
+            Renderable.renderableBuilder.createInterleavedBufferData(
                     mesh, data.vboInterleaved.getStrideBytes(), Renderable.byteBuffers, config);
             GL.vboHelper.updateBufferData(data.vboInterleaved.getVboID(), 0, Renderable.byteBuffers.getInterleaved());
         }
@@ -44,7 +44,7 @@ public class VertexBufferObjectInterleavedUpdateStrategy {
 
         // Create byte buffer data and send byte buffer data for indexes
         if ((mesh.hasIndexes()) && (data.vboVertexIndex != null)) {
-            Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
+            Renderable.renderableBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.updateBufferElementData(data.vboVertexIndex.getVboID(), 0,
                     Renderable.byteBuffers.getVertexIndex());
         }
@@ -52,7 +52,7 @@ public class VertexBufferObjectInterleavedUpdateStrategy {
         GL.vboHelper.unbind();
 
         // Create draw call
-        data.drawCall = Renderable.vboBuilder.createDrawCall(mesh, config);
+        data.drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
     }
 
 }

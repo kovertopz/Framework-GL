@@ -10,33 +10,44 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.vbo;
+package net.smert.frameworkgl.opengl.renderable.immediatemode;
 
-import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBODrawElements extends AbstractDrawCall {
+public class ImmediateModeRenderCall extends AbstractRenderCall {
 
-    private int indexType;
+    private DrawCommands[] drawCommands;
+    private Mesh mesh;
 
-    public int getIndexType() {
-        return indexType;
+    public DrawCommands[] getDrawCommands() {
+        return drawCommands;
     }
 
-    public void setIndexType(int indexType) {
-        this.indexType = indexType;
+    public void setDrawCommands(DrawCommands[] drawCommands) {
+        this.drawCommands = drawCommands;
+    }
+
+    public Mesh getMesh() {
+        return mesh;
+    }
+
+    public void setMesh(Mesh mesh) {
+        this.mesh = mesh;
     }
 
     @Override
     public void render() {
-        for (int i = 0; i < primitiveModes.length; i++) {
+        for (int i = 0; i < drawCommands.length; i++) {
+            DrawCommands drawCommand = drawCommands[i];
             Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], indexType);
+            drawCommand.execCommands(mesh);
         }
     }
 

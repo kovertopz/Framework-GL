@@ -34,7 +34,7 @@ public class VertexBufferObjectNonInterleavedCreateStrategy {
 
         // Create non interleaved buffer data
         if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
-            Renderable.vboBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers, config);
+            Renderable.renderableBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers, config);
         }
 
         // Create VBO and send byte buffer data for colors
@@ -55,7 +55,8 @@ public class VertexBufferObjectNonInterleavedCreateStrategy {
         if (mesh.hasTexCoords()) {
             data.vboTexCoord = GL.glFactory.createVertexBufferObject();
             data.vboTexCoord.create();
-            GL.vboHelper.setBufferData(data.vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(), data.bufferUsage);
+            GL.vboHelper.setBufferData(data.vboTexCoord.getVboID(), Renderable.byteBuffers.getTexCoord(),
+                    data.bufferUsage);
         }
 
         // Create VBO and send byte buffer data for vertices
@@ -69,7 +70,7 @@ public class VertexBufferObjectNonInterleavedCreateStrategy {
         if (mesh.hasIndexes()) {
             data.vboVertexIndex = GL.glFactory.createVertexBufferObject();
             data.vboVertexIndex.create();
-            Renderable.vboBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
+            Renderable.renderableBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.setBufferElementData(data.vboVertexIndex.getVboID(), Renderable.byteBuffers.getVertexIndex(),
                     data.bufferUsage);
         }
@@ -77,7 +78,7 @@ public class VertexBufferObjectNonInterleavedCreateStrategy {
         GL.vboHelper.unbind();
 
         // Create draw call
-        data.drawCall = Renderable.vboBuilder.createDrawCall(mesh, config);
+        data.drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
     }
 
 }

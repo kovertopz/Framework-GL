@@ -22,7 +22,7 @@ public class VertexBufferObjectNonInterleavedData {
 
     public int bufferUsage;
     public int renderableConfigID;
-    public AbstractDrawCall drawCall;
+    public RenderCall drawCall;
     public VertexBufferObject vboColor;
     public VertexBufferObject vboNormal;
     public VertexBufferObject vboTexCoord;

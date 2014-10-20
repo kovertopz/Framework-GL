@@ -64,8 +64,7 @@ public class DrawCommandsConversion implements DrawCommands {
                                     GL.renderHelper.color(r, g, b);
                                     break;
                                 case GLTypes.FLOAT:
-                                    GL.renderHelper.color(
-                                            colors[offset + 0], colors[offset + 1], colors[offset + 2]);
+                                    GL.renderHelper.color(colors[offset + 0], colors[offset + 1], colors[offset + 2]);
                                     break;
                                 default:
                                     throw new IllegalArgumentException(
@@ -84,12 +83,12 @@ public class DrawCommandsConversion implements DrawCommands {
                                     GL.renderHelper.color(r, g, b, a);
                                     break;
                                 case GLTypes.FLOAT:
-                                    GL.renderHelper.color(
-                                            colors[offset + 0], colors[offset + 1], colors[offset + 2], colors[offset + 3]);
+                                    GL.renderHelper.color(colors[offset + 0], colors[offset + 1], colors[offset + 2],
+                                            colors[offset + 3]);
                                     break;
                                 default:
-                                    throw new IllegalArgumentException(
-                                            "Unknown GL type constant for color: " + config.getColorType());
+                                    throw new IllegalArgumentException("Unknown GL type constant for color: "
+                                            + config.getColorType());
                             }
                             break;
 
@@ -97,17 +96,45 @@ public class DrawCommandsConversion implements DrawCommands {
                             throw new IllegalArgumentException("Unknown color size: " + config.getColorSize());
                     }
                 }
+
                 if (mesh.hasNormals()) {
                     int offset = config.getNormalSize() * j;
                     GL.renderHelper.normal(normals[offset + 0], normals[offset + 1], normals[offset + 2]);
                 }
+
                 if (mesh.hasTexCoords()) {
                     int offset = config.getTexCoordSize() * j;
-                    GL.renderHelper.texCoord(texCoords[offset + 0], texCoords[offset + 1], texCoords[offset + 2]);
+                    switch (config.getTexCoordSize()) {
+                        case 2:
+                            GL.renderHelper.texCoord(texCoords[offset + 0], texCoords[offset + 1]);
+                            break;
+
+                        case 3:
+                            GL.renderHelper.texCoord(texCoords[offset + 0], texCoords[offset + 1],
+                                    texCoords[offset + 2]);
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Unknown texture coordinate size: "
+                                    + config.getTexCoordSize());
+                    }
                 }
+
                 if (mesh.hasVertices()) {
                     int offset = config.getVertexSize() * j;
-                    GL.renderHelper.vertex(vertices[offset + 0], vertices[offset + 1], vertices[offset + 2]);
+                    switch (config.getVertexSize()) {
+                        case 3:
+                            GL.renderHelper.vertex(vertices[offset + 0], vertices[offset + 1], vertices[offset + 2]);
+                            break;
+
+                        case 4:
+                            GL.renderHelper.vertex(vertices[offset + 0], vertices[offset + 1], vertices[offset + 2],
+                                    vertices[offset + 3]);
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Unknown vertex size: " + config.getVertexSize());
+                    }
                 }
             }
 

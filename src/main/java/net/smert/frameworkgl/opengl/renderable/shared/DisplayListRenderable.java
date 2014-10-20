@@ -12,10 +12,13 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.smert.frameworkgl.opengl.DisplayList;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
 
 /**
  *
@@ -23,44 +26,53 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
  */
 public class DisplayListRenderable extends AbstractRenderable {
 
-    private DisplayList displayList;
+    private final List<DisplayList> displayLists;
+    private RenderCall renderCall;
+
+    public DisplayListRenderable() {
+        displayLists = new ArrayList<>();
+        renderCall = null;
+    }
 
     @Override
     public void create(Mesh mesh) {
 
-        // Destroy existing display list
+        // Destroy existing display lists
         destroy();
 
-        // Create display list
-        displayList = GL.glFactory.createDisplayList();
-        displayList.create();
-        int displayListID = displayList.getDisplayListID();
-
-        // Compile display list
-        assert (displayListID != 0);
-        GL.displayListHelper.begin(displayListID);
         for (int i = 0; i < mesh.getTotalSegments(); i++) {
+
+            // Create display list
+            DisplayList displayList = GL.glFactory.createDisplayList();
+            displayList.create();
+            int displayListID = displayList.getDisplayListID();
+
+            // Compile display list
+            assert (displayListID != 0);
+            GL.displayListHelper.begin(displayListID);
             DrawCommands drawCommands = mesh.getSegment(i).getDrawCommands();
             drawCommands.execCommands(mesh);
+            GL.displayListHelper.end();
+
+            // Save display list
+            displayLists.add(displayList);
         }
-        GL.displayListHelper.end();
+
+        // Create render call
+        renderCall = Renderable.displayListRenderCallBuilder.createRenderCall(mesh, displayLists);
     }
 
     @Override
     public void destroy() {
-        if (displayList == null) {
-            return;
+        for (DisplayList displayList : displayLists) {
+            displayList.destroy();
         }
-        displayList.destroy();
-        displayList = null;
+        displayLists.clear();
     }
 
     @Override
     public void render() {
-        assert (displayList != null);
-        int displayListID = displayList.getDisplayListID();
-        assert (displayListID != 0);
-        GL.displayListHelper.call(displayListID);
+        renderCall.render();
     }
 
 }

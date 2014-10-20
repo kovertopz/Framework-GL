@@ -12,18 +12,22 @@
  */
 package net.smert.frameworkgl.opengl.renderable;
 
+import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.gl1.BindStateGL1;
 import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
+import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderCallBindState;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderPool;
 import net.smert.frameworkgl.opengl.renderable.shared.TextureBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.TexturePool;
-import net.smert.frameworkgl.opengl.renderable.va.VABuilder;
+import net.smert.frameworkgl.opengl.renderable.va.VADrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.va.VertexArrays;
 import net.smert.frameworkgl.opengl.renderable.vbo.ByteBuffers;
-import net.smert.frameworkgl.opengl.renderable.vbo.VBOBuilder;
+import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawCallBuilder;
 
 /**
  *
@@ -34,14 +38,18 @@ public class Renderable {
     public static BindStateGL1 bindState1;
     public static BindStateGL2 bindState2;
     public static ByteBuffers byteBuffers;
+    public static DisplayListRenderCallBuilder displayListRenderCallBuilder;
     public static DrawCommands drawCommandsConversion;
+    public static ImmediateModeRenderCallBuilder immediateModeRenderCallBuilder;
+    public static RenderableBuilder renderableBuilder;
     public static RenderableConfigurationPool configPool;
+    public static RenderCallBindState renderCallBindState;
     public static ShaderBindState shaderBindState;
     public static ShaderPool shaderPool;
     public static TextureBindState textureBindState;
     public static TexturePool texturePool;
-    public static VABuilder vaBuilder;
-    public static VBOBuilder vboBuilder;
+    public static VADrawCallBuilder vaDrawCallBuilder;
+    public static VBODrawCallBuilder vboDrawCallBuilder;
     public static VertexArrays vertexArrays;
 
 }

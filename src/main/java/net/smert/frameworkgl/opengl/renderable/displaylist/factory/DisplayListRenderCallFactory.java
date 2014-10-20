@@ -10,31 +10,25 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.displaylist.factory;
+
+import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCall;
+import org.picocontainer.MutablePicoContainer;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractDrawCall extends AbstractRenderCall {
+public class DisplayListRenderCallFactory {
 
-    protected int[] elementCounts;
-    protected int[] primitiveModes;
+    private final MutablePicoContainer container;
 
-    public int[] getElementCounts() {
-        return elementCounts;
+    public DisplayListRenderCallFactory(MutablePicoContainer displayListRenderCallFactoryContainer) {
+        container = displayListRenderCallFactoryContainer;
     }
 
-    public void setElementCounts(int[] elementCounts) {
-        this.elementCounts = elementCounts;
-    }
-
-    public int[] getPrimitiveModes() {
-        return primitiveModes;
-    }
-
-    public void setPrimitiveModes(int[] primitiveModes) {
-        this.primitiveModes = primitiveModes;
+    public DisplayListRenderCall createDisplayList() {
+        return container.getComponent(DisplayListRenderCall.class);
     }
 
 }

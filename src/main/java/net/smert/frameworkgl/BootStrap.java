@@ -88,6 +88,9 @@ import net.smert.frameworkgl.opengl.model.obj.MaterialReader;
 import net.smert.frameworkgl.opengl.model.obj.ObjReader;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCall;
+import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCallBuilder;
+import net.smert.frameworkgl.opengl.renderable.displaylist.factory.DisplayListRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL2;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL3;
@@ -97,8 +100,13 @@ import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectBindStrateg
 import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
 import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategyGL2;
 import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategyGL2;
+import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCall;
+import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
+import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderCallBindState;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderPool;
@@ -118,14 +126,14 @@ import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInter
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderStrategy;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
 import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedUpdateStrategy;
-import net.smert.frameworkgl.opengl.renderable.va.VABuilder;
 import net.smert.frameworkgl.opengl.renderable.va.VADrawArrays;
+import net.smert.frameworkgl.opengl.renderable.va.VADrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.va.VADrawElements;
 import net.smert.frameworkgl.opengl.renderable.va.VertexArrays;
 import net.smert.frameworkgl.opengl.renderable.va.factory.VADrawCallFactory;
 import net.smert.frameworkgl.opengl.renderable.vbo.ByteBuffers;
-import net.smert.frameworkgl.opengl.renderable.vbo.VBOBuilder;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawArrays;
+import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawRangeElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
@@ -150,7 +158,9 @@ public class BootStrap {
 
     protected MutablePicoContainer cameraFactoryContainer;
     protected MutablePicoContainer gameObjectFactoryContainer;
+    protected MutablePicoContainer displayListRenderCallFactoryContainer;
     protected MutablePicoContainer glFactoryContainer;
+    protected MutablePicoContainer immediateModeRenderCallFactoryContainer;
     protected MutablePicoContainer meshFactoryContainer;
     protected MutablePicoContainer renderableFactoryGL1Container;
     protected MutablePicoContainer renderableFactoryGL2Container;
@@ -282,6 +292,28 @@ public class BootStrap {
         }
 
         {
+            // Container for DisplayListRenderCallFactory
+            displayListRenderCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+
+            // Renderable display list
+            displayListRenderCallFactoryContainer.addComponent(DisplayListRenderCall.class);
+
+            // Add container for DisplayListRenderCallFactory
+            parentContainer.addComponent("displayListRenderCallFactoryContainer", displayListRenderCallFactoryContainer);
+        }
+
+        {
+            // Container for ImmediateModeRenderCallFactory
+            immediateModeRenderCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+
+            // Renderable immediate mode
+            immediateModeRenderCallFactoryContainer.addComponent(ImmediateModeRenderCall.class);
+
+            // Add container for ImmediateModeRenderCallFactory
+            parentContainer.addComponent("immediateModeRenderCallFactoryContainer", immediateModeRenderCallFactoryContainer);
+        }
+
+        {
             // Container for VADrawCallFactory
             vaDrawCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
 
@@ -391,18 +423,32 @@ public class BootStrap {
         container.as(Characteristics.USE_NAMES).addComponent(RenderableFactoryGL2.class);
         container.as(Characteristics.USE_NAMES).addComponent(RenderableFactoryGL3.class);
 
-        // Renderable factory gl1
+        // Renderable display list
+        container.addComponent(DisplayListRenderCallBuilder.class);
+
+        // Renderable display list factory
+        container.as(Characteristics.USE_NAMES).addComponent(DisplayListRenderCallFactory.class);
+
+        // Renderable gl1
         container.addComponent(BindStateGL1.class);
         container.addComponent(VertexArrayBindStrategyGL1.class);
         container.addComponent(VertexBufferObjectBindStrategyGL1.class);
 
-        // Renderable factory gl2
+        // Renderable gl2
         container.addComponent(BindStateGL2.class);
         container.addComponent(VertexArrayBindStrategyGL2.class);
         container.addComponent(VertexBufferObjectBindStrategyGL2.class);
 
+        // Renderable immediate mode
+        container.addComponent(ImmediateModeRenderCallBuilder.class);
+
+        // Renderable immediate mode factory
+        container.as(Characteristics.USE_NAMES).addComponent(ImmediateModeRenderCallFactory.class);
+
         // Renderable shared
+        container.addComponent(RenderableBuilder.class);
         container.addComponent(RenderableConfigurationPool.class);
+        container.addComponent(RenderCallBindState.class);
         container.addComponent(ShaderBindState.class);
         container.addComponent(ShaderPool.class);
         container.addComponent(TextureBindState.class);
@@ -418,7 +464,7 @@ public class BootStrap {
         container.addComponent(VertexBufferObjectNonInterleavedUpdateStrategy.class);
 
         // Renderable VA
-        container.addComponent(VABuilder.class);
+        container.addComponent(VADrawCallBuilder.class);
         container.addComponent(VertexArrays.class);
 
         // Renderable VA factory
@@ -426,7 +472,7 @@ public class BootStrap {
 
         // Renderable VBO
         container.addComponent(ByteBuffers.class);
-        container.addComponent(VBOBuilder.class);
+        container.addComponent(VBODrawCallBuilder.class);
 
         // Renderable VBO factory
         container.as(Characteristics.USE_NAMES).addComponent(VBODrawCallFactory.class);
@@ -501,13 +547,17 @@ public class BootStrap {
         Renderable.bindState2 = container.getComponent(BindStateGL2.class);
         Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
         Renderable.configPool = container.getComponent(RenderableConfigurationPool.class);
+        Renderable.displayListRenderCallBuilder = container.getComponent(DisplayListRenderCallBuilder.class);
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
+        Renderable.immediateModeRenderCallBuilder = container.getComponent(ImmediateModeRenderCallBuilder.class);
+        Renderable.renderableBuilder = container.getComponent(RenderableBuilder.class);
+        Renderable.renderCallBindState = container.getComponent(RenderCallBindState.class);
         Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
         Renderable.shaderPool = container.getComponent(ShaderPool.class);
         Renderable.textureBindState = container.getComponent(TextureBindState.class);
         Renderable.texturePool = container.getComponent(TexturePool.class);
-        Renderable.vaBuilder = container.getComponent(VABuilder.class);
-        Renderable.vboBuilder = container.getComponent(VBOBuilder.class);
+        Renderable.vaDrawCallBuilder = container.getComponent(VADrawCallBuilder.class);
+        Renderable.vboDrawCallBuilder = container.getComponent(VBODrawCallBuilder.class);
         Renderable.vertexArrays = container.getComponent(VertexArrays.class);
     }
 

@@ -53,10 +53,9 @@ public class VBODrawRangeElements extends AbstractDrawCall {
     @Override
     public void render() {
         for (int i = 0; i < primitiveModes.length; i++) {
-            Renderable.shaderBindState.bindShader(shaders[i]);
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
-            GL.vboHelper.drawRangeElements(
-                    primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i], indexType);
+            Renderable.renderCallBindState.bind(uniqueShaderIDs[i], textureTypeMappings[i]);
+            GL.vboHelper.drawRangeElements(primitiveModes[i], minIndexes[i], maxIndexes[i], elementCounts[i],
+                    indexType);
         }
     }
 
