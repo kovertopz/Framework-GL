@@ -17,10 +17,10 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
-import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.SkyboxGameObject;
@@ -99,8 +99,8 @@ public class Skybox extends Screen {
             viewFrustumGameObject.getRenderableState().setInFrustum(true);
             viewFrustumGameObject.getWorldTransform().getRotation().set(camera.getRotationMatrix());
             viewFrustumGameObject.setWorldPosition(camera.getPosition());
-            viewFrustumGameObject.update(
-                    camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+            viewFrustumGameObject.update(camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(),
+                    camera.getZFar());
             Fw.graphics.updateAabb(viewFrustumGameObject);
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             updateGameObjectsToRender();
@@ -198,8 +198,8 @@ public class Skybox extends Screen {
         viewFrustumGameObject.getColor3().set("white");
         viewFrustumGameObject.getColor3().setA(.4f);
         viewFrustumGameObject.getRenderableState().setInFrustum(false);
-        viewFrustumGameObject.init(
-                camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(), camera.getZFar());
+        viewFrustumGameObject.init(camera.getAspectRatio(), camera.getFieldOfView(), camera.getZNear(),
+                camera.getZFar());
 
         // Frustum culling
         FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();
