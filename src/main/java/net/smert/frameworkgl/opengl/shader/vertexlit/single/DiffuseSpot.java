@@ -22,11 +22,11 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BlinnPhongDiffusePoint extends AbstractShader {
+public class DiffuseSpot extends AbstractShader {
 
     private final DiffuseUniforms uniforms;
 
-    public BlinnPhongDiffusePoint(DiffuseUniforms uniforms, Shader shader) {
+    public DiffuseSpot(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
@@ -50,12 +50,12 @@ public class BlinnPhongDiffusePoint extends AbstractShader {
 
     public static class Factory {
 
-        public static BlinnPhongDiffusePoint Create() throws IOException {
+        public static DiffuseSpot Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/blinn_phong_diffuse_point.fsh",
-                    "vertexlit/single/blinn_phong_diffuse_point.vsh",
-                    "vertexLitSingleBlinnPhongDiffusePoint");
-            return new BlinnPhongDiffusePoint(new DiffuseUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/diffuse_spot.fsh",
+                    "vertexlit/single/diffuse_spot.vsh",
+                    "vertexLitSingleDiffuseSpot");
+            return new DiffuseSpot(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }

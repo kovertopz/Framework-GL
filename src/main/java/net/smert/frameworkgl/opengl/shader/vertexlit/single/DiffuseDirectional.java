@@ -22,11 +22,11 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class PhongDiffuseDirectional extends AbstractShader {
+public class DiffuseDirectional extends AbstractShader {
 
     private final DiffuseUniforms uniforms;
 
-    public PhongDiffuseDirectional(DiffuseUniforms uniforms, Shader shader) {
+    public DiffuseDirectional(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
     }
@@ -43,19 +43,16 @@ public class PhongDiffuseDirectional extends AbstractShader {
         matrixFloatBuffer.flip();
         uniforms.setNormalMatrix(false, matrixFloatBuffer);
         matrixFloatBuffer.clear();
-        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
 
-        public static PhongDiffuseDirectional Create() throws IOException {
+        public static DiffuseDirectional Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "vertexlit/single/phong_diffuse_directional.fsh",
-                    "vertexlit/single/phong_diffuse_directional.vsh",
-                    "vertexLitSinglePhongDiffuseDirectional");
-            return new PhongDiffuseDirectional(new DiffuseUniforms(shader.getProgramID()), shader);
+                    "vertexlit/single/diffuse_directional.fsh",
+                    "vertexlit/single/diffuse_directional.vsh",
+                    "vertexLitSingleDiffuseDirectional");
+            return new DiffuseDirectional(new DiffuseUniforms(shader.getProgramID()), shader);
         }
 
     }
