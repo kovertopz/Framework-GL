@@ -49,9 +49,9 @@ public class MeshReader extends Screen {
     private AbstractRenderable renderableTorus;
     private AbstractRenderable renderableUvSphere;
     private AmbientLight ambientLight;
-    private DiffusePoint vertexLitSingleDiffusePoint;
     private Camera camera;
     private CameraController cameraController;
+    private DiffusePoint vertexLitSingleDiffusePoint;
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private MaterialLight materialLight;
@@ -183,9 +183,6 @@ public class MeshReader extends Screen {
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
         GL.o1.setClearDepth(1f);
-        GL.o1.enableLight0();
-        GL.o1.enableLighting();
-        GL.o1.setSmoothLighting(true);
         GL.o1.clear();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
