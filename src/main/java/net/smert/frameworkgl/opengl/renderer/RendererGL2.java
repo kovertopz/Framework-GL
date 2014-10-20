@@ -197,7 +197,6 @@ public class RendererGL2 extends AbstractRendererGL {
 
     @Override
     public void switchShader(AbstractShader shader) {
-        Renderable.shaderBindState.setDefaultShader(shader);
         Renderable.shaderBindState.switchShader(shader);
     }
 

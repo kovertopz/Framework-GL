@@ -17,7 +17,6 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
 
@@ -29,29 +28,13 @@ public class ShaderBindState {
 
     private boolean shaderBinded;
     private float textureFlag;
-    private int uniqueShaderID;
     private final AbstractShader defaultDoNothingShader;
-    private AbstractShader defaultShader;
     private AbstractShader shader;
     private FloatBuffer matrixFloatBuffer;
 
     public ShaderBindState() {
         defaultDoNothingShader = new DefaultDoNothingShader();
         reset();
-    }
-
-    public void bindShader(int uniqueShaderID) {
-        if (this.uniqueShaderID == uniqueShaderID) {
-            return;
-        }
-        this.uniqueShaderID = uniqueShaderID;
-        // If the segment's material has a shader use it, otherwise use the shader set by switchShader
-        if (uniqueShaderID != -1) {
-            AbstractShader abstractShader = Renderable.shaderPool.get(uniqueShaderID);
-            switchShader(abstractShader);
-        } else {
-            switchShader(defaultShader);
-        }
     }
 
     public int getTextureUnit(int textureTypeID) {
@@ -65,8 +48,6 @@ public class ShaderBindState {
     public final void reset() {
         shaderBinded = false;
         textureFlag = Float.MIN_VALUE; // So that the first call to sendUniformTextureFlag does an update
-        uniqueShaderID = Integer.MIN_VALUE; // Default is -1 elsewhere
-        defaultShader = defaultDoNothingShader;
         shader = defaultDoNothingShader;
     }
 
@@ -90,10 +71,6 @@ public class ShaderBindState {
         GL.matrixHelper.load(camera.getViewMatrix());
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();
-    }
-
-    public void setDefaultShader(AbstractShader defaultShader) {
-        this.defaultShader = defaultShader;
     }
 
     public void switchShader(AbstractShader shader) {
