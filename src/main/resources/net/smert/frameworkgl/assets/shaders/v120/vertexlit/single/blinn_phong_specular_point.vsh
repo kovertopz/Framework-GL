@@ -16,7 +16,9 @@
 attribute vec3 in_Normal;
 attribute vec4 in_Vertex;
 attribute vec4 in_Color;
+attribute vec4 in_TexCoord0;
 varying vec4 pass_Color;
+varying vec4 pass_TexCoord0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Default Uniforms                                                           //
@@ -112,5 +114,6 @@ void main(void)
     }
 
     pass_Color = emissionAmbient + attenuationFactor * (lightAmbient + lightDiffuse + lightSpecular);
+    pass_TexCoord0 = in_TexCoord0;
     gl_Position = uProjectionViewModelMatrix * in_Vertex;
 }

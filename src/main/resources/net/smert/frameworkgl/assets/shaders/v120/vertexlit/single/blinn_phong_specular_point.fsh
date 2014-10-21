@@ -4,11 +4,19 @@
 // In/Out Variables                                                           //
 ////////////////////////////////////////////////////////////////////////////////
 varying vec4 pass_Color;
+varying vec4 pass_TexCoord0;
+
+////////////////////////////////////////////////////////////////////////////////
+// Default Uniforms                                                           //
+////////////////////////////////////////////////////////////////////////////////
+uniform float uTextureFlag = 0.0;
+uniform sampler2D uTexture0; // Diffuse texture
 
 ////////////////////////////////////////////////////////////////////////////////
 // Main                                                                       //
 ////////////////////////////////////////////////////////////////////////////////
 void main(void)
 {
-    gl_FragColor = pass_Color; // Interpolated color from vertex shader
+    vec4 textureColor = texture2D(uTexture0, pass_TexCoord0.st);
+    gl_FragColor = mix(pass_Color, pass_Color * textureColor, uTextureFlag); // Mix interpolated color and texture
 }

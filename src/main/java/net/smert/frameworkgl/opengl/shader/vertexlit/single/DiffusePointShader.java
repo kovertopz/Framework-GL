@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
+import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.opengl.constants.TextureUnit;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
@@ -29,6 +31,7 @@ public class DiffusePointShader extends AbstractShader {
     public DiffusePointShader(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
+        setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
     }
 
     public DiffuseUniforms getUniforms() {
