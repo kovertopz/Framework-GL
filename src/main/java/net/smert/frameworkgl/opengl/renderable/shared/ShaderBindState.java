@@ -98,14 +98,21 @@ public class ShaderBindState {
 
         public DefaultDoNothingShader() {
             super(new DefaultShaderUniforms(0), new Shader());
+            setTextureUnit(TextureType.BUMP, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.DETAIL, TextureUnit.TEXTURE0);
             setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.DISPLACEMENT, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.ENVIRONMENT, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.GLOW, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.HEIGHT, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.NORMAL, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.PARALLAX, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE0);
+            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE0);
             setTextureUnit(TextureType.AMBIENT_OCCLUSION, TextureUnit.TEXTURE1);
-            setTextureUnit(TextureType.DETAIL, TextureUnit.TEXTURE2);
-            setTextureUnit(TextureType.ENVIRONMENT, TextureUnit.TEXTURE3);
-            setTextureUnit(TextureType.HEIGHT, TextureUnit.TEXTURE4);
-            setTextureUnit(TextureType.SPECULAR, TextureUnit.TEXTURE5);
-            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE6);
-            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE7);
+            setTextureUnit(TextureType.SPECULAR, TextureUnit.TEXTURE2);
+            setTextureUnit(TextureType.SPECULAR_EXPONENT, TextureUnit.TEXTURE3);
+
             setTextureUnit(TextureType.TEXTURE0, TextureUnit.TEXTURE0);
             setTextureUnit(TextureType.TEXTURE1, TextureUnit.TEXTURE1);
             setTextureUnit(TextureType.TEXTURE2, TextureUnit.TEXTURE2);
