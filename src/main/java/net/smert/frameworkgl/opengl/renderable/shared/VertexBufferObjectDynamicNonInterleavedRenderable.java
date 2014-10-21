@@ -19,7 +19,9 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexBufferObjectDynamicNonInterleavedRenderable extends VertexBufferObjectNonInterleavedRenderable {
+public class VertexBufferObjectDynamicNonInterleavedRenderable
+        extends VertexBufferObjectNonInterleavedRenderable
+        implements DynamicNonInterleavedRenderable {
 
     private final VertexBufferObjectNonInterleavedUpdateStrategy update;
 

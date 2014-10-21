@@ -18,7 +18,7 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface DynamicInterleavedRenderable extends InterleavedRenderable {
+public interface DynamicArrayRenderable extends ArrayRenderable {
 
     public void update(Mesh mesh);
 

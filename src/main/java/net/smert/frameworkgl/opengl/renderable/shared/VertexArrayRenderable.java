@@ -13,12 +13,13 @@
 package net.smert.frameworkgl.opengl.renderable.shared;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayRenderable extends ArrayRenderable {
+public class VertexArrayRenderable extends AbstractRenderable implements ArrayRenderable {
 
     protected VertexArrayBindStrategy bind;
     protected final VertexArrayCreateStrategy create;

@@ -12,10 +12,14 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.mesh.Mesh;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class DynamicNonInterleavedRenderable extends NonInterleavedRenderable {
+public interface DynamicNonInterleavedRenderable extends NonInterleavedRenderable {
+
+    public void update(Mesh mesh);
 
 }

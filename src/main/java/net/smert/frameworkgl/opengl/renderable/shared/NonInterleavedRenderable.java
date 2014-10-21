@@ -12,12 +12,18 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.mesh.Mesh;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class NonInterleavedRenderable extends AbstractRenderable {
+public interface NonInterleavedRenderable {
+
+    public void create(Mesh mesh);
+
+    public void destroy();
+
+    public void render();
 
 }

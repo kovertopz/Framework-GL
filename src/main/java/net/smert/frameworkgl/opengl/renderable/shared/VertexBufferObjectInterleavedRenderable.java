@@ -14,12 +14,13 @@ package net.smert.frameworkgl.opengl.renderable.shared;
 
 import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexBufferObjectInterleavedRenderable extends InterleavedRenderable {
+public class VertexBufferObjectInterleavedRenderable extends AbstractRenderable implements InterleavedRenderable {
 
     protected VertexBufferObjectBindStrategy bind;
     protected final VertexBufferObjectInterleavedCreateStrategy create;

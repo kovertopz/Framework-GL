@@ -18,7 +18,7 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayDynamicRenderable extends VertexArrayRenderable {
+public class VertexArrayDynamicRenderable extends VertexArrayRenderable implements DynamicArrayRenderable {
 
     private final VertexArrayUpdateStrategy update;
 
