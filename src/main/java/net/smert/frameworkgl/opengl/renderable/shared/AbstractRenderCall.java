@@ -32,18 +32,12 @@ public abstract class AbstractRenderCall implements RenderCall {
 
     public static class TextureTypeMapping {
 
-        private final float textureFlag;
         private final int uniqueTextureID;
         private final TextureType textureType;
 
-        public TextureTypeMapping(float textureFlag, int uniqueTextureID, TextureType textureType) {
-            this.textureFlag = textureFlag;
+        public TextureTypeMapping(int uniqueTextureID, TextureType textureType) {
             this.uniqueTextureID = uniqueTextureID;
             this.textureType = textureType;
-        }
-
-        public float getTextureFlag() {
-            return textureFlag;
         }
 
         public int getUniqueTextureID() {

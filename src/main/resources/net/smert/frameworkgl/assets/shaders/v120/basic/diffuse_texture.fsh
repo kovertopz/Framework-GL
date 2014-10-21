@@ -18,5 +18,5 @@ uniform sampler2D uTexture0; // Diffuse texture
 void main(void)
 {
     vec4 textureColor = texture2D(uTexture0, pass_TexCoord0.st);
-    gl_FragColor = mix(pass_Color, textureColor, uTextureFlag); // Mix interpolated color and texture
+    gl_FragColor = mix(pass_Color, pass_Color * textureColor, uTextureFlag); // Mix interpolated color and texture
 }

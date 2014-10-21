@@ -86,6 +86,7 @@ public class ShaderBindState {
         shader.bind();
         shaderBinded = true;
         textureFlag = Float.MIN_VALUE; // Reset the flag
+        sendUniformTextureFlag(0f); // Reset the uniform for the texture flag
     }
 
     public void unbindShader() {
@@ -103,6 +104,8 @@ public class ShaderBindState {
             setTextureUnit(TextureType.ENVIRONMENT, TextureUnit.TEXTURE3);
             setTextureUnit(TextureType.HEIGHT, TextureUnit.TEXTURE4);
             setTextureUnit(TextureType.SPECULAR, TextureUnit.TEXTURE5);
+            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE6);
+            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE7);
             setTextureUnit(TextureType.TEXTURE0, TextureUnit.TEXTURE0);
             setTextureUnit(TextureType.TEXTURE1, TextureUnit.TEXTURE1);
             setTextureUnit(TextureType.TEXTURE2, TextureUnit.TEXTURE2);
@@ -111,8 +114,6 @@ public class ShaderBindState {
             setTextureUnit(TextureType.TEXTURE5, TextureUnit.TEXTURE5);
             setTextureUnit(TextureType.TEXTURE6, TextureUnit.TEXTURE6);
             setTextureUnit(TextureType.TEXTURE7, TextureUnit.TEXTURE7);
-            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE6);
-            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE7);
         }
 
         @Override

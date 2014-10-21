@@ -39,7 +39,6 @@ public abstract class AbstractRenderCallBuilder {
                 continue;
             }
 
-            float textureFlag = segmentMaterial.getTextureFlag();
             int j = 0;
             Map<TextureType, String> textureTypeToFilename = segmentMaterial.getTextures();
             textureTypeMappings[i] = new TextureTypeMapping[textureTypeToFilename.size()];
@@ -50,7 +49,7 @@ public abstract class AbstractRenderCallBuilder {
                 TextureType textureType = entry.getKey();
                 String filename = entry.getValue();
                 int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
-                textureTypeMappings[i][j++] = new TextureTypeMapping(textureFlag, uniqueTextureID, textureType);
+                textureTypeMappings[i][j++] = new TextureTypeMapping(uniqueTextureID, textureType);
             }
         }
 

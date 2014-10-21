@@ -31,7 +31,6 @@ public class TextureBindState {
     private int maxModelTextureUnitsWithTextureFlag;
     private int maxShaderTextureUnits;
     private int maxTextureUnits;
-    private float textureFlagOn;
     private final HashMapIntInt textureUnitToTextureID;
 
     public TextureBindState() {
@@ -84,7 +83,7 @@ public class TextureBindState {
 
         if (flagChanged) {
             if (textureID != 0) {
-                Renderable.shaderBindState.sendUniformTextureFlag(textureFlagOn);
+                Renderable.shaderBindState.sendUniformTextureFlag(1f);
             } else {
                 Renderable.shaderBindState.sendUniformTextureFlag(0f);
             }
@@ -170,7 +169,6 @@ public class TextureBindState {
             return;
         }
         for (TextureTypeMapping mapping : textures) {
-            textureFlagOn = mapping.getTextureFlag();
             int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureType());
             Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());
             bindTexture(textureUnit, texture);
@@ -210,7 +208,6 @@ public class TextureBindState {
     }
 
     public final void reset() {
-        textureFlagOn = 1f;
         activeTextureUnit = -1;
     }
 
