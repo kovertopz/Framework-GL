@@ -122,7 +122,7 @@ public class FansAndStrips extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.renderer1.render(renderableFansAndStrips, 0f, 0f, 0f);
+            Fw.graphics.render(renderableFansAndStrips, 0f, 0f, 0f);
         }
     }
 

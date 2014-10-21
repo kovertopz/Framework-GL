@@ -26,6 +26,8 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public interface Renderer {
 
+    public void color(float r, float g, float b, float a);
+
     public void render(AbstractRenderable renderable, float x, float y, float z);
 
     public void render(AbstractRenderable renderable, Transform4f transform);

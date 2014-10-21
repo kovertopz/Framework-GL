@@ -271,7 +271,7 @@ public class Skybox extends Screen {
             Fw.graphics.switchShader(skyboxShader);
 
             // Render skybox
-            GL.o1.color(1f, 1f, 1f, 1f);
+            Fw.graphics.color(1f, 1f, 1f, 1f);
             skyboxGameObject.getWorldTransform().setPosition(camera.getPosition());
             GL.o1.enableTextureCubeMap();
             GL.o1.disableCulling();

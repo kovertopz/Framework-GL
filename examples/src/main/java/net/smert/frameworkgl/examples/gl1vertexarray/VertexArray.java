@@ -87,11 +87,11 @@ public class VertexArray extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create vertex array renderables
-        renderableQuads = GL.renderer1.createArrayRenderable();
+        renderableQuads = Fw.graphics.createArrayRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.renderer1.createArrayRenderable();
+        renderableQuadsWithPerVertexColors = Fw.graphics.createArrayRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.renderer1.createArrayRenderable();
+        renderableTriangles = Fw.graphics.createArrayRenderable();
         renderableTriangles.create(meshTriangles);
 
         // OpenGL settings
@@ -132,9 +132,9 @@ public class VertexArray extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.renderer1.render(renderableTriangles, -2f, 0f, 0f);
-            GL.renderer1.render(renderableQuads, 2f, 0f, 0f);
-            GL.renderer1.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            Fw.graphics.render(renderableTriangles, -2f, 0f, 0f);
+            Fw.graphics.render(renderableQuads, 2f, 0f, 0f);
+            Fw.graphics.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

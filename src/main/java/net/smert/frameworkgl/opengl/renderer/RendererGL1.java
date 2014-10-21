@@ -92,6 +92,11 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
+    public void color(float r, float g, float b, float a) {
+        GL.o1.color(r, g, b, a);
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);

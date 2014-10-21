@@ -114,7 +114,7 @@ public class MeshReaderTextured extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCrateAndBarrel = GL.renderer1.createNonInterleavedRenderable();
+        renderableCrateAndBarrel = Fw.graphics.createNonInterleavedRenderable();
         renderableCrateAndBarrel.create(meshCrateAndBarrel);
 
         // OpenGL settings
@@ -165,7 +165,7 @@ public class MeshReaderTextured extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
-            GL.renderer1.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
+            Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
         }
     }
 

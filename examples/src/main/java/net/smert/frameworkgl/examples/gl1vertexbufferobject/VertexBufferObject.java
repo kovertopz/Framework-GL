@@ -87,11 +87,11 @@ public class VertexBufferObject extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create vertex buffer object renderables
-        renderableQuads = GL.renderer1.createNonInterleavedRenderable();
+        renderableQuads = Fw.graphics.createNonInterleavedRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.renderer1.createNonInterleavedRenderable();
+        renderableQuadsWithPerVertexColors = Fw.graphics.createNonInterleavedRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.renderer1.createNonInterleavedRenderable();
+        renderableTriangles = Fw.graphics.createNonInterleavedRenderable();
         renderableTriangles.create(meshTriangles);
 
         // OpenGL settings
@@ -132,9 +132,9 @@ public class VertexBufferObject extends Screen {
             camera.updateOpenGL();
 
             // Render directly
-            GL.renderer1.render(renderableTriangles, -2f, 0f, 0f);
-            GL.renderer1.render(renderableQuads, 2f, 0f, 0f);
-            GL.renderer1.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
+            Fw.graphics.render(renderableTriangles, -2f, 0f, 0f);
+            Fw.graphics.render(renderableQuads, 2f, 0f, 0f);
+            Fw.graphics.render(renderableQuadsWithPerVertexColors, 0f, 2f, 0f);
         }
     }
 

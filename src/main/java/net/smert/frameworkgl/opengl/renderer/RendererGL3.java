@@ -38,6 +38,11 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
+    public void color(float r, float g, float b, float a) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -226,7 +226,7 @@ public class FrustumCulling extends Screen {
             GL.o1.clear();
 
             // Update camera
-            GL.renderer1.setCamera(camera);
+            Fw.graphics.setCamera(camera);
 
             // Update ambient light, light and material light
             ambientLight.updateOpenGL(lightFloatBuffer);
@@ -234,14 +234,14 @@ public class FrustumCulling extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
-            GL.renderer1.render(gameObjectsToRender);
+            Fw.graphics.render(gameObjectsToRender);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                GL.renderer1.renderBlend(viewFrustumGameObject);
+                Fw.graphics.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -251,7 +251,7 @@ public class FrustumCulling extends Screen {
                     // Updating AABBs this way is costly
                     aabbGameObject.update(worldAabb);
                     // AABB is already in world coordinates so we don't translate
-                    GL.renderer1.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                    Fw.graphics.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
                 }
             }
 
@@ -260,7 +260,7 @@ public class FrustumCulling extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    GL.renderer1.render(simpleOrientationAxisGameObject);
+                    Fw.graphics.render(simpleOrientationAxisGameObject);
                 }
                 GL.o1.enableDepthTest();
             }

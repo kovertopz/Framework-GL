@@ -83,6 +83,11 @@ public class RendererGL2 extends AbstractRendererGL {
     }
 
     @Override
+    public void color(float r, float g, float b, float a) {
+        GL.o1.color(r, g, b, a);
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();

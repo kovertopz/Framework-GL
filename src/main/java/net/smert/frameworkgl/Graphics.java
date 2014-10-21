@@ -307,6 +307,11 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
+    public void color(float r, float g, float b, float a) {
+        renderer.color(r, g, b, a);
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         renderer.render(renderable, x, y, z);
     }

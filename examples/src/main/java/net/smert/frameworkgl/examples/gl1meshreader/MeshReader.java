@@ -151,19 +151,19 @@ public class MeshReader extends Screen {
         }
 
         // Create vertex buffer object renderables
-        renderableCapsule = GL.renderer1.createNonInterleavedRenderable();
+        renderableCapsule = Fw.graphics.createNonInterleavedRenderable();
         renderableCapsule.create(meshCapsule);
-        renderableCone = GL.renderer1.createNonInterleavedRenderable();
+        renderableCone = Fw.graphics.createNonInterleavedRenderable();
         renderableCone.create(meshCone);
-        renderableCube = GL.renderer1.createNonInterleavedRenderable();
+        renderableCube = Fw.graphics.createNonInterleavedRenderable();
         renderableCube.create(meshCube);
-        renderableCylinder = GL.renderer1.createNonInterleavedRenderable();
+        renderableCylinder = Fw.graphics.createNonInterleavedRenderable();
         renderableCylinder.create(meshCylinder);
-        renderableIcoSphere = GL.renderer1.createNonInterleavedRenderable();
+        renderableIcoSphere = Fw.graphics.createNonInterleavedRenderable();
         renderableIcoSphere.create(meshIcoSphere);
-        renderableTorus = GL.renderer1.createNonInterleavedRenderable();
+        renderableTorus = Fw.graphics.createNonInterleavedRenderable();
         renderableTorus.create(meshTorus);
-        renderableUvSphere = GL.renderer1.createNonInterleavedRenderable();
+        renderableUvSphere = Fw.graphics.createNonInterleavedRenderable();
         renderableUvSphere.create(meshUvSphere);
 
         // OpenGL settings
@@ -214,13 +214,13 @@ public class MeshReader extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
-            GL.renderer1.render(renderableCapsule, -3f, 0f, 3f);
-            GL.renderer1.render(renderableCone, 3f, 0f, 3f);
-            GL.renderer1.render(renderableCube, -3f, 0f, 0f);
-            GL.renderer1.render(renderableCylinder, 3f, 0f, 0f);
-            GL.renderer1.render(renderableIcoSphere, -3f, 0f, -3f);
-            GL.renderer1.render(renderableUvSphere, 3f, 0f, -3f);
-            GL.renderer1.render(renderableTorus, 0f, 3f, 0f);
+            Fw.graphics.render(renderableCapsule, -3f, 0f, 3f);
+            Fw.graphics.render(renderableCone, 3f, 0f, 3f);
+            Fw.graphics.render(renderableCube, -3f, 0f, 0f);
+            Fw.graphics.render(renderableCylinder, 3f, 0f, 0f);
+            Fw.graphics.render(renderableIcoSphere, -3f, 0f, -3f);
+            Fw.graphics.render(renderableUvSphere, 3f, 0f, -3f);
+            Fw.graphics.render(renderableTorus, 0f, 3f, 0f);
         }
     }
 

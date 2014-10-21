@@ -178,7 +178,7 @@ public class Crosshair extends Screen {
 
         // Render statistics game object
         renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(GL.renderer1);
+        renderStatisticsGameObject.init(Fw.graphics);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -250,7 +250,7 @@ public class Crosshair extends Screen {
             GL.o1.clear();
 
             // Update camera
-            GL.renderer1.setCamera(camera);
+            Fw.graphics.setCamera(camera);
 
             // Update ambient light, light and material light
             ambientLight.updateOpenGL(lightFloatBuffer);
@@ -258,14 +258,14 @@ public class Crosshair extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
-            GL.renderer1.render(gameObjectsToRender);
+            Fw.graphics.render(gameObjectsToRender);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                GL.renderer1.renderBlend(viewFrustumGameObject);
+                Fw.graphics.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -275,7 +275,7 @@ public class Crosshair extends Screen {
                     // Updating AABBs this way is costly
                     aabbGameObject.update(worldAabb);
                     // AABB is already in world coordinates so we don't translate
-                    GL.renderer1.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                    Fw.graphics.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
                 }
             }
 
@@ -284,7 +284,7 @@ public class Crosshair extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    GL.renderer1.render(simpleOrientationAxisGameObject);
+                    Fw.graphics.render(simpleOrientationAxisGameObject);
                 }
                 GL.o1.enableDepthTest();
             }
@@ -292,11 +292,11 @@ public class Crosshair extends Screen {
             // Render 2D
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
-            GL.renderer1.set2DMode();
-            GL.renderer1.resetTextRendering();
-            GL.renderer1.textNewHalfLine();
+            Fw.graphics.set2DMode();
+            Fw.graphics.resetTextRendering();
+            Fw.graphics.textNewHalfLine();
             renderStatisticsGameObject.render(); // Game object has no renderable
-            GL.renderer1.render(crosshairGameObject);
+            Fw.graphics.render(crosshairGameObject);
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

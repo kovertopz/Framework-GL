@@ -163,7 +163,7 @@ public class FontRendering extends Screen {
 
         // Render statistics game object
         renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(GL.renderer1);
+        renderStatisticsGameObject.init(Fw.graphics);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -234,7 +234,7 @@ public class FontRendering extends Screen {
             GL.o1.clear();
 
             // Update camera
-            GL.renderer1.setCamera(camera);
+            Fw.graphics.setCamera(camera);
 
             // Update ambient light, light and material light
             ambientLight.updateOpenGL(lightFloatBuffer);
@@ -242,14 +242,14 @@ public class FontRendering extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render directly
-            GL.renderer1.render(gameObjectsToRender);
+            Fw.graphics.render(gameObjectsToRender);
 
             // Render debug
             GL.o1.disableLighting();
 
             // View frustum
             if (viewFrustumGameObject.getRenderableState().isInFrustum()) {
-                GL.renderer1.renderBlend(viewFrustumGameObject);
+                Fw.graphics.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -259,7 +259,7 @@ public class FontRendering extends Screen {
                     // Updating AABBs this way is costly
                     aabbGameObject.update(worldAabb);
                     // AABB is already in world coordinates so we don't translate
-                    GL.renderer1.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+                    Fw.graphics.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
                 }
             }
 
@@ -268,7 +268,7 @@ public class FontRendering extends Screen {
                 GL.o1.disableDepthTest();
                 for (GameObject gameObject : gameObjectsToRender) {
                     simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-                    GL.renderer1.render(simpleOrientationAxisGameObject);
+                    Fw.graphics.render(simpleOrientationAxisGameObject);
                 }
                 GL.o1.enableDepthTest();
             }
@@ -276,21 +276,21 @@ public class FontRendering extends Screen {
             // Render 2D
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
-            GL.renderer1.set2DMode();
-            GL.renderer1.resetTextRendering();
-            GL.renderer1.textNewHalfLine();
-            GL.renderer1.setTextColor("red");
-            GL.renderer1.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?");
-            GL.renderer1.textNewLine();
-            GL.renderer1.setTextColor("green");
-            GL.renderer1.drawString("the quick brown fox jumps over the lazy dog!");
-            GL.renderer1.textNewLine();
-            GL.renderer1.setTextColor("blue");
-            GL.renderer1.drawString("0123456789!@#$%^&*()-_=+[]{}\\|;':\",./<>?");
-            GL.renderer1.textNewLine();
-            GL.renderer1.setTextColor("yellow");
-            GL.renderer1.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
-            GL.renderer1.textNewLine();
+            Fw.graphics.set2DMode();
+            Fw.graphics.resetTextRendering();
+            Fw.graphics.textNewHalfLine();
+            Fw.graphics.setTextColor("red");
+            Fw.graphics.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?");
+            Fw.graphics.textNewLine();
+            Fw.graphics.setTextColor("green");
+            Fw.graphics.drawString("the quick brown fox jumps over the lazy dog!");
+            Fw.graphics.textNewLine();
+            Fw.graphics.setTextColor("blue");
+            Fw.graphics.drawString("0123456789!@#$%^&*()-_=+[]{}\\|;':\",./<>?");
+            Fw.graphics.textNewLine();
+            Fw.graphics.setTextColor("yellow");
+            Fw.graphics.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
+            Fw.graphics.textNewLine();
             renderStatisticsGameObject.render(); // Game object has no renderable
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
