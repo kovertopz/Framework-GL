@@ -39,7 +39,7 @@ public class PrimitiveCube extends AbstractDynamicMesh {
         final Color color0 = constructionInfo.getColor(0);
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

@@ -33,7 +33,7 @@ public class PrimitiveGrid extends AbstractDynamicMesh {
         final Color color2 = constructionInfo.getColor(2);
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

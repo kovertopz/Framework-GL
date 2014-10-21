@@ -14,7 +14,6 @@ package net.smert.frameworkgl.opengl.mesh.dynamic;
 
 import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
-import net.smert.frameworkgl.utils.Color;
 
 /**
  *
@@ -26,7 +25,7 @@ public class CubeMap extends AbstractDynamicMesh {
     public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

@@ -76,7 +76,7 @@ public class JFrameMainModel {
         if (!filename.contains("$") && filename.endsWith(".class") && !filename.startsWith("Main")) {
             String clazzName = getClassNameFromPath(fullPath, separator);
 
-            if ((clazzName.length() != 0) && (checkMainMethodExists(clazzName) == true)) {
+            if ((clazzName.length() != 0) && checkMainMethodExists(clazzName)) {
                 mainClasses.add(clazzName);
             }
         }

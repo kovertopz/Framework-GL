@@ -31,7 +31,7 @@ public class PrimitivePyramid extends AbstractDynamicMesh {
         final Color color0 = constructionInfo.getColor(0);
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

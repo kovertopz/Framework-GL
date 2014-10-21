@@ -36,7 +36,7 @@ public class ViewFrustum extends AbstractDynamicMesh {
         final Color color3 = constructionInfo.getColor(3);
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

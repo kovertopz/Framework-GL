@@ -77,10 +77,10 @@ public class Crosshair extends Screen {
     }
 
     private void handleInput() {
-        if (Fw.input.isKeyDown(Keyboard.ESCAPE) == true) {
+        if (Fw.input.isKeyDown(Keyboard.ESCAPE)) {
             Fw.app.stopRunning();
         }
-        if ((Fw.input.isKeyDown(Keyboard.F1) == true) && (Fw.input.wasKeyDown(Keyboard.F1) == false)) {
+        if (Fw.input.isKeyDown(Keyboard.F1) && !Fw.input.wasKeyDown(Keyboard.F1)) {
             wireframe = !wireframe;
             if (wireframe) {
                 GL.o1.setPolygonModeFrontLine();
@@ -88,10 +88,10 @@ public class Crosshair extends Screen {
                 GL.o1.setPolygonModeFrontFill();
             }
         }
-        if ((Fw.input.isKeyDown(Keyboard.B) == true) && (Fw.input.wasKeyDown(Keyboard.B) == false)) {
+        if (Fw.input.isKeyDown(Keyboard.B) && !Fw.input.wasKeyDown(Keyboard.B)) {
             renderAabbs = !renderAabbs;
         }
-        if ((Fw.input.isKeyDown(Keyboard.O) == true) && (Fw.input.wasKeyDown(Keyboard.O) == false)) {
+        if (Fw.input.isKeyDown(Keyboard.O) && !Fw.input.wasKeyDown(Keyboard.O)) {
             renderSimpleOrientationAxis = !renderSimpleOrientationAxis;
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {

@@ -39,7 +39,7 @@ public class PrimitiveQuad extends AbstractDynamicMesh {
         float texCoordSizeY = texCoordMaxY - texCoordMinY;
 
         // Reset
-        if (reset == true) {
+        if (reset) {
             tessellator.setConvertToTriangles(constructionInfo.convertToTriangles);
             tessellator.reset();
         }

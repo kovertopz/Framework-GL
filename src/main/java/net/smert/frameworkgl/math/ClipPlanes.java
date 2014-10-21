@@ -197,23 +197,23 @@ public class ClipPlanes {
     public boolean planePointEquation(float x, float y, float z, float threshold) {
         boolean result;
         result = (npX * x + npY * y + npZ * z + npW > -threshold + npThreshold);
-        if (result == false) {
+        if (!result) {
             return result;
         }
         result = (fpX * x + fpY * y + fpZ * z + fpW > -threshold + fpThreshold);
-        if (result == false) {
+        if (!result) {
             return result;
         }
         result = (lpX * x + lpY * y + lpZ * z + lpW > -threshold + lpThreshold);
-        if (result == false) {
+        if (!result) {
             return result;
         }
         result = (rpX * x + rpY * y + rpZ * z + rpW > -threshold + rpThreshold);
-        if (result == false) {
+        if (!result) {
             return result;
         }
         result = (bpX * x + bpY * y + bpZ * z + bpW > -threshold + bpThreshold);
-        if (result == false) {
+        if (!result) {
             return result;
         }
         result = (tpX * x + tpY * y + tpZ * z + tpW > -threshold + tpThreshold);

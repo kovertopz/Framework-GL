@@ -58,10 +58,10 @@ public class DynamicMeshes extends Screen {
     }
 
     private void handleInput() {
-        if (Fw.input.isKeyDown(Keyboard.ESCAPE) == true) {
+        if (Fw.input.isKeyDown(Keyboard.ESCAPE)) {
             Fw.app.stopRunning();
         }
-        if ((Fw.input.isKeyDown(Keyboard.F1) == true) && (Fw.input.wasKeyDown(Keyboard.F1) == false)) {
+        if (Fw.input.isKeyDown(Keyboard.F1) && !Fw.input.wasKeyDown(Keyboard.F1)) {
             wireframe = !wireframe;
             if (wireframe) {
                 GL.o1.setPolygonModeFrontLine();

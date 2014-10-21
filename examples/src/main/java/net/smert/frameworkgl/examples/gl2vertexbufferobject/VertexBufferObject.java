@@ -54,7 +54,7 @@ public class VertexBufferObject extends Screen {
     }
 
     private void handleInput() {
-        if (Fw.input.isKeyDown(Keyboard.ESCAPE) == true) {
+        if (Fw.input.isKeyDown(Keyboard.ESCAPE)) {
             Fw.app.stopRunning();
         }
         cameraController.update();
