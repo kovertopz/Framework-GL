@@ -143,14 +143,6 @@ public class Crosshair extends Screen {
         cameraController = GL.cameraFactory.createCameraController();
         cameraController.setCamera(camera);
 
-        // Load textures
-        try {
-            // Texture must be loaded before the renderable is created
-            Fw.graphics.loadTexture("gui/crosshair.png");
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
         // Memory usage
         memoryUsage = new MemoryUsage();
 
@@ -162,6 +154,14 @@ public class Crosshair extends Screen {
 
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+
+        // Load textures
+        try {
+            // Texture must be loaded before the renderable is created
+            Fw.graphics.loadTexture("gui/crosshair.png");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // AABB game object
         aabbGameObject = new AABBGameObject();

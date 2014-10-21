@@ -143,17 +143,6 @@ public class Skybox extends Screen {
         cameraController = GL.cameraFactory.createCameraController();
         cameraController.setCamera(camera);
 
-        // Load textures
-        try {
-            // Texture must be loaded before the renderable is created
-            // Parameters ("skybox/stormydays", "png") will create a texture named "skybox/stormydays/cubemap.png"
-            // from "skybox/stormydays/xpos.png", "skybox/stormydays/xneg.png", "skybox/stormydays/ypos.png"
-            // "skybox/stormydays/yneg.png", "skybox/stormydays/zpos.png" and "skybox/stormydays/zneg.png"
-            Fw.graphics.loadCubeMapTexture("skybox/stormydays", "png");
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
         // Memory usage
         memoryUsage = new MemoryUsage();
 
@@ -165,6 +154,17 @@ public class Skybox extends Screen {
 
         // Float buffer for light
         lightFloatBuffer = GL.bufferHelper.createFloatBuffer(4);
+
+        // Load textures
+        try {
+            // Texture must be loaded before the renderable is created
+            // Parameters ("skybox/stormydays", "png") will create a texture named "skybox/stormydays/cubemap.png"
+            // from "skybox/stormydays/xpos.png", "skybox/stormydays/xneg.png", "skybox/stormydays/ypos.png"
+            // "skybox/stormydays/yneg.png", "skybox/stormydays/zpos.png" and "skybox/stormydays/zneg.png"
+            Fw.graphics.loadCubeMapTexture("skybox/stormydays", "png");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
