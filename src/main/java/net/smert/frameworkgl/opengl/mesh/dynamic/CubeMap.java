@@ -24,7 +24,6 @@ public class CubeMap extends AbstractDynamicMesh {
 
     @Override
     public void create(boolean reset, ConstructionInfo constructionInfo, Tessellator tessellator) {
-        final Color color0 = constructionInfo.getColor(0);
 
         // Reset
         if (reset == true) {
@@ -37,86 +36,62 @@ public class CubeMap extends AbstractDynamicMesh {
         tessellator.start(Primitives.QUADS);
 
         // Face +Z
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, 1f);
         tessellator.addVertex(1f, 1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, 1f);
         tessellator.addVertex(-1f, 1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, 1f);
         tessellator.addVertex(-1f, -1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, 1f);
         tessellator.addVertex(1f, -1f, 1f);
 
         // Face +X
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, -1f);
         tessellator.addVertex(1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, 1f);
         tessellator.addVertex(1f, 1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, 1f);
         tessellator.addVertex(1f, -1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, -1f);
         tessellator.addVertex(1f, -1f, -1f);
 
         // Face -Z
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, -1f);
         tessellator.addVertex(-1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, -1f);
         tessellator.addVertex(1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, -1f);
         tessellator.addVertex(1f, -1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, -1f);
         tessellator.addVertex(-1f, -1f, -1f);
 
         // Face -X
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, 1f);
         tessellator.addVertex(-1f, 1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, -1f);
         tessellator.addVertex(-1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, -1f);
         tessellator.addVertex(-1f, -1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, 1f);
         tessellator.addVertex(-1f, -1f, 1f);
 
         // Face +Y
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, -1f);
         tessellator.addVertex(1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, -1f);
         tessellator.addVertex(-1f, 1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, 1f, 1f);
         tessellator.addVertex(-1f, 1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, 1f, 1f);
         tessellator.addVertex(1f, 1f, 1f);
 
         // Face -Y
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, 1f);
         tessellator.addVertex(1f, -1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, 1f);
         tessellator.addVertex(-1f, -1f, 1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(-1f, -1f, -1f);
         tessellator.addVertex(-1f, -1f, -1f);
-        tessellator.addColor(color0);
         tessellator.addTexCoord(1f, -1f, -1f);
         tessellator.addVertex(1f, -1f, -1f);
 

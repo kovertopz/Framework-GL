@@ -260,6 +260,7 @@ public class Skybox extends Screen {
             materialLight.updateOpenGL(lightFloatBuffer);
 
             // Render skybox
+            GL.o1.color(1f, 1f, 1f, 1f);
             skyboxGameObject.getWorldTransform().setPosition(camera.getPosition());
             GL.o1.enableTextureCubeMap();
             GL.o1.disableCulling();
