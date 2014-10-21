@@ -100,7 +100,12 @@ void main(void)
 
     // Calculate cone's light influence
     float coneCosAngle = dot(-eyeLightDir, normalize(uLight.spotEyeDirection));
-    float coneEffect = (coneCosAngle < uLight.spotOuterCutoffCos) ? 0.0 : pow(coneCosAngle, uLight.spotExponent);
+    float coneEffect;
+    if ( (coneCosAngle > 0.000001) && (coneCosAngle >= uLight.spotOuterCutoffCos) ) {
+        coneEffect = pow(coneCosAngle, uLight.spotExponent);
+    } else {
+        coneEffect = 0.0;
+    }
     attenuationFactor *= coneEffect;
 
     // Calculate lambert term
@@ -111,7 +116,7 @@ void main(void)
 
     // Calculate specular
     vec4 lightSpecular = vec4(0.0);
-    if ( NdotL > 0.0 )
+    if ( NdotL > 0.000001 )
     {
         vec3 halfVector = normalize(eyeLightDir - eyeVertex.xyz);
         float NdotHV = max(dot(eyeNormal, halfVector), 0.0);

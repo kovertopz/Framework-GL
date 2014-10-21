@@ -106,7 +106,7 @@ void main(void)
 
     // Calculate specular
     vec4 lightSpecular = vec4(0.0);
-    if ( NdotL > 0.0 )
+    if ( NdotL > 0.000001 )
     {
         vec3 halfVector = normalize(eyeLightDir - eyeVertex.xyz);
         float NdotHV = max(dot(eyeNormal, halfVector), 0.0);

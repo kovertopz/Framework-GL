@@ -106,7 +106,7 @@ void main(void)
 
     // Calculate specular
     vec4 lightSpecular = vec4(0.0);
-    if ( NdotL > 0.0 )
+    if ( NdotL > 0.000001 )
     {
         // Most tutorials call eyeVertexViewDir just "eyeDir" or "eyeViewDir". Both names
         // are very misleading to me since the camera eye direction comes to mind first.

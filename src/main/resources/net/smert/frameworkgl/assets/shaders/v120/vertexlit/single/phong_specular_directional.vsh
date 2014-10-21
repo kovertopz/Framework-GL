@@ -97,11 +97,10 @@ void main(void)
 
     // Calculate specular
     vec4 lightSpecular = vec4(0.0);
-    if ( NdotL > 0.0 )
+    if ( NdotL > 0.000001 )
     {
         // Transform the vertex into eye space
         vec4 eyeVertex = uViewModelMatrix * in_Vertex;
-        vec3 eyeLightDir = uLight.eyePosition.xyz - eyeVertex.xyz;
         // Most tutorials call eyeVertexViewDir just "eyeDir" or "eyeViewDir". Both names
         // are very misleading to me since the camera eye direction comes to mind first.
         vec3 eyeReflectLightDir = reflect(-eyeLightDir, eyeNormal);

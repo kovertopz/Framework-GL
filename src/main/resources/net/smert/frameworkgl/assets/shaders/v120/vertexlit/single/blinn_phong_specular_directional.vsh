@@ -97,13 +97,12 @@ void main(void)
 
     // Calculate specular
     vec4 lightSpecular = vec4(0.0);
-    if ( NdotL > 0.0 )
+    if ( NdotL > 0.000001 )
     {
         // Transform the vertex into eye space
         vec4 eyeVertex = uViewModelMatrix * in_Vertex;
-        vec3 eyeLightDir = uLight.eyePosition.xyz - eyeVertex.xyz;
         vec3 halfVector = normalize(eyeLightDir - eyeVertex.xyz);
-        float NdotHV = max(dot(eyeNormal, uLight.halfVector.xyz), 0.0);
+        float NdotHV = max(dot(eyeNormal, halfVector), 0.0);
         lightSpecular = pow(NdotHV, uMaterialLight.shininess) * (uLight.specular * matSpecular);
     }
 

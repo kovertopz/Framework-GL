@@ -98,7 +98,12 @@ void main(void)
 
     // Calculate cone's light influence
     float coneCosAngle = dot(-eyeLightDir, normalize(uLight.spotEyeDirection));
-    float coneEffect = (coneCosAngle < uLight.spotOuterCutoffCos) ? 0.0 : pow(coneCosAngle, uLight.spotExponent);
+    float coneEffect;
+    if ( (coneCosAngle > 0.000001) && (coneCosAngle >= uLight.spotOuterCutoffCos) ) {
+        coneEffect = pow(coneCosAngle, uLight.spotExponent);
+    } else {
+        coneEffect = 0.0;
+    }
     attenuationFactor *= coneEffect;
 
     // Calculate lambert term
