@@ -13,42 +13,17 @@
 package net.smert.frameworkgl.opengl.shader.pixellit.single;
 
 import java.io.IOException;
-import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.opengl.Shader;
-import net.smert.frameworkgl.opengl.TextureType;
-import net.smert.frameworkgl.opengl.constants.TextureUnit;
-import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DiffuseSpotShader extends AbstractShader {
-
-    private final DiffuseUniforms uniforms;
+public class DiffuseSpotShader extends AbstractDiffuseShader {
 
     public DiffuseSpotShader(DiffuseUniforms uniforms, Shader shader) {
         super(uniforms, shader);
-        this.uniforms = uniforms;
-        setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
-    }
-
-    public DiffuseUniforms getUniforms() {
-        return uniforms;
-    }
-
-    @Override
-    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
-        super.sendUniformMatrices(matrixFloatBuffer);
-        viewModelMatrix.toMatrix3f(normalMatrix);
-        normalMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setNormalMatrix(false, matrixFloatBuffer);
-        matrixFloatBuffer.clear();
-        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
     }
 
     public static class Factory {
