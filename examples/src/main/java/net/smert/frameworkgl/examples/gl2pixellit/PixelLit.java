@@ -144,7 +144,7 @@ public class PixelLit extends Screen {
             } else if ((spotOuterCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
                 spotOuterCutoff = 0f;
             } else if ((spotOuterCutoff != 90f) && (spotOuterCutoff != 180f)) {
-                spotOuterCutoff += 0.005f;
+                spotOuterCutoff += Fw.timer.getDelta() * 3f;
                 if (spotOuterCutoff > 180f) {
                     spotOuterCutoff = 0f;
                 }
@@ -160,7 +160,7 @@ public class PixelLit extends Screen {
             } else if ((spotInnerCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.V)) {
                 spotInnerCutoff = 0f;
             } else if ((spotInnerCutoff != 90f) && (spotInnerCutoff != 180f)) {
-                spotInnerCutoff += 0.005f;
+                spotInnerCutoff += Fw.timer.getDelta() * 3f;
                 if (spotInnerCutoff > 180f) {
                     spotInnerCutoff = 0f;
                 }

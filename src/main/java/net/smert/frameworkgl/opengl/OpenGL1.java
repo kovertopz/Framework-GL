@@ -427,13 +427,18 @@ public class OpenGL1 {
         return this;
     }
 
-    public OpenGL1 setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha() {
-        GL11.glBlendFunc(BlendFunctions.SRC_ALPHA, BlendFunctions.ONE_MINUS_SRC_ALPHA);
+    public OpenGL1 setBlendingFunctionOneAndOneMinusSrcAlpha() {
+        GL11.glBlendFunc(BlendFunctions.ONE, BlendFunctions.ONE_MINUS_SRC_ALPHA);
         return this;
     }
 
-    public OpenGL1 setBlendingFunctionOneAndOneMinusSrcAlpha() {
-        GL11.glBlendFunc(BlendFunctions.ONE, BlendFunctions.ONE_MINUS_SRC_ALPHA);
+    public OpenGL1 setBlendingFunctionOneAndZero() {
+        GL11.glBlendFunc(BlendFunctions.ONE, BlendFunctions.ZERO);
+        return this;
+    }
+
+    public OpenGL1 setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha() {
+        GL11.glBlendFunc(BlendFunctions.SRC_ALPHA, BlendFunctions.ONE_MINUS_SRC_ALPHA);
         return this;
     }
 

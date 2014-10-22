@@ -137,7 +137,7 @@ public class VertexLit extends Screen {
             } else if ((spotCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
                 spotCutoff = 0f;
             } else if ((spotCutoff != 90f) && (spotCutoff != 180f)) {
-                spotCutoff += 0.005f;
+                spotCutoff += Fw.timer.getDelta() * 3f;
                 if (spotCutoff > 180f) {
                     spotCutoff = 0f;
                 }
