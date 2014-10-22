@@ -22,7 +22,7 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class AbstractDiffuseShader extends AbstractShader {
+public abstract class AbstractDiffuseShader extends AbstractShader {
 
     private final DiffuseUniforms uniforms;
 
