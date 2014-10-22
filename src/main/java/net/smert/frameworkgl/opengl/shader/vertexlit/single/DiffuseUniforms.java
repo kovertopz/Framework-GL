@@ -12,12 +12,12 @@
  */
 package net.smert.frameworkgl.opengl.shader.vertexlit.single;
 
-import net.smert.frameworkgl.opengl.shader.common.SingleLightAndMaterialUniforms;
 import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
+import net.smert.frameworkgl.opengl.shader.common.SingleLightAndMaterialUniforms;
 
 /**
  *
