@@ -16,6 +16,7 @@ OpenGL 1.X
   - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
   - You must not attach any shaders to a mesh material.
   - The bind state uses gl*ClientState and gl*Pointer calls.
+  - You should not used named texture types (defined in net.smert.frameworkgl.opengl.TextureType) instead use TextureType.TEXTURE[0-8].
 
 OpenGL 2.1
 ========================================
@@ -52,7 +53,7 @@ Renderables
 
 Shaders
 ========================================
-  - GLSL 120 & 330 shaders do not rely on built-in attributes, uniforms and variables.
+  - GLSL 120 & 330 shaders do not rely on built-in attributes, uniforms and variables (GLSL 120 still uses gl_FragColor and gl_FragData).
   - All shaders reference a global DefaultAttribLocations by default (during compiling) for locating vertex attributes and must be consistent across all shaders. The bind state uses this information to enable/disable the correct vertex attributes.
   - If you make changes to the global DefaultAttribLocations then you must update the bind state (Renderable.bindState[2 or 3].setAttribLocations(GL.defaultAttribLocations)).
   - Vertex lit shaders emulate glEnable(GL_COLOR_MATERIAL) and glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE) by default.
