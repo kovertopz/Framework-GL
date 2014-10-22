@@ -23,7 +23,7 @@ OpenGL 2.1
   - You must choose withOpenGL33ProfileCompatibility() in your Configuration.
   - You need to enable the correct renderer and renderable factory with Fw.graphics.switchRenderableFactoryAndRenderer(2).
   - You must render all objects with a shader.
-  - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs.
+  - You can render objects using Display Lists, Immediate Mode, Vertex Arrays and VBOs (Immediate Mode & Display Lists do not appear to work for Intel drivers).
   - You must use the matrix helper instead of OpenGL matrix functions.
   - The bind state uses gl*VertexAttribArray and glVertexAttribPointer.
 
