@@ -42,12 +42,15 @@ import net.smert.frameworkgl.opengl.shader.basic.SkyboxShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularDirectionalShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularPointShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularSpotShader;
+import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularSpotTwoConeShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.DiffuseDirectionalShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.DiffusePointShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.DiffuseSpotShader;
+import net.smert.frameworkgl.opengl.shader.pixellit.single.DiffuseSpotTwoConeShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.PhongSpecularDirectionalShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.PhongSpecularPointShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.PhongSpecularSpotShader;
+import net.smert.frameworkgl.opengl.shader.pixellit.single.PhongSpecularSpotTwoConeShader;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
 import org.slf4j.Logger;
@@ -64,7 +67,8 @@ public class PixelLit extends Screen {
     private boolean renderAabbs;
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
-    private float spotCutoff;
+    private float spotInnerCutoff;
+    private float spotOuterCutoff;
     private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
@@ -72,11 +76,13 @@ public class PixelLit extends Screen {
     private BlinnPhongSpecularDirectionalShader pixelLitSingleBlinnPhongSpecularDirectionalShader;
     private BlinnPhongSpecularPointShader pixelLitSingleBlinnPhongSpecularPointShader;
     private BlinnPhongSpecularSpotShader pixelLitSingleBlinnPhongSpecularSpotShader;
+    private BlinnPhongSpecularSpotTwoConeShader pixelLitSingleBlinnPhongSpecularSpotTwoConeShader;
     private Camera camera;
     private CameraController cameraController;
     private DiffuseDirectionalShader pixelLitSingleDiffuseDirectionalShader;
     private DiffusePointShader pixelLitSingleDiffusePointShader;
     private DiffuseSpotShader pixelLitSingleDiffuseSpotShader;
+    private DiffuseSpotTwoConeShader pixelLitSingleDiffuseSpotTwoConeShader;
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
@@ -89,6 +95,7 @@ public class PixelLit extends Screen {
     private PhongSpecularDirectionalShader pixelLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader pixelLitSinglePhongSpecularPointShader;
     private PhongSpecularSpotShader pixelLitSinglePhongSpecularSpotShader;
+    private PhongSpecularSpotTwoConeShader pixelLitSinglePhongSpecularSpotTwoConeShader;
     private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
@@ -132,29 +139,45 @@ public class PixelLit extends Screen {
             updateGameObjectsToRender();
         }
         if (Fw.input.isKeyDown(Keyboard.C)) {
-            if ((spotCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
-                spotCutoff = 180f;
-            } else if ((spotCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
-                spotCutoff = 0f;
-            } else if ((spotCutoff != 90f) && (spotCutoff != 180f)) {
-                spotCutoff += 0.005f;
-                if (spotCutoff > 180f) {
-                    spotCutoff = 0f;
+            if ((spotOuterCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
+                spotOuterCutoff = 180f;
+            } else if ((spotOuterCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
+                spotOuterCutoff = 0f;
+            } else if ((spotOuterCutoff != 90f) && (spotOuterCutoff != 180f)) {
+                spotOuterCutoff += 0.005f;
+                if (spotOuterCutoff > 180f) {
+                    spotOuterCutoff = 0f;
                 }
-                if (spotCutoff > 90f) {
-                    spotCutoff = 90f;
+                if (spotOuterCutoff > 90f) {
+                    spotOuterCutoff = 90f;
                 }
             }
-            glLightSpot.setSpotCutoff(spotCutoff);
+            glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
+        }
+        if (Fw.input.isKeyDown(Keyboard.V)) {
+            if ((spotInnerCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.V)) {
+                spotInnerCutoff = 180f;
+            } else if ((spotInnerCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.V)) {
+                spotInnerCutoff = 0f;
+            } else if ((spotInnerCutoff != 90f) && (spotInnerCutoff != 180f)) {
+                spotInnerCutoff += 0.005f;
+                if (spotInnerCutoff > 180f) {
+                    spotInnerCutoff = 0f;
+                }
+                if (spotInnerCutoff > 90f) {
+                    spotInnerCutoff = 90f;
+                }
+            }
+            glLightSpot.setSpotInnerCutoff(spotInnerCutoff);
         }
         if (Fw.input.isKeyDown(Keyboard.LBRACKET) && !Fw.input.wasKeyDown(Keyboard.LBRACKET)) {
             if (--shaderIndex < 0) {
-                shaderIndex += 9;
+                shaderIndex += 12;
             }
             updateCurrentShader();
         }
         if (Fw.input.isKeyDown(Keyboard.RBRACKET) && !Fw.input.wasKeyDown(Keyboard.RBRACKET)) {
-            shaderIndex = ++shaderIndex % 9;
+            shaderIndex = ++shaderIndex % 12;
             updateCurrentShader();
         }
         cameraController.update();
@@ -176,30 +199,46 @@ public class PixelLit extends Screen {
                 shaderName = "BlinnPhongSpecularSpotShader";
                 break;
             case 3:
-                shaderName = "DiffuseDirectionalShader";
+                shaderName = "BlinnPhongSpecularSpotTwoConeShader";
                 break;
             case 4:
-                shaderName = "DiffusePointShader";
+                shaderName = "DiffuseDirectionalShader";
                 break;
             case 5:
-                shaderName = "DiffuseSpotShader";
+                shaderName = "DiffusePointShader";
                 break;
             case 6:
-                shaderName = "PhongSpecularDirectionalShader";
+                shaderName = "DiffuseSpotShader";
                 break;
             case 7:
-                shaderName = "PhongSpecularPointShader";
+                shaderName = "DiffuseSpotTwoConeShader";
                 break;
             case 8:
+                shaderName = "PhongSpecularDirectionalShader";
+                break;
+            case 9:
+                shaderName = "PhongSpecularPointShader";
+                break;
+            case 10:
                 shaderName = "PhongSpecularSpotShader";
+                break;
+            case 11:
+                shaderName = "PhongSpecularSpotTwoConeShader";
                 break;
         }
 
         Fw.graphics.drawString(shaderName);
-        if ((shaderIndex == 2) || (shaderIndex == 5) || (shaderIndex == 8)) {
+        if ((shaderIndex == 2) || (shaderIndex == 6) || (shaderIndex == 10)) {
             Fw.graphics.textNewLine();
             Fw.graphics.setTextColor("lime");
-            Fw.graphics.drawString("Spot cutoff: " + spotCutoff);
+            Fw.graphics.drawString("Spot cutoff: " + spotOuterCutoff);
+        }
+        if ((shaderIndex == 3) || (shaderIndex == 7) || (shaderIndex == 11)) {
+            Fw.graphics.textNewLine();
+            Fw.graphics.setTextColor("lime");
+            Fw.graphics.drawString("Spot outer cutoff: " + spotOuterCutoff);
+            Fw.graphics.textNewLine();
+            Fw.graphics.drawString("Spot inner cutoff: " + spotInnerCutoff);
         }
     }
 
@@ -215,22 +254,31 @@ public class PixelLit extends Screen {
                 currentShader = pixelLitSingleBlinnPhongSpecularSpotShader;
                 break;
             case 3:
-                currentShader = pixelLitSingleDiffuseDirectionalShader;
+                currentShader = pixelLitSingleBlinnPhongSpecularSpotTwoConeShader;
                 break;
             case 4:
-                currentShader = pixelLitSingleDiffusePointShader;
+                currentShader = pixelLitSingleDiffuseDirectionalShader;
                 break;
             case 5:
-                currentShader = pixelLitSingleDiffuseSpotShader;
+                currentShader = pixelLitSingleDiffusePointShader;
                 break;
             case 6:
-                currentShader = pixelLitSinglePhongSpecularDirectionalShader;
+                currentShader = pixelLitSingleDiffuseSpotShader;
                 break;
             case 7:
-                currentShader = pixelLitSinglePhongSpecularPointShader;
+                currentShader = pixelLitSingleDiffuseSpotTwoConeShader;
                 break;
             case 8:
+                currentShader = pixelLitSinglePhongSpecularDirectionalShader;
+                break;
+            case 9:
+                currentShader = pixelLitSinglePhongSpecularPointShader;
+                break;
+            case 10:
                 currentShader = pixelLitSinglePhongSpecularSpotShader;
+                break;
+            case 11:
+                currentShader = pixelLitSinglePhongSpecularSpotTwoConeShader;
                 break;
         }
     }
@@ -262,34 +310,49 @@ public class PixelLit extends Screen {
                 pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
                 break;
             case 3:
+                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
+                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setLight(glLightSpot);
+                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
+                break;
+            case 4:
                 pixelLitSingleDiffuseDirectionalShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSingleDiffuseDirectionalShader.getUniforms().setLight(glLightDirectional);
                 pixelLitSingleDiffuseDirectionalShader.getUniforms().setMaterialLight(materialLight);
                 break;
-            case 4:
+            case 5:
                 pixelLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSingleDiffusePointShader.getUniforms().setLight(glLightPoint);
                 pixelLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
                 break;
-            case 5:
+            case 6:
                 pixelLitSingleDiffuseSpotShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSingleDiffuseSpotShader.getUniforms().setLight(glLightSpot);
                 pixelLitSingleDiffuseSpotShader.getUniforms().setMaterialLight(materialLight);
                 break;
-            case 6:
+            case 7:
+                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
+                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setLight(glLightSpot);
+                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
+                break;
+            case 8:
                 pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setLight(glLightDirectional);
                 pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
                 break;
-            case 7:
+            case 9:
                 pixelLitSinglePhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSinglePhongSpecularPointShader.getUniforms().setLight(glLightPoint);
                 pixelLitSinglePhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
                 break;
-            case 8:
+            case 10:
                 pixelLitSinglePhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
                 pixelLitSinglePhongSpecularSpotShader.getUniforms().setLight(glLightSpot);
                 pixelLitSinglePhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
+                break;
+            case 11:
+                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
+                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setLight(glLightSpot);
+                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
                 break;
         }
     }
@@ -337,8 +400,10 @@ public class PixelLit extends Screen {
         glLightSpot = GL.glFactory.createGLLight();
         glLightSpot.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLightSpot.setRadius(256f); // Shader uses this value and OpenGL does not
-        spotCutoff = 180f;
-        glLightSpot.setSpotCutoff(spotCutoff);
+        spotInnerCutoff = 180f;
+        spotOuterCutoff = 180f;
+        glLightSpot.setSpotInnerCutoff(spotInnerCutoff);
+        glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
         glLightSpot.setSpotDirection(new Vector4f(0f, -15f, -10f, 1f));
         materialLight = GL.glFactory.createMaterialLight();
         materialLight.setShininess(16);
@@ -412,24 +477,30 @@ public class PixelLit extends Screen {
             pixelLitSingleBlinnPhongSpecularPointShader.init();
             pixelLitSingleBlinnPhongSpecularSpotShader = BlinnPhongSpecularSpotShader.Factory.Create();
             pixelLitSingleBlinnPhongSpecularSpotShader.init();
+            pixelLitSingleBlinnPhongSpecularSpotTwoConeShader = BlinnPhongSpecularSpotTwoConeShader.Factory.Create();
+            pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.init();
             pixelLitSingleDiffuseDirectionalShader = DiffuseDirectionalShader.Factory.Create();
             pixelLitSingleDiffuseDirectionalShader.init();
             pixelLitSingleDiffusePointShader = DiffusePointShader.Factory.Create();
             pixelLitSingleDiffusePointShader.init();
             pixelLitSingleDiffuseSpotShader = DiffuseSpotShader.Factory.Create();
             pixelLitSingleDiffuseSpotShader.init();
+            pixelLitSingleDiffuseSpotTwoConeShader = DiffuseSpotTwoConeShader.Factory.Create();
+            pixelLitSingleDiffuseSpotTwoConeShader.init();
             pixelLitSinglePhongSpecularDirectionalShader = PhongSpecularDirectionalShader.Factory.Create();
             pixelLitSinglePhongSpecularDirectionalShader.init();
             pixelLitSinglePhongSpecularPointShader = PhongSpecularPointShader.Factory.Create();
             pixelLitSinglePhongSpecularPointShader.init();
             pixelLitSinglePhongSpecularSpotShader = PhongSpecularSpotShader.Factory.Create();
             pixelLitSinglePhongSpecularSpotShader.init();
+            pixelLitSinglePhongSpecularSpotTwoConeShader = PhongSpecularSpotTwoConeShader.Factory.Create();
+            pixelLitSinglePhongSpecularSpotTwoConeShader.init();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
 
         // Set current shader
-        shaderIndex = 4;
+        shaderIndex = 5;
         updateCurrentShader();
 
         // OpenGL settings
