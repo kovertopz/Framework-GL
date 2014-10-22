@@ -31,7 +31,7 @@ void main(void)
     // Transform the vertex into eye space
     vec4 eyeVertex = uViewModelMatrix * in_Vertex;
 
-    pass_Color = gl_Color;
+    pass_Color = in_Color;
     pass_Normal = eyeNormal;
     pass_TexCoord0 = in_TexCoord0;
     pass_Vertex = eyeVertex;

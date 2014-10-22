@@ -27,7 +27,7 @@ void main(void)
     // inverse of the upper leftmost 3x3 of uViewModelMatrix.
     vec3 eyeNormal = normalize(uNormalMatrix * in_Normal);
 
-    pass_Color = gl_Color;
+    pass_Color = in_Color;
     pass_Normal = eyeNormal;
     pass_TexCoord0 = in_TexCoord0;
     gl_Position = uProjectionViewModelMatrix * in_Vertex;

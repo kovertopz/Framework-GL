@@ -29,4 +29,24 @@ public class OpenGL2 {
         GL20.glStencilOpSeparate(StencilOperations.FRONT, StencilOperations.KEEP, StencilOperations.DECR, StencilOperations.KEEP);
     }
 
+    public void vertexAttrib(int index, float x) {
+        GL20.glVertexAttrib1f(index, x);
+    }
+
+    public void vertexAttrib(int index, float x, float y) {
+        GL20.glVertexAttrib2f(index, x, y);
+    }
+
+    public void vertexAttrib(int index, float x, float y, float z) {
+        GL20.glVertexAttrib3f(index, x, y, z);
+    }
+
+    public void vertexAttrib(int index, byte x, byte y, byte z, byte w) {
+        GL20.glVertexAttrib4Nub(index, x, y, z, w);
+    }
+
+    public void vertexAttrib(int index, float x, float y, float z, float w) {
+        GL20.glVertexAttrib4f(index, x, y, z, w);
+    }
+
 }

@@ -34,12 +34,20 @@ public class DefaultAttribLocations {
         return nameToIndex.get(name);
     }
 
+    public void setIndex(String name, int index) {
+        nameToIndex.put(name, index);
+    }
+
     public Map<Integer, String> getAttribLocations() {
         return indexToAttributeLocation;
     }
 
     public String getAttribLocation(int index) {
         return indexToAttributeLocation.get(index);
+    }
+
+    public void setAttribLocations(int index, String name) {
+        indexToAttributeLocation.put(index, name);
     }
 
     public final void reset() {
@@ -77,14 +85,6 @@ public class DefaultAttribLocations {
         indexToAttributeLocation.put(nameToIndex.get("texCoord5"), "in_TexCoord5");
         indexToAttributeLocation.put(nameToIndex.get("binormal"), "in_Binormal");
         indexToAttributeLocation.put(nameToIndex.get("tangent"), "in_Tangent");
-    }
-
-    public void setAttribLocations(int index, String name) {
-        indexToAttributeLocation.put(index, name);
-    }
-
-    public void setIndex(String name, int index) {
-        nameToIndex.put(name, index);
     }
 
 }

@@ -85,6 +85,7 @@ public class RendererGL2 extends AbstractRendererGL {
     @Override
     public void color(float r, float g, float b, float a) {
         GL.o1.color(r, g, b, a);
+        GL.o2.vertexAttrib(GL.defaultAttribLocations.getIndex("color"), r, g, b, a);
     }
 
     @Override
@@ -207,6 +208,8 @@ public class RendererGL2 extends AbstractRendererGL {
     @Override
     public void colorText(Color color) {
         GL.o1.color(color.getR(), color.getG(), color.getB(), color.getA());
+        GL.o2.vertexAttrib(GL.defaultAttribLocations.getIndex("color"), color.getR(), color.getG(), color.getB(),
+                color.getA());
     }
 
     @Override
