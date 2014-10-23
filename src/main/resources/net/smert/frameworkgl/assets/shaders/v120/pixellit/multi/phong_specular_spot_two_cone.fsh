@@ -96,12 +96,15 @@ void main(void)
         attenuationFactor *= clamp(1.0 - (dist * dist) / (uLights[i].radius * uLights[i].radius), 0.0, 1.0);
 
         // Calculate cone's light influence
-        float coneCosAngle = dot(-eyeLightDir, normalize(uLights[i].spotEyeDirection));
-        float edge0 = uLights[i].spotOuterCutoffCos;
-        float edge1 = uLights[i].spotOuterCutoffCos + (1.0 - uLights[i].spotInnerCutoffCos);
-        float t = clamp((coneCosAngle - edge0) / (edge1 - edge0), 0.0, 1.0);
-        float coneEffect = t * t * (3.0 - 2.0 * t);
-        attenuationFactor *= coneEffect;
+        if ( uLights[i].spotOuterCutoffCos != -1.0 )
+        {
+            float coneCosAngle = dot(-eyeLightDir, normalize(uLights[i].spotEyeDirection));
+            float edge0 = uLights[i].spotOuterCutoffCos;
+            float edge1 = uLights[i].spotOuterCutoffCos + (1.0 - uLights[i].spotInnerCutoffCos);
+            float t = clamp((coneCosAngle - edge0) / (edge1 - edge0), 0.0, 1.0);
+            float coneEffect = t * t * (3.0 - 2.0 * t);
+            attenuationFactor *= coneEffect;
+        }
 
         // Skip light if it won't matter
         if ( attenuationFactor <= 0.0 )

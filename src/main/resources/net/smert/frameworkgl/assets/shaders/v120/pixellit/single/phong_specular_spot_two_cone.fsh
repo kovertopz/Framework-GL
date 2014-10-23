@@ -82,12 +82,15 @@ void main(void)
     attenuationFactor *= clamp(1.0 - (dist * dist) / (uLight.radius * uLight.radius), 0.0, 1.0);
 
     // Calculate cone's light influence
-    float coneCosAngle = dot(-eyeLightDir, normalize(uLight.spotEyeDirection));
-    float edge0 = uLight.spotOuterCutoffCos;
-    float edge1 = uLight.spotOuterCutoffCos + (1.0 - uLight.spotInnerCutoffCos);
-    float t = clamp((coneCosAngle - edge0) / (edge1 - edge0), 0.0, 1.0);
-    float coneEffect = t * t * (3.0 - 2.0 * t);
-    attenuationFactor *= coneEffect;
+    if ( uLight.spotOuterCutoffCos != -1.0 )
+    {
+        float coneCosAngle = dot(-eyeLightDir, normalize(uLight.spotEyeDirection));
+        float edge0 = uLight.spotOuterCutoffCos;
+        float edge1 = uLight.spotOuterCutoffCos + (1.0 - uLight.spotInnerCutoffCos);
+        float t = clamp((coneCosAngle - edge0) / (edge1 - edge0), 0.0, 1.0);
+        float coneEffect = t * t * (3.0 - 2.0 * t);
+        attenuationFactor *= coneEffect;
+    }
 
     // Calculate lambert term
     float NdotL = max(dot(pass_Normal, eyeLightDir), 0.0);
