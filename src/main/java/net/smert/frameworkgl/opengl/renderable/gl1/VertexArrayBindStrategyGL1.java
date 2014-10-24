@@ -14,12 +14,13 @@ package net.smert.frameworkgl.opengl.renderable.gl1;
 
 import net.smert.frameworkgl.opengl.VertexArray;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayBindStrategy;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayBindStrategyGL1 implements net.smert.frameworkgl.opengl.renderable.shared.VertexArrayBindStrategy {
+public class VertexArrayBindStrategyGL1 implements VertexArrayBindStrategy {
 
     @Override
     public void bind(int renderableConfigID, VertexArray vaColor, VertexArray vaNormal, VertexArray vaTexCoord,

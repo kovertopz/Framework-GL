@@ -474,10 +474,15 @@ public class Configuration {
      * been removed. This is the recommended profile for the framework. This supports Mac OSX 10.9 and later.
      */
     public final void withOpenGL33ProfileCore() {
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            // Because on Mac OSX you have to request a 3.2 core profile to get a 3.3 core profile...DUH
+            withOpenGL32ProfileCore();
+            return;
+        }
         glslVersion = 330;
         openglMajorVersion = 3;
         openglMinorVersion = 3;
-        contextAttribs = new ContextAttribs(3, 3)
+        contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
                 .withProfileCompatibility(false)
                 .withProfileCore(true);
     }

@@ -15,13 +15,13 @@ package net.smert.frameworkgl.opengl.renderable.gl2;
 import net.smert.frameworkgl.opengl.VertexBufferObject;
 import net.smert.frameworkgl.opengl.VertexBufferObjectInterleaved;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectBindStrategy;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexBufferObjectBindStrategyGL2
-        implements net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectBindStrategy {
+public class VertexBufferObjectBindStrategyGL2 implements VertexBufferObjectBindStrategy {
 
     @Override
     public void bind(int renderableConfigID, VertexBufferObject vboColor, VertexBufferObject vboNormal,

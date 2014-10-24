@@ -9,11 +9,13 @@ Framework-GL has the following features :
 
 - Basic rendering with immediate mode, display lists, vertex arrays,
   vertex buffer objects (dynamic & interleaved) using OpenGL 1.X.
-- Basic rendering with immediate mode, display lists, vertex arrays,
-  vertex buffer objects (dynamic & interleaved) and shaders using
-  OpenGL 2.X.
+- Basic rendering with vertex arrays, vertex buffer objects (dynamic
+  & interleaved) and shaders using OpenGL 2.X.
+- Basic rendering with vertex arrays, vertex array objects and
+  shaders using OpenGL 3.X.
 - Builders (FBOs, shaders & textures)
-- Built-in shaders (Diffuse, Blinn-Phong, Phong vertex lit)
+- Built-in shaders (Diffuse, Blinn-Phong and Phong either pixel or
+  vertex lit)
 - Cube maps
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.
