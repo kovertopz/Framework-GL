@@ -25,6 +25,7 @@ import net.smert.frameworkgl.opengl.helpers.ShaderHelper;
 import net.smert.frameworkgl.opengl.helpers.ShaderUniformHelper;
 import net.smert.frameworkgl.opengl.helpers.TextureHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexArrayHelper;
+import net.smert.frameworkgl.opengl.helpers.VertexArrayObjectHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexBufferObjectHelper;
 import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
@@ -79,6 +80,7 @@ public class GL {
     public static TextureHelper textureHelper;
     public static TextureReader textureReader;
     public static VertexArrayHelper vaHelper;
+    public static VertexArrayObjectHelper vaoHelper;
     public static VertexBufferObjectHelper vboHelper;
 
 }

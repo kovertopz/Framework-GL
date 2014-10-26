@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl.renderable;
 import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.gl1.BindStateGL1;
 import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
+import net.smert.frameworkgl.opengl.renderable.gl3.BindStateGL3;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
@@ -36,6 +37,7 @@ public class Renderable {
 
     public static BindStateGL1 bindState1;
     public static BindStateGL2 bindState2;
+    public static BindStateGL3 bindState3;
     public static ByteBuffers byteBuffers;
     public static DisplayListRenderCallBuilder displayListRenderCallBuilder;
     public static DrawCommands drawCommandsConversion;
