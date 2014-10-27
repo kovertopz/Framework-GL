@@ -477,6 +477,9 @@ public class Configuration {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             // Because on Mac OSX you have to request a 3.2 core profile to get a 3.3 core profile...DUH
             withOpenGL32ProfileCore();
+            glslVersion = 330;
+            openglMajorVersion = 3;
+            openglMinorVersion = 3;
             return;
         }
         glslVersion = 330;
