@@ -87,11 +87,11 @@ public class MeshToDisplayList extends Screen {
         meshTriangles = new CubeMeshForTriangles();
 
         // Create display list renderables
-        renderableQuads = GL.renderer1.createDisplayListRenderable();
+        renderableQuads = Fw.graphics.createDisplayListRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.renderer1.createDisplayListRenderable();
+        renderableQuadsWithPerVertexColors = Fw.graphics.createDisplayListRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.renderer1.createDisplayListRenderable();
+        renderableTriangles = Fw.graphics.createDisplayListRenderable();
         renderableTriangles.create(meshTriangles);
 
         // OpenGL settings

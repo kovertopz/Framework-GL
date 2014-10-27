@@ -81,7 +81,7 @@ public class FansAndStrips extends Screen {
         meshFansAndStrips = Fw.graphics.createMesh(fansAndStrips);
 
         // Create immediate mode renderable
-        renderableFansAndStrips = GL.renderer1.createImmediateModeRenderable();
+        renderableFansAndStrips = Fw.graphics.createImmediateModeRenderable();
         renderableFansAndStrips.create(meshFansAndStrips);
 
         // OpenGL settings

@@ -95,11 +95,11 @@ public class ImmediateMode extends Screen {
         meshTriangles = Fw.graphics.createMesh(cubeTriangles);
 
         // Create immediate mode renderables
-        renderableQuads = GL.renderer1.createImmediateModeRenderable();
+        renderableQuads = Fw.graphics.createImmediateModeRenderable();
         renderableQuads.create(meshQuads);
-        renderableQuadsWithPerVertexColors = GL.renderer1.createImmediateModeRenderable();
+        renderableQuadsWithPerVertexColors = Fw.graphics.createImmediateModeRenderable();
         renderableQuadsWithPerVertexColors.create(meshQuadsWithPerVertexColors);
-        renderableTriangles = GL.renderer1.createImmediateModeRenderable();
+        renderableTriangles = Fw.graphics.createImmediateModeRenderable();
         renderableTriangles.create(meshTriangles);
 
         // OpenGL settings
