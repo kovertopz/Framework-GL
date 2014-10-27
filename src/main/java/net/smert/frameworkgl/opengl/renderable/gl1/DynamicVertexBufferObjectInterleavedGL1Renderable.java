@@ -10,18 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl1;
 
+import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.shared.DynamicInterleavedRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayUpdateStrategy {
+public class DynamicVertexBufferObjectInterleavedGL1Renderable extends VertexBufferObjectInterleavedGL1Renderable
+        implements DynamicInterleavedRenderable {
 
-    public void update(Mesh mesh, VertexArrayData data) {
+    public DynamicVertexBufferObjectInterleavedGL1Renderable() {
+        bufferUsage = VertexBufferObjectTypes.DYNAMIC_DRAW;
+    }
 
+    @Override
+    public void update(Mesh mesh) {
+        updateGL1AndGL2(mesh);
     }
 
 }

@@ -10,28 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.factory;
+package net.smert.frameworkgl.opengl.renderable.gl1;
 
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.shared.DynamicArrayRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface RenderableFactory {
+public class DynamicVertexArrayGL1Renderable extends VertexArrayGL1Renderable implements DynamicArrayRenderable {
 
-    public AbstractRenderable createArrayRenderable();
-
-    public AbstractRenderable createDisplayListRenderable();
-
-    public AbstractRenderable createDynamicInterleavedRenderable();
-
-    public AbstractRenderable createDynamicNonInterleavedRenderable();
-
-    public AbstractRenderable createImmediateModeRenderable();
-
-    public AbstractRenderable createInterleavedRenderable();
-
-    public AbstractRenderable createNonInterleavedRenderable();
+    @Override
+    public void update(Mesh mesh) {
+        updateGL1AndGL2(mesh);
+    }
 
 }

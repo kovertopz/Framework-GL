@@ -10,29 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl3;
 
+import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractVertexArrayObjectInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.InterleavedRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayDynamicRenderable extends VertexArrayRenderable implements DynamicArrayRenderable {
+public class VertexArrayObjectInterleavedGL3Renderable extends AbstractVertexArrayObjectInterleavedRenderable
+        implements InterleavedRenderable {
 
-    private final VertexArrayUpdateStrategy update;
-
-    public VertexArrayDynamicRenderable(
-            VertexArrayCreateStrategy create,
-            VertexArrayRenderStrategy render,
-            VertexArrayUpdateStrategy update) {
-        super(create, render);
-        this.update = update;
+    public VertexArrayObjectInterleavedGL3Renderable() {
+        bufferUsage = VertexBufferObjectTypes.STATIC_DRAW;
     }
 
     @Override
-    public void update(Mesh mesh) {
-        update.update(mesh, data);
+    public void create(Mesh mesh) {
+        createGL3(mesh);
+    }
+
+    @Override
+    public void render() {
+        renderGL3();
     }
 
 }

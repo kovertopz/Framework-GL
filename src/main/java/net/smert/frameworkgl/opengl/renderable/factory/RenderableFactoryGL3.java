@@ -13,6 +13,10 @@
 package net.smert.frameworkgl.opengl.renderable.factory;
 
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.DynamicVertexArrayObjectInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.DynamicVertexArrayObjectNonInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.VertexArrayObjectInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.VertexArrayObjectNonInterleavedGL3Renderable;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -29,27 +33,37 @@ public class RenderableFactoryGL3 implements RenderableFactory {
 
     @Override
     public AbstractRenderable createArrayRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
-    public AbstractRenderable createDynamicInterleavedRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public AbstractRenderable createDisplayListRenderable() {
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
-    public AbstractRenderable createDynamicNonInterleavedRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public DynamicVertexArrayObjectInterleavedGL3Renderable createDynamicInterleavedRenderable() {
+        return container.getComponent(DynamicVertexArrayObjectInterleavedGL3Renderable.class);
     }
 
     @Override
-    public AbstractRenderable createInterleavedRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public DynamicVertexArrayObjectNonInterleavedGL3Renderable createDynamicNonInterleavedRenderable() {
+        return container.getComponent(DynamicVertexArrayObjectNonInterleavedGL3Renderable.class);
     }
 
     @Override
-    public AbstractRenderable createNonInterleavedRenderable() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public AbstractRenderable createImmediateModeRenderable() {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public VertexArrayObjectInterleavedGL3Renderable createInterleavedRenderable() {
+        return container.getComponent(VertexArrayObjectInterleavedGL3Renderable.class);
+    }
+
+    @Override
+    public VertexArrayObjectNonInterleavedGL3Renderable createNonInterleavedRenderable() {
+        return container.getComponent(VertexArrayObjectNonInterleavedGL3Renderable.class);
     }
 
 }

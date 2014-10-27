@@ -70,12 +70,20 @@ public class Graphics implements Renderer, TextRenderer {
         return renderableFactory.createArrayRenderable();
     }
 
+    public AbstractRenderable createDisplayListRenderable() {
+        return renderableFactory.createDisplayListRenderable();
+    }
+
     public AbstractRenderable createDynamicInterleavedRenderable() {
         return renderableFactory.createDynamicInterleavedRenderable();
     }
 
     public AbstractRenderable createDynamicNonInterleavedRenderable() {
         return renderableFactory.createDynamicNonInterleavedRenderable();
+    }
+
+    public AbstractRenderable createImmediateModeRenderable() {
+        return renderableFactory.createImmediateModeRenderable();
     }
 
     public AbstractRenderable createInterleavedRenderable() {

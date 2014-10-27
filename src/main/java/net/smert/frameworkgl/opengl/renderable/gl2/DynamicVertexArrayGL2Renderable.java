@@ -10,17 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl2;
 
-import net.smert.frameworkgl.opengl.VertexArray;
+import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.shared.DynamicArrayRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface VertexArrayBindStrategy {
+public class DynamicVertexArrayGL2Renderable extends VertexArrayGL2Renderable implements DynamicArrayRenderable {
 
-    public void bind(int renderableConfigID, VertexArray vaColor, VertexArray vaNormal, VertexArray vaTexCoord,
-            VertexArray vaVertex);
+    @Override
+    public void update(Mesh mesh) {
+        updateGL1AndGL2(mesh);
+    }
 
 }

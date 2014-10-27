@@ -12,10 +12,40 @@
  */
 package net.smert.frameworkgl.opengl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class VertexArrayObject {
+
+    private final static Logger log = LoggerFactory.getLogger(VertexArrayObject.class);
+
+    private int vaoID;
+
+    public VertexArrayObject() {
+        vaoID = 0;
+    }
+
+    public void create() {
+        destroy();
+        vaoID = GL.vaoHelper.create();
+        log.debug("Created a new VAO with ID: {}", vaoID);
+    }
+
+    public void destroy() {
+        if (vaoID == 0) {
+            return;
+        }
+        GL.vaoHelper.delete(vaoID);
+        log.debug("Deleted a VAO with ID: {}", vaoID);
+        vaoID = 0;
+    }
+
+    public int getVaoID() {
+        return vaoID;
+    }
 
 }

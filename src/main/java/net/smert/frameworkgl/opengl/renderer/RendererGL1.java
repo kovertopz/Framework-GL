@@ -22,13 +22,13 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectNonInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectNonInterleavedGL1Renderable;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.Color;
 
@@ -53,36 +53,36 @@ public class RendererGL1 extends AbstractRendererGL {
         GL.o1.popMatrix();
     }
 
-    public VertexArrayRenderable createArrayRenderable() {
+    public VertexArrayGL1Renderable createArrayRenderable() {
         return GL.rf1.createArrayRenderable();
     }
 
-    public DisplayListRenderable createDisplayListRenderable() {
-        return GL.rf1.createDisplayList();
+    public DisplayListGL1Renderable createDisplayListRenderable() {
+        return GL.rf1.createDisplayListRenderable();
     }
 
-    public VertexBufferObjectDynamicInterleavedRenderable createDynamicInterleavedRenderable() {
+    public DynamicVertexBufferObjectInterleavedGL1Renderable createDynamicInterleavedRenderable() {
         return GL.rf1.createDynamicInterleavedRenderable();
     }
 
-    public VertexBufferObjectDynamicNonInterleavedRenderable createDynamicNonInterleavedRenderable() {
+    public DynamicVertexBufferObjectNonInterleavedGL1Renderable createDynamicNonInterleavedRenderable() {
         return GL.rf1.createDynamicNonInterleavedRenderable();
     }
 
-    public ImmediateModeRenderable createImmediateModeRenderable() {
-        return GL.rf1.createImmediateMode();
+    public ImmediateModeGL1Renderable createImmediateModeRenderable() {
+        return GL.rf1.createImmediateModeRenderable();
     }
 
-    public VertexBufferObjectInterleavedRenderable createInterleavedRenderable() {
+    public VertexBufferObjectInterleavedGL1Renderable createInterleavedRenderable() {
         return GL.rf1.createInterleavedRenderable();
     }
 
-    public VertexBufferObjectNonInterleavedRenderable createNonInterleavedRenderable() {
+    public VertexBufferObjectNonInterleavedGL1Renderable createNonInterleavedRenderable() {
         return GL.rf1.createNonInterleavedRenderable();
     }
 
     public void destroy() {
-        Renderable.bindState1.reset();
+        Renderable.bindState.reset();
     }
 
     public void init() {

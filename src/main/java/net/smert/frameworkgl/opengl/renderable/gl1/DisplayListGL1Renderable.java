@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +19,19 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DisplayListRenderable extends AbstractRenderable {
+public class DisplayListGL1Renderable extends AbstractRenderable {
 
     private final List<DisplayList> displayLists;
     private RenderCall renderCall;
 
-    public DisplayListRenderable() {
+    public DisplayListGL1Renderable() {
         displayLists = new ArrayList<>();
         renderCall = null;
     }

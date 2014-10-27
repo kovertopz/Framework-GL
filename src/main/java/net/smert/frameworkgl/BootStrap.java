@@ -54,6 +54,7 @@ import net.smert.frameworkgl.opengl.helpers.ShaderHelper;
 import net.smert.frameworkgl.opengl.helpers.ShaderUniformHelper;
 import net.smert.frameworkgl.opengl.helpers.TextureHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexArrayHelper;
+import net.smert.frameworkgl.opengl.helpers.VertexArrayObjectHelper;
 import net.smert.frameworkgl.opengl.helpers.VertexBufferObjectHelper;
 import net.smert.frameworkgl.opengl.image.bmp.BMPReader;
 import net.smert.frameworkgl.opengl.image.gif.GIFReader;
@@ -95,37 +96,34 @@ import net.smert.frameworkgl.opengl.renderable.displaylist.factory.DisplayListRe
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL2;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL3;
-import net.smert.frameworkgl.opengl.renderable.gl1.BindStateGL1;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayBindStrategyGL1;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectBindStrategyGL1;
-import net.smert.frameworkgl.opengl.renderable.gl2.BindStateGL2;
-import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayBindStrategyGL2;
-import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectBindStrategyGL2;
+import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexArrayGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectNonInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectNonInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.DynamicVertexArrayGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.DynamicVertexBufferObjectInterleavedGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.DynamicVertexBufferObjectNonInterleavedGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexArrayGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectInterleavedGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl2.VertexBufferObjectNonInterleavedGL2Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.DynamicVertexArrayObjectInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.DynamicVertexArrayObjectNonInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.VertexArrayObjectInterleavedGL3Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl3.VertexArrayObjectNonInterleavedGL3Renderable;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCall;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
-import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.BindState;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderPool;
 import net.smert.frameworkgl.opengl.renderable.shared.TextureBindState;
 import net.smert.frameworkgl.opengl.renderable.shared.TexturePool;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayCreateStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayUpdateStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedCreateStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedUpdateStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedCreateStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderStrategy;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedUpdateStrategy;
 import net.smert.frameworkgl.opengl.renderable.va.VADrawArrays;
 import net.smert.frameworkgl.opengl.renderable.va.VADrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.va.VADrawElements;
@@ -257,13 +255,14 @@ public class BootStrap {
             renderableFactoryGL1Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
 
             // Renderable
-            renderableFactoryGL1Container.addComponent(DisplayListRenderable.class);
-            renderableFactoryGL1Container.addComponent(ImmediateModeRenderable.class);
-            renderableFactoryGL1Container.addComponent(VertexArrayRenderable.class);
-            renderableFactoryGL1Container.addComponent(VertexBufferObjectDynamicInterleavedRenderable.class);
-            renderableFactoryGL1Container.addComponent(VertexBufferObjectDynamicNonInterleavedRenderable.class);
-            renderableFactoryGL1Container.addComponent(VertexBufferObjectInterleavedRenderable.class);
-            renderableFactoryGL1Container.addComponent(VertexBufferObjectNonInterleavedRenderable.class);
+            renderableFactoryGL1Container.addComponent(DisplayListGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(DynamicVertexArrayGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(DynamicVertexBufferObjectInterleavedGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(DynamicVertexBufferObjectNonInterleavedGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(ImmediateModeGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(VertexArrayGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(VertexBufferObjectInterleavedGL1Renderable.class);
+            renderableFactoryGL1Container.addComponent(VertexBufferObjectNonInterleavedGL1Renderable.class);
 
             // Add container for RenderableFactoryGL1
             parentContainer.addComponent("renderableFactoryGL1Container", renderableFactoryGL1Container);
@@ -274,13 +273,12 @@ public class BootStrap {
             renderableFactoryGL2Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
 
             // Renderable
-            renderableFactoryGL2Container.addComponent(DisplayListRenderable.class);
-            renderableFactoryGL2Container.addComponent(ImmediateModeRenderable.class);
-            renderableFactoryGL2Container.addComponent(VertexArrayRenderable.class);
-            renderableFactoryGL2Container.addComponent(VertexBufferObjectDynamicInterleavedRenderable.class);
-            renderableFactoryGL2Container.addComponent(VertexBufferObjectDynamicNonInterleavedRenderable.class);
-            renderableFactoryGL2Container.addComponent(VertexBufferObjectInterleavedRenderable.class);
-            renderableFactoryGL2Container.addComponent(VertexBufferObjectNonInterleavedRenderable.class);
+            renderableFactoryGL2Container.addComponent(DynamicVertexArrayGL2Renderable.class);
+            renderableFactoryGL2Container.addComponent(DynamicVertexBufferObjectInterleavedGL2Renderable.class);
+            renderableFactoryGL2Container.addComponent(DynamicVertexBufferObjectNonInterleavedGL2Renderable.class);
+            renderableFactoryGL2Container.addComponent(VertexArrayGL2Renderable.class);
+            renderableFactoryGL2Container.addComponent(VertexBufferObjectInterleavedGL2Renderable.class);
+            renderableFactoryGL2Container.addComponent(VertexBufferObjectNonInterleavedGL2Renderable.class);
 
             // Add container for RenderableFactoryGL2
             parentContainer.addComponent("renderableFactoryGL2Container", renderableFactoryGL2Container);
@@ -289,6 +287,12 @@ public class BootStrap {
         {
             // Container for RenderableFactoryGL3
             renderableFactoryGL3Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+
+            // Renderable
+            renderableFactoryGL3Container.addComponent(DynamicVertexArrayObjectInterleavedGL3Renderable.class);
+            renderableFactoryGL3Container.addComponent(DynamicVertexArrayObjectNonInterleavedGL3Renderable.class);
+            renderableFactoryGL3Container.addComponent(VertexArrayObjectInterleavedGL3Renderable.class);
+            renderableFactoryGL3Container.addComponent(VertexArrayObjectNonInterleavedGL3Renderable.class);
 
             // Add container for RenderableFactoryGL3
             parentContainer.addComponent("renderableFactoryGL3Container", renderableFactoryGL3Container);
@@ -397,6 +401,7 @@ public class BootStrap {
         container.addComponent(ShaderUniformHelper.class);
         container.addComponent(TextureHelper.class);
         container.addComponent(VertexArrayHelper.class);
+        container.addComponent(VertexArrayObjectHelper.class);
         container.addComponent(VertexBufferObjectHelper.class);
 
         // Image
@@ -432,16 +437,6 @@ public class BootStrap {
         // Renderable display list factory
         container.as(Characteristics.USE_NAMES).addComponent(DisplayListRenderCallFactory.class);
 
-        // Renderable gl1
-        container.addComponent(BindStateGL1.class);
-        container.addComponent(VertexArrayBindStrategyGL1.class);
-        container.addComponent(VertexBufferObjectBindStrategyGL1.class);
-
-        // Renderable gl2
-        container.addComponent(BindStateGL2.class);
-        container.addComponent(VertexArrayBindStrategyGL2.class);
-        container.addComponent(VertexBufferObjectBindStrategyGL2.class);
-
         // Renderable immediate mode
         container.addComponent(ImmediateModeRenderCallBuilder.class);
 
@@ -449,21 +444,13 @@ public class BootStrap {
         container.as(Characteristics.USE_NAMES).addComponent(ImmediateModeRenderCallFactory.class);
 
         // Renderable shared
+        container.addComponent(BindState.class);
         container.addComponent(RenderableBuilder.class);
         container.addComponent(RenderableConfigurationPool.class);
         container.addComponent(ShaderBindState.class);
         container.addComponent(ShaderPool.class);
         container.addComponent(TextureBindState.class);
         container.addComponent(TexturePool.class);
-        container.addComponent(VertexArrayCreateStrategy.class);
-        container.addComponent(VertexArrayRenderStrategy.class);
-        container.addComponent(VertexArrayUpdateStrategy.class);
-        container.addComponent(VertexBufferObjectInterleavedCreateStrategy.class);
-        container.addComponent(VertexBufferObjectInterleavedRenderStrategy.class);
-        container.addComponent(VertexBufferObjectInterleavedUpdateStrategy.class);
-        container.addComponent(VertexBufferObjectNonInterleavedCreateStrategy.class);
-        container.addComponent(VertexBufferObjectNonInterleavedRenderStrategy.class);
-        container.addComponent(VertexBufferObjectNonInterleavedUpdateStrategy.class);
 
         // Renderable VA
         container.addComponent(VADrawCallBuilder.class);
@@ -541,12 +528,12 @@ public class BootStrap {
         GL.textureHelper = container.getComponent(TextureHelper.class);
         GL.textureReader = container.getComponent(TextureReader.class);
         GL.vaHelper = container.getComponent(VertexArrayHelper.class);
+        GL.vaoHelper = container.getComponent(VertexArrayObjectHelper.class);
         GL.vboHelper = container.getComponent(VertexBufferObjectHelper.class);
     }
 
     protected void createStaticRenderable(MutablePicoContainer container) {
-        Renderable.bindState1 = container.getComponent(BindStateGL1.class);
-        Renderable.bindState2 = container.getComponent(BindStateGL2.class);
+        Renderable.bindState = container.getComponent(BindState.class);
         Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
         Renderable.configPool = container.getComponent(RenderableConfigurationPool.class);
         Renderable.displayListRenderCallBuilder = container.getComponent(DisplayListRenderCallBuilder.class);

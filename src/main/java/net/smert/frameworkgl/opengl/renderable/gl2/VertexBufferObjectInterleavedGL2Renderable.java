@@ -10,33 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl2;
 
 import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractVertexBufferObjectInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.InterleavedRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexBufferObjectDynamicInterleavedRenderable
-        extends VertexBufferObjectInterleavedRenderable
-        implements DynamicInterleavedRenderable {
+public class VertexBufferObjectInterleavedGL2Renderable extends AbstractVertexBufferObjectInterleavedRenderable
+        implements InterleavedRenderable {
 
-    private final VertexBufferObjectInterleavedUpdateStrategy update;
-
-    public VertexBufferObjectDynamicInterleavedRenderable(
-            VertexBufferObjectInterleavedCreateStrategy create,
-            VertexBufferObjectInterleavedRenderStrategy render,
-            VertexBufferObjectInterleavedUpdateStrategy update) {
-        super(create, render);
-        this.update = update;
-        data.bufferUsage = VertexBufferObjectTypes.DYNAMIC_DRAW;
+    public VertexBufferObjectInterleavedGL2Renderable() {
+        bufferUsage = VertexBufferObjectTypes.STATIC_DRAW;
     }
 
     @Override
-    public void update(Mesh mesh) {
-        update.update(mesh, data);
+    public void create(Mesh mesh) {
+        createGL1AndGL2(mesh);
+    }
+
+    @Override
+    public void render() {
+        renderGL2();
     }
 
 }

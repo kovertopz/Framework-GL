@@ -10,38 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl1;
 
+import net.smert.frameworkgl.opengl.constants.VertexBufferObjectTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractVertexBufferObjectNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.shared.NonInterleavedRenderable;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class ImmediateModeRenderable extends AbstractRenderable {
+public class VertexBufferObjectNonInterleavedGL1Renderable extends AbstractVertexBufferObjectNonInterleavedRenderable
+        implements NonInterleavedRenderable {
 
-    private RenderCall renderCall;
-
-    public ImmediateModeRenderable() {
-        renderCall = null;
+    public VertexBufferObjectNonInterleavedGL1Renderable() {
+        bufferUsage = VertexBufferObjectTypes.STATIC_DRAW;
     }
 
     @Override
     public void create(Mesh mesh) {
-
-        // Create render call
-        renderCall = Renderable.immediateModeRenderCallBuilder.createRenderCall(mesh);
-    }
-
-    @Override
-    public void destroy() {
+        createGL1AndGL2(mesh);
     }
 
     @Override
     public void render() {
-        renderCall.render();
+        renderGL1();
     }
 
 }

@@ -10,28 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.factory;
+package net.smert.frameworkgl.opengl.helpers;
 
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import org.lwjgl.opengl.GL30;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface RenderableFactory {
+public class VertexArrayObjectHelper {
 
-    public AbstractRenderable createArrayRenderable();
+    public void bind(int vaoID) {
+        GL30.glBindVertexArray(vaoID);
+    }
 
-    public AbstractRenderable createDisplayListRenderable();
+    public int create() {
+        return GL30.glGenVertexArrays();
+    }
 
-    public AbstractRenderable createDynamicInterleavedRenderable();
+    public void delete(int vboID) {
+        GL30.glDeleteVertexArrays(vboID);
+    }
 
-    public AbstractRenderable createDynamicNonInterleavedRenderable();
-
-    public AbstractRenderable createImmediateModeRenderable();
-
-    public AbstractRenderable createInterleavedRenderable();
-
-    public AbstractRenderable createNonInterleavedRenderable();
+    public void unbind() {
+        GL30.glBindVertexArray(0);
+    }
 
 }

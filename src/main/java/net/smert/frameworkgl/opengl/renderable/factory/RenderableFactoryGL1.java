@@ -12,15 +12,13 @@
  */
 package net.smert.frameworkgl.opengl.renderable.factory;
 
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayBindStrategyGL1;
-import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectBindStrategyGL1;
-import net.smert.frameworkgl.opengl.renderable.shared.DisplayListRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.ImmediateModeRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexArrayRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectDynamicNonInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectInterleavedRenderable;
-import net.smert.frameworkgl.opengl.renderable.shared.VertexBufferObjectNonInterleavedRenderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectNonInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.ImmediateModeGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexArrayGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectInterleavedGL1Renderable;
+import net.smert.frameworkgl.opengl.renderable.gl1.VertexBufferObjectNonInterleavedGL1Renderable;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -30,62 +28,44 @@ import org.picocontainer.MutablePicoContainer;
 public class RenderableFactoryGL1 implements RenderableFactory {
 
     private final MutablePicoContainer container;
-    private final VertexArrayBindStrategyGL1 vertexArrayBindStrategy;
-    private final VertexBufferObjectBindStrategyGL1 vertexBufferObjectBindStrategy;
 
-    public RenderableFactoryGL1(MutablePicoContainer renderableFactoryGL1Container,
-            VertexArrayBindStrategyGL1 vertexArrayBindStrategy,
-            VertexBufferObjectBindStrategyGL1 vertexBufferObjectBindStrategy) {
+    public RenderableFactoryGL1(MutablePicoContainer renderableFactoryGL1Container) {
         container = renderableFactoryGL1Container;
-        this.vertexArrayBindStrategy = vertexArrayBindStrategy;
-        this.vertexBufferObjectBindStrategy = vertexBufferObjectBindStrategy;
-    }
-
-    public DisplayListRenderable createDisplayList() {
-        return container.getComponent(DisplayListRenderable.class);
-    }
-
-    public ImmediateModeRenderable createImmediateMode() {
-        return container.getComponent(ImmediateModeRenderable.class);
     }
 
     @Override
-    public VertexArrayRenderable createArrayRenderable() {
-        VertexArrayRenderable vertexArrayRenderable = container.getComponent(VertexArrayRenderable.class);
-        vertexArrayRenderable.setBind(vertexArrayBindStrategy);
-        return vertexArrayRenderable;
+    public VertexArrayGL1Renderable createArrayRenderable() {
+        return container.getComponent(VertexArrayGL1Renderable.class);
     }
 
     @Override
-    public VertexBufferObjectDynamicInterleavedRenderable createDynamicInterleavedRenderable() {
-        VertexBufferObjectDynamicInterleavedRenderable vboDynamicInterleavedRenderable
-                = container.getComponent(VertexBufferObjectDynamicInterleavedRenderable.class);
-        vboDynamicInterleavedRenderable.setBind(vertexBufferObjectBindStrategy);
-        return vboDynamicInterleavedRenderable;
+    public DisplayListGL1Renderable createDisplayListRenderable() {
+        return container.getComponent(DisplayListGL1Renderable.class);
     }
 
     @Override
-    public VertexBufferObjectDynamicNonInterleavedRenderable createDynamicNonInterleavedRenderable() {
-        VertexBufferObjectDynamicNonInterleavedRenderable vboDynamicNonInterleavedRenderable
-                = container.getComponent(VertexBufferObjectDynamicNonInterleavedRenderable.class);
-        vboDynamicNonInterleavedRenderable.setBind(vertexBufferObjectBindStrategy);
-        return vboDynamicNonInterleavedRenderable;
+    public DynamicVertexBufferObjectInterleavedGL1Renderable createDynamicInterleavedRenderable() {
+        return container.getComponent(DynamicVertexBufferObjectInterleavedGL1Renderable.class);
     }
 
     @Override
-    public VertexBufferObjectInterleavedRenderable createInterleavedRenderable() {
-        VertexBufferObjectInterleavedRenderable vboInterleavedRenderable
-                = container.getComponent(VertexBufferObjectInterleavedRenderable.class);
-        vboInterleavedRenderable.setBind(vertexBufferObjectBindStrategy);
-        return vboInterleavedRenderable;
+    public DynamicVertexBufferObjectNonInterleavedGL1Renderable createDynamicNonInterleavedRenderable() {
+        return container.getComponent(DynamicVertexBufferObjectNonInterleavedGL1Renderable.class);
     }
 
     @Override
-    public VertexBufferObjectNonInterleavedRenderable createNonInterleavedRenderable() {
-        VertexBufferObjectNonInterleavedRenderable vboNonInterleavedRenderable
-                = container.getComponent(VertexBufferObjectNonInterleavedRenderable.class);
-        vboNonInterleavedRenderable.setBind(vertexBufferObjectBindStrategy);
-        return vboNonInterleavedRenderable;
+    public ImmediateModeGL1Renderable createImmediateModeRenderable() {
+        return container.getComponent(ImmediateModeGL1Renderable.class);
+    }
+
+    @Override
+    public VertexBufferObjectInterleavedGL1Renderable createInterleavedRenderable() {
+        return container.getComponent(VertexBufferObjectInterleavedGL1Renderable.class);
+    }
+
+    @Override
+    public VertexBufferObjectNonInterleavedGL1Renderable createNonInterleavedRenderable() {
+        return container.getComponent(VertexBufferObjectNonInterleavedGL1Renderable.class);
     }
 
 }

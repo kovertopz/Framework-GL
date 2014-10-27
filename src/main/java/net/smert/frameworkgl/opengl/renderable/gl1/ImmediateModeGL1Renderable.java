@@ -10,51 +10,39 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.opengl.renderable.shared;
+package net.smert.frameworkgl.opengl.renderable.gl1;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
+import net.smert.frameworkgl.opengl.renderable.shared.RenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VertexArrayRenderable extends AbstractRenderable implements ArrayRenderable {
+public class ImmediateModeGL1Renderable extends AbstractRenderable {
 
-    protected VertexArrayBindStrategy bind;
-    protected final VertexArrayCreateStrategy create;
-    protected final VertexArrayData data;
-    protected final VertexArrayRenderStrategy render;
+    private RenderCall renderCall;
 
-    public VertexArrayRenderable(
-            VertexArrayCreateStrategy create,
-            VertexArrayRenderStrategy render) {
-        this.create = create;
-        this.data = new VertexArrayData();
-        this.render = render;
-    }
-
-    public VertexArrayBindStrategy getBind() {
-        return bind;
-    }
-
-    public void setBind(VertexArrayBindStrategy bind) {
-        this.bind = bind;
+    public ImmediateModeGL1Renderable() {
+        renderCall = null;
     }
 
     @Override
     public void create(Mesh mesh) {
-        create.create(mesh, data);
+
+        // Create render call
+        renderCall = Renderable.immediateModeRenderCallBuilder.createRenderCall(mesh);
     }
 
     @Override
     public void destroy() {
-        data.destroy();
     }
 
     @Override
     public void render() {
-        render.render(bind, data);
+        renderCall.render();
     }
 
 }
