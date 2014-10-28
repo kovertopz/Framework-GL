@@ -338,6 +338,20 @@ public class CustomClassLoader extends SecureClassLoader {
         }
     }
 
+    private String mapLibraryName(String libraryName) {
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            return "lib" + libraryName + ".jnilib";
+        }
+        return System.mapLibraryName(libraryName);
+    }
+
+    private String mapLibraryNameAlternate(String libraryName) {
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            return "lib" + libraryName + ".dylib";
+        }
+        return System.mapLibraryName(libraryName);
+    }
+
     protected boolean allowedToOverwriteFileEntryInJar(FileEntryInJar existingFileEntryInJar, FileEntryInJar newFileEntryInJar) {
         return (existingFileEntryInJar.getDepth() < newFileEntryInJar.getDepth());
     }
@@ -413,11 +427,18 @@ public class CustomClassLoader extends SecureClassLoader {
     protected String findLibrary(String libraryName) {
         log.log(Level.FINER, "CustomClassLoader finding native library: {0}", libraryName);
 
-        libraryName = System.mapLibraryName(libraryName);
+        libraryName = mapLibraryName(libraryName);
+        log.log(Level.FINER, "CustomClassLoader mapped library name: {0}", libraryName);
         FileEntryInJar fileEntryInJar = fileEntriesInJar.get(libraryName);
         if (fileEntryInJar == null) {
             log.log(Level.FINEST, "CustomClassLoader did not find native library: {0}", libraryName);
-            return super.findLibrary(libraryName);
+            libraryName = mapLibraryNameAlternate(libraryName);
+            log.log(Level.FINER, "CustomClassLoader mapped alternate library name: {0}", libraryName);
+            fileEntryInJar = fileEntriesInJar.get(libraryName);
+            if (fileEntryInJar == null) {
+                log.log(Level.FINEST, "CustomClassLoader did not find native library: {0}", libraryName);
+                return super.findLibrary(libraryName);
+            }
         }
 
         try {
