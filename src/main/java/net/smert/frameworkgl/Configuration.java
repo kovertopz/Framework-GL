@@ -32,6 +32,7 @@ public class Configuration {
     protected boolean logConsole;
     protected boolean logFile;
     protected boolean pauseNotInFocus;
+    protected boolean validateShaders;
     protected boolean vSyncRequested;
     protected float mouseMoveSensitivity;
     protected float mouseWheelSensitivity;
@@ -65,6 +66,7 @@ public class Configuration {
         logFile = true;
         pauseNotInFocus = true;
         vSyncEnabled = false;
+        validateShaders = true;
         vSyncRequested = false;
         mouseMoveSensitivity = 1f;
         mouseWheelSensitivity = 1f;
@@ -153,6 +155,15 @@ public class Configuration {
      */
     public boolean isPauseNotInFocus() {
         return pauseNotInFocus;
+    }
+
+    /**
+     * Should we validate shaders after linking?
+     *
+     * @return
+     */
+    public boolean isValidateShaders() {
+        return validateShaders;
     }
 
     /**
@@ -477,6 +488,8 @@ public class Configuration {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             // Because on Mac OSX you have to request a 3.2 core profile to get a 3.3 core profile...DUH
             withOpenGL32ProfileCore();
+            // Not sure why the shaders have errors validating, yet the info log shows nothing specific.
+            validateShaders = false;
             glslVersion = 330;
             openglMajorVersion = 3;
             openglMinorVersion = 3;

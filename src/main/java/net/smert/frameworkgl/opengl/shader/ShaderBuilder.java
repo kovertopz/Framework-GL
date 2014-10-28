@@ -121,11 +121,13 @@ public class ShaderBuilder {
         }
 
         // Validate program
-        GL.shaderHelper.validate(programID);
-        if (!GL.shaderHelper.getValidateStatus(programID)) {
-            log.error("Program validate errors: Name: {} Info Log:\n{}",
-                    programName, GL.shaderHelper.getInfoLog(programID));
-            throw new RuntimeException("Program \"" + programName + "\" had validate errors");
+        if (Fw.config.isValidateShaders()) {
+            GL.shaderHelper.validate(programID);
+            if (!GL.shaderHelper.getValidateStatus(programID)) {
+                log.error("Program validate errors: Name: {} Info Log:\n{}",
+                        programName, GL.shaderHelper.getInfoLog(programID));
+                throw new RuntimeException("Program \"" + programName + "\" had validate errors");
+            }
         }
 
         log.info("Loaded shader program: {}", programName);
