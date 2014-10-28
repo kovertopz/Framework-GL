@@ -30,8 +30,8 @@ public class BlinnPhongSpecularSpotTwoConeShader extends AbstractSpecularShader 
 
         public static BlinnPhongSpecularSpotTwoConeShader Create() throws IOException {
             Shader shader = Fw.graphics.buildShader(
-                    "pixellit/multi/blinn_phong_specular_spot.fsh",
-                    "pixellit/multi/blinn_phong_specular_spot.vsh",
+                    "pixellit/multi/blinn_phong_specular_spot_two_cone.fsh",
+                    "pixellit/multi/blinn_phong_specular_spot_two_cone.vsh",
                     "pixelLitMultiBlinnPhongSpecularSpot");
             return new BlinnPhongSpecularSpotTwoConeShader(new SpecularUniforms(shader.getProgramID()), shader);
         }
