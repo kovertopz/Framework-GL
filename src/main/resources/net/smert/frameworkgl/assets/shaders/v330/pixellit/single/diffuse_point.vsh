@@ -7,10 +7,10 @@ in vec3 in_Normal;
 in vec4 in_Vertex;
 in vec4 in_Color;
 in vec4 in_TexCoord0;
-varying vec3 pass_Normal;
-varying vec4 pass_Vertex;
-varying vec4 pass_Color;
-varying vec4 pass_TexCoord0;
+out vec3 pass_Normal;
+out vec4 pass_Vertex;
+out vec4 pass_Color;
+out vec4 pass_TexCoord0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Default Uniforms                                                           //
