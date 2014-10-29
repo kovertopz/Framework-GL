@@ -14,6 +14,7 @@ package net.smert.frameworkgl.examples.dummyscreen;
 
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
+import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.utils.FpsTimer;
 
 /**
@@ -37,6 +38,7 @@ public class DummyScreen extends Screen {
     public void init() {
         System.out.println("init");
         fpsTimer = new FpsTimer();
+        GL.o1.clear();
     }
 
     @Override
