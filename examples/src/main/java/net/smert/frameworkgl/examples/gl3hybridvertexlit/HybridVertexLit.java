@@ -299,9 +299,9 @@ public class HybridVertexLit extends Screen {
         if (Fw.input.isKeyDown(Keyboard.F1) && !Fw.input.wasKeyDown(Keyboard.F1)) {
             wireframe = !wireframe;
             if (wireframe) {
-                GL.o1.setPolygonModeFrontLine();
+                GL.o1.setPolygonModeFrontAndBackLine();
             } else {
-                GL.o1.setPolygonModeFrontFill();
+                GL.o1.setPolygonModeFrontAndBackFill();
             }
         }
         if (Fw.input.isKeyDown(Keyboard.B) && !Fw.input.wasKeyDown(Keyboard.B)) {
