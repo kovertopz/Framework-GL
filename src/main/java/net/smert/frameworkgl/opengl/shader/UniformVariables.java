@@ -16,6 +16,7 @@ import java.util.List;
 import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GLLight;
 import net.smert.frameworkgl.opengl.MaterialLight;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
 
 /**
  *
@@ -26,7 +27,7 @@ public class UniformVariables {
     private AmbientLight ambientLight;
     private GLLight glLight;
     private List<GLLight> glLights;
-    private MaterialLight materialLight;
+    private MaterialLight defaultMaterialLight;
 
     public AmbientLight getAmbientLight() {
         return ambientLight;
@@ -52,12 +53,20 @@ public class UniformVariables {
         this.glLights = glLights;
     }
 
-    public MaterialLight getMaterialLight() {
-        return materialLight;
+    public MaterialLight getDefaultMaterialLight() {
+        return defaultMaterialLight;
     }
 
-    public void setMaterialLight(MaterialLight materialLight) {
-        this.materialLight = materialLight;
+    public void setDefaultMaterialLight(MaterialLight defaultMaterialLight) {
+        this.defaultMaterialLight = defaultMaterialLight;
+    }
+
+    public MaterialLight getMaterialLight(String materialLightName) {
+        int uniqueID = Renderable.materialLightPool.getUniqueID(materialLightName);
+        if (uniqueID == -1) {
+            return defaultMaterialLight;
+        }
+        return Renderable.materialLightPool.get(uniqueID);
     }
 
 }

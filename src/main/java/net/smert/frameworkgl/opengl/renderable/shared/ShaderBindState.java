@@ -13,14 +13,13 @@
 package net.smert.frameworkgl.opengl.renderable.shared;
 
 import java.nio.FloatBuffer;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.opengl.GL;
-import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.camera.Camera;
-import net.smert.frameworkgl.opengl.constants.TextureUnit;
 import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
-import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
+import net.smert.frameworkgl.opengl.shader.DefaultDoNothingShader;
 
 /**
  *
@@ -53,12 +52,16 @@ public class ShaderBindState {
         shader = defaultDoNothingShader;
     }
 
+    public void sendUniformMatrices() {
+        shader.sendUniformMatrices(matrixFloatBuffer);
+    }
+
     public void sendUniformsOncePerBind() {
         shader.sendUniformsOncePerBind(matrixFloatBuffer);
     }
 
-    public void sendUniformsOncePerRenderable() {
-        shader.sendUniformsOncePerRenderable(matrixFloatBuffer);
+    public void sendUniformsOncePerGameObject(GameObject gameObject) {
+        shader.sendUniformsOncePerGameObject(matrixFloatBuffer, gameObject);
     }
 
     public void sendUniformsOncePerRenderCall(Segment segment) {
@@ -103,61 +106,6 @@ public class ShaderBindState {
     public void unbindShader() {
         shader.unbind();
         shaderBinded = false;
-    }
-
-    private static class DefaultDoNothingShader extends AbstractShader {
-
-        public DefaultDoNothingShader() {
-            super(new DefaultShaderUniforms(0), new Shader());
-            setTextureUnit(TextureType.BUMP, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.DETAIL, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.DISPLACEMENT, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.ENVIRONMENT, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.GLOW, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.HEIGHT, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.NORMAL, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.PARALLAX, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.TRANSLUCENT, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.TRANSPARENCY, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.AMBIENT_OCCLUSION, TextureUnit.TEXTURE1);
-            setTextureUnit(TextureType.SPECULAR, TextureUnit.TEXTURE2);
-            setTextureUnit(TextureType.SPECULAR_EXPONENT, TextureUnit.TEXTURE3);
-
-            setTextureUnit(TextureType.TEXTURE0, TextureUnit.TEXTURE0);
-            setTextureUnit(TextureType.TEXTURE1, TextureUnit.TEXTURE1);
-            setTextureUnit(TextureType.TEXTURE2, TextureUnit.TEXTURE2);
-            setTextureUnit(TextureType.TEXTURE3, TextureUnit.TEXTURE3);
-            setTextureUnit(TextureType.TEXTURE4, TextureUnit.TEXTURE4);
-            setTextureUnit(TextureType.TEXTURE5, TextureUnit.TEXTURE5);
-            setTextureUnit(TextureType.TEXTURE6, TextureUnit.TEXTURE6);
-            setTextureUnit(TextureType.TEXTURE7, TextureUnit.TEXTURE7);
-        }
-
-        @Override
-        public void bind() {
-        }
-
-        @Override
-        public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
-        }
-
-        @Override
-        public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
-        }
-
-        @Override
-        public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
-        }
-
-        @Override
-        public void sendUniformTextureFlag(float flag) {
-        }
-
-        @Override
-        public void unbind() {
-        }
-
     }
 
 }

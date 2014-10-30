@@ -40,7 +40,7 @@ public class RendererGL2 extends AbstractRendererGL {
     }
 
     private void render(AbstractRenderable renderable) {
-        Renderable.shaderBindState.sendUniformsOncePerRenderable();
+        Renderable.shaderBindState.sendUniformMatrices();
         renderable.render();
     }
 
@@ -73,11 +73,9 @@ public class RendererGL2 extends AbstractRendererGL {
     }
 
     public void destroy() {
-        Renderable.bindState.reset();
     }
 
     public void init() {
-        Renderable.bindState.setAttribLocations(GL.defaultAttribLocations);
     }
 
     @Override
@@ -106,13 +104,14 @@ public class RendererGL2 extends AbstractRendererGL {
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();
         GL.matrixHelper.translate(position.getX(), position.getY(), position.getZ());
-        renderable.render();
+        render(renderable);
     }
 
     @Override
     public void render(GameObject gameObject) {
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.load(gameObject.getWorldTransform());
+        Renderable.shaderBindState.sendUniformsOncePerGameObject(gameObject);
         render(gameObject.getRenderable());
     }
 

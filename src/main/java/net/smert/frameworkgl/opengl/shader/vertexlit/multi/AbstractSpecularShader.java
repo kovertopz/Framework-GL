@@ -13,9 +13,13 @@
 package net.smert.frameworkgl.opengl.shader.vertexlit.multi;
 
 import java.nio.FloatBuffer;
+import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
+import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
@@ -37,8 +41,8 @@ public abstract class AbstractSpecularShader extends AbstractShader {
     }
 
     @Override
-    public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
-        super.sendUniformsOncePerRenderable(matrixFloatBuffer);
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformMatrices(matrixFloatBuffer);
         viewModelMatrix.toMatrix3f(normalMatrix);
         normalMatrix.toFloatBuffer(matrixFloatBuffer);
         matrixFloatBuffer.flip();
@@ -47,6 +51,18 @@ public abstract class AbstractSpecularShader extends AbstractShader {
         viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
         matrixFloatBuffer.flip();
         uniforms.setViewModelMatrix(false, matrixFloatBuffer);
+    }
+
+    @Override
+    public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
+        MaterialLight materialLight;
+        SegmentMaterial material = segment.getMaterial();
+        if (material == null) {
+            materialLight = GL.uniformVariables.getDefaultMaterialLight();
+        } else {
+            materialLight = GL.uniformVariables.getMaterialLight(material.getMaterialLightName());
+        }
+        uniforms.setMaterialLight(materialLight);
     }
 
 }

@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl.shader;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.opengl.GL;
@@ -74,15 +75,18 @@ public abstract class AbstractShader {
         unbind();
     }
 
-    public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
-    }
-
-    public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
+    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
         GL.matrixHelper.multiplyViewAndModelMatrix(viewModelMatrix);
         GL.matrixHelper.multiplyProjectionAndViewModelMatrix(viewModelMatrix, projectionViewModelMatrix);
         projectionViewModelMatrix.toFloatBuffer(matrixFloatBuffer);
         matrixFloatBuffer.flip();
         shaderUniforms.setProjectionViewModelMatrix(false, matrixFloatBuffer);
+    }
+
+    public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
+    }
+
+    public void sendUniformsOncePerGameObject(FloatBuffer matrixFloatBuffer, GameObject gameObject) {
     }
 
     public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {

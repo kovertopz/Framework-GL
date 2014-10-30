@@ -23,6 +23,7 @@ import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
@@ -148,11 +149,14 @@ public class Graphics implements Renderer, TextRenderer {
         GL.renderer1.destroy();
         GL.renderer2.destroy();
         GL.renderer3.destroy();
+        Renderable.bindState.reset();
         Renderable.shaderBindState.reset();
         Renderable.textureBindState.reset();
         GL.fboHelper.unbind();
         GL.textureHelper.unbind();
         GL.vboHelper.unbind();
+        Renderable.configPool.destroy();
+        Renderable.materialLightPool.destroy();
         Renderable.shaderPool.destroy();
         Renderable.texturePool.destroy();
     }
@@ -182,9 +186,13 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     public void init() {
+        MaterialLight materialLight = GL.glFactory.createMaterialLight();
         GL.renderer1.init();
         GL.renderer2.init();
         GL.renderer3.init();
+        GL.uniformVariables.setDefaultMaterialLight(materialLight);
+        Renderable.bindState.setAttribLocations(GL.defaultAttribLocations);
+        Renderable.materialLightPool.add("default", materialLight);
         Renderable.shaderBindState.init();
         defaultFont = GL.glFontBuilder.
                 addUsAsciiGlyphs().
@@ -206,17 +214,17 @@ public class Graphics implements Renderer, TextRenderer {
     public void loadCubeMapTexture(String folderName, String fileExtension) throws IOException {
         ImageReader imageReader = GL.textureReader.getImageReader("." + fileExtension);
         String filename;
-        filename = folderName + "/xpos.png";
+        filename = folderName + "/xpos." + fileExtension;
         BufferedImage xPosBufferedImage = imageReader.load(filename);
-        filename = folderName + "/xneg.png";
+        filename = folderName + "/xneg." + fileExtension;
         BufferedImage xNegBufferedImage = imageReader.load(filename);
-        filename = folderName + "/ypos.png";
+        filename = folderName + "/ypos." + fileExtension;
         BufferedImage yPosBufferedImage = imageReader.load(filename);
-        filename = folderName + "/yneg.png";
+        filename = folderName + "/yneg." + fileExtension;
         BufferedImage yNegBufferedImage = imageReader.load(filename);
-        filename = folderName + "/zpos.png";
+        filename = folderName + "/zpos." + fileExtension;
         BufferedImage zPosBufferedImage = imageReader.load(filename);
-        filename = folderName + "/zneg.png";
+        filename = folderName + "/zneg." + fileExtension;
         BufferedImage zNegBufferedImage = imageReader.load(filename);
         GL.textureBuilder.
                 setLoadFlipVertically(false)

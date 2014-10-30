@@ -82,7 +82,6 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     public void destroy() {
-        Renderable.bindState.reset();
     }
 
     public void init() {
