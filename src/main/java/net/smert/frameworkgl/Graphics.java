@@ -14,6 +14,7 @@ package net.smert.frameworkgl;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -190,7 +191,10 @@ public class Graphics implements Renderer, TextRenderer {
         GL.renderer1.init();
         GL.renderer2.init();
         GL.renderer3.init();
+        GL.uniformVariables.setAmbientLight(GL.glFactory.createAmbientLight());
         GL.uniformVariables.setDefaultMaterialLight(materialLight);
+        GL.uniformVariables.setGlLight(GL.glFactory.createGLLight());
+        GL.uniformVariables.setGlLights(new ArrayList<>());
         Renderable.bindState.setAttribLocations(GL.defaultAttribLocations);
         Renderable.materialLightPool.add("default", materialLight);
         Renderable.shaderBindState.init();
