@@ -18,6 +18,7 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.MultipleLightsOfTheSameType;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
@@ -85,10 +86,8 @@ public class SinglePassPixelLit extends Screen {
     private FpsTimer fpsTimer;
     private final List<GameObject> gameObjectsToRender;
     private List<GLLight> currentLights;
-    private final List<GLLight> directionalLights;
-    private final List<GLLight> pointLights;
-    private final List<GLLight> spotLights;
     private MemoryUsage memoryUsage;
+    private MultipleLightsOfTheSameType multipleLightsOfTheSameType;
     private PhongSpecularDirectionalShader pixelLitMultiPhongSpecularDirectionalShader;
     private PhongSpecularPointShader pixelLitMultiPhongSpecularPointShader;
     private PhongSpecularSpotShader pixelLitMultiPhongSpecularSpotShader;
@@ -104,215 +103,6 @@ public class SinglePassPixelLit extends Screen {
         renderSimpleOrientationAxis = false;
         wireframe = false;
         gameObjectsToRender = new ArrayList<>();
-        directionalLights = new ArrayList<>();
-        pointLights = new ArrayList<>();
-        spotLights = new ArrayList<>();
-    }
-
-    private void createDirectionalLights() {
-        GLLight directionalLight;
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(1f, 0f, 0f, 1f));
-        directionalLight.setSpecular(new Vector4f(1f, 0f, 0f, 1f));
-        directionalLight.setPosition(new Vector4f(0f, 15f, 15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(0f, 1f, 0f, 1f));
-        directionalLight.setSpecular(new Vector4f(0f, 1f, 0f, 1f));
-        directionalLight.setPosition(new Vector4f(-15f, 15f, 0f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(0f, 0f, 1f, 1f));
-        directionalLight.setSpecular(new Vector4f(0f, 0f, 1f, 1f));
-        directionalLight.setPosition(new Vector4f(0f, 15f, -15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(1f, 1f, 0f, 1f));
-        directionalLight.setSpecular(new Vector4f(1f, 1f, 0f, 1f));
-        directionalLight.setPosition(new Vector4f(15f, 15f, 0f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(0f, 1f, 1f, 1f));
-        directionalLight.setSpecular(new Vector4f(0f, 1f, 1f, 1f));
-        directionalLight.setPosition(new Vector4f(15f, 15f, 15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(1f, 0f, 1f, 1f));
-        directionalLight.setSpecular(new Vector4f(1f, 0f, 1f, 1f));
-        directionalLight.setPosition(new Vector4f(-15f, 15f, 15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(.5f, .5f, 0f, 1f));
-        directionalLight.setSpecular(new Vector4f(.5f, .5f, 0f, 1f));
-        directionalLight.setPosition(new Vector4f(-15f, 15f, -15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-
-        directionalLight = GL.glFactory.createGLLight();
-        directionalLight.setDiffuse(new Vector4f(0f, .5f, .5f, 1f));
-        directionalLight.setSpecular(new Vector4f(0f, .5f, .5f, 1f));
-        directionalLight.setPosition(new Vector4f(15f, 15f, -15f, 0f));
-        directionalLight.setRadius(32f);
-        directionalLights.add(directionalLight);
-    }
-
-    private void createPointLights() {
-        GLLight pointLight;
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(1f, 0f, 0f, 1f));
-        pointLight.setSpecular(new Vector4f(1f, 0f, 0f, 1f));
-        pointLight.setPosition(new Vector4f(0f, 15f, 15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(0f, 1f, 0f, 1f));
-        pointLight.setSpecular(new Vector4f(0f, 1f, 0f, 1f));
-        pointLight.setPosition(new Vector4f(-15f, 15f, 0f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(0f, 0f, 1f, 1f));
-        pointLight.setSpecular(new Vector4f(0f, 0f, 1f, 1f));
-        pointLight.setPosition(new Vector4f(0f, 15f, -15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(1f, 1f, 0f, 1f));
-        pointLight.setSpecular(new Vector4f(1f, 1f, 0f, 1f));
-        pointLight.setPosition(new Vector4f(15f, 15f, 0f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(0f, 1f, 1f, 1f));
-        pointLight.setSpecular(new Vector4f(0f, 1f, 1f, 1f));
-        pointLight.setPosition(new Vector4f(15f, 15f, 15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(1f, 0f, 1f, 1f));
-        pointLight.setSpecular(new Vector4f(1f, 0f, 1f, 1f));
-        pointLight.setPosition(new Vector4f(-15f, 15f, 15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(.5f, .5f, 0f, 1f));
-        pointLight.setSpecular(new Vector4f(.5f, .5f, 0f, 1f));
-        pointLight.setPosition(new Vector4f(-15f, 15f, -15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-
-        pointLight = GL.glFactory.createGLLight();
-        pointLight.setDiffuse(new Vector4f(0f, .5f, .5f, 1f));
-        pointLight.setSpecular(new Vector4f(0f, .5f, .5f, 1f));
-        pointLight.setPosition(new Vector4f(15f, 15f, -15f, 1f));
-        pointLight.setRadius(32f);
-        pointLights.add(pointLight);
-    }
-
-    private void createSpotLights() {
-        GLLight spotLight;
-        spotInnerCutoff = 180f;
-        spotOuterCutoff = 180f;
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(1f, 0f, 0f, 1f));
-        spotLight.setSpecular(new Vector4f(1f, 0f, 0f, 1f));
-        spotLight.setPosition(new Vector4f(0f, 15f, 15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(0f, -15f, -15f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(0f, 1f, 0f, 1f));
-        spotLight.setSpecular(new Vector4f(0f, 1f, 0f, 1f));
-        spotLight.setPosition(new Vector4f(-15f, 15f, 0f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(15f, -15f, 0f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(0f, 0f, 1f, 1f));
-        spotLight.setSpecular(new Vector4f(0f, 0f, 1f, 1f));
-        spotLight.setPosition(new Vector4f(0f, 15f, -15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(0f, -15f, 15f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(1f, 1f, 0f, 1f));
-        spotLight.setSpecular(new Vector4f(1f, 1f, 0f, 1f));
-        spotLight.setPosition(new Vector4f(15f, 15f, 0f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(-15f, -15f, 0f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(0f, 1f, 1f, 1f));
-        spotLight.setSpecular(new Vector4f(0f, 1f, 1f, 1f));
-        spotLight.setPosition(new Vector4f(15f, 15f, 15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(-15f, -15f, -15f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(1f, 0f, 1f, 1f));
-        spotLight.setSpecular(new Vector4f(1f, 0f, 1f, 1f));
-        spotLight.setPosition(new Vector4f(-15f, 15f, 15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(15f, -15f, -15f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(.5f, .5f, 0f, 1f));
-        spotLight.setSpecular(new Vector4f(.5f, .5f, 0f, 1f));
-        spotLight.setPosition(new Vector4f(-15f, 15f, -15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(15f, -15f, 15f, 1f));
-        spotLights.add(spotLight);
-
-        spotLight = GL.glFactory.createGLLight();
-        spotLight.setDiffuse(new Vector4f(0f, .5f, .5f, 1f));
-        spotLight.setSpecular(new Vector4f(0f, .5f, .5f, 1f));
-        spotLight.setPosition(new Vector4f(15f, 15f, -15f, 1f));
-        spotLight.setRadius(32f);
-        spotLight.setSpotInnerCutoff(spotInnerCutoff);
-        spotLight.setSpotOuterCutoff(spotOuterCutoff);
-        spotLight.setSpotDirection(new Vector4f(-15f, -15f, 15f, 1f));
-        spotLights.add(spotLight);
     }
 
     private void handleInput() {
@@ -358,7 +148,7 @@ public class SinglePassPixelLit extends Screen {
                     spotOuterCutoff = 90f;
                 }
             }
-            for (GLLight light : spotLights) {
+            for (GLLight light : multipleLightsOfTheSameType.getSpotLights()) {
                 light.setSpotOuterCutoff(spotOuterCutoff);
             }
         }
@@ -376,7 +166,7 @@ public class SinglePassPixelLit extends Screen {
                     spotInnerCutoff = 90f;
                 }
             }
-            for (GLLight light : spotLights) {
+            for (GLLight light : multipleLightsOfTheSameType.getSpotLights()) {
                 light.setSpotInnerCutoff(spotInnerCutoff);
             }
         }
@@ -457,12 +247,12 @@ public class SinglePassPixelLit extends Screen {
             case 0:
             case 4:
             case 8:
-                currentLights = directionalLights;
+                currentLights = multipleLightsOfTheSameType.getDirectionalLights();
                 break;
             case 1:
             case 5:
             case 9:
-                currentLights = pointLights;
+                currentLights = multipleLightsOfTheSameType.getPointLights();
                 break;
             case 2:
             case 3:
@@ -470,7 +260,7 @@ public class SinglePassPixelLit extends Screen {
             case 7:
             case 10:
             case 11:
-                currentLights = spotLights;
+                currentLights = multipleLightsOfTheSameType.getSpotLights();
                 break;
         }
     }
@@ -558,9 +348,10 @@ public class SinglePassPixelLit extends Screen {
         memoryUsage = new MemoryUsage();
 
         // Create glLights and material light
-        createDirectionalLights();
-        createPointLights();
-        createSpotLights();
+        multipleLightsOfTheSameType = new MultipleLightsOfTheSameType();
+        multipleLightsOfTheSameType.init();
+        spotInnerCutoff = 180f;
+        spotOuterCutoff = 180f;
         GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
         GL.uniformVariables.getDefaultMaterialLight().setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
