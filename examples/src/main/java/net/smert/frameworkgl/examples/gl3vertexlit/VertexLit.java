@@ -28,10 +28,8 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
@@ -68,7 +66,6 @@ public class VertexLit extends Screen {
     private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private BlinnPhongSpecularDirectionalShader vertexLitSingleBlinnPhongSpecularDirectionalShader;
     private BlinnPhongSpecularPointShader vertexLitSingleBlinnPhongSpecularPointShader;
     private BlinnPhongSpecularSpotShader vertexLitSingleBlinnPhongSpecularSpotShader;
@@ -80,11 +77,11 @@ public class VertexLit extends Screen {
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
+    private GLLight currentLight;
     private GLLight glLightDirectional;
     private GLLight glLightPoint;
     private GLLight glLightSpot;
     private final List<GameObject> gameObjectsToRender;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private PhongSpecularDirectionalShader vertexLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader vertexLitSinglePhongSpecularPointShader;
@@ -203,6 +200,26 @@ public class VertexLit extends Screen {
         }
     }
 
+    private void updateCurrentLight() {
+        switch (shaderIndex) {
+            case 0:
+            case 3:
+            case 6:
+                currentLight = glLightDirectional;
+                break;
+            case 1:
+            case 4:
+            case 7:
+                currentLight = glLightPoint;
+                break;
+            case 2:
+            case 5:
+            case 8:
+                currentLight = glLightSpot;
+                break;
+        }
+    }
+
     private void updateCurrentShader() {
         switch (shaderIndex) {
             case 0:
@@ -244,56 +261,6 @@ public class VertexLit extends Screen {
         }
     }
 
-    private void updateShaderUniforms() {
-        switch (shaderIndex) {
-            case 0:
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setLight(glLightDirectional);
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 1:
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setLight(glLightPoint);
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 2:
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setLight(glLightSpot);
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 3:
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setLight(glLightDirectional);
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 4:
-                vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffusePointShader.getUniforms().setLight(glLightPoint);
-                vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 5:
-                vertexLitSingleDiffuseSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffuseSpotShader.getUniforms().setLight(glLightSpot);
-                vertexLitSingleDiffuseSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 6:
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setLight(glLightDirectional);
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 7:
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setLight(glLightPoint);
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 8:
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setLight(glLightSpot);
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-        }
-    }
-
     @Override
     public void destroy() {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
@@ -326,8 +293,7 @@ public class VertexLit extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLights and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLights and material light
         glLightDirectional = GL.glFactory.createGLLight();
         glLightDirectional.setPosition(new Vector4f(0f, 15f, 10f, 0f));
         glLightDirectional.setRadius(256f); // Shader uses this value and OpenGL does not
@@ -340,9 +306,8 @@ public class VertexLit extends Screen {
         spotCutoff = 180f;
         glLightSpot.setSpotCutoff(spotCutoff);
         glLightSpot.setSpotDirection(new Vector4f(0f, -15f, -10f, 1f));
-        materialLight = GL.glFactory.createMaterialLight();
-        materialLight.setShininess(16);
-        materialLight.setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
+        GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
 
         // Load textures
         try {
@@ -470,6 +435,12 @@ public class VertexLit extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update current light
+            updateCurrentLight();
+
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(currentLight);
+
             // Bind shader
             Fw.graphics.switchShader(skyboxShader);
 
@@ -487,9 +458,6 @@ public class VertexLit extends Screen {
 
             // Bind shader
             Fw.graphics.switchShader(currentShader);
-
-            // Update uniforms
-            updateShaderUniforms();
 
             // Render directly
             Fw.graphics.render(gameObjectsToRender);

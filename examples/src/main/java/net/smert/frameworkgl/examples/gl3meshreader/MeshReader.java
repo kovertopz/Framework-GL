@@ -18,10 +18,8 @@ import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
@@ -48,13 +46,11 @@ public class MeshReader extends Screen {
     private AbstractRenderable renderableIcoSphere;
     private AbstractRenderable renderableTorus;
     private AbstractRenderable renderableUvSphere;
-    private AmbientLight ambientLight;
     private Camera camera;
     private CameraController cameraController;
     private DiffusePointShader vertexLitSingleDiffusePointShader;
     private FpsTimer fpsTimer;
     private GLLight glLight;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private Mesh meshCapsule;
     private Mesh meshCone;
@@ -109,12 +105,10 @@ public class MeshReader extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLight and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLight
         glLight = GL.glFactory.createGLLight();
         glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLight.setRadius(256f); // Shader uses this value and OpenGL does not
-        materialLight = GL.glFactory.createMaterialLight();
 
         // Create meshes
         meshCapsule = GL.meshFactory.createMesh();
@@ -214,13 +208,11 @@ public class MeshReader extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(glLight);
+
             // Bind shader
             Fw.graphics.switchShader(vertexLitSingleDiffusePointShader);
-
-            // Update uniforms
-            vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setLight(glLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             Fw.graphics.render(renderableCapsule, -3f, 0f, 3f);

@@ -26,10 +26,8 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
@@ -53,7 +51,6 @@ public class FrustumCulling extends Screen {
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private Camera camera;
     private CameraController cameraController;
     private ColorShader colorShader;
@@ -62,7 +59,6 @@ public class FrustumCulling extends Screen {
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private final List<GameObject> gameObjectsToRender;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private ViewFrustumGameObject viewFrustumGameObject;
@@ -147,12 +143,10 @@ public class FrustumCulling extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLight and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLight
         glLight = GL.glFactory.createGLLight();
         glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLight.setRadius(256f); // Shader uses this value and OpenGL does not
-        materialLight = GL.glFactory.createMaterialLight();
 
         // AABB game object
         aabbGameObject = new AABBGameObject();
@@ -238,13 +232,11 @@ public class FrustumCulling extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(glLight);
+
             // Bind shader
             Fw.graphics.switchShader(vertexLitSingleDiffusePointShader);
-
-            // Update uniforms
-            vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setLight(glLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             Fw.graphics.render(gameObjectsToRender);

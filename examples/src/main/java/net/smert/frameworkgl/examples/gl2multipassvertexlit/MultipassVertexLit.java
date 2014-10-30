@@ -28,17 +28,15 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.opengl.shader.basic.DiffuseTextureShader;
 import net.smert.frameworkgl.opengl.shader.basic.SkyboxShader;
+import net.smert.frameworkgl.opengl.shader.vertexlit.single.AbstractDiffuseShader;
 import net.smert.frameworkgl.opengl.shader.vertexlit.single.BlinnPhongSpecularDirectionalShader;
 import net.smert.frameworkgl.opengl.shader.vertexlit.single.BlinnPhongSpecularPointShader;
 import net.smert.frameworkgl.opengl.shader.vertexlit.single.BlinnPhongSpecularSpotShader;
@@ -66,9 +64,8 @@ public class MultipassVertexLit extends Screen {
     private boolean wireframe;
     private float spotCutoff;
     private int shaderIndex;
-    private AbstractShader currentShader;
+    private AbstractDiffuseShader currentShader;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private BlinnPhongSpecularDirectionalShader vertexLitSingleBlinnPhongSpecularDirectionalShader;
     private BlinnPhongSpecularPointShader vertexLitSingleBlinnPhongSpecularPointShader;
     private BlinnPhongSpecularSpotShader vertexLitSingleBlinnPhongSpecularSpotShader;
@@ -80,15 +77,11 @@ public class MultipassVertexLit extends Screen {
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
-    private GLLight currentDirectionalLight;
-    private GLLight currentPointLight;
-    private GLLight currentSpotLight;
     private final List<GameObject> gameObjectsToRender;
     private List<GLLight> currentLights;
     private final List<GLLight> directionalLights;
     private final List<GLLight> pointLights;
     private final List<GLLight> spotLights;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private PhongSpecularDirectionalShader vertexLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader vertexLitSinglePhongSpecularPointShader;
@@ -470,56 +463,6 @@ public class MultipassVertexLit extends Screen {
         }
     }
 
-    private void updateShaderUniforms() {
-        switch (shaderIndex) {
-            case 0:
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                vertexLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 1:
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setLight(currentPointLight);
-                vertexLitSingleBlinnPhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 2:
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setLight(currentSpotLight);
-                vertexLitSingleBlinnPhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 3:
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                vertexLitSingleDiffuseDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 4:
-                vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffusePointShader.getUniforms().setLight(currentPointLight);
-                vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 5:
-                vertexLitSingleDiffuseSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSingleDiffuseSpotShader.getUniforms().setLight(currentSpotLight);
-                vertexLitSingleDiffuseSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 6:
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                vertexLitSinglePhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 7:
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setLight(currentPointLight);
-                vertexLitSinglePhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 8:
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setLight(currentSpotLight);
-                vertexLitSinglePhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-        }
-    }
-
     @Override
     public void destroy() {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
@@ -552,14 +495,12 @@ public class MultipassVertexLit extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLights and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLights and material light
         createDirectionalLights();
         createPointLights();
         createSpotLights();
-        materialLight = GL.glFactory.createMaterialLight();
-        materialLight.setShininess(16);
-        materialLight.setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
+        GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
 
         // Load textures
         try {
@@ -688,6 +629,9 @@ public class MultipassVertexLit extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update current lights
+            updateCurrentLights();
+
             // Bind shader
             Fw.graphics.switchShader(skyboxShader);
 
@@ -705,9 +649,6 @@ public class MultipassVertexLit extends Screen {
             // Unbind shader
             Fw.graphics.unbindShader();
 
-            // Update current lights
-            updateCurrentLights();
-
             // Bind shader
             Fw.graphics.switchShader(currentShader);
 
@@ -719,27 +660,21 @@ public class MultipassVertexLit extends Screen {
             for (GLLight light : currentLights) {
 
                 if (firstPass) {
-                    ambientLight.reset();
+                    GL.uniformVariables.getAmbientLight().reset();
                     GL.o1.setBlendingFunctionOneAndZero();
                     GL.o1.setDepthFuncLess();
                     GL.o1.enableDepthMask();
                     firstPass = false;
                 } else {
                     // Ambient only enabled on the first pass
-                    ambientLight.setAmbient(new Vector4f());
+                    GL.uniformVariables.getAmbientLight().setAmbient(new Vector4f());
                     GL.o1.setBlendingFunctionOneAndOne();
                     GL.o1.setDepthFuncEqual();
                     GL.o1.disableDepthMask();
                 }
 
-                // I'm not using a switch statement and instead will set all lights
-                // since updateShaderUniforms() will do the right thing anyways.
-                currentDirectionalLight = light;
-                currentPointLight = light;
-                currentSpotLight = light;
-
-                // Update uniforms
-                updateShaderUniforms();
+                // Update shader uniforms
+                currentShader.getUniforms().setLight(light);
 
                 // Render directly
                 Fw.graphics.render(gameObjectsToRender);

@@ -28,10 +28,8 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
@@ -64,7 +62,6 @@ public class HybridPixelLit extends Screen {
     private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private BlinnPhongSpecularHybridShader pixelLitMultiBlinnPhongSpecularHybridShader;
     private Camera camera;
     private CameraController cameraController;
@@ -77,7 +74,6 @@ public class HybridPixelLit extends Screen {
     private final List<GLLight> directionalLights;
     private final List<GLLight> pointLights;
     private final List<GLLight> spotLights;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private PhongSpecularHybridShader pixelLitMultiPhongSpecularHybridShader;
     private RenderStatisticsGameObject renderStatisticsGameObject;
@@ -471,26 +467,6 @@ public class HybridPixelLit extends Screen {
         }
     }
 
-    private void updateShaderUniforms() {
-        switch (shaderIndex) {
-            case 0:
-                pixelLitMultiBlinnPhongSpecularHybridShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitMultiBlinnPhongSpecularHybridShader.getUniforms().setLights(currentLights);
-                pixelLitMultiBlinnPhongSpecularHybridShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 1:
-                pixelLitMultiDiffuseHybridShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitMultiDiffuseHybridShader.getUniforms().setLights(currentLights);
-                pixelLitMultiDiffuseHybridShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 2:
-                pixelLitMultiPhongSpecularHybridShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitMultiPhongSpecularHybridShader.getUniforms().setLights(currentLights);
-                pixelLitMultiPhongSpecularHybridShader.getUniforms().setMaterialLight(materialLight);
-                break;
-        }
-    }
-
     @Override
     public void destroy() {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
@@ -523,16 +499,14 @@ public class HybridPixelLit extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLights and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLights and material light
         createDirectionalLights();
         createPointLights();
         createSpotLights();
-        materialLight = GL.glFactory.createMaterialLight();
-        materialLight.setShininess(16);
+        GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
-        materialLight.setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
-        materialLight.setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
 
         // Load textures
         try {
@@ -649,6 +623,12 @@ public class HybridPixelLit extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update current lights
+            updateCurrentLights();
+
+            // Update global uniform variables
+            GL.uniformVariables.setGlLights(currentLights);
+
             // Bind shader
             Fw.graphics.switchShader(skyboxShader);
 
@@ -664,14 +644,8 @@ public class HybridPixelLit extends Screen {
             // Unbind shader
             Fw.graphics.unbindShader();
 
-            // Update current lights
-            updateCurrentLights();
-
             // Bind shader
             Fw.graphics.switchShader(currentShader);
-
-            // Update uniforms
-            updateShaderUniforms();
 
             // Render directly
             Fw.graphics.render(gameObjectsToRender);

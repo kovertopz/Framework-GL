@@ -28,10 +28,8 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
@@ -72,7 +70,6 @@ public class PixelLit extends Screen {
     private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private BlinnPhongSpecularDirectionalShader pixelLitSingleBlinnPhongSpecularDirectionalShader;
     private BlinnPhongSpecularPointShader pixelLitSingleBlinnPhongSpecularPointShader;
     private BlinnPhongSpecularSpotShader pixelLitSingleBlinnPhongSpecularSpotShader;
@@ -86,11 +83,11 @@ public class PixelLit extends Screen {
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
+    private GLLight currentLight;
     private GLLight glLightDirectional;
     private GLLight glLightPoint;
     private GLLight glLightSpot;
     private final List<GameObject> gameObjectsToRender;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private PhongSpecularDirectionalShader pixelLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader pixelLitSinglePhongSpecularPointShader;
@@ -242,6 +239,29 @@ public class PixelLit extends Screen {
         }
     }
 
+    private void updateCurrentLight() {
+        switch (shaderIndex) {
+            case 0:
+            case 4:
+            case 8:
+                currentLight = glLightDirectional;
+                break;
+            case 1:
+            case 5:
+            case 9:
+                currentLight = glLightPoint;
+                break;
+            case 2:
+            case 3:
+            case 6:
+            case 7:
+            case 10:
+            case 11:
+                currentLight = glLightSpot;
+                break;
+        }
+    }
+
     private void updateCurrentShader() {
         switch (shaderIndex) {
             case 0:
@@ -292,71 +312,6 @@ public class PixelLit extends Screen {
         }
     }
 
-    private void updateShaderUniforms() {
-        switch (shaderIndex) {
-            case 0:
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setLight(glLightDirectional);
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 1:
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setLight(glLightPoint);
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 2:
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setLight(glLightSpot);
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 3:
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setLight(glLightSpot);
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 4:
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setLight(glLightDirectional);
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 5:
-                pixelLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffusePointShader.getUniforms().setLight(glLightPoint);
-                pixelLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 6:
-                pixelLitSingleDiffuseSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseSpotShader.getUniforms().setLight(glLightSpot);
-                pixelLitSingleDiffuseSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 7:
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setLight(glLightSpot);
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 8:
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setLight(glLightDirectional);
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 9:
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setLight(glLightPoint);
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 10:
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setLight(glLightSpot);
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 11:
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setLight(glLightSpot);
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-        }
-    }
-
     @Override
     public void destroy() {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
@@ -389,8 +344,7 @@ public class PixelLit extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLights and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLights and material light
         glLightDirectional = GL.glFactory.createGLLight();
         glLightDirectional.setPosition(new Vector4f(0f, 15f, 10f, 0f));
         glLightDirectional.setRadius(256f); // Shader uses this value and OpenGL does not
@@ -405,11 +359,10 @@ public class PixelLit extends Screen {
         glLightSpot.setSpotInnerCutoff(spotInnerCutoff);
         glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
         glLightSpot.setSpotDirection(new Vector4f(0f, -15f, -10f, 1f));
-        materialLight = GL.glFactory.createMaterialLight();
-        materialLight.setShininess(16);
+        GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
-        materialLight.setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
-        materialLight.setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
 
         // Load textures
         try {
@@ -543,6 +496,12 @@ public class PixelLit extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update current light
+            updateCurrentLight();
+
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(currentLight);
+
             // Bind shader
             Fw.graphics.switchShader(skyboxShader);
 
@@ -560,9 +519,6 @@ public class PixelLit extends Screen {
 
             // Bind shader
             Fw.graphics.switchShader(currentShader);
-
-            // Update uniforms
-            updateShaderUniforms();
 
             // Render directly
             Fw.graphics.render(gameObjectsToRender);

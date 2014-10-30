@@ -18,10 +18,8 @@ import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
@@ -43,14 +41,12 @@ public class MeshReaderTextured extends Screen {
     private final static Logger log = LoggerFactory.getLogger(MeshReaderTextured.class);
 
     private AbstractRenderable renderableCrateAndBarrel;
-    private AmbientLight ambientLight;
     private Camera camera;
     private CameraController cameraController;
     private DiffusePointShader vertexLitSingleDiffusePointShader;
     private DiffuseTextureShader diffuseTextureShader;
     private FpsTimer fpsTimer;
     private GLLight glLight;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private Mesh meshCrateAndBarrel;
 
@@ -93,12 +89,10 @@ public class MeshReaderTextured extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLight and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLight
         glLight = GL.glFactory.createGLLight();
         glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLight.setRadius(256f); // Shader uses this value and OpenGL does not
-        materialLight = GL.glFactory.createMaterialLight();
 
         // Create meshes
         meshCrateAndBarrel = GL.meshFactory.createMesh();
@@ -127,6 +121,12 @@ public class MeshReaderTextured extends Screen {
             diffuseTextureShader.init();
             vertexLitSingleDiffusePointShader = DiffusePointShader.Factory.Create();
             vertexLitSingleDiffusePointShader.init();
+
+            // Disable glEnable(GL_COLOR_MATERIAL) on shader (enabled by default)
+            vertexLitSingleDiffusePointShader.bind();
+            vertexLitSingleDiffusePointShader.getUniforms().setColorMaterialAmbient(0f);
+            vertexLitSingleDiffusePointShader.getUniforms().setColorMaterialDiffuse(0f);
+            vertexLitSingleDiffusePointShader.unbind();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -170,16 +170,11 @@ public class MeshReaderTextured extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(glLight);
+
             // Bind shader
             Fw.graphics.switchShader(vertexLitSingleDiffusePointShader);
-
-            // Update uniforms
-            vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-            // Disable glEnable(GL_COLOR_MATERIAL) on shader (enabled by default)
-            vertexLitSingleDiffusePointShader.getUniforms().setColorMaterialAmbient(0f);
-            vertexLitSingleDiffusePointShader.getUniforms().setColorMaterialDiffuse(0f);
-            vertexLitSingleDiffusePointShader.getUniforms().setLight(glLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);

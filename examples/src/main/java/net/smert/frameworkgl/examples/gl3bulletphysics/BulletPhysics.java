@@ -31,10 +31,8 @@ import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.constants.GetString;
@@ -54,7 +52,6 @@ public class BulletPhysics extends Screen {
     private final static Logger log = LoggerFactory.getLogger(BulletPhysics.class);
 
     private float spawnTimer;
-    private AmbientLight ambientLight;
     private BulletWrapper bulletWrapper;
     private Camera camera;
     private CameraController cameraController;
@@ -63,7 +60,6 @@ public class BulletPhysics extends Screen {
     private GLLight glLight;
     private final List<GameObject> gameObjects;
     private final Map<Integer, String> randomObjects;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
 
     public BulletPhysics(String[] args) {
@@ -111,12 +107,10 @@ public class BulletPhysics extends Screen {
         bulletWrapper = new BulletWrapper();
         bulletWrapper.init();
 
-        // Create ambient light, glLight and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLight
         glLight = GL.glFactory.createGLLight();
         glLight.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLight.setRadius(256f); // Shader uses this value and OpenGL does not
-        materialLight = GL.glFactory.createMaterialLight();
 
         // Create ground
         BulletGameObject groundGameObject
@@ -199,13 +193,11 @@ public class BulletPhysics extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update global uniform variables
+            GL.uniformVariables.setGlLight(glLight);
+
             // Bind shader
             Fw.graphics.switchShader(vertexLitSingleDiffusePointShader);
-
-            // Update uniforms
-            vertexLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setLight(glLight);
-            vertexLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
 
             // Render directly
             Fw.graphics.render(gameObjects);

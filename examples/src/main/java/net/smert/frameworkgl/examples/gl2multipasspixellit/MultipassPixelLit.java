@@ -28,17 +28,15 @@ import net.smert.frameworkgl.helpers.Keyboard;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.math.Vector4f;
-import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.GLLight;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.opengl.shader.basic.DiffuseTextureShader;
 import net.smert.frameworkgl.opengl.shader.basic.SkyboxShader;
+import net.smert.frameworkgl.opengl.shader.pixellit.single.AbstractDiffuseShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularDirectionalShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularPointShader;
 import net.smert.frameworkgl.opengl.shader.pixellit.single.BlinnPhongSpecularSpotShader;
@@ -70,9 +68,8 @@ public class MultipassPixelLit extends Screen {
     private float spotInnerCutoff;
     private float spotOuterCutoff;
     private int shaderIndex;
-    private AbstractShader currentShader;
+    private AbstractDiffuseShader currentShader;
     private AABBGameObject aabbGameObject;
-    private AmbientLight ambientLight;
     private BlinnPhongSpecularDirectionalShader pixelLitSingleBlinnPhongSpecularDirectionalShader;
     private BlinnPhongSpecularPointShader pixelLitSingleBlinnPhongSpecularPointShader;
     private BlinnPhongSpecularSpotShader pixelLitSingleBlinnPhongSpecularSpotShader;
@@ -86,15 +83,11 @@ public class MultipassPixelLit extends Screen {
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
-    private GLLight currentDirectionalLight;
-    private GLLight currentPointLight;
-    private GLLight currentSpotLight;
     private final List<GameObject> gameObjectsToRender;
     private List<GLLight> currentLights;
     private final List<GLLight> directionalLights;
     private final List<GLLight> pointLights;
     private final List<GLLight> spotLights;
-    private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private PhongSpecularDirectionalShader pixelLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader pixelLitSinglePhongSpecularPointShader;
@@ -532,71 +525,6 @@ public class MultipassPixelLit extends Screen {
         }
     }
 
-    private void updateShaderUniforms() {
-        switch (shaderIndex) {
-            case 0:
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                pixelLitSingleBlinnPhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 1:
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setLight(currentPointLight);
-                pixelLitSingleBlinnPhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 2:
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSingleBlinnPhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 3:
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSingleBlinnPhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 4:
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                pixelLitSingleDiffuseDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 5:
-                pixelLitSingleDiffusePointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffusePointShader.getUniforms().setLight(currentPointLight);
-                pixelLitSingleDiffusePointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 6:
-                pixelLitSingleDiffuseSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseSpotShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSingleDiffuseSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 7:
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSingleDiffuseSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 8:
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setLight(currentDirectionalLight);
-                pixelLitSinglePhongSpecularDirectionalShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 9:
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setLight(currentPointLight);
-                pixelLitSinglePhongSpecularPointShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 10:
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSinglePhongSpecularSpotShader.getUniforms().setMaterialLight(materialLight);
-                break;
-            case 11:
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setAmbientLight(ambientLight);
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setLight(currentSpotLight);
-                pixelLitSinglePhongSpecularSpotTwoConeShader.getUniforms().setMaterialLight(materialLight);
-                break;
-        }
-    }
-
     @Override
     public void destroy() {
         for (GameObject gameObject : dynamicMeshesWorld.getGameObjects()) {
@@ -629,16 +557,14 @@ public class MultipassPixelLit extends Screen {
         // Memory usage
         memoryUsage = new MemoryUsage();
 
-        // Create ambient light, glLights and material light
-        ambientLight = GL.glFactory.createAmbientLight();
+        // Create glLights and material light
         createDirectionalLights();
         createPointLights();
         createSpotLights();
-        materialLight = GL.glFactory.createMaterialLight();
-        materialLight.setShininess(16);
+        GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
-        materialLight.setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
-        materialLight.setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
+        GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
 
         // Load textures
         try {
@@ -773,6 +699,9 @@ public class MultipassPixelLit extends Screen {
             // Update camera
             Fw.graphics.setCamera(camera);
 
+            // Update current lights
+            updateCurrentLights();
+
             // Bind shader
             Fw.graphics.switchShader(skyboxShader);
 
@@ -790,9 +719,6 @@ public class MultipassPixelLit extends Screen {
             // Unbind shader
             Fw.graphics.unbindShader();
 
-            // Update current lights
-            updateCurrentLights();
-
             // Bind shader
             Fw.graphics.switchShader(currentShader);
 
@@ -804,27 +730,21 @@ public class MultipassPixelLit extends Screen {
             for (GLLight light : currentLights) {
 
                 if (firstPass) {
-                    ambientLight.reset();
+                    GL.uniformVariables.getAmbientLight().reset();
                     GL.o1.setBlendingFunctionOneAndZero();
                     GL.o1.setDepthFuncLess();
                     GL.o1.enableDepthMask();
                     firstPass = false;
                 } else {
                     // Ambient only enabled on the first pass
-                    ambientLight.setAmbient(new Vector4f());
+                    GL.uniformVariables.getAmbientLight().setAmbient(new Vector4f());
                     GL.o1.setBlendingFunctionOneAndOne();
                     GL.o1.setDepthFuncEqual();
                     GL.o1.disableDepthMask();
                 }
 
-                // I'm not using a switch statement and instead will set all lights
-                // since updateShaderUniforms() will do the right thing anyways.
-                currentDirectionalLight = light;
-                currentPointLight = light;
-                currentSpotLight = light;
-
-                // Update uniforms
-                updateShaderUniforms();
+                // Update shader uniforms
+                currentShader.getUniforms().setLight(light);
 
                 // Render directly
                 Fw.graphics.render(gameObjectsToRender);
