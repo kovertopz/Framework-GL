@@ -138,7 +138,7 @@ void main(void)
         if ( NdotL > 0.000001 )
         {
             vec3 eyeReflectLightDir = reflect(-eyeLightDir, pass_Normal);
-            float RdotE = max(dot(eyeReflectLightDir, eyeVertexViewDir), 0.0);
+            float RdotE = max(dot(eyeReflectLightDir, eyeVertexViewDir), 0.000001);
             lightSpecular += pow(RdotE, uMaterialLight.shininess) * (uLights[i].specular * uMaterialLight.specular)
                              * attenuationFactor;
         }

@@ -105,7 +105,7 @@ void main(void)
         // are very misleading to me since the camera eye direction comes to mind first.
         vec3 eyeReflectLightDir = reflect(-eyeLightDir, eyeNormal);
         vec3 eyeVertexViewDir = normalize(-eyeVertex.xyz);
-        float RdotE = max(dot(eyeReflectLightDir, eyeVertexViewDir), 0.0);
+        float RdotE = max(dot(eyeReflectLightDir, eyeVertexViewDir), 0.000001);
         lightSpecular = pow(RdotE, uMaterialLight.shininess) * (uLight.specular * matSpecular);
     }
 
