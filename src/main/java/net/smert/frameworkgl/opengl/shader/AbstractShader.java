@@ -20,6 +20,7 @@ import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 
 /**
  *
@@ -73,12 +74,18 @@ public abstract class AbstractShader {
         unbind();
     }
 
-    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+    public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
+    }
+
+    public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
         GL.matrixHelper.multiplyViewAndModelMatrix(viewModelMatrix);
         GL.matrixHelper.multiplyProjectionAndViewModelMatrix(viewModelMatrix, projectionViewModelMatrix);
         projectionViewModelMatrix.toFloatBuffer(matrixFloatBuffer);
         matrixFloatBuffer.flip();
         shaderUniforms.setProjectionViewModelMatrix(false, matrixFloatBuffer);
+    }
+
+    public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
     }
 
     public void sendUniformTextureFlag(float flag) {

@@ -15,15 +15,15 @@ package net.smert.frameworkgl.opengl.renderable.va;
 import java.nio.ByteBuffer;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCallBuilder;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.va.factory.VADrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VADrawCallBuilder extends AbstractDrawCallBuilder {
+public class VADrawCallBuilder extends AbstractRenderCallBuilder {
 
     private final VADrawCallFactory vaDrawCallFactory;
 
@@ -31,10 +31,8 @@ public class VADrawCallBuilder extends AbstractDrawCallBuilder {
         this.vaDrawCallFactory = vaDrawCallFactory;
     }
 
-    public AbstractDrawCall createDrawCall(Mesh mesh, RenderableConfiguration config, ByteBuffer vertexIndexBuffer) {
-        AbstractDrawCall drawCall;
-
-        int totalSegments = mesh.getTotalSegments();
+    public AbstractRenderCall createRenderCall(Mesh mesh, RenderableConfiguration config, ByteBuffer vertexIndexBuffer) {
+        AbstractRenderCall renderCall;
 
         if (mesh.hasIndexes()) {
 
@@ -46,27 +44,20 @@ public class VADrawCallBuilder extends AbstractDrawCallBuilder {
             drawElements.setVertexIndexBuffer(vertexIndexBuffer);
 
             // Make sure we set the abstract class
-            drawCall = drawElements;
+            renderCall = drawElements;
         } else {
 
-            // Convert first indexes
-            int[] firstElements = new int[totalSegments];
-            for (int i = 0; i < firstElements.length; i++) {
-                firstElements[i] = mesh.getSegment(i).getMinIndex();
-            }
-
-            // Create concrete class and set specific data
+            // Create concrete class
             VADrawArrays drawArrays = vaDrawCallFactory.createDrawArrays();
-            drawArrays.setFirstElements(firstElements);
 
             // Make sure we set the abstract class
-            drawCall = drawArrays;
+            renderCall = drawArrays;
         }
 
-        // Do common things
-        super.createDrawCall(mesh, drawCall);
+        // Attach segments to the render call
+        super.createRenderCall(mesh, renderCall);
 
-        return drawCall;
+        return renderCall;
     }
 
 }

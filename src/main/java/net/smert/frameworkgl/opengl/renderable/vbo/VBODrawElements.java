@@ -13,14 +13,15 @@
 package net.smert.frameworkgl.opengl.renderable.vbo;
 
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBODrawElements extends AbstractDrawCall {
+public class VBODrawElements extends AbstractRenderCall {
 
     private int indexType;
 
@@ -34,9 +35,13 @@ public class VBODrawElements extends AbstractDrawCall {
 
     @Override
     public void render() {
-        for (int i = 0; i < primitiveModes.length; i++) {
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
-            GL.vboHelper.drawElements(primitiveModes[i], elementCounts[i], indexType);
+        for (int i = 0; i < segments.length; i++) {
+            Segment segment = segments[i];
+            int elementCount = segment.getElementCount();
+            int primitiveMode = segment.getPrimitiveMode();
+            Renderable.textureBindState.bindTextures(segment);
+            Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
+            GL.vboHelper.drawElements(primitiveMode, elementCount, indexType);
         }
     }
 

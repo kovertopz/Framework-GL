@@ -39,7 +39,7 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     private void render(AbstractRenderable renderable) {
-        Renderable.shaderBindState.sendUniformMatrices();
+        Renderable.shaderBindState.sendUniformsOncePerRenderable();
         renderable.render();
     }
 

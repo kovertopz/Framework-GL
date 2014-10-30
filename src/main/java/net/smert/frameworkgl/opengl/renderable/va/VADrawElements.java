@@ -14,14 +14,15 @@ package net.smert.frameworkgl.opengl.renderable.va;
 
 import java.nio.ByteBuffer;
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VADrawElements extends AbstractDrawCall {
+public class VADrawElements extends AbstractRenderCall {
 
     private int indexType;
     private ByteBuffer vertexIndexBuffer;
@@ -44,9 +45,13 @@ public class VADrawElements extends AbstractDrawCall {
 
     @Override
     public void render() {
-        for (int i = 0; i < primitiveModes.length; i++) {
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
-            GL.vaHelper.drawElements(primitiveModes[i], elementCounts[i], indexType, vertexIndexBuffer);
+        for (int i = 0; i < segments.length; i++) {
+            Segment segment = segments[i];
+            int elementCount = segment.getElementCount();
+            int primitiveMode = segment.getPrimitiveMode();
+            Renderable.textureBindState.bindTextures(segment);
+            Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
+            GL.vaHelper.drawElements(primitiveMode, elementCount, indexType, vertexIndexBuffer);
         }
     }
 

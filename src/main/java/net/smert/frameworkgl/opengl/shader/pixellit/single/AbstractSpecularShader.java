@@ -37,8 +37,8 @@ public abstract class AbstractSpecularShader extends AbstractShader {
     }
 
     @Override
-    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
-        super.sendUniformMatrices(matrixFloatBuffer);
+    public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
+        super.sendUniformsOncePerRenderable(matrixFloatBuffer);
         viewModelMatrix.toMatrix3f(normalMatrix);
         normalMatrix.toFloatBuffer(matrixFloatBuffer);
         matrixFloatBuffer.flip();

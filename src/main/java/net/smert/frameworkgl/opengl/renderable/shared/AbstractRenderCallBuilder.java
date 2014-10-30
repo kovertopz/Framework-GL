@@ -12,13 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
-import java.util.Iterator;
-import java.util.Map;
-import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
-import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall.TextureTypeMapping;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 
 /**
  *
@@ -30,30 +25,13 @@ public abstract class AbstractRenderCallBuilder {
 
         int totalSegments = mesh.getTotalSegments();
 
-        // Convert textures for each segment
-        TextureTypeMapping[][] textureTypeMappings = new TextureTypeMapping[totalSegments][];
-        for (int i = 0; i < textureTypeMappings.length; i++) {
-
-            SegmentMaterial segmentMaterial = mesh.getSegment(i).getMaterial();
-            if (segmentMaterial == null) {
-                continue;
-            }
-
-            int j = 0;
-            Map<TextureType, String> textureTypeToFilename = segmentMaterial.getTextures();
-            textureTypeMappings[i] = new TextureTypeMapping[textureTypeToFilename.size()];
-
-            Iterator<Map.Entry<TextureType, String>> entries = textureTypeToFilename.entrySet().iterator();
-            while (entries.hasNext()) {
-                Map.Entry<TextureType, String> entry = entries.next();
-                TextureType textureType = entry.getKey();
-                String filename = entry.getValue();
-                int uniqueTextureID = Renderable.texturePool.getUniqueID(filename);
-                textureTypeMappings[i][j++] = new TextureTypeMapping(uniqueTextureID, textureType);
-            }
+        // Create segment array
+        Segment[] segments = new Segment[totalSegments];
+        for (int i = 0; i < segments.length; i++) {
+            segments[i] = mesh.getSegment(i);
         }
 
-        renderCall.setTextureTypeMappings(textureTypeMappings);
+        renderCall.setSegments(segments);
     }
 
 }

@@ -16,6 +16,7 @@ import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCall
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.BindState;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
+import net.smert.frameworkgl.opengl.renderable.shared.MaterialLightPool;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
@@ -38,6 +39,7 @@ public class Renderable {
     public static DisplayListRenderCallBuilder displayListRenderCallBuilder;
     public static DrawCommands drawCommandsConversion;
     public static ImmediateModeRenderCallBuilder immediateModeRenderCallBuilder;
+    public static MaterialLightPool materialLightPool;
     public static RenderableBuilder renderableBuilder;
     public static RenderableConfigurationPool configPool;
     public static ShaderBindState shaderBindState;

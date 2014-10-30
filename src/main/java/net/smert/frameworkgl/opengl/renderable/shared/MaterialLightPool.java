@@ -12,29 +12,26 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import net.smert.frameworkgl.opengl.MaterialLight;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractDrawCall extends AbstractRenderCall {
+public class MaterialLightPool extends ObjectPool<MaterialLight> {
 
-    protected int[] elementCounts;
-    protected int[] primitiveModes;
-
-    public int[] getElementCounts() {
-        return elementCounts;
+    @Override
+    protected ObjectDestroyer<MaterialLight> createObjectDestroyer() {
+        return new ShaderDestroyer();
     }
 
-    public void setElementCounts(int[] elementCounts) {
-        this.elementCounts = elementCounts;
-    }
+    private static class ShaderDestroyer extends ObjectDestroyer<MaterialLight> {
 
-    public int[] getPrimitiveModes() {
-        return primitiveModes;
-    }
+        @Override
+        public void destroy(MaterialLight materialLight) {
+            // Data object contains to resources to destroy
+        }
 
-    public void setPrimitiveModes(int[] primitiveModes) {
-        this.primitiveModes = primitiveModes;
     }
 
 }

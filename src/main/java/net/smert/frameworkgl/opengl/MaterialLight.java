@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl;
 
 import java.nio.FloatBuffer;
+import java.util.Objects;
 import net.smert.frameworkgl.math.Vector4f;
 import net.smert.frameworkgl.opengl.constants.Face;
 import net.smert.frameworkgl.opengl.constants.Material;
@@ -109,6 +110,45 @@ public class MaterialLight {
         specular.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
         GL.o1.material(face, Material.SPECULAR, lightFloatBuffer);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.face;
+        hash = 67 * hash + this.shininess;
+        hash = 67 * hash + Objects.hashCode(this.ambient);
+        hash = 67 * hash + Objects.hashCode(this.diffuse);
+        hash = 67 * hash + Objects.hashCode(this.emission);
+        hash = 67 * hash + Objects.hashCode(this.specular);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MaterialLight other = (MaterialLight) obj;
+        if (this.face != other.face) {
+            return false;
+        }
+        if (this.shininess != other.shininess) {
+            return false;
+        }
+        if (!Objects.equals(this.ambient, other.ambient)) {
+            return false;
+        }
+        if (!Objects.equals(this.diffuse, other.diffuse)) {
+            return false;
+        }
+        if (!Objects.equals(this.emission, other.emission)) {
+            return false;
+        }
+        return Objects.equals(this.specular, other.specular);
     }
 
 }

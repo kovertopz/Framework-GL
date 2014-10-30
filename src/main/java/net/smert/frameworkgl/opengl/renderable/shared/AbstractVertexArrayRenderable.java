@@ -27,7 +27,7 @@ import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 public abstract class AbstractVertexArrayRenderable extends AbstractRenderable {
 
     protected int renderableConfigID;
-    protected AbstractDrawCall drawCall;
+    protected RenderCall renderCall;
     protected VertexArray vaColor;
     protected VertexArray vaNormal;
     protected VertexArray vaTexCoord;
@@ -36,7 +36,7 @@ public abstract class AbstractVertexArrayRenderable extends AbstractRenderable {
 
     public AbstractVertexArrayRenderable() {
         renderableConfigID = -1;
-        drawCall = null;
+        renderCall = null;
         vaColor = null;
         vaNormal = null;
         vaTexCoord = null;
@@ -155,18 +155,18 @@ public abstract class AbstractVertexArrayRenderable extends AbstractRenderable {
             vertexIndexBuffer = vaVertexIndex.getByteBuffer();
         }
 
-        // Create draw call
-        drawCall = Renderable.vaDrawCallBuilder.createDrawCall(mesh, config, vertexIndexBuffer);
+        // Create render call
+        renderCall = Renderable.vaDrawCallBuilder.createRenderCall(mesh, config, vertexIndexBuffer);
     }
 
     protected void renderGL1() {
         bindGL1();
-        drawCall.render();
+        renderCall.render();
     }
 
     protected void renderGL2() {
         bindGL2();
-        drawCall.render();
+        renderCall.render();
     }
 
     protected void updateGL1AndGL2(Mesh mesh) {

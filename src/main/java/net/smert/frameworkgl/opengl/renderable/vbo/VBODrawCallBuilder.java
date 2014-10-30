@@ -14,15 +14,15 @@ package net.smert.frameworkgl.opengl.renderable.vbo;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCallBuilder;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VBODrawCallBuilder extends AbstractDrawCallBuilder {
+public class VBODrawCallBuilder extends AbstractRenderCallBuilder {
 
     private boolean canRenderRanged;
     private final VBODrawCallFactory vboDrawCallFactory;
@@ -32,59 +32,40 @@ public class VBODrawCallBuilder extends AbstractDrawCallBuilder {
         this.vboDrawCallFactory = vboDrawCallFactory;
     }
 
-    public AbstractDrawCall createDrawCall(Mesh mesh, RenderableConfiguration config) {
-        AbstractDrawCall drawCall;
-
-        int totalSegments = mesh.getTotalSegments();
+    public AbstractRenderCall createRenderCall(Mesh mesh, RenderableConfiguration config) {
+        AbstractRenderCall renderCall;
 
         if (mesh.hasIndexes()) {
             if (canRenderRanged) {
 
-                // Convert max indexes from each segment
-                int[] maxIndexes = new int[totalSegments];
-                for (int i = 0; i < maxIndexes.length; i++) {
-                    maxIndexes[i] = mesh.getSegment(i).getMaxIndex();
-                }
-
-                // Convert min indexes from each segment
-                int[] minIndexes = new int[totalSegments];
-                for (int i = 0; i < minIndexes.length; i++) {
-                    minIndexes[i] = mesh.getSegment(i).getMinIndex();
-                }
-
                 // Create concrete class and set specific data
                 VBODrawRangeElements drawRangedElements = vboDrawCallFactory.createDrawRangeElements();
                 drawRangedElements.setIndexType(config.getIndexType());
-                drawRangedElements.setMaxIndexes(maxIndexes);
-                drawRangedElements.setMinIndexes(minIndexes);
 
                 // Make sure we set the abstract class
-                drawCall = drawRangedElements;
+                renderCall = drawRangedElements;
             } else {
+
+                // Create concrete class and set specific data
                 VBODrawElements drawElements = vboDrawCallFactory.createDrawElements();
                 drawElements.setIndexType(config.getIndexType());
-                drawCall = drawElements;
+
+                // Make sure we set the abstract class
+                renderCall = drawElements;
             }
         } else {
 
-            // Convert first indexes
-            int[] firstElements = new int[totalSegments];
-            for (int i = 0; i < firstElements.length; i++) {
-                firstElements[i] = mesh.getSegment(i).getMinIndex();
-            }
-
-            // Create concrete class and set specific data
+            // Create concrete class
             VBODrawArrays drawArrays = vboDrawCallFactory.createDrawArrays();
-            drawArrays.setFirstElements(firstElements);
 
             // Make sure we set the abstract class
-            drawCall = drawArrays;
+            renderCall = drawArrays;
         }
 
-        // Do common things
-        super.createDrawCall(mesh, drawCall);
+        // Attach segments to the render call
+        super.createRenderCall(mesh, renderCall);
 
-        return drawCall;
+        return renderCall;
     }
 
     public boolean isCanRenderRanged() {

@@ -157,7 +157,7 @@ public class ObjReader implements ModelReader {
         Color specular = material.getSpecular();
 
         SegmentMaterial segmentMaterial = GL.meshFactory.createSegmentMaterial();
-        MaterialLight materialLight = segmentMaterial.getMaterialLight();
+        MaterialLight materialLight = GL.glFactory.createMaterialLight();
 
         // Lighting
         if (ambient.hasBeenSet()) {
@@ -170,6 +170,13 @@ public class ObjReader implements ModelReader {
             materialLight.setSpecular(new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1f));
         }
         materialLight.setShininess(specularExponent);
+
+        // Save the material name and add the material to the pool
+        String materialLightName = "materialLight_" + materialLight.hashCode();
+        segmentMaterial.setMaterialLightName(materialLightName);
+        if (Renderable.materialLightPool.getUniqueID(materialLightName) == -1) {
+            Renderable.materialLightPool.add(materialLightName, materialLight);
+        }
 
         // Textures
         String filename;

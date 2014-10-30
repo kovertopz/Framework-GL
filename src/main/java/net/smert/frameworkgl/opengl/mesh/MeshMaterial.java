@@ -18,14 +18,14 @@ package net.smert.frameworkgl.opengl.mesh;
  */
 public class MeshMaterial {
 
-    private String shader;
+    private String shaderName;
 
-    public String getShader() {
-        return shader;
+    public String getShaderName() {
+        return shaderName;
     }
 
-    public void setShader(String shader) {
-        this.shader = shader;
+    public void setShaderName(String shaderName) {
+        this.shaderName = shaderName;
     }
 
 }

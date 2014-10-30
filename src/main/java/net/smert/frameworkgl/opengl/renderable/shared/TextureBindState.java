@@ -12,12 +12,16 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
+import java.util.Iterator;
+import java.util.Map;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
+import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
+import net.smert.frameworkgl.opengl.mesh.Segment;
+import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall.TextureTypeMapping;
 import net.smert.frameworkgl.utils.HashMapIntInt;
 
 /**
@@ -163,14 +167,18 @@ public class TextureBindState {
         bindTexture(TextureUnit.TEXTURE15, texture);
     }
 
-    public void bindTextures(TextureTypeMapping[] textures) {
-        if (textures == null) {
+    public void bindTextures(Segment segment) {
+        SegmentMaterial material = segment.getMaterial();
+        if ((material == null) || (material.getTextures().isEmpty())) {
             unbindModel();
             return;
         }
-        for (TextureTypeMapping mapping : textures) {
-            int textureUnit = Renderable.shaderBindState.getTextureUnit(mapping.getTextureType());
-            Texture texture = Renderable.texturePool.get(mapping.getUniqueTextureID());
+        Iterator<Map.Entry<TextureType, String>> iterator = material.getTextures().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<TextureType, String> entry = iterator.next();
+            int textureUnit = Renderable.shaderBindState.getTextureUnit(entry.getKey());
+            int uniqueTextureID = Renderable.texturePool.getUniqueID(entry.getValue());
+            Texture texture = Renderable.texturePool.get(uniqueTextureID);
             bindTexture(textureUnit, texture);
         }
     }

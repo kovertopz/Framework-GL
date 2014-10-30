@@ -16,7 +16,6 @@ import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCallBuilder;
-import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 
 /**
  *
@@ -32,18 +31,9 @@ public class ImmediateModeRenderCallBuilder extends AbstractRenderCallBuilder {
 
     public AbstractRenderCall createRenderCall(Mesh mesh) {
         ImmediateModeRenderCall immediateModeRenderCall = immediateModeRenderCallFactory.createImmediateMode();
-
-        // Convert draw commands
-        DrawCommands[] drawCommands = new DrawCommands[mesh.getTotalSegments()];
-        for (int i = 0; i < drawCommands.length; i++) {
-            DrawCommands drawCommand = mesh.getSegment(i).getDrawCommands();
-            drawCommands[i] = drawCommand;
-        }
-
-        immediateModeRenderCall.setDrawCommands(drawCommands);
         immediateModeRenderCall.setMesh(mesh);
 
-        // Attach shaders and textures to the render call
+        // Attach segments to the render call
         super.createRenderCall(mesh, immediateModeRenderCall);
 
         return immediateModeRenderCall;

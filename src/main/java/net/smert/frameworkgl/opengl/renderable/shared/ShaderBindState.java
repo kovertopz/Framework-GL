@@ -18,6 +18,7 @@ import net.smert.frameworkgl.opengl.Shader;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.constants.TextureUnit;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.opengl.shader.DefaultShaderUniforms;
 
@@ -52,8 +53,16 @@ public class ShaderBindState {
         shader = defaultDoNothingShader;
     }
 
-    public void sendUniformMatrices() {
-        shader.sendUniformMatrices(matrixFloatBuffer);
+    public void sendUniformsOncePerBind() {
+        shader.sendUniformsOncePerBind(matrixFloatBuffer);
+    }
+
+    public void sendUniformsOncePerRenderable() {
+        shader.sendUniformsOncePerRenderable(matrixFloatBuffer);
+    }
+
+    public void sendUniformsOncePerRenderCall(Segment segment) {
+        shader.sendUniformsOncePerRenderCall(matrixFloatBuffer, segment);
     }
 
     public void sendUniformTextureFlag(float flag) {
@@ -78,6 +87,7 @@ public class ShaderBindState {
         if (this.shader == shader) {
             if (!shaderBinded) {
                 shader.bind();
+                sendUniformsOncePerBind();
                 shaderBinded = true;
             }
             return;
@@ -86,6 +96,7 @@ public class ShaderBindState {
         shader.bind();
         shaderBinded = true;
         textureFlag = Float.MIN_VALUE; // Reset the flag
+        sendUniformsOncePerBind();
         sendUniformTextureFlag(0f); // Reset the uniform for the texture flag
     }
 
@@ -128,7 +139,15 @@ public class ShaderBindState {
         }
 
         @Override
-        public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
+        public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
+        }
+
+        @Override
+        public void sendUniformsOncePerRenderable(FloatBuffer matrixFloatBuffer) {
+        }
+
+        @Override
+        public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
         }
 
         @Override

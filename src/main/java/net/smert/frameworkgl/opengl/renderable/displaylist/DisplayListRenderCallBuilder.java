@@ -42,7 +42,7 @@ public class DisplayListRenderCallBuilder extends AbstractRenderCallBuilder {
 
         displayListRenderCall.setDisplayListIDs(displayListIDs);
 
-        // Attach shaders and textures to the render call
+        // Attach segments to the render call
         super.createRenderCall(mesh, displayListRenderCall);
 
         return displayListRenderCall;

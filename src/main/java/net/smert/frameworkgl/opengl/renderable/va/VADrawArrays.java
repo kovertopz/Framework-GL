@@ -13,30 +13,26 @@
 package net.smert.frameworkgl.opengl.renderable.va;
 
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
-import net.smert.frameworkgl.opengl.renderable.shared.AbstractDrawCall;
+import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class VADrawArrays extends AbstractDrawCall {
-
-    private int[] firstElements;
-
-    public int[] getFirstElements() {
-        return firstElements;
-    }
-
-    public void setFirstElements(int[] firstElements) {
-        this.firstElements = firstElements;
-    }
+public class VADrawArrays extends AbstractRenderCall {
 
     @Override
     public void render() {
-        for (int i = 0; i < primitiveModes.length; i++) {
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
-            GL.vaHelper.drawArrays(primitiveModes[i], firstElements[i], elementCounts[i]);
+        for (int i = 0; i < segments.length; i++) {
+            Segment segment = segments[i];
+            int elementCount = segment.getElementCount();
+            int firstElement = segment.getMinIndex();
+            int primitiveMode = segment.getPrimitiveMode();
+            Renderable.textureBindState.bindTextures(segment);
+            Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
+            GL.vaHelper.drawArrays(primitiveMode, firstElement, elementCount);
         }
     }
 

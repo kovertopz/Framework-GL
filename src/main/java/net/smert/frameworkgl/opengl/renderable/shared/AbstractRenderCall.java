@@ -12,7 +12,7 @@
  */
 package net.smert.frameworkgl.opengl.renderable.shared;
 
-import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 
 /**
  *
@@ -20,34 +20,14 @@ import net.smert.frameworkgl.opengl.TextureType;
  */
 public abstract class AbstractRenderCall implements RenderCall {
 
-    protected TextureTypeMapping[][] textureTypeMappings;
+    protected Segment[] segments;
 
-    public TextureTypeMapping[][] getTextureTypeMappings() {
-        return textureTypeMappings;
+    public Segment[] getSegments() {
+        return segments;
     }
 
-    public void setTextureTypeMappings(TextureTypeMapping[][] textureTypeMappings) {
-        this.textureTypeMappings = textureTypeMappings;
-    }
-
-    public static class TextureTypeMapping {
-
-        private final int uniqueTextureID;
-        private final TextureType textureType;
-
-        public TextureTypeMapping(int uniqueTextureID, TextureType textureType) {
-            this.uniqueTextureID = uniqueTextureID;
-            this.textureType = textureType;
-        }
-
-        public int getUniqueTextureID() {
-            return uniqueTextureID;
-        }
-
-        public TextureType getTextureType() {
-            return textureType;
-        }
-
+    public void setSegments(Segment[] segments) {
+        this.segments = segments;
     }
 
 }

@@ -33,7 +33,7 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
     protected boolean hasVertices;
     protected int bufferUsage;
     protected int renderableConfigID;
-    protected RenderCall drawCall;
+    protected RenderCall renderCall;
     protected VertexArrayObject vao;
     protected VertexBufferObject vboVertexIndex;
     protected VertexBufferObjectInterleaved vboInterleaved;
@@ -45,7 +45,7 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
         hasVertices = false;
         bufferUsage = -1;
         renderableConfigID = -1;
-        drawCall = null;
+        renderCall = null;
         vboVertexIndex = null;
         vboInterleaved = null;
     }
@@ -147,13 +147,13 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
         GL.vboHelper.unbind();
         GL.vaoHelper.unbind();
 
-        // Create draw call
-        drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
+        // Create render call
+        renderCall = Renderable.vboDrawCallBuilder.createRenderCall(mesh, config);
     }
 
     protected void renderGL3() {
         bindGL3();
-        drawCall.render();
+        renderCall.render();
     }
 
     protected void updateGL3(Mesh mesh) {
@@ -184,8 +184,8 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
 
         GL.vboHelper.unbind();
 
-        // Create draw call
-        drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
+        // Create render call
+        renderCall = Renderable.vboDrawCallBuilder.createRenderCall(mesh, config);
     }
 
     @Override

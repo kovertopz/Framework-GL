@@ -27,7 +27,7 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
 
     protected int bufferUsage;
     protected int renderableConfigID;
-    protected RenderCall drawCall;
+    protected RenderCall renderCall;
     protected VertexBufferObject vboColor;
     protected VertexBufferObject vboNormal;
     protected VertexBufferObject vboTexCoord;
@@ -37,7 +37,7 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
     public AbstractVertexBufferObjectNonInterleavedRenderable() {
         bufferUsage = -1;
         renderableConfigID = -1;
-        drawCall = null;
+        renderCall = null;
         vboColor = null;
         vboNormal = null;
         vboTexCoord = null;
@@ -173,18 +173,18 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
 
         GL.vboHelper.unbind();
 
-        // Create draw call
-        drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
+        // Create render call
+        renderCall = Renderable.vboDrawCallBuilder.createRenderCall(mesh, config);
     }
 
     protected void renderGL1() {
         bindGL1();
-        drawCall.render();
+        renderCall.render();
     }
 
     protected void renderGL2() {
         bindGL2();
-        drawCall.render();
+        renderCall.render();
     }
 
     protected void updateGL1AndGL2(Mesh mesh) {
@@ -226,8 +226,8 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
 
         GL.vboHelper.unbind();
 
-        // Create draw call
-        drawCall = Renderable.vboDrawCallBuilder.createDrawCall(mesh, config);
+        // Create render call
+        renderCall = Renderable.vboDrawCallBuilder.createRenderCall(mesh, config);
     }
 
     @Override

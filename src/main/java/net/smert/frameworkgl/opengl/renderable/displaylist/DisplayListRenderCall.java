@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.renderable.displaylist;
 
 import net.smert.frameworkgl.opengl.GL;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 
@@ -34,9 +35,11 @@ public class DisplayListRenderCall extends AbstractRenderCall {
 
     @Override
     public void render() {
-        for (int i = 0; i < displayListIDs.length; i++) {
+        for (int i = 0; i < segments.length; i++) {
+            Segment segment = segments[i];
+            Renderable.textureBindState.bindTextures(segment);
+            Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
             int displayListID = displayListIDs[i];
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
             GL.displayListHelper.call(displayListID);
         }
     }

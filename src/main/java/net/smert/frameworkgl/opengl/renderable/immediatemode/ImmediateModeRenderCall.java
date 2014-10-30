@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.renderable.immediatemode;
 
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
@@ -23,16 +24,7 @@ import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
  */
 public class ImmediateModeRenderCall extends AbstractRenderCall {
 
-    private DrawCommands[] drawCommands;
     private Mesh mesh;
-
-    public DrawCommands[] getDrawCommands() {
-        return drawCommands;
-    }
-
-    public void setDrawCommands(DrawCommands[] drawCommands) {
-        this.drawCommands = drawCommands;
-    }
 
     public Mesh getMesh() {
         return mesh;
@@ -44,9 +36,11 @@ public class ImmediateModeRenderCall extends AbstractRenderCall {
 
     @Override
     public void render() {
-        for (int i = 0; i < drawCommands.length; i++) {
-            DrawCommands drawCommand = drawCommands[i];
-            Renderable.textureBindState.bindTextures(textureTypeMappings[i]);
+        for (int i = 0; i < segments.length; i++) {
+            Segment segment = segments[i];
+            Renderable.textureBindState.bindTextures(segment);
+            Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
+            DrawCommands drawCommand = segment.getDrawCommands();
             drawCommand.execCommands(mesh);
         }
     }
