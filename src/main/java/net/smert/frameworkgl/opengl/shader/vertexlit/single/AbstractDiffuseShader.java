@@ -54,6 +54,12 @@ public abstract class AbstractDiffuseShader extends AbstractShader {
     }
 
     @Override
+    public void sendUniformsOncePerBind(FloatBuffer matrixFloatBuffer) {
+        uniforms.setAmbientLight(GL.uniformVariables.getAmbientLight());
+        uniforms.setLight(GL.uniformVariables.getGlLight());
+    }
+
+    @Override
     public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
         MaterialLight materialLight;
         SegmentMaterial material = segment.getMaterial();

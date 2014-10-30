@@ -63,9 +63,6 @@ public class UniformVariables {
 
     public MaterialLight getMaterialLight(String materialLightName) {
         int uniqueID = Renderable.materialLightPool.getUniqueID(materialLightName);
-        if (uniqueID == -1) {
-            return defaultMaterialLight;
-        }
         return Renderable.materialLightPool.get(uniqueID);
     }
 

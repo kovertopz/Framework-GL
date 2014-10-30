@@ -12,57 +12,24 @@
  */
 package net.smert.frameworkgl.opengl.shader.pixellit.multi;
 
-import java.nio.FloatBuffer;
-import net.smert.frameworkgl.opengl.GL;
-import net.smert.frameworkgl.opengl.MaterialLight;
 import net.smert.frameworkgl.opengl.Shader;
-import net.smert.frameworkgl.opengl.TextureType;
-import net.smert.frameworkgl.opengl.constants.TextureUnit;
-import net.smert.frameworkgl.opengl.mesh.Segment;
-import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
-import net.smert.frameworkgl.opengl.shader.AbstractShader;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractSpecularShader extends AbstractShader {
+public abstract class AbstractSpecularShader extends AbstractDiffuseShader {
 
     private final SpecularUniforms uniforms;
 
     public AbstractSpecularShader(SpecularUniforms uniforms, Shader shader) {
         super(uniforms, shader);
         this.uniforms = uniforms;
-        setTextureUnit(TextureType.DIFFUSE, TextureUnit.TEXTURE0);
     }
 
+    @Override
     public SpecularUniforms getUniforms() {
         return uniforms;
-    }
-
-    @Override
-    public void sendUniformMatrices(FloatBuffer matrixFloatBuffer) {
-        super.sendUniformMatrices(matrixFloatBuffer);
-        viewModelMatrix.toMatrix3f(normalMatrix);
-        normalMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setNormalMatrix(false, matrixFloatBuffer);
-        matrixFloatBuffer.clear();
-        viewModelMatrix.toFloatBuffer(matrixFloatBuffer);
-        matrixFloatBuffer.flip();
-        uniforms.setViewModelMatrix(false, matrixFloatBuffer);
-    }
-
-    @Override
-    public void sendUniformsOncePerRenderCall(FloatBuffer matrixFloatBuffer, Segment segment) {
-        MaterialLight materialLight;
-        SegmentMaterial material = segment.getMaterial();
-        if (material == null) {
-            materialLight = GL.uniformVariables.getDefaultMaterialLight();
-        } else {
-            materialLight = GL.uniformVariables.getMaterialLight(material.getMaterialLightName());
-        }
-        uniforms.setMaterialLight(materialLight);
     }
 
 }
