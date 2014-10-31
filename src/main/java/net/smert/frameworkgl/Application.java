@@ -65,6 +65,7 @@ public class Application {
 
         // Initialization of OpenGL must happen here since we are in a new thread
         Fw.window.create();
+        Fw.audio.init();
         Fw.graphics.init();
         Fw.input.init();
         screen.init();
@@ -125,6 +126,7 @@ public class Application {
         // Shutdown
         screen.pause();
         screen.destroy();
+        Fw.audio.destroy();
         Fw.graphics.destroy();
         Display.destroy();
     }

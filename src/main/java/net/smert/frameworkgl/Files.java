@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -445,6 +446,27 @@ public class Files {
                     ZipInputStream zip = new ZipInputStream(fis);
                     advanceStreamToEntryInZipFile(zip, relativePath);
                     return zip;
+
+                default:
+                    throw new IllegalArgumentException("Unknown file type: " + fileType);
+            }
+        }
+
+        public URL toURL() {
+            switch (fileType) {
+                case FILE:
+                    try {
+                        File file = new File(fullPathToFile);
+                        return file.toURI().toURL();
+                    } catch (MalformedURLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                case JAR:
+                    return this.getClass().getResource(fullPathToFile);
+
+                case ZIP:
+                    throw new UnsupportedOperationException("Not supported");
 
                 default:
                     throw new IllegalArgumentException("Unknown file type: " + fileType);
