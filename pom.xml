@@ -40,21 +40,28 @@
         <mavennatives.version>0.0.7</mavennatives.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <paulscode.soundsystem.version>2013.04.17</paulscode.soundsystem.version>
         <picocontainer.version>2.14.3</picocontainer.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.7</slf4j.version>
+        <twelvemonkeys.imageio.version>3.0-rc5</twelvemonkeys.imageio.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>com.paulscode</groupId>
+            <artifactId>Paulscode-SoundSystem</artifactId>
+            <version>${paulscode.soundsystem.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-jpeg</artifactId>
-            <version>3.0-rc5</version>
+            <version>${twelvemonkeys.imageio.version}</version>
         </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-tiff</artifactId>
-            <version>3.0-rc5</version>
+            <version>${twelvemonkeys.imageio.version}</version>
         </dependency>
         <dependency>
             <groupId>org.lwjgl.lwjgl</groupId>

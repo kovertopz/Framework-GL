@@ -58,6 +58,7 @@ public class CustomClassLoader extends SecureClassLoader {
     private int maxDepthForJarFiles;
     private final ByteBuffer classByteCodeBuffer;
     private final Map<String, Class> loadedClasses;
+    private final Map<String, String> loadedNatives;
     private final Map<String, FileEntryInJar> fileEntriesInJar;
     private final List<JarFileEntry> jarFileEntries;
     private final ProtectionDomain rootProtectionDomain;
@@ -75,6 +76,7 @@ public class CustomClassLoader extends SecureClassLoader {
         // BufferOverflowException while reading a class.
         classByteCodeBuffer = ByteBuffer.allocateDirect(1048576);
         loadedClasses = new HashMap<>();
+        loadedNatives = new HashMap<>();
         fileEntriesInJar = new HashMap<>();
         jarFileEntries = new ArrayList<>();
         rootProtectionDomain = getClass().getProtectionDomain();
@@ -428,11 +430,26 @@ public class CustomClassLoader extends SecureClassLoader {
         log.log(Level.FINER, "CustomClassLoader finding native library: {0}", libraryName);
 
         libraryName = mapLibraryName(libraryName);
+
+        String fullPathToNativeLibrary = loadedNatives.get(libraryName);
+        if (fullPathToNativeLibrary != null) {
+            log.log(Level.FINEST, "CustomClassLoader found an already extracted native: {0}", fullPathToNativeLibrary);
+            return fullPathToNativeLibrary;
+        }
+
         log.log(Level.FINER, "CustomClassLoader mapped library name: {0}", libraryName);
         FileEntryInJar fileEntryInJar = fileEntriesInJar.get(libraryName);
         if (fileEntryInJar == null) {
             log.log(Level.FINEST, "CustomClassLoader did not find native library: {0}", libraryName);
+
             libraryName = mapLibraryNameAlternate(libraryName);
+
+            fullPathToNativeLibrary = loadedNatives.get(libraryName);
+            if (fullPathToNativeLibrary != null) {
+                log.log(Level.FINEST, "CustomClassLoader found an already extracted native: {0}", fullPathToNativeLibrary);
+                return fullPathToNativeLibrary;
+            }
+
             log.log(Level.FINER, "CustomClassLoader mapped alternate library name: {0}", libraryName);
             fileEntryInJar = fileEntriesInJar.get(libraryName);
             if (fileEntryInJar == null) {
@@ -445,7 +462,8 @@ public class CustomClassLoader extends SecureClassLoader {
             // Read the bytes of the native library and save it to a temp file
             try (JarInputStream jarInputStream = fileEntryInJar.advanceStreamToEntry()) {
                 File tmpFile = extractFileToTempDirectory(jarInputStream, fileEntryInJar.getName());
-                String fullPathToNativeLibrary = tmpFile.getAbsolutePath();
+                fullPathToNativeLibrary = tmpFile.getAbsolutePath();
+                loadedNatives.put(libraryName, fullPathToNativeLibrary);
                 log.log(Level.FINEST, "CustomClassLoader loaded the native library: {0}", fullPathToNativeLibrary);
                 return fullPathToNativeLibrary;
             }
