@@ -21,7 +21,6 @@ import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DisplayListGL1Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectInterleavedGL1Renderable;
 import net.smert.frameworkgl.opengl.renderable.gl1.DynamicVertexBufferObjectNonInterleavedGL1Renderable;
