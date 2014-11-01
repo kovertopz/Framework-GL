@@ -207,7 +207,6 @@ public class FontRendering extends Screen {
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
         GL.o1.setClearDepth(1f);
-        GL.o1.enableTexture2D();
         GL.o1.clear();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));

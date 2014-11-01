@@ -221,8 +221,9 @@ public class Skybox extends Screen {
         GL.o1.enableLight0();
         GL.o1.enableLighting();
         GL.o1.setSmoothLighting(true);
-        GL.o1.enableTexture2D();
         GL.o1.clear();
+
+        Fw.graphics.enableTexture2D();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
 
@@ -262,7 +263,7 @@ public class Skybox extends Screen {
             // Render skybox
             Fw.graphics.color(1f, 1f, 1f, 1f);
             skyboxGameObject.getWorldTransform().setPosition(camera.getPosition());
-            GL.o1.enableTextureCubeMap();
+            Fw.graphics.enableTextureCubeMap();
             GL.o1.disableCulling();
             GL.o1.disableDepthTest();
             GL.o1.disableLighting();
@@ -270,7 +271,7 @@ public class Skybox extends Screen {
             GL.o1.enableDepthTest();
             GL.o1.enableCulling();
             GL.o1.enableLighting();
-            GL.o1.disableTextureCubeMap();
+            Fw.graphics.disableTextureCubeMap();
 
             // Render directly
             Fw.graphics.render(gameObjectsToRender);

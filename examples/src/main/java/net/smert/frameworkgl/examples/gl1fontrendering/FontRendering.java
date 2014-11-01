@@ -203,8 +203,9 @@ public class FontRendering extends Screen {
         GL.o1.enableLight0();
         GL.o1.enableLighting();
         GL.o1.setSmoothLighting(true);
-        GL.o1.enableTexture2D();
         GL.o1.clear();
+
+        Fw.graphics.enableTexture2D();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
 

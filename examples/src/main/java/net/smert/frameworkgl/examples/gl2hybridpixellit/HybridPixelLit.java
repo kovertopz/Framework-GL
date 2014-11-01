@@ -382,7 +382,6 @@ public class HybridPixelLit extends Screen {
         GL.o1.setDepthFuncLess();
         GL.o1.enableDepthMask();
         GL.o1.setClearDepth(1f);
-        GL.o1.enableTexture2D();
         GL.o1.clear();
 
         log.info("OpenGL version: " + GL.o1.getString(GetString.VERSION));
@@ -427,13 +426,11 @@ public class HybridPixelLit extends Screen {
             // Render skybox
             Fw.graphics.color(1f, 1f, 1f, 1f);
             skyboxGameObject.getWorldTransform().setPosition(camera.getPosition());
-            GL.o1.enableTextureCubeMap();
             GL.o1.disableCulling();
             GL.o1.disableDepthTest();
             Fw.graphics.render(skyboxGameObject);
             GL.o1.enableDepthTest();
             GL.o1.enableCulling();
-            GL.o1.disableTextureCubeMap();
 
             // Unbind shader
             Fw.graphics.unbindShader();
