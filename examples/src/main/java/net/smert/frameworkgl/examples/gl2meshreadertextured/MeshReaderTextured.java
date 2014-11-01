@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.examples.gl2meshreadertextured;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.helpers.Keyboard;
@@ -69,6 +70,13 @@ public class MeshReaderTextured extends Screen {
 
     @Override
     public void init() {
+
+        // Register assets
+        try {
+            Fw.files.registerAssets("/net/smert/frameworkgl/examples/assets", true);
+        } catch (IOException | URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // Switch renderer and factory to OpenGL 2
         Fw.graphics.switchRenderableFactoryAndRenderer(2);

@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.examples.gl1meshreadertextured;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.FloatBuffer;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
@@ -70,6 +71,13 @@ public class MeshReaderTextured extends Screen {
 
     @Override
     public void init() {
+
+        // Register assets
+        try {
+            Fw.files.registerAssets("/net/smert/frameworkgl/examples/assets", true);
+        } catch (IOException | URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // Create timer
         fpsTimer = new FpsTimer();

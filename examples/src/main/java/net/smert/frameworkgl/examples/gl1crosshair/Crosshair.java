@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.examples.gl1crosshair;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +130,13 @@ public class Crosshair extends Screen {
 
     @Override
     public void init() {
+
+        // Register assets
+        try {
+            Fw.files.registerAssets("/net/smert/frameworkgl/examples/assets", true);
+        } catch (IOException | URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // Create timer
         fpsTimer = new FpsTimer();

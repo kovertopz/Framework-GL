@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.examples.gl2hybridpixellit;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
@@ -269,6 +270,13 @@ public class HybridPixelLit extends Screen {
 
     @Override
     public void init() {
+
+        // Register assets
+        try {
+            Fw.files.registerAssets("/net/smert/frameworkgl/examples/assets", true);
+        } catch (IOException | URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
 
         // Switch renderer and factory to OpenGL 2
         Fw.graphics.switchRenderableFactoryAndRenderer(2);
