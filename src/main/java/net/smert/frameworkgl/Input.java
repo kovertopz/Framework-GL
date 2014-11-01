@@ -141,6 +141,24 @@ public class Input {
     }
 
     /**
+     * Check to see if the keyboard alt key is down.
+     *
+     * @return
+     */
+    public boolean isKeyAltDown() {
+        return keyboardHelper.isKeyDown(Keyboard.LALT) || keyboardHelper.isKeyDown(Keyboard.RALT);
+    }
+
+    /**
+     * Check to see if the keyboard control key is down.
+     *
+     * @return
+     */
+    public boolean isKeyControlDown() {
+        return keyboardHelper.isKeyDown(Keyboard.LCONTROL) || keyboardHelper.isKeyDown(Keyboard.RCONTROL);
+    }
+
+    /**
      * Check to see if the keyboard key is down.
      *
      * @param keyboard
@@ -148,6 +166,24 @@ public class Input {
      */
     public boolean isKeyDown(Keyboard keyboard) {
         return keyboardHelper.isKeyDown(keyboard);
+    }
+
+    /**
+     * Check to see if the keyboard meta (Windows) key is down.
+     *
+     * @return
+     */
+    public boolean isKeyMetaDown() {
+        return keyboardHelper.isKeyDown(Keyboard.LMETA) || keyboardHelper.isKeyDown(Keyboard.RMETA);
+    }
+
+    /**
+     * Check to see if the keyboard shift key is down.
+     *
+     * @return
+     */
+    public boolean isKeyShiftDown() {
+        return keyboardHelper.isKeyDown(Keyboard.LSHIFT) || keyboardHelper.isKeyDown(Keyboard.RSHIFT);
     }
 
     public void releaseMouseCursor() {
@@ -270,6 +306,24 @@ public class Input {
     }
 
     /**
+     * Was an alt key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyAltDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LALT) || keyboardHelper.wasKeyDown(Keyboard.RALT);
+    }
+
+    /**
+     * Was a control key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyControlDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LCONTROL) || keyboardHelper.wasKeyDown(Keyboard.RCONTROL);
+    }
+
+    /**
      * Was the key on the keyboard down in the last frame?
      *
      * @param keyboard
@@ -277,6 +331,24 @@ public class Input {
      */
     public boolean wasKeyDown(Keyboard keyboard) {
         return keyboardHelper.wasKeyDown(keyboard);
+    }
+
+    /**
+     * Was a meta key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyMetaDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LMETA) || keyboardHelper.wasKeyDown(Keyboard.RMETA);
+    }
+
+    /**
+     * Was a shift key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyShiftDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LSHIFT) || keyboardHelper.wasKeyDown(Keyboard.RSHIFT);
     }
 
 }

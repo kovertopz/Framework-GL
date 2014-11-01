@@ -82,6 +82,10 @@ public class Timer {
         return renderTicksPerSecond;
     }
 
+    public long getCurrentElapsedTimeDifference() {
+        return currentElapsedTimeDifference;
+    }
+
     public boolean isGameTick() {
         return isGameTick;
     }

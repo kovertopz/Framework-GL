@@ -158,12 +158,12 @@ public class RenderableConfiguration {
         float t = texCoords[offset + 1];
         float r = 0f;
 
-        assert (s >= 0f && s <= 1f);
-        assert (t >= 0f && t <= 1f);
+        assert (s >= -1f && s <= 1f);
+        assert (t >= -1f && t <= 1f);
 
         if (texCoordSize == 3) {
             r = texCoords[offset + 2];
-            assert (r >= 0f && r <= 1f);
+            assert (r >= -1f && r <= 1f);
         }
 
         // Depending on the GL type and size put it into the byte buffer
