@@ -98,7 +98,7 @@ public class TextureBuilder {
         // Generate mipmaps
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
-                GL.textureHelper.setByteMipmaps(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
+                GL.textureHelper.setMipmapData(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
                 break;
 
             case TextureTypes.FLOAT:
@@ -151,7 +151,7 @@ public class TextureBuilder {
             case TextureTypes.UNSIGNED_INT:
             case TextureTypes.UNSIGNED_SHORT:
             case TextureTypes.UNSIGNED_INT_24_8:
-                GL.fboHelper.generateMipmap(TextureTargets.TEXTURE_2D);
+                throw new IllegalArgumentException("Unsupported texture primitive for mipmap data: " + texturePrimitive);
         }
     }
 
@@ -207,7 +207,7 @@ public class TextureBuilder {
             case TextureTypes.UNSIGNED_INT:
             case TextureTypes.UNSIGNED_SHORT:
             case TextureTypes.UNSIGNED_INT_24_8:
-                throw new UnsupportedOperationException("Not supported yet.");
+                throw new IllegalArgumentException("Unsupported texture primitive for mipmap data: " + texturePrimitive);
         }
     }
 
@@ -318,7 +318,7 @@ public class TextureBuilder {
             case TextureTypes.UNSIGNED_INT:
             case TextureTypes.UNSIGNED_SHORT:
             case TextureTypes.UNSIGNED_INT_24_8:
-                throw new UnsupportedOperationException("Not supported yet.");
+                throw new IllegalArgumentException("Unsupported texture primitive for mipmap data: " + texturePrimitive);
         }
     }
 
