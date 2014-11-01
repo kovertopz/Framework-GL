@@ -332,6 +332,36 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
+    public void disableTexture2D() {
+        renderer.disableTexture2D();
+    }
+
+    @Override
+    public void disableTexture3D() {
+        renderer.disableTexture3D();
+    }
+
+    @Override
+    public void disableTextureCubeMap() {
+        renderer.disableTextureCubeMap();
+    }
+
+    @Override
+    public void enableTexture2D() {
+        renderer.enableTexture2D();
+    }
+
+    @Override
+    public void enableTexture3D() {
+        renderer.enableTexture3D();
+    }
+
+    @Override
+    public void enableTextureCubeMap() {
+        renderer.enableTextureCubeMap();
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         renderer.render(renderable, x, y, z);
     }

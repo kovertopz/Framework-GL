@@ -95,6 +95,36 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
+    public void disableTexture2D() {
+        GL.o1.disableTexture2D();
+    }
+
+    @Override
+    public void disableTexture3D() {
+        GL.o1.disableTexture3D();
+    }
+
+    @Override
+    public void disableTextureCubeMap() {
+        GL.o1.disableTextureCubeMap();
+    }
+
+    @Override
+    public void enableTexture2D() {
+        GL.o1.enableTexture2D();
+    }
+
+    @Override
+    public void enableTexture3D() {
+        GL.o1.enableTexture3D();
+    }
+
+    @Override
+    public void enableTextureCubeMap() {
+        GL.o1.enableTextureCubeMap();
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.o1.pushMatrix();
         GL.o1.translate(x, y, z);

@@ -83,6 +83,30 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
+    public void disableTexture2D() {
+    }
+
+    @Override
+    public void disableTexture3D() {
+    }
+
+    @Override
+    public void disableTextureCubeMap() {
+    }
+
+    @Override
+    public void enableTexture2D() {
+    }
+
+    @Override
+    public void enableTexture3D() {
+    }
+
+    @Override
+    public void enableTextureCubeMap() {
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.loadIdentity();

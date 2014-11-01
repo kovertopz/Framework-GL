@@ -28,6 +28,18 @@ public interface Renderer {
 
     public void color(float r, float g, float b, float a);
 
+    public void disableTexture2D();
+
+    public void disableTexture3D();
+
+    public void disableTextureCubeMap();
+
+    public void enableTexture2D();
+
+    public void enableTexture3D();
+
+    public void enableTextureCubeMap();
+
     public void render(AbstractRenderable renderable, float x, float y, float z);
 
     public void render(AbstractRenderable renderable, Transform4f transform);
