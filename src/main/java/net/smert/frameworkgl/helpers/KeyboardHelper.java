@@ -12,6 +12,9 @@
  */
 package net.smert.frameworkgl.helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -23,6 +26,11 @@ public class KeyboardHelper {
     private boolean[] nextState;
     private boolean[] wasDown;
     private int[] lwjglToKeyboard;
+    private final List<KeyboardEvent> keyboardEvents;
+
+    public KeyboardHelper() {
+        keyboardEvents = new ArrayList<>();
+    }
 
     private void mapLwglToKeyboard() {
 
@@ -139,6 +147,10 @@ public class KeyboardHelper {
         }
     }
 
+    public List<KeyboardEvent> getKeyboardEvents() {
+        return keyboardEvents;
+    }
+
     public void init() {
         isDown = new boolean[KEYBOARD_SIZE];
         nextState = new boolean[KEYBOARD_SIZE];
@@ -169,11 +181,21 @@ public class KeyboardHelper {
 
     public void update() {
 
+        // Clear last frames events
+        keyboardEvents.clear();
+
         // Handle queued events
         while (org.lwjgl.input.Keyboard.next()) {
-            int key = lwjglToKeyboard[org.lwjgl.input.Keyboard.getEventKey()];
-            nextState[key] = org.lwjgl.input.Keyboard.getEventKeyState();
+            KeyboardEvent event = new KeyboardEvent();
+            event.character = org.lwjgl.input.Keyboard.getEventCharacter();
+            event.key = org.lwjgl.input.Keyboard.getEventKey();
+            event.mappedKey = lwjglToKeyboard[event.key];
+            event.state = org.lwjgl.input.Keyboard.getEventKeyState();
+            keyboardEvents.add(event);
+            nextState[event.mappedKey] = event.state;
         }
+
+        // Update states
         updateButtonState();
     }
 
@@ -186,6 +208,30 @@ public class KeyboardHelper {
 
     public boolean wasKeyDown(Keyboard keyboard) {
         return wasDown[keyboard.ordinal()];
+    }
+
+    public static class KeyboardEvent {
+
+        /**
+         * The state indicates that the key has been pressed when true
+         */
+        public boolean state;
+
+        /**
+         * The character of the keyboard associated with the event
+         */
+        public char character;
+
+        /**
+         * The raw key from LWJGL
+         */
+        public int key;
+
+        /**
+         * The mapped key to the framework's keyboard
+         */
+        public int mappedKey;
+
     }
 
 }

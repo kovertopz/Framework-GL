@@ -12,7 +12,12 @@
  */
 package net.smert.frameworkgl.helpers;
 
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import net.smert.frameworkgl.Fw;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
 
 /**
  *
@@ -37,10 +42,14 @@ public class MouseHelper {
     private float deltaX;
     private float deltaY;
     private int buttonCount;
+    private int mouseX;
+    private int mouseY;
     private int[] lwjglToMouse;
+    private final List<MouseEvent> mouseEvents;
 
     public MouseHelper() {
         isGrabbed = false;
+        mouseEvents = new ArrayList<>();
         clearDelta();
     }
 
@@ -98,6 +107,8 @@ public class MouseHelper {
         deltaY *= Fw.config.getMouseMoveSensitivity();
         float totalDelta = deltaX + deltaY;
         nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0f);
+        mouseX = org.lwjgl.input.Mouse.getX();
+        mouseY = org.lwjgl.input.Mouse.getY();
     }
 
     public float getDeltaWheel() {
@@ -116,10 +127,22 @@ public class MouseHelper {
         return buttonCount;
     }
 
+    public int getMouseX() {
+        return mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
     public void grabMouseCursor() {
         clearDelta();
         isGrabbed = true;
         centerCursor();
+    }
+
+    public List<MouseEvent> getMouseEvents() {
+        return mouseEvents;
     }
 
     public void init() {
@@ -162,17 +185,43 @@ public class MouseHelper {
         centerCursor();
     }
 
+    public void setCursorPosition(int x, int y) {
+        org.lwjgl.input.Mouse.setCursorPosition(x, y);
+    }
+
+    public void setNativeCursor(MouseCursor mouseCursor) {
+        try {
+            org.lwjgl.input.Mouse.setNativeCursor(mouseCursor.getCursor());
+        } catch (LWJGLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public void update() {
+
+        // Clear last frames events
+        mouseEvents.clear();
 
         // Handle queued events
         while (org.lwjgl.input.Mouse.next()) {
-            int eventButton = org.lwjgl.input.Mouse.getEventButton();
-            if (eventButton == LWJGL_MOUSE_MOVE) {
-                continue;
+            MouseEvent event = new MouseEvent();
+            event.button = org.lwjgl.input.Mouse.getEventButton();
+            event.deltaWheel = org.lwjgl.input.Mouse.getEventDWheel();
+            event.deltaX = org.lwjgl.input.Mouse.getEventDX();
+            event.deltaY = org.lwjgl.input.Mouse.getEventDY();
+            event.mappedButton = lwjglToMouse[mapLwglToArray(event.button)];
+            event.mouseX = org.lwjgl.input.Mouse.getEventX();
+            event.mouseY = org.lwjgl.input.Mouse.getEventY();
+            event.state = org.lwjgl.input.Mouse.getEventButtonState();
+            mouseEvents.add(event);
+
+            // LWJGL_MOUSE_MOVE is handled in updateXYChange()
+            if (event.button != LWJGL_MOUSE_MOVE) {
+                nextState[event.mappedButton] = event.state;
             }
-            int button = lwjglToMouse[mapLwglToArray(eventButton)];
-            nextState[button] = org.lwjgl.input.Mouse.getEventButtonState();
         }
+
+        // Update states
         updateWheelChange();
         updateXYChange();
         updateButtonState();
@@ -187,6 +236,69 @@ public class MouseHelper {
 
     public boolean wasButtonDown(Mouse mouse) {
         return wasDown[mouse.ordinal()];
+    }
+
+    public static class MouseCursor {
+
+        private Cursor cursor;
+
+        public void create(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images,
+                IntBuffer delays) {
+            try {
+                cursor = new Cursor(width, height, xHotspot, yHotspot, numImages, images, delays);
+            } catch (LWJGLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        public Cursor getCursor() {
+            return cursor;
+        }
+
+    }
+
+    public static class MouseEvent {
+
+        /**
+         * The state indicates that the button has been pressed when true
+         */
+        public boolean state;
+
+        /**
+         * The raw button from LWJGL
+         */
+        public int button;
+
+        /**
+         * The raw delta mouse wheel change without getMouseWheelSensitivity applied.
+         */
+        public int deltaWheel;
+
+        /**
+         * The raw delta X position change without getMouseMoveSensitivity applied.
+         */
+        public int deltaX;
+
+        /**
+         * The raw delta Y position change without getMouseMoveSensitivity applied.
+         */
+        public int deltaY;
+
+        /**
+         * The mapped button to the framework's mouse
+         */
+        public int mappedButton;
+
+        /**
+         * The mouse X position associated with the event
+         */
+        public int mouseX;
+
+        /**
+         * The mouse Y position associated with the event
+         */
+        public int mouseY;
+
     }
 
 }

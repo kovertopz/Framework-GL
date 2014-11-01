@@ -90,8 +90,24 @@ public class Input {
         return mouseHelper.getButtonCount();
     }
 
+    public int getMouseX() {
+        return mouseHelper.getMouseX();
+    }
+
+    public int getMouseY() {
+        return mouseHelper.getMouseY();
+    }
+
     public void grabMouseCursor() {
         mouseHelper.grabMouseCursor();
+    }
+
+    public List<KeyboardHelper.KeyboardEvent> getKeyboardEvents() {
+        return keyboardHelper.getKeyboardEvents();
+    }
+
+    public List<MouseHelper.MouseEvent> getMouseEvents() {
+        return mouseHelper.getMouseEvents();
     }
 
     /**
@@ -257,6 +273,25 @@ public class Input {
             throw new IllegalArgumentException("Action cannot be null");
         }
         actionToKey.put(action, mouse.ordinal());
+    }
+
+    /**
+     * Sets the mouse cursor position
+     *
+     * @param x
+     * @param y
+     */
+    public void setCursorPosition(int x, int y) {
+        mouseHelper.setCursorPosition(x, y);
+    }
+
+    /**
+     * Set the native cursor image
+     *
+     * @param mouseCursor
+     */
+    public void setNativeCursor(MouseHelper.MouseCursor mouseCursor) {
+        mouseHelper.setNativeCursor(mouseCursor);
     }
 
     /**
