@@ -24,8 +24,10 @@ public class Texture {
 
     private final static Logger log = LoggerFactory.getLogger(Texture.class);
 
+    private int height;
     private int textureID;
     private int textureTarget;
+    private int width;
 
     public Texture() {
         textureID = 0;
@@ -47,6 +49,10 @@ public class Texture {
         textureID = 0;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public int getTextureID() {
         return textureID;
     }
@@ -57,6 +63,14 @@ public class Texture {
 
     public void setTextureTarget(int textureTarget) {
         this.textureTarget = textureTarget;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidthAndHeight(int width, int height) {
+
     }
 
 }
