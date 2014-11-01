@@ -34,6 +34,21 @@ public class TextureReader {
         extensionToImageReader = new HashMap<>();
     }
 
+    public BufferedImage getBufferedImage(String filename) throws IOException {
+
+        // Get image reader and load the image
+        ImageReader imageReader = getImageReader(filename);
+        BufferedImage bufferedImage = imageReader.load(filename);
+
+        // Flip image if the format requires it
+        if (useFlipDefaults) {
+            GL.textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
+            GL.textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
+        }
+
+        return bufferedImage;
+    }
+
     public ImageReader getImageReader(String filename) {
 
         // Get the extension from the filename
@@ -62,15 +77,8 @@ public class TextureReader {
 
     public Texture load(String filename) throws IOException {
 
-        // Get image reader and load the image
-        ImageReader imageReader = getImageReader(filename);
-        BufferedImage bufferedImage = imageReader.load(filename);
-
-        // Flip image if the format requires it
-        if (useFlipDefaults) {
-            GL.textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
-            GL.textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
-        }
+        // Get the buffered image
+        BufferedImage bufferedImage = getBufferedImage(filename);
 
         // Build the texture
         GL.textureBuilder.load2D(bufferedImage).buildTexture();

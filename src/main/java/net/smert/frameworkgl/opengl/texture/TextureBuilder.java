@@ -433,6 +433,30 @@ public class TextureBuilder {
         return temp;
     }
 
+    public byte[] getPixelByteArray() {
+        return pixelByteArray;
+    }
+
+    public float getLodBias() {
+        return lodBias;
+    }
+
+    public float getMaxLod() {
+        return maxLod;
+    }
+
+    public float getMinLod() {
+        return minLod;
+    }
+
+    public int getTextureCompareFunction() {
+        return textureCompareFunction;
+    }
+
+    public int getTextureCompareMode() {
+        return textureCompareMode;
+    }
+
     public int getTextureFilterMag() {
         return textureFilterMag;
     }
@@ -475,6 +499,54 @@ public class TextureBuilder {
 
     public int getTextureWrapT() {
         return textureWrapT;
+    }
+
+    public BufferedImage getBufferedImage() {
+        return bufferedImage;
+    }
+
+    public ByteBuffer getPixelByteBuffer() {
+        return pixelByteBuffer;
+    }
+
+    public ByteBuffer getPixelByteBufferXNeg() {
+        return pixelByteBufferXNeg;
+    }
+
+    public ByteBuffer getPixelByteBufferXPos() {
+        return pixelByteBufferXPos;
+    }
+
+    public ByteBuffer getPixelByteBufferYNeg() {
+        return pixelByteBufferYNeg;
+    }
+
+    public ByteBuffer getPixelByteBufferYPos() {
+        return pixelByteBufferYPos;
+    }
+
+    public ByteBuffer getPixelByteBufferZNeg() {
+        return pixelByteBufferZNeg;
+    }
+
+    public ByteBuffer getPixelByteBufferZPos() {
+        return pixelByteBufferZPos;
+    }
+
+    public boolean isFlipHorizontally() {
+        return flipHorizontally;
+    }
+
+    public boolean isFlipVertically() {
+        return flipVertically;
+    }
+
+    public boolean isNullData() {
+        return nullData;
+    }
+
+    public boolean isUseMipmap() {
+        return useMipmap;
     }
 
     public TextureBuilder load2D(BufferedImage textureImage) {
