@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import net.smert.frameworkgl.opengl.constants.BlendEquations;
 import net.smert.frameworkgl.opengl.constants.BlendFunctions;
 import net.smert.frameworkgl.opengl.constants.ClearBits;
@@ -30,7 +31,6 @@ import org.lwjgl.util.glu.GLU;
  */
 public class OpenGL1 {
 
-    private boolean wireframeMode = false;
     private float defaultLineWidth = 1f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
 
@@ -174,6 +174,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 disableScissorTest() {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        return this;
+    }
+
     public OpenGL1 disableStencilTest() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
         return this;
@@ -191,11 +196,6 @@ public class OpenGL1 {
 
     public OpenGL1 disableTextureCubeMap() {
         GL11.glDisable(TextureTargets.TEXTURE_CUBE_MAP);
-        return this;
-    }
-
-    public OpenGL1 disableWireframe() {
-        wireframeMode = false;
         return this;
     }
 
@@ -289,6 +289,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 enableScissorTest() {
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        return this;
+    }
+
     public OpenGL1 enableStencilTest() {
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         return this;
@@ -306,11 +311,6 @@ public class OpenGL1 {
 
     public OpenGL1 enableTextureCubeMap() {
         GL11.glEnable(TextureTargets.TEXTURE_CUBE_MAP);
-        return this;
-    }
-
-    public OpenGL1 enableWireframe() {
-        wireframeMode = true;
         return this;
     }
 
@@ -339,12 +339,16 @@ public class OpenGL1 {
         return GL11.glGetString(getString);
     }
 
+    public void getModelViewMatrix(FloatBuffer matrix) {
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
+    }
+
     public void getProjectionMatrix(FloatBuffer matrix) {
         GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, matrix);
     }
 
-    public void getModelViewMatrix(FloatBuffer matrix) {
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
+    public void getViewportDimensions(IntBuffer viewportBuffer) {
+        GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     }
 
     public OpenGL1 light(int lightNumber, int light, float value) {
@@ -419,6 +423,16 @@ public class OpenGL1 {
 
     public OpenGL1 rotate(float angle, float x, float y, float z) {
         GL11.glRotatef(angle, x, y, z);
+        return this;
+    }
+
+    public OpenGL1 scissor(int x, int y, int width, int height) {
+        GL11.glScissor(x, y, width, height);
+        return this;
+    }
+
+    public OpenGL1 setBlendingFunctionDstColorAndZero() {
+        GL11.glBlendFunc(BlendFunctions.DST_COLOR, BlendFunctions.ZERO);
         return this;
     }
 
@@ -683,15 +697,6 @@ public class OpenGL1 {
 
     public OpenGL1 switchModelView() {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        return this;
-    }
-
-    public OpenGL1 switchPolygonFillMode() {
-        if (wireframeMode) {
-            GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
-        } else {
-            GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-        }
         return this;
     }
 

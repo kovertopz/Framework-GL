@@ -12,10 +12,17 @@
  */
 package net.smert.frameworkgl.opengl;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class OpenGL3 {
+
+    public int getMaxColorAttachments() {
+        return GL11.glGetInteger(GL30.GL_MAX_COLOR_ATTACHMENTS);
+    }
 
 }
