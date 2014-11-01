@@ -12,8 +12,18 @@
  */
 package net.smert.frameworkgl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.codecs.CodecJOgg;
+import paulscode.sound.codecs.CodecWav;
+import paulscode.sound.libraries.LibraryJavaSound;
+import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 /**
  *
@@ -21,15 +31,42 @@ import paulscode.sound.SoundSystemConfig;
  */
 public class Audio {
 
+    private boolean initialized;
+    private final List<Class> librariesToLoad;
+    private final Map<String, Class> codecsToLoad;
     private SoundSystem soundSystem;
 
-    public void backgroundMusic(String audioFile) {
+    public Audio() {
+        librariesToLoad = new ArrayList<>();
+        codecsToLoad = new HashMap<>();
+        reset();
+    }
+
+    public void addCodec(String extension, Class clazz) {
+        codecsToLoad.put(extension, clazz);
+    }
+
+    public void addLibrary(Class clazz) {
+        librariesToLoad.add(clazz);
+    }
+
+    public String backgroundMusic(String audioFile, boolean toLoop) {
         Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        soundSystem.backgroundMusic(audioFile, audio.toURL(), audio.getFullPathToFile(), true);
+        soundSystem.backgroundMusic(audioFile, audio.toURL(), audio.getFullPathToFile(), toLoop);
+        return audioFile;
+    }
+
+    public void clearCodecsToLoad() {
+        codecsToLoad.clear();
+    }
+
+    public void clearLibrariesToLoad() {
+        librariesToLoad.clear();
     }
 
     public void destroy() {
         if (soundSystem != null) {
+            initialized = false;
             soundSystem.cleanup();
             soundSystem = null;
         }
@@ -45,10 +82,53 @@ public class Audio {
         soundSystem.fadeOutIn(sourceName, audio.toURL(), audio.getFullPathToFile(), millisecondsOut, millisecondsIn);
     }
 
-    public void init() {
+    public float getMasterVolume() {
+        return soundSystem.getMasterVolume();
+    }
 
-        // Libraries and codecs are loaded in BootStrap
+    public void setMasterVolume(float volume) {
+        soundSystem.setMasterVolume(volume);
+    }
+
+    public float getPitch(String sourceName) {
+        return soundSystem.getPitch(sourceName);
+    }
+
+    public void setPitch(String sourceName, float pitch) {
+        soundSystem.setPitch(sourceName, pitch);
+    }
+
+    public float getVolume(String sourceName) {
+        return soundSystem.getVolume(sourceName);
+    }
+
+    public void setVolume(String sourceName, float volume) {
+        soundSystem.setVolume(sourceName, volume);
+    }
+
+    public void init() {
+        if (initialized) {
+            return;
+        }
+
+        // Load libraries and codecs
+        try {
+            for (Class clazz : librariesToLoad) {
+                SoundSystemConfig.addLibrary(clazz);
+            }
+            Iterator<Map.Entry<String, Class>> iterator = codecsToLoad.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Class> entry = iterator.next();
+                SoundSystemConfig.setCodec(entry.getKey(), entry.getValue());
+            }
+            SoundSystemConfig.setSoundFilesPackage("");
+        } catch (SoundSystemException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        // Create sound system
         soundSystem = new SoundSystem();
+        initialized = true;
     }
 
     public boolean isPlaying(String sourceName) {
@@ -88,8 +168,75 @@ public class Audio {
                 SoundSystemConfig.ATTENUATION_ROLLOFF, maxDistance);
     }
 
+    public void remove(String sourceName) {
+        soundSystem.removeSource(sourceName);
+    }
+
+    public final void reset() {
+        initialized = false;
+        librariesToLoad.clear();
+        codecsToLoad.clear();
+        soundSystem = null;
+        addLibrary(LibraryLWJGLOpenAL.class);
+        addLibrary(LibraryJavaSound.class);
+        addCodec("ogg", CodecJOgg.class);
+        addCodec("wav", CodecWav.class);
+    }
+
     public void resume(String sourceName) {
         soundSystem.play(sourceName);
+    }
+
+    public void setLinearAttenuation(String sourceName) {
+        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_LINEAR);
+    }
+
+    public void setListenerAngle(float radians) {
+        soundSystem.setListenerAngle(radians);
+    }
+
+    public void setListenerOrientation(float lookX, float lookY, float lookZ, float upX, float upY, float upZ) {
+        soundSystem.setListenerOrientation(lookX, lookY, lookZ, upX, upY, upZ);
+    }
+
+    public void setListenerPosition(float x, float y, float z) {
+        soundSystem.setListenerPosition(x, y, z);
+    }
+
+    public void setListenerVelocity(float x, float y, float z) {
+        soundSystem.setListenerVelocity(x, y, z);
+    }
+
+    public void setLogrithmicAttenuation(String sourceName) {
+        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
+    }
+
+    public void setLooping(String sourceName, boolean toLoop) {
+        soundSystem.setLooping(sourceName, toLoop);
+    }
+
+    public void setMaxDistance(String sourceName, float maxDistance) {
+        soundSystem.setDistOrRoll(sourceName, maxDistance);
+    }
+
+    public void setNoAttenuation(String sourceName) {
+        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_NONE);
+    }
+
+    public void setPosition(String sourceName, float x, float y, float z) {
+        soundSystem.setPosition(sourceName, x, y, z);
+    }
+
+    public void setPriority(String sourceName, boolean priority) {
+        soundSystem.setPriority(sourceName, priority);
+    }
+
+    public void setTemporary(String sourceName, boolean temporary) {
+        soundSystem.setTemporary(sourceName, temporary);
+    }
+
+    public void setVelocity(String sourceName, float x, float y, float z) {
+        soundSystem.setVelocity(sourceName, x, y, z);
     }
 
     public void stop(String sourceName) {
