@@ -10,8 +10,10 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.examples.audiomidi;
+package net.smert.frameworkgl.examples.audiowav;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.opengl.GL;
@@ -21,11 +23,12 @@ import net.smert.frameworkgl.utils.FpsTimer;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class AudioMidi extends Screen {
+public class AudioWav extends Screen {
 
+    private int sourceID;
     private FpsTimer fpsTimer;
 
-    public AudioMidi(String[] args) {
+    public AudioWav(String[] args) {
     }
 
     @Override
@@ -37,16 +40,24 @@ public class AudioMidi extends Screen {
     @Override
     public void init() {
         System.out.println("init");
+
+        // Register assets
+        try {
+            Fw.files.registerAssets("/net/smert/frameworkgl/examples/assets", true);
+        } catch (IOException | URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
+
         fpsTimer = new FpsTimer();
         Fw.audio.init();
-        Fw.audio.backgroundMusic("carminab.mid", true);
+        sourceID = Fw.audio.playMusic("237729__flathill__rain-and-thunder-4.wav", true);
         GL.o1.clear();
     }
 
     @Override
     public void pause() {
         System.out.println("pause");
-        Fw.audio.pause("carminab.mid");
+        Fw.audio.pause(sourceID);
     }
 
     @Override
@@ -62,7 +73,7 @@ public class AudioMidi extends Screen {
     @Override
     public void resume() {
         System.out.println("resume");
-        Fw.audio.resume("carminab.mid");
+        Fw.audio.resume(sourceID);
     }
 
 }

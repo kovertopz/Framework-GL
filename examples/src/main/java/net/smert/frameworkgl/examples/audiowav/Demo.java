@@ -10,17 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.examples.audiomidi;
+package net.smert.frameworkgl.examples.audiowav;
+
+import net.smert.frameworkgl.BootStrap;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Configuration extends net.smert.frameworkgl.Configuration {
+public class Demo {
 
-    public Configuration(String[] args) {
-        super(args);
-        setWindowTitle("Audio");
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        BootStrap boot = new BootStrap();
+        boot.start(Configuration.class, AudioWav.class, args);
     }
 
 }
