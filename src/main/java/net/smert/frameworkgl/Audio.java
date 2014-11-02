@@ -12,18 +12,10 @@
  */
 package net.smert.frameworkgl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.SoundSystemException;
-import paulscode.sound.codecs.CodecJOgg;
-import paulscode.sound.codecs.CodecWav;
-import paulscode.sound.libraries.LibraryJavaSound;
-import paulscode.sound.libraries.LibraryLWJGLOpenAL;
+import net.smert.frameworkgl.openal.AL;
+import net.smert.frameworkgl.openal.OpenAL;
+import net.smert.frameworkgl.openal.OpenALListener;
+import net.smert.frameworkgl.openal.codecs.Codec;
 
 /**
  *
@@ -32,215 +24,252 @@ import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 public class Audio {
 
     private boolean initialized;
-    private final List<Class> librariesToLoad;
-    private final Map<String, Class> codecsToLoad;
-    private SoundSystem soundSystem;
+    private OpenAL openal;
 
-    public Audio() {
-        librariesToLoad = new ArrayList<>();
-        codecsToLoad = new HashMap<>();
-        reset();
+    public void createMusic() {
     }
 
-    public void addCodec(String extension, Class clazz) {
-        codecsToLoad.put(extension, clazz);
-    }
-
-    public void addLibrary(Class clazz) {
-        librariesToLoad.add(clazz);
-    }
-
-    public String backgroundMusic(String audioFile, boolean toLoop) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        soundSystem.backgroundMusic(audioFile, audio.toURL(), audio.getFullPathToFile(), toLoop);
-        return audioFile;
-    }
-
-    public void clearCodecsToLoad() {
-        codecsToLoad.clear();
-    }
-
-    public void clearLibrariesToLoad() {
-        librariesToLoad.clear();
+    public void createSound() {
     }
 
     public void destroy() {
-        if (soundSystem != null) {
+        if (openal != null) {
+            openal.destroy();
+            openal = null;
             initialized = false;
-            soundSystem.cleanup();
-            soundSystem = null;
         }
     }
 
-    public void fadeOut(String sourceName, String audioFile, long milliseconds) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        soundSystem.fadeOut(sourceName, audio.toURL(), audio.getFullPathToFile(), milliseconds);
+    public float getDefaultSourceMaxDistance() {
+        return openal.getDefaultSourceMaxDistance();
     }
 
-    public void fadeOutIn(String sourceName, String audioFile, long millisecondsOut, long millisecondsIn) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        soundSystem.fadeOutIn(sourceName, audio.toURL(), audio.getFullPathToFile(), millisecondsOut, millisecondsIn);
+    public void setDefaultSourceMaxDistance(float defaultSourceMaxDistance) {
+        openal.setDefaultSourceMaxDistance(defaultSourceMaxDistance);
+    }
+
+    public float getDefaultSourceMusicVolume() {
+        return openal.getDefaultSourceMusicVolume();
+    }
+
+    public void setDefaultSourceMusicVolume(float defaultSourceMusicVolume) {
+        openal.setDefaultSourceMusicVolume(defaultSourceMusicVolume);
+    }
+
+    public float getDefaultSourceReferenceDistance() {
+        return openal.getDefaultSourceReferenceDistance();
+    }
+
+    public void setDefaultSourceReferenceDistance(float defaultSourceReferenceDistance) {
+        openal.setDefaultSourceReferenceDistance(defaultSourceReferenceDistance);
+    }
+
+    public float getDefaultSourceRolloff() {
+        return openal.getDefaultSourceRolloff();
+    }
+
+    public void setDefaultSourceRolloff(float defaultSourceRolloff) {
+        openal.setDefaultSourceRolloff(defaultSourceRolloff);
+    }
+
+    public float getDefaultSourceSoundVolume() {
+        return openal.getDefaultSourceSoundVolume();
+    }
+
+    public void setDefaultSourceSoundVolume(float defaultSourceSoundVolume) {
+        openal.setDefaultSourceSoundVolume(defaultSourceSoundVolume);
+    }
+
+    public float getDopplerFactor() {
+        return openal.getDopplerFactor();
+    }
+
+    public void setDopplerFactor(float factor) {
+        openal.setDopplerFactor(factor);
+    }
+
+    public float getDopplerVelocity() {
+        return openal.getDopplerVelocity();
+    }
+
+    public void setDopplerVelocity(float velocity) {
+        openal.setDopplerVelocity(velocity);
     }
 
     public float getMasterVolume() {
-        return soundSystem.getMasterVolume();
+        return openal.getMasterVolume();
     }
 
-    public void setMasterVolume(float volume) {
-        soundSystem.setMasterVolume(volume);
+    public void setMasterVolume(float masterVolume) {
+        openal.setMasterVolume(masterVolume);
     }
 
-    public float getPitch(String sourceName) {
-        return soundSystem.getPitch(sourceName);
+    public float getVolume(int soundID) {
+        return openal.getVolume(soundID);
     }
 
-    public void setPitch(String sourceName, float pitch) {
-        soundSystem.setPitch(sourceName, pitch);
+    public void setVolume(int soundID, float volume) {
+        openal.setVolume(soundID, volume);
     }
 
-    public float getVolume(String sourceName) {
-        return soundSystem.getVolume(sourceName);
+    public int getContextFrequency() {
+        return openal.getContextFrequency();
     }
 
-    public void setVolume(String sourceName, float volume) {
-        soundSystem.setVolume(sourceName, volume);
+    public void setContextFrequency(int contextFrequency) {
+        openal.setContextFrequency(contextFrequency);
+    }
+
+    public int getContextRefresh() {
+        return openal.getContextRefresh();
+    }
+
+    public void setContextRefresh(int contextRefresh) {
+        openal.setContextRefresh(contextRefresh);
+    }
+
+    public int getDistanceModel() {
+        return openal.getDistanceModel();
+    }
+
+    public int getMaxChannels() {
+        return openal.getMaxChannels();
+    }
+
+    public void setMaxChannels(int maxChannels) {
+        openal.setMaxChannels(maxChannels);
+    }
+
+    public int getNumberOfMusicChannels() {
+        return openal.getNumberOfMusicChannels();
+    }
+
+    public void setNumberOfMusicChannels(int numberOfMusicChannels) {
+        openal.setNumberOfMusicChannels(numberOfMusicChannels);
+    }
+
+    public int getNumberOfSoundChannels() {
+        return openal.getNumberOfSoundChannels();
+    }
+
+    public void setNumberOfSoundChannels(int numberOfSoundChannels) {
+        openal.setNumberOfSoundChannels(numberOfSoundChannels);
+    }
+
+    public void setDistanceModelInverseDistance() {
+        openal.setDistanceModelInverseDistance();
+    }
+
+    public void setDistanceModelInverseDistanceClamped() {
+        openal.setDistanceModelInverseDistanceClamped();
+    }
+
+    public void setDistanceModelNone() {
+        openal.setDistanceModelNone();
+    }
+
+    public OpenALListener getListener() {
+        return openal.getListener();
+    }
+
+    public void setListener(OpenALListener listener) {
+        openal.setListener(listener);
+    }
+
+    public String getDeviceArguments() {
+        return openal.getDeviceArguments();
+    }
+
+    public void setDeviceArguments(String deviceArguments) {
+        openal.setDeviceArguments(deviceArguments);
+    }
+
+    public boolean isContextSynchronized() {
+        return openal.isContextSynchronized();
+    }
+
+    public void setContextSynchronized(boolean contextSynchronized) {
+        openal.setContextSynchronized(contextSynchronized);
+    }
+
+    public boolean isOpenDevice() {
+        return openal.isOpenDevice();
+    }
+
+    public void setOpenDevice(boolean openDevice) {
+        openal.setOpenDevice(openDevice);
     }
 
     public void init() {
         if (initialized) {
             return;
         }
-
-        // Load libraries and codecs
-        try {
-            for (Class clazz : librariesToLoad) {
-                SoundSystemConfig.addLibrary(clazz);
-            }
-            Iterator<Map.Entry<String, Class>> iterator = codecsToLoad.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Class> entry = iterator.next();
-                SoundSystemConfig.setCodec(entry.getKey(), entry.getValue());
-            }
-            SoundSystemConfig.setSoundFilesPackage("");
-        } catch (SoundSystemException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        // Create sound system
-        soundSystem = new SoundSystem();
+        openal = AL.openal;
+        openal.init();
         initialized = true;
     }
 
-    public boolean isPlaying(String sourceName) {
-        return soundSystem.playing(sourceName);
+    public boolean isPlaying(int soundID) {
+        return openal.isPlaying(soundID);
     }
 
-    public void load(String audioFile) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        soundSystem.loadSound(audio.toURL(), audio.getFullPathToFile());
+    public void pause(int soundID) {
+        openal.pause(soundID);
     }
 
-    public void pause(String sourceName) {
-        soundSystem.pause(sourceName);
+    public int playMusic(String audioFile, boolean loop) {
+        return openal.playMusic(audioFile, loop);
     }
 
-    public String play(String audioFile, boolean priority, boolean toLoop) {
-        return play(audioFile, priority, toLoop, 0, 0, 0);
+    public int playMusic(String audioFile, boolean loop, boolean priority) {
+        return openal.playMusic(audioFile, loop, priority);
     }
 
-    public String play(String audioFile, boolean priority, boolean toLoop, float x, float y, float z) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        return soundSystem.quickPlay(priority, audio.toURL(), audio.getFullPathToFile(), toLoop, x, y, z,
-                SoundSystemConfig.ATTENUATION_NONE, 0);
+    public int playSound(String audioFile, boolean loop, boolean priority) {
+        return openal.playSound(audioFile, loop, priority);
     }
 
-    public String playWithLinearAttenuation(String audioFile, boolean priority, boolean toLoop, float x, float y,
-            float z, float maxDistance) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        return soundSystem.quickPlay(priority, audio.toURL(), audio.getFullPathToFile(), toLoop, x, y, z,
-                SoundSystemConfig.ATTENUATION_LINEAR, maxDistance);
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z) {
+        return openal.playSound(audioFile, loop, priority, x, y, z);
     }
 
-    public String playWithLogrithmicAttenuation(String audioFile, boolean priority, boolean toLoop, float x, float y,
-            float z, float maxDistance) {
-        Files.FileAsset audio = Fw.files.getAudio(audioFile);
-        return soundSystem.quickPlay(priority, audio.toURL(), audio.getFullPathToFile(), toLoop, x, y, z,
-                SoundSystemConfig.ATTENUATION_ROLLOFF, maxDistance);
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
+            float maxDistance) {
+        return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance);
     }
 
-    public void remove(String sourceName) {
-        soundSystem.removeSource(sourceName);
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
+            float maxDistance, float referenceDistance) {
+        return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance, referenceDistance);
     }
 
-    public final void reset() {
-        initialized = false;
-        librariesToLoad.clear();
-        codecsToLoad.clear();
-        soundSystem = null;
-        addLibrary(LibraryLWJGLOpenAL.class);
-        addLibrary(LibraryJavaSound.class);
-        addCodec("ogg", CodecJOgg.class);
-        addCodec("wav", CodecWav.class);
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
+            float maxDistance, float referenceDistance, float rolloff) {
+        return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance, referenceDistance, rolloff);
     }
 
-    public void resume(String sourceName) {
-        soundSystem.play(sourceName);
+    public void registerCodec(String extension, Codec codec) {
+        openal.registerCodec(extension, null);
     }
 
-    public void setLinearAttenuation(String sourceName) {
-        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_LINEAR);
+    public void resume(int soundID) {
+        openal.resume(soundID);
     }
 
-    public void setListenerAngle(float radians) {
-        soundSystem.setListenerAngle(radians);
+    public void rewind(int soundID) {
+        openal.rewind(soundID);
     }
 
-    public void setListenerOrientation(float lookX, float lookY, float lookZ, float upX, float upY, float upZ) {
-        soundSystem.setListenerOrientation(lookX, lookY, lookZ, upX, upY, upZ);
+    public void stop(int soundID) {
+        openal.stop(soundID);
     }
 
-    public void setListenerPosition(float x, float y, float z) {
-        soundSystem.setListenerPosition(x, y, z);
+    public void unregisterCodec(String extension) {
+        openal.unregisterCodec(extension);
     }
 
-    public void setListenerVelocity(float x, float y, float z) {
-        soundSystem.setListenerVelocity(x, y, z);
-    }
-
-    public void setLogrithmicAttenuation(String sourceName) {
-        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
-    }
-
-    public void setLooping(String sourceName, boolean toLoop) {
-        soundSystem.setLooping(sourceName, toLoop);
-    }
-
-    public void setMaxDistance(String sourceName, float maxDistance) {
-        soundSystem.setDistOrRoll(sourceName, maxDistance);
-    }
-
-    public void setNoAttenuation(String sourceName) {
-        soundSystem.setAttenuation(sourceName, SoundSystemConfig.ATTENUATION_NONE);
-    }
-
-    public void setPosition(String sourceName, float x, float y, float z) {
-        soundSystem.setPosition(sourceName, x, y, z);
-    }
-
-    public void setPriority(String sourceName, boolean priority) {
-        soundSystem.setPriority(sourceName, priority);
-    }
-
-    public void setTemporary(String sourceName, boolean temporary) {
-        soundSystem.setTemporary(sourceName, temporary);
-    }
-
-    public void setVelocity(String sourceName, float x, float y, float z) {
-        soundSystem.setVelocity(sourceName, x, y, z);
-    }
-
-    public void stop(String sourceName) {
-        soundSystem.stop(sourceName);
+    public void update() {
+        openal.update();
     }
 
 }
