@@ -20,7 +20,7 @@ public class Configuration extends net.smert.frameworkgl.Configuration {
 
     public Configuration(String[] args) {
         super(args);
-        setWindowTitle("Audio");
+        setWindowTitle("Audio Wav");
     }
 
 }
