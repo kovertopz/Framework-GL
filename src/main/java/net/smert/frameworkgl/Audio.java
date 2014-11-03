@@ -26,6 +26,11 @@ public class Audio {
     private boolean initialized;
     private OpenAL openal;
 
+    public Audio() {
+        initialized = false;
+        openal = null;
+    }
+
     public void createMusic() {
     }
 

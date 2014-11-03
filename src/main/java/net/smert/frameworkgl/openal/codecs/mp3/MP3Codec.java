@@ -26,7 +26,7 @@ public class MP3Codec implements Codec {
 
     @Override
     public Data load(String audioFile) {
-        log.info("Loading MIDI audio file: {}", audioFile);
+        log.info("Loading MP3 audio file: {}", audioFile);
         return new Codec.Data();
     }
 

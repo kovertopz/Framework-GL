@@ -21,7 +21,6 @@ import net.smert.frameworkgl.openal.codecs.Codec;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.Util;
-import org.lwjgl.util.WaveData;
 
 /**
  *
@@ -180,11 +179,20 @@ public class OpenAL {
     }
 
     public float getVolume(int soundID) {
-        return AL.sourceHelper.getGain(soundID);
+        if (soundID == 0) {
+            return 0;
+        }
+        float volume = AL.sourceHelper.getGain(soundID);
+        checkForError("getting sound volume");
+        return volume;
     }
 
     public void setVolume(int soundID, float volume) {
+        if (soundID == 0) {
+            return;
+        }
         AL.sourceHelper.setGain(soundID, volume);
+        checkForError("setting sound volume");
     }
 
     public int getContextFrequency() {
@@ -341,11 +349,20 @@ public class OpenAL {
     }
 
     public boolean isPlaying(int soundID) {
-        return (AL.sourceHelper.getSourceState(soundID) == AL10.AL_PLAYING);
+        if (soundID == 0) {
+            return false;
+        }
+        boolean isPlaying = (AL.sourceHelper.getSourceState(soundID) == AL10.AL_PLAYING);
+        checkForError("checking if sound was playing");
+        return isPlaying;
     }
 
     public void pause(int soundID) {
+        if (soundID == 0) {
+            return;
+        }
         AL.sourceHelper.pause(soundID);
+        checkForError("pausing sound");
     }
 
     public int playMusic(String audioFile, boolean loop) {
@@ -353,15 +370,6 @@ public class OpenAL {
     }
 
     public int playMusic(String audioFile, boolean loop, boolean priority) {
-
-        // Create a new buffer
-        OpenALBuffer buffer = createTempALBuffer(audioFile);
-
-        // Create a new source
-        OpenALSource source = createTempALSource();
-
-        int bufferID = buffer.getBufferID();
-        int sourceID = source.getSourceID();
 
         // Get codec and load the audio file
         Codec codec = getCodec(audioFile);
@@ -371,6 +379,14 @@ public class OpenAL {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+
+        // Create a new source
+        OpenALSource source = createTempALSource();
+        int sourceID = source.getSourceID();
+
+        // Create a new buffer
+        OpenALBuffer buffer = createTempALBuffer(audioFile);
+        int bufferID = buffer.getBufferID();
 
         // Send buffer data
         AL.bufferHelper.setData(bufferID, codecData.format, codecData.buffer, codecData.sampleRate);
@@ -391,16 +407,19 @@ public class OpenAL {
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority) {
-        return playSound(audioFile, loop, priority, 0, 0, 0);
+        return playSound(audioFile, loop, priority, 0, 0, 0, defaultSourceMaxDistance, defaultSourceReferenceDistance,
+                defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z) {
-        return playSound(audioFile, loop, priority, x, y, z, defaultSourceMaxDistance);
+        return playSound(audioFile, loop, priority, x, y, z, defaultSourceMaxDistance, defaultSourceReferenceDistance,
+                defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
             float maxDistance) {
-        return playSound(audioFile, loop, priority, x, y, z, maxDistance, defaultSourceReferenceDistance);
+        return playSound(audioFile, loop, priority, x, y, z, maxDistance, defaultSourceReferenceDistance,
+                defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
@@ -411,15 +430,6 @@ public class OpenAL {
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
             float maxDistance, float referenceDistance, float rolloff) {
 
-        // Create a new buffer
-        OpenALBuffer buffer = createTempALBuffer(audioFile);
-
-        // Create a new source
-        OpenALSource source = createTempALSource();
-
-        int bufferID = buffer.getBufferID();
-        int sourceID = source.getSourceID();
-
         // Get codec and load the audio file
         Codec codec = getCodec(audioFile);
         Codec.Data codecData;
@@ -428,6 +438,14 @@ public class OpenAL {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+
+        // Create a new source
+        OpenALSource source = createTempALSource();
+        int sourceID = source.getSourceID();
+
+        // Create a new buffer
+        OpenALBuffer buffer = createTempALBuffer(audioFile);
+        int bufferID = buffer.getBufferID();
 
         // Send buffer data
         AL.bufferHelper.setData(bufferID, codecData.format, codecData.buffer, codecData.sampleRate);
@@ -483,15 +501,27 @@ public class OpenAL {
     }
 
     public void resume(int soundID) {
+        if (soundID == 0) {
+            return;
+        }
         AL.sourceHelper.play(soundID);
+        checkForError("resuming sound");
     }
 
     public void rewind(int soundID) {
+        if (soundID == 0) {
+            return;
+        }
         AL.sourceHelper.rewind(soundID);
+        checkForError("rewinding sound");
     }
 
     public void stop(int soundID) {
+        if (soundID == 0) {
+            return;
+        }
         AL.sourceHelper.stop(soundID);
+        checkForError("stopping sound");
     }
 
     public void unregisterCodec(String extension) {
@@ -507,6 +537,7 @@ public class OpenAL {
         // Update the listener
         listener.setGain(masterVolume);
         listener.update();
+        checkForError("updating listener");
 
         Util.checkALError();
     }
