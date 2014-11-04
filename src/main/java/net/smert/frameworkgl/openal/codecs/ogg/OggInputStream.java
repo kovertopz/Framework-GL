@@ -52,12 +52,12 @@ public class OggInputStream extends InputStream {
     private ByteBuffer pcmBuffer;
     private final Comment jorbisComment;
     private final DspState jorbisDspState;
-    private HeaderParser headerParser;
+    private HeaderPacketParser headerPacketParser;
     private final Info jorbisInfo;
     private final InputStream in;
     private final Packet joggPacket;
     private final Page joggPage;
-    private PCMParser pcmParser;
+    private PCMPacketParser pcmPacketParser;
     private final StreamState joggStreamState;
     private final SyncState joggSyncState;
 
@@ -78,7 +78,8 @@ public class OggInputStream extends InputStream {
         bigEndian = ByteOrder.nativeOrder().equals(ByteOrder.BIG_ENDIAN);
         endOfStream = false;
         initialized = false;
-        headerParser = new HeaderParser(jorbisComment, jorbisInfo, joggPacket, joggPage, joggStreamState, joggSyncState);
+        headerPacketParser = new HeaderPacketParser(jorbisComment, jorbisInfo, joggPacket, joggPage, joggStreamState,
+                joggSyncState);
         joggSyncState.init();
         count = 0;
         packet = 1;
@@ -91,7 +92,7 @@ public class OggInputStream extends InputStream {
         jorbisBlock.init(jorbisDspState); // Noobs
         pcmBuffer = ByteBuffer.allocateDirect(PCM_BUFFER_SIZE).order(ByteOrder.nativeOrder());
         pcmBuffer.limit(0);
-        pcmParser = new PCMParser(joggPacket, joggPage, joggStreamState, joggSyncState);
+        pcmPacketParser = new PCMPacketParser(joggPacket, joggPage, joggStreamState, joggSyncState);
         pcmInfo = new float[1][][];
         pcmIndexes = new int[getChannels()];
     }
@@ -118,14 +119,14 @@ public class OggInputStream extends InputStream {
             }
 
             // Read page and packet
-            if (!headerParser.read(packet)) {
+            if (!headerPacketParser.read(packet)) {
                 needsData = true;
                 continue;
             }
 
             // Increase packet count and reset parser state
             packet++;
-            headerParser.reset();
+            headerPacketParser.reset();
 
             // If we read 3 packets then the header is complete
             if (packet == 4) {
@@ -161,7 +162,7 @@ public class OggInputStream extends InputStream {
             }
 
             // Read page and packet
-            if (!pcmParser.read(packet)) {
+            if (!pcmPacketParser.read(packet)) {
                 needsData = true;
                 continue;
             }
@@ -170,8 +171,8 @@ public class OggInputStream extends InputStream {
             packet++;
 
             // If there was an error get new data
-            if (pcmParser.isError()) {
-                pcmParser.reset(); // Reset parser state for new data
+            if (pcmPacketParser.isError()) {
+                pcmPacketParser.reset(); // Reset parser state for new data
                 continue;
             }
 
@@ -235,13 +236,13 @@ public class OggInputStream extends InputStream {
                 }
 
                 // Read another packet
-                if (!pcmParser.read(packet)) {
+                if (!pcmPacketParser.read(packet)) {
 
                     // Flip buffer once only if we saved data
                     if (savedData) {
                         pcmBuffer.flip();
                     }
-                    pcmParser.reset(); // Reset parser state for new data
+                    pcmPacketParser.reset(); // Reset parser state for new data
                     hasPacket = false;
                 }
 
@@ -318,7 +319,7 @@ public class OggInputStream extends InputStream {
         return value;
     }
 
-    private static class HeaderParser {
+    private static class HeaderPacketParser {
 
         private int state;
         private final Comment jorbisComment;
@@ -328,7 +329,7 @@ public class OggInputStream extends InputStream {
         private final StreamState joggStreamState;
         private final SyncState joggSyncState;
 
-        public HeaderParser(Comment jorbisComment, Info jorbisInfo, Packet joggPacket, Page joggPage,
+        public HeaderPacketParser(Comment jorbisComment, Info jorbisInfo, Packet joggPacket, Page joggPage,
                 StreamState joggStreamState, SyncState joggSyncState) {
             this.jorbisComment = jorbisComment;
             this.jorbisInfo = jorbisInfo;
@@ -396,7 +397,7 @@ public class OggInputStream extends InputStream {
 
     }
 
-    private static class PCMParser {
+    private static class PCMPacketParser {
 
         private boolean error;
         private int state;
@@ -405,7 +406,7 @@ public class OggInputStream extends InputStream {
         private final StreamState joggStreamState;
         private final SyncState joggSyncState;
 
-        public PCMParser(Packet joggPacket, Page joggPage, StreamState joggStreamState, SyncState joggSyncState) {
+        public PCMPacketParser(Packet joggPacket, Page joggPage, StreamState joggStreamState, SyncState joggSyncState) {
             this.joggPacket = joggPacket;
             this.joggPage = joggPage;
             this.joggStreamState = joggStreamState;
