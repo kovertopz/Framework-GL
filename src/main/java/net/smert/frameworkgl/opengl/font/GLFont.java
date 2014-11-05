@@ -33,7 +33,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
+import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.utils.HashMapIntGeneric;
 
 /**
@@ -82,7 +84,12 @@ public class GLFont {
         Iterator<CodePage> iterator = codePageIndexToCodePage.values().iterator();
         while (iterator.hasNext()) {
             CodePage codePage = iterator.next();
+            String filename = codePage.getFontTextureFilename();
             codePage.destroy();
+            Texture texture = Renderable.texturePool.remove(filename);
+            if (texture != null) {
+                texture.destroy();
+            }
         }
         codePageIndexToCodePage.clear();
         glyphsToLoad.clear();
