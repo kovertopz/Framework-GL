@@ -185,11 +185,6 @@ public class CustomClassLoader extends SecureClassLoader {
                     continue;
                 }
 
-                // Skip manifest files
-                if (name.startsWith("META-INF")) {
-                    continue;
-                }
-
                 log.log(Level.FINER, "CustomClassLoader found a file: {0} in the JAR file: {1}",
                         new Object[]{name, jarFileEntry.getUrl().toString()});
 
