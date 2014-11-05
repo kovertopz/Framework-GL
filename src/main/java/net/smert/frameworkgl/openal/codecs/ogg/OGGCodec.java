@@ -69,8 +69,6 @@ public class OGGCodec implements Codec {
                 BufferedInputStream bis = new BufferedInputStream(is);
                 OggInputStream ois = new OggInputStream(bis)) {
             return create(ois);
-        } catch (IOException ex) {
-            throw ex;
         }
     }
 

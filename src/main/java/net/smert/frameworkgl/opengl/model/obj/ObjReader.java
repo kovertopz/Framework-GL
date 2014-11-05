@@ -180,7 +180,6 @@ public class ObjReader implements ModelReader {
 
         // Textures
         String filename;
-
         filename = material.getAmbientMapFilename();
         if ((filename != null) && (filename.length() > 0)) {
             segmentMaterial.setTexture(TextureType.AMBIENT_OCCLUSION, filename);
