@@ -426,6 +426,11 @@ public class OpenGL1 {
         return this;
     }
 
+    public OpenGL1 scale(float x, float y, float z) {
+        GL11.glScalef(x, y, z);
+        return this;
+    }
+
     public OpenGL1 scissor(int x, int y, int width, int height) {
         GL11.glScissor(x, y, width, height);
         return this;

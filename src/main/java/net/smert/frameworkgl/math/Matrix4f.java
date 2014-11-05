@@ -573,6 +573,13 @@ public class Matrix4f {
         return this;
     }
 
+    public Matrix4f setDiagonal(float x, float y, float z) {
+        d0 = x;
+        d5 = y;
+        d10 = z;
+        return this;
+    }
+
     public Matrix4f setFrustum(float left, float right, float bottom, float top, float zNear, float zFar) {
         float invDeltaX = 1f / (right - left);
         float invDeltaY = 1f / (top - bottom);

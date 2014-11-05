@@ -140,6 +140,13 @@ public class Matrix3f {
         return this;
     }
 
+    public Matrix3f addDiagonal(float x, float y, float z) {
+        xAxis.x += x;
+        yAxis.y += y;
+        zAxis.z += z;
+        return this;
+    }
+
     public Matrix3f addDiagonal(Vector3f vector) {
         xAxis.x += vector.x;
         yAxis.y += vector.y;
@@ -285,6 +292,13 @@ public class Matrix3f {
         xAxis.x = radius;
         yAxis.y = radius;
         zAxis.z = radius;
+        return this;
+    }
+
+    public Matrix3f setDiagonal(float x, float y, float z) {
+        xAxis.x = x;
+        yAxis.y = y;
+        zAxis.z = z;
         return this;
     }
 

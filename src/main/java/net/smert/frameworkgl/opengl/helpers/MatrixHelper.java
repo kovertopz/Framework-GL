@@ -156,6 +156,11 @@ public class MatrixHelper {
         matrix.setPerspective(fieldOfViewY, aspectRatio, zNear, zFar);
     }
 
+    public void scale(float x, float y, float z) {
+        Matrix4f matrix = getCurrentMatrix();
+        matrix.setDiagonal(z);
+    }
+
     public void translate(float x, float y, float z) {
         Matrix4f matrix = getCurrentMatrix();
         vector.set(x, y, z);

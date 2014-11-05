@@ -197,6 +197,11 @@ public class Transform4f {
         return this;
     }
 
+    public Transform4f setScale(float x, float y, float z) {
+        rotation.setDiagonal(x, y, z);
+        return this;
+    }
+
     public Transform4f setPosition(float x, float y, float z) {
         this.position.set(x, y, z);
         return this;
