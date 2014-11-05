@@ -583,6 +583,9 @@ public class CustomClassLoader extends SecureClassLoader {
     protected synchronized Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         log.log(Level.FINER, "CustomClassLoader loading class: {0}", className);
 
+        // Register CustomClassLoader as a context class loader
+        Thread.currentThread().setContextClassLoader(this);
+
         // We return null when we can't find a class instead of throwing an exception
         Class clazz = null;
         try {
