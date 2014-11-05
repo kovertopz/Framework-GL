@@ -42,6 +42,7 @@ public class MeshReaderTextured extends Screen {
     private final static Logger log = LoggerFactory.getLogger(MeshReaderTextured.class);
 
     private AbstractRenderable renderableCrateAndBarrel;
+    private AbstractRenderable renderableHotGirl;
     private AmbientLight ambientLight;
     private FloatBuffer lightFloatBuffer;
     private FpsTimer fpsTimer;
@@ -51,6 +52,7 @@ public class MeshReaderTextured extends Screen {
     private MaterialLight materialLight;
     private MemoryUsage memoryUsage;
     private Mesh meshCrateAndBarrel;
+    private Mesh meshHotGirl;
 
     public MeshReaderTextured(String[] args) {
     }
@@ -106,10 +108,12 @@ public class MeshReaderTextured extends Screen {
 
         // Create meshes
         meshCrateAndBarrel = GL.meshFactory.createMesh();
+        meshHotGirl = GL.meshFactory.createMesh();
 
         // Load the meshes from obj models
         try {
             Fw.graphics.loadMesh("crate_barrel/crate and barrel.obj", meshCrateAndBarrel);
+            Fw.graphics.loadMesh("hot_girl/Hot_Girl_01.obj", meshHotGirl);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -117,6 +121,7 @@ public class MeshReaderTextured extends Screen {
         // Load textures
         try {
             Fw.graphics.loadTextures(meshCrateAndBarrel);
+            Fw.graphics.loadTextures(meshHotGirl);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -124,6 +129,8 @@ public class MeshReaderTextured extends Screen {
         // Create vertex buffer object renderables
         renderableCrateAndBarrel = Fw.graphics.createNonInterleavedRenderable();
         renderableCrateAndBarrel.create(meshCrateAndBarrel);
+        renderableHotGirl = Fw.graphics.createNonInterleavedRenderable();
+        renderableHotGirl.create(meshHotGirl);
 
         // OpenGL settings
         GL.o1.enableCulling();
@@ -175,6 +182,7 @@ public class MeshReaderTextured extends Screen {
 
             // Render directly
             Fw.graphics.render(renderableCrateAndBarrel, -1.5f, -1.5f, 0f);
+            Fw.graphics.render(renderableHotGirl, -1.5f, 2f, 0f);
         }
     }
 

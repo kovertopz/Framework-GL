@@ -76,11 +76,27 @@ public class Conversion {
         return RGBA;
     }
 
-    public static BufferedImage FlipHorizontally(BufferedImage image) {
-        int w = image.getWidth();
-        int h = image.getHeight();
+    public static byte[] FlipHorizontally(byte[] pixelData, int width, int height) {
+        byte[] pixelDataFlipped = new byte[pixelData.length];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0, jj = width - 1; j < width; j++, jj--) {
+                int offset = (j + (i * width)) * 4;
+                int offsetNew = (jj + (i * width)) * 4;
+                pixelDataFlipped[offsetNew + 0] = pixelData[offset + 0];
+                pixelDataFlipped[offsetNew + 1] = pixelData[offset + 1];
+                pixelDataFlipped[offsetNew + 2] = pixelData[offset + 2];
+                pixelDataFlipped[offsetNew + 3] = pixelData[offset + 3];
+            }
+        }
+        return pixelData;
+    }
 
-        BufferedImage flippedimage = new BufferedImage(w, h, image.getType());
+    public static BufferedImage FlipHorizontally(BufferedImage image) {
+        int h = image.getHeight();
+        int imageType = (image.getType() == 0) ? BufferedImage.TYPE_INT_ARGB : image.getType();
+        int w = image.getWidth();
+
+        BufferedImage flippedimage = new BufferedImage(w, h, imageType);
         Graphics2D g = flippedimage.createGraphics();
 
         g.drawImage(image, 0, 0, w, h, w, 0, 0, h, null);
@@ -89,11 +105,27 @@ public class Conversion {
         return flippedimage;
     }
 
+    public static byte[] FlipVertically(byte[] pixelData, int width, int height) {
+        byte[] pixelDataFlipped = new byte[pixelData.length];
+        for (int i = height - 1, ii = 0; i >= 0; i--, ii++) {
+            for (int j = 0; j < width; j++) {
+                int offset = (j + (i * width)) * 4;
+                int offsetNew = (j + (ii * width)) * 4;
+                pixelDataFlipped[offsetNew + 0] = pixelData[offset + 0];
+                pixelDataFlipped[offsetNew + 1] = pixelData[offset + 1];
+                pixelDataFlipped[offsetNew + 2] = pixelData[offset + 2];
+                pixelDataFlipped[offsetNew + 3] = pixelData[offset + 3];
+            }
+        }
+        return pixelDataFlipped;
+    }
+
     public static BufferedImage FlipVertically(BufferedImage image) {
         int h = image.getHeight();
+        int imageType = (image.getType() == 0) ? BufferedImage.TYPE_INT_ARGB : image.getType();
         int w = image.getWidth();
 
-        BufferedImage flippedimage = new BufferedImage(w, h, image.getType());
+        BufferedImage flippedimage = new BufferedImage(w, h, imageType);
         Graphics2D g = flippedimage.createGraphics();
 
         g.drawImage(image, 0, 0, w, h, 0, h, w, 0, null);

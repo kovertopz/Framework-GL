@@ -552,15 +552,17 @@ public class TextureBuilder {
 
     public TextureBuilder load2D(BufferedImage textureImage) {
 
-        if (flipHorizontally) {
-            textureImage = Conversion.FlipHorizontally(textureImage);
-        }
-        if (flipVertically) {
-            textureImage = Conversion.FlipVertically(textureImage);
-        }
         setImage(textureImage);
         setHeightAndWidthFromImage();
         convertImageARGBToRGBABytePixelArray();
+        if (flipHorizontally) {
+            pixelByteArray = Conversion.FlipHorizontally(pixelByteArray, textureImage.getWidth(),
+                    textureImage.getHeight());
+        }
+        if (flipVertically) {
+            pixelByteArray = Conversion.FlipVertically(pixelByteArray, textureImage.getWidth(),
+                    textureImage.getHeight());
+        }
         createBytePixelDataBuffer();
 
         return this;
@@ -568,15 +570,17 @@ public class TextureBuilder {
 
     public TextureBuilder loadCube(BufferedImage textureImage, int cubeSize) {
 
-        if (flipHorizontally) {
-            textureImage = Conversion.FlipHorizontally(textureImage);
-        }
-        if (flipVertically) {
-            textureImage = Conversion.FlipVertically(textureImage);
-        }
         setImage(textureImage);
         setHeightAndWidthFromImage();
         convertImageARGBToRGBABytePixelArray();
+        if (flipHorizontally) {
+            pixelByteArray = Conversion.FlipHorizontally(pixelByteArray, textureImage.getWidth(),
+                    textureImage.getHeight());
+        }
+        if (flipVertically) {
+            pixelByteArray = Conversion.FlipVertically(pixelByteArray, textureImage.getWidth(),
+                    textureImage.getHeight());
+        }
 
         switch (cubeSize) {
             case TextureTargets.TEXTURE_CUBE_MAP_POSITIVE_X:

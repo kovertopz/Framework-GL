@@ -57,10 +57,6 @@ public class TextureHelper {
         GL30.glGenerateMipmap(textureTarget);
     }
 
-    public void setByteMipmaps(int internalFormat, int width, int height, int format, ByteBuffer pixelData) {
-        GLU.gluBuild2DMipmaps(textureTarget, internalFormat, width, height, format, TextureTypes.UNSIGNED_BYTE, pixelData);
-    }
-
     public void setClamping(int wrapR, int wrapS, int wrapT) {
         GL11.glTexParameteri(textureTarget, GL12.GL_TEXTURE_WRAP_R, wrapR);
         GL11.glTexParameteri(textureTarget, GL11.GL_TEXTURE_WRAP_S, wrapS);
@@ -138,6 +134,10 @@ public class TextureHelper {
 
     public void setMinLod(float minLod) {
         GL11.glTexParameterf(textureTarget, GL12.GL_TEXTURE_MIN_LOD, minLod);
+    }
+
+    public void setMipmapData(int internalFormat, int width, int height, int format, ByteBuffer pixelData) {
+        GLU.gluBuild2DMipmaps(textureTarget, internalFormat, width, height, format, TextureTypes.UNSIGNED_BYTE, pixelData);
     }
 
     public void setTextureTarget2D() {
