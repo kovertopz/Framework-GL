@@ -12,11 +12,12 @@
  */
 package net.smert.frameworkgl.examples;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,7 +37,7 @@ import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,62 +166,59 @@ public class CustomClassLoader extends SecureClassLoader {
     private void extractFileInformationFromJarFileEntries() throws IOException {
         for (JarFileEntry jarFileEntry : jarFileEntries) {
             int currentDepth = jarFileEntry.getDepth();
-            try (JarInputStream jarInputStream = new JarInputStream(jarFileEntry.getUrl().openStream())) {
-                while (true) {
-                    JarEntry entry = jarInputStream.getNextJarEntry();
+            JarFile jarFile = jarFileEntry.getJarFile();
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry jarEntry = entries.nextElement();
+                String name = jarEntry.getName(); // Name should never start with a forward slash
 
-                    // If there are no more entries
-                    if (entry == null) {
-                        break;
+                // Remove trailing slash from directories. A directory resource won't be found since
+                // findResource() never has a trailing slash
+                if (jarEntry.isDirectory()) {
+                    while (name.endsWith("/")) {
+                        name = name.substring(0, name.length() - 1);
                     }
-
-                    String name = entry.getName(); // Name should never start with a forward slash
-
-                    // Remove trailing slash from directories. A directory resource won't be found since
-                    // findResource() never has a trailing slash
-                    if (entry.isDirectory()) {
-                        while (name.endsWith("/")) {
-                            name = name.substring(0, name.length() - 1);
-                        }
-                    }
-
-                    // Skip jar entries since we already have them all
-                    if (name.endsWith(".jar")) {
-                        continue;
-                    }
-
-                    // Skip manifest files
-                    if (name.startsWith("META-INF")) {
-                        continue;
-                    }
-
-                    log.log(Level.FINER, "CustomClassLoader found a file: {0} in the JAR file: {1}",
-                            new Object[]{name, jarFileEntry.getUrl().toString()});
-
-                    // Get the existing entry and overwrite it if we are allowed. Default implementation only allows
-                    // overrides with a higher depth level than the current. Another file with the same depth will not
-                    // override the existing entry. This may have security consequences if the package is sealed.
-                    FileEntryInJar existingFileEntryInJar = fileEntriesInJar.get(name);
-                    FileEntryInJar newFileEntryInJar = new FileEntryInJar(currentDepth, jarFileEntry, name);
-                    if (existingFileEntryInJar != null) {
-                        if (!allowedToOverwriteFileEntryInJar(existingFileEntryInJar, newFileEntryInJar)) {
-                            continue;
-                        }
-                    }
-                    fileEntriesInJar.put(name, newFileEntryInJar);
                 }
+
+                // Skip jar entries since we already have them all
+                if (name.endsWith(".jar")) {
+                    continue;
+                }
+
+                // Skip manifest files
+                if (name.startsWith("META-INF")) {
+                    continue;
+                }
+
+                log.log(Level.FINER, "CustomClassLoader found a file: {0} in the JAR file: {1}",
+                        new Object[]{name, jarFileEntry.getUrl().toString()});
+
+                // Get the existing entry and overwrite it if we are allowed. Default implementation only allows
+                // overrides with a higher depth level than the current. Another file with the same depth will not
+                // override the existing entry. This may have security consequences if the package is sealed.
+                FileEntryInJar existingFileEntryInJar = fileEntriesInJar.get(name);
+                FileEntryInJar newFileEntryInJar = new FileEntryInJar(currentDepth, jarEntry, jarFileEntry, name);
+                if (existingFileEntryInJar != null) {
+                    if (!allowedToOverwriteFileEntryInJar(existingFileEntryInJar, newFileEntryInJar)) {
+                        continue;
+                    }
+                }
+                fileEntriesInJar.put(name, newFileEntryInJar);
             }
         }
     }
 
-    private File extractFileToTempDirectory(JarInputStream jarInputStream, String name) throws IOException {
+    private File extractFileToTempDirectory(JarFile jarFile, JarEntry entry, String name)
+            throws IOException {
         File tmpFile = createTempFile(name);
         int totalSize = 0;
-        try (FileOutputStream fos = new FileOutputStream(tmpFile);
+        try (InputStream is = jarFile.getInputStream(entry);
+                BufferedInputStream bis = new BufferedInputStream(is);
+                FileOutputStream fos = new FileOutputStream(tmpFile);
                 BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-            byte[] bytesRead = new byte[1024];
+            byte[] bytesRead = new byte[1024 * 1024];
             int len;
-            while ((len = jarInputStream.read(bytesRead)) != -1) {
+            while ((len = bis.read(bytesRead)) != -1) {
                 bos.write(bytesRead, 0, len);
                 totalSize += len;
             }
@@ -235,55 +233,61 @@ public class CustomClassLoader extends SecureClassLoader {
             return;
         }
 
-        try (JarInputStream jarInputStream = new JarInputStream(url.openStream())) {
-            // Get or create a manifest
-            Manifest jarManifest = jarInputStream.getManifest();
-            if (jarManifest == null) {
-                jarManifest = new Manifest();
+        // Open file
+        File file;
+        try {
+            file = new File(url.toURI());
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
+        JarFile jarFile = new JarFile(file);
+
+        // Get or create a manifest
+        Manifest jarManifest = jarFile.getManifest();
+        if (jarManifest == null) {
+            jarManifest = new Manifest();
+        }
+
+        // Create a new code source for this JAR
+        CodeSource rootCodeSource = rootProtectionDomain.getCodeSource();
+        Certificate[] rootCertificates = rootCodeSource.getCertificates();
+        CodeSource newCodeSource = (rootCertificates == null)
+                ? new CodeSource(url, rootCodeSource.getCodeSigners())
+                : new CodeSource(url, rootCertificates);
+
+        // Create an entry for this JAR file. We will be searching all JAR file entries later
+        JarFileEntry jarFileEntry = new JarFileEntry(depth, newCodeSource, jarFile, jarManifest, url);
+        jarFileEntries.add(jarFileEntry);
+
+        // Loop over jar entries and find jar files
+        Enumeration<JarEntry> entries = jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry jarEntry = entries.nextElement();
+
+            // We don't do anything with directories
+            if (jarEntry.isDirectory()) {
+                continue;
             }
-            // Create a new code source for this JAR
-            CodeSource rootCodeSource = rootProtectionDomain.getCodeSource();
-            Certificate[] rootCertificates = rootCodeSource.getCertificates();
-            CodeSource newCodeSource = (rootCertificates == null)
-                    ? new CodeSource(url, rootCodeSource.getCodeSigners())
-                    : new CodeSource(url, rootCertificates);
-            // Create an entry for this JAR file. We will be searching all JAR file entries later
-            JarFileEntry jarFileEntry = new JarFileEntry(depth, newCodeSource, jarManifest, url);
-            jarFileEntries.add(jarFileEntry);
 
-            while (true) {
-                JarEntry entry = jarInputStream.getNextJarEntry();
+            String name = jarEntry.getName(); // Name should never start with a forward slash
 
-                // If there are no more entries
-                if (entry == null) {
-                    break;
-                }
-
-                // We don't do anything with directories
-                if (entry.isDirectory()) {
-                    continue;
-                }
-
-                String name = entry.getName(); // Name should never start with a forward slash
-
-                // Skip non-jar entries
-                if (!name.endsWith(".jar")) {
-                    continue;
-                }
-
-                log.log(Level.FINE, "CustomClassLoader found a JAR file: {0}", name);
-
-                File tmpFile = extractFileToTempDirectory(jarInputStream, name);
-                extractJarFilesInsideRootJar(tmpFile.toURI().toURL(), depth + 1);
+            // Skip non-jar entries
+            if (!name.endsWith(".jar")) {
+                continue;
             }
+
+            log.log(Level.FINE, "CustomClassLoader found a JAR file: {0}", name);
+
+            File tmpFile = extractFileToTempDirectory(jarFile, jarEntry, name);
+            extractJarFilesInsideRootJar(tmpFile.toURI().toURL(), depth + 1);
         }
     }
 
-    private byte[] getClassBytes(JarInputStream jarInputStream) throws IOException {
+    private byte[] getClassBytes(BufferedInputStream bis) throws IOException {
         classByteCodeBuffer.clear();
-        byte[] bytesRead = new byte[1024];
+        byte[] bytesRead = new byte[32 * 1024];
         int len, totalSize = 0;
-        while ((len = jarInputStream.read(bytesRead)) != -1) {
+        while ((len = bis.read(bytesRead)) != -1) {
             classByteCodeBuffer.put(bytesRead, 0, len);
             totalSize += len;
         }
@@ -394,8 +398,9 @@ public class CustomClassLoader extends SecureClassLoader {
 
         try {
             // Read the bytes of the class and then define it
-            try (JarInputStream jarInputStream = fileEntryInJar.advanceStreamToEntry()) {
-                byte[] classBytes = getClassBytes(jarInputStream);
+            try (InputStream jarInputStream = fileEntryInJar.openStream();
+                    BufferedInputStream bis = new BufferedInputStream(jarInputStream)) {
+                byte[] classBytes = getClassBytes(bis);
                 CodeSource codeSource = fileEntryInJar.getJarFileEntry().getCodeSource();
                 clazz = defineClass(className, classBytes, 0, classBytes.length, codeSource);
                 loadedClasses.put(className, clazz);
@@ -460,13 +465,14 @@ public class CustomClassLoader extends SecureClassLoader {
 
         try {
             // Read the bytes of the native library and save it to a temp file
-            try (JarInputStream jarInputStream = fileEntryInJar.advanceStreamToEntry()) {
-                File tmpFile = extractFileToTempDirectory(jarInputStream, fileEntryInJar.getName());
-                fullPathToNativeLibrary = tmpFile.getAbsolutePath();
-                loadedNatives.put(libraryName, fullPathToNativeLibrary);
-                log.log(Level.FINEST, "CustomClassLoader loaded the native library: {0}", fullPathToNativeLibrary);
-                return fullPathToNativeLibrary;
-            }
+            JarFileEntry jarFileEntry = fileEntryInJar.getJarFileEntry();
+            JarFile jarFile = jarFileEntry.getJarFile();
+            JarEntry jarEntry = fileEntryInJar.getJarEntry();
+            File tmpFile = extractFileToTempDirectory(jarFile, jarEntry, fileEntryInJar.getName());
+            fullPathToNativeLibrary = tmpFile.getAbsolutePath();
+            loadedNatives.put(libraryName, fullPathToNativeLibrary);
+            log.log(Level.FINEST, "CustomClassLoader loaded the native library: {0}", fullPathToNativeLibrary);
+            return fullPathToNativeLibrary;
         } catch (IOException e) {
             log.log(Level.SEVERE, "Unable to open JarInputStream for fileEntryInJar", e);
             System.exit(-1);
@@ -604,52 +610,23 @@ public class CustomClassLoader extends SecureClassLoader {
     public static class FileEntryInJar {
 
         private final int depth;
+        private final JarEntry jarEntry;
         private final JarFileEntry jarFileEntry;
         private final String name;
 
-        public FileEntryInJar(int depth, JarFileEntry jarFileEntry, String name) {
+        public FileEntryInJar(int depth, JarEntry jarEntry, JarFileEntry jarFileEntry, String name) {
             this.depth = depth;
+            this.jarEntry = jarEntry;
             this.jarFileEntry = jarFileEntry;
             this.name = name;
         }
 
-        public JarInputStream advanceStreamToEntry() throws IOException {
-
-            boolean entryFound = false;
-            JarInputStream jarInputStream = new JarInputStream(jarFileEntry.getUrl().openStream());
-
-            // Advance the input stream to the entry of the asset
-            while (true) {
-                JarEntry entry = jarInputStream.getNextJarEntry();
-
-                // If there are no more entries
-                if (entry == null) {
-                    break;
-                }
-
-                // We don't do anything with directories
-                if (entry.isDirectory()) {
-                    continue;
-                }
-
-                String entryName = entry.getName(); // Name should never start with a forward slash
-
-                if (entryName.equals(name)) {
-                    entryFound = true;
-                    break;
-                }
-            }
-
-            if (!entryFound) {
-                throw new FileNotFoundException("The path requested: " + name + " in the JAR file: "
-                        + jarFileEntry.getUrl().toString() + " does not exist");
-            }
-
-            return jarInputStream;
-        }
-
         public int getDepth() {
             return depth;
+        }
+
+        public JarEntry getJarEntry() {
+            return jarEntry;
         }
 
         public JarFileEntry getJarFileEntry() {
@@ -668,6 +645,10 @@ public class CustomClassLoader extends SecureClassLoader {
             }
         }
 
+        public InputStream openStream() throws IOException {
+            return jarFileEntry.getJarFile().getInputStream(jarEntry);
+        }
+
         @Override
         public String toString() {
             return "Name: " + name + " Depth: " + depth + " JarFileEntry: " + jarFileEntry;
@@ -679,12 +660,14 @@ public class CustomClassLoader extends SecureClassLoader {
 
         private final int depth;
         private final CodeSource codeSource;
+        private final JarFile jarFile;
         private final Manifest manifest;
         private final URL url;
 
-        public JarFileEntry(int depth, CodeSource codeSource, Manifest manifest, URL url) {
+        public JarFileEntry(int depth, CodeSource codeSource, JarFile jarFile, Manifest manifest, URL url) {
             this.depth = depth;
             this.codeSource = codeSource;
+            this.jarFile = jarFile;
             this.manifest = manifest;
             this.url = url;
         }
@@ -711,6 +694,10 @@ public class CustomClassLoader extends SecureClassLoader {
 
         public CodeSource getCodeSource() {
             return codeSource;
+        }
+
+        public JarFile getJarFile() {
+            return jarFile;
         }
 
         public Manifest getManifest() {
