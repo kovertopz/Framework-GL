@@ -28,12 +28,14 @@ public class MatrixHelper {
     public final static int MATRIX_VIEW = 2;
 
     private int mode;
+    private final Matrix4f scale;
     private final Stack<Matrix4f> modelMatrixStack;
     private final Stack<Matrix4f> projectionMatrixStack;
     private final Stack<Matrix4f> viewMatrixStack;
     private final Vector3f vector;
 
     public MatrixHelper() {
+        scale = new Matrix4f();
         modelMatrixStack = new Stack<>();
         projectionMatrixStack = new Stack<>();
         viewMatrixStack = new Stack<>();
@@ -126,6 +128,7 @@ public class MatrixHelper {
 
     public final void reset() {
         mode = MATRIX_MODEL;
+        scale.identity();
         modelMatrixStack.clear();
         modelMatrixStack.push(new Matrix4f());
         projectionMatrixStack.clear();
@@ -158,7 +161,8 @@ public class MatrixHelper {
 
     public void scale(float x, float y, float z) {
         Matrix4f matrix = getCurrentMatrix();
-        matrix.setDiagonal(z);
+        scale.setDiagonal(x, y, z);
+        matrix.multiply(scale);
     }
 
     public void translate(float x, float y, float z) {
