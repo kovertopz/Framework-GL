@@ -504,7 +504,7 @@ public class ObjReader implements ModelReader {
                 break;
 
             default:
-                log.warn("Skipped line with an unsupported token: " + line);
+                log.warn("Skipped line with an unsupported token: {}", line);
         }
     }
 
