@@ -39,6 +39,8 @@ public class Files {
 
     private final static Logger log = LoggerFactory.getLogger(Files.class);
     private final static String AUDIO_LOCATION = "audio";
+    private final static String FONT_LOCATION = "font";
+    private final static String GUI_LOCATION = "gui";
     private final static String MATERIAL_LOCATION = "materials";
     private final static String MESH_LOCATION = "meshes";
     private final static String SHADER_LOCATION = "shaders";
@@ -288,6 +290,14 @@ public class Files {
 
     public FileAsset getAudio(String filename) {
         return get(AUDIO_LOCATION, filename);
+    }
+
+    public FileAsset getFont(String filename) {
+        return get(FONT_LOCATION, filename);
+    }
+
+    public FileAsset getGui(String filename) {
+        return get(GUI_LOCATION, filename);
     }
 
     public FileAsset getMaterial(String filename) {
