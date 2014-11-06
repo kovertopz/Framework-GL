@@ -16,8 +16,26 @@ import java.io.IOException;
 import java.util.logging.SimpleFormatter;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
+import net.smert.frameworkgl.gui.InputSystem;
+import net.smert.frameworkgl.gui.RenderDevice;
+import net.smert.frameworkgl.gui.SoundDevice;
+import net.smert.frameworkgl.gui.TimeProvider;
+import net.smert.frameworkgl.gui.factory.GUIFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
+import net.smert.frameworkgl.openal.AL;
+import net.smert.frameworkgl.openal.OpenAL;
+import net.smert.frameworkgl.openal.OpenALBuffer;
+import net.smert.frameworkgl.openal.OpenALListener;
+import net.smert.frameworkgl.openal.OpenALSource;
+import net.smert.frameworkgl.openal.codecs.midi.MIDICodec;
+import net.smert.frameworkgl.openal.codecs.mp3.MP3Codec;
+import net.smert.frameworkgl.openal.codecs.ogg.OGGCodec;
+import net.smert.frameworkgl.openal.codecs.wav.WAVCodec;
+import net.smert.frameworkgl.openal.factory.ALFactory;
+import net.smert.frameworkgl.openal.helpers.ALBufferHelper;
+import net.smert.frameworkgl.openal.helpers.ALListenerHelper;
+import net.smert.frameworkgl.openal.helpers.ALSourceHelper;
 import net.smert.frameworkgl.opengl.AmbientLight;
 import net.smert.frameworkgl.opengl.DisplayList;
 import net.smert.frameworkgl.opengl.FrameBufferObject;
@@ -43,7 +61,9 @@ import net.smert.frameworkgl.opengl.camera.LegacyCamera;
 import net.smert.frameworkgl.opengl.camera.LegacyCameraController;
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
 import net.smert.frameworkgl.opengl.factory.GLFactory;
-import net.smert.frameworkgl.opengl.font.GLFontBuilder;
+import net.smert.frameworkgl.opengl.fbo.FrameBufferObjectBuilder;
+import net.smert.frameworkgl.opengl.font.AngelCodeFontBuilder;
+import net.smert.frameworkgl.opengl.font.AwtFontBuilder;
 import net.smert.frameworkgl.opengl.helpers.BufferHelper;
 import net.smert.frameworkgl.opengl.helpers.DisplayListHelper;
 import net.smert.frameworkgl.opengl.helpers.FrameBufferObjectHelper;
@@ -60,7 +80,6 @@ import net.smert.frameworkgl.opengl.image.bmp.BMPReader;
 import net.smert.frameworkgl.opengl.image.gif.GIFReader;
 import net.smert.frameworkgl.opengl.image.jpg.JPGReader;
 import net.smert.frameworkgl.opengl.image.png.PNGReader;
-import net.smert.frameworkgl.opengl.image.tga.TGAImage;
 import net.smert.frameworkgl.opengl.image.tga.TGAReader;
 import net.smert.frameworkgl.opengl.image.tiff.TIFFReader;
 import net.smert.frameworkgl.opengl.mesh.DrawCommandsConversion;
@@ -88,6 +107,10 @@ import net.smert.frameworkgl.opengl.mesh.dynamic.ViewFrustum;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
 import net.smert.frameworkgl.opengl.model.obj.MaterialReader;
 import net.smert.frameworkgl.opengl.model.obj.ObjReader;
+import net.smert.frameworkgl.opengl.pipeline.DeferredLightingPipeline;
+import net.smert.frameworkgl.opengl.pipeline.DeferredRenderingPipeline;
+import net.smert.frameworkgl.opengl.pipeline.ForwardRenderingPipeline;
+import net.smert.frameworkgl.opengl.pipeline.factory.RenderingPipelineFactory;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCall;
@@ -118,6 +141,7 @@ import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRender
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.BindState;
+import net.smert.frameworkgl.opengl.renderable.shared.MaterialLightPool;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
 import net.smert.frameworkgl.opengl.renderable.shared.ShaderBindState;
@@ -135,12 +159,15 @@ import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawRangeElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
-import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.AngelCodeFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.AwtFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.RendererGL1;
 import net.smert.frameworkgl.opengl.renderer.RendererGL2;
 import net.smert.frameworkgl.opengl.renderer.RendererGL3;
+import net.smert.frameworkgl.opengl.renderer.factory.RendererFactory;
 import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
 import net.smert.frameworkgl.opengl.shader.ShaderBuilder;
+import net.smert.frameworkgl.opengl.shader.UniformVariables;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
 import org.picocontainer.Characteristics;
@@ -154,15 +181,19 @@ import org.picocontainer.parameters.ConstantParameter;
  */
 public class BootStrap {
 
+    protected MutablePicoContainer alFactoryContainer;
     protected MutablePicoContainer cameraFactoryContainer;
     protected MutablePicoContainer gameObjectFactoryContainer;
     protected MutablePicoContainer displayListRenderCallFactoryContainer;
     protected MutablePicoContainer glFactoryContainer;
+    protected MutablePicoContainer guiFactoryContainer;
     protected MutablePicoContainer immediateModeRenderCallFactoryContainer;
     protected MutablePicoContainer meshFactoryContainer;
     protected MutablePicoContainer renderableFactoryGL1Container;
     protected MutablePicoContainer renderableFactoryGL2Container;
     protected MutablePicoContainer renderableFactoryGL3Container;
+    protected MutablePicoContainer rendererFactoryContainer;
+    protected MutablePicoContainer renderingPipelineFactoryContainer;
     protected MutablePicoContainer vaDrawCallFactoryContainer;
     protected MutablePicoContainer vboDrawCallFactoryContainer;
 
@@ -170,7 +201,8 @@ public class BootStrap {
 
         {
             // Container for GameObjectFactory
-            gameObjectFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            gameObjectFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Framework multiple instance components
             gameObjectFactoryContainer.addComponent(GameObject.class);
@@ -180,8 +212,38 @@ public class BootStrap {
         }
 
         {
+            // Container for GUIFactory
+            guiFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
+
+            // GUI
+            guiFactoryContainer.addComponent(InputSystem.class);
+            guiFactoryContainer.addComponent(RenderDevice.class);
+            guiFactoryContainer.addComponent(SoundDevice.class);
+            guiFactoryContainer.addComponent(TimeProvider.class);
+
+            // Add container for CameraFactory
+            parentContainer.addComponent("guiFactoryContainer", guiFactoryContainer);
+        }
+
+        {
+            // Container for ALFactory
+            alFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
+
+            // OpenAL multiple instance components
+            alFactoryContainer.addComponent(OpenALBuffer.class);
+            alFactoryContainer.addComponent(OpenALListener.class);
+            alFactoryContainer.addComponent(OpenALSource.class);
+
+            // Add container for ALFactory
+            parentContainer.addComponent("alFactoryContainer", alFactoryContainer);
+        }
+
+        {
             // Container for GLFactory
-            glFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            glFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // OpenGL multiple instance components
             glFactoryContainer.addComponent(AmbientLight.class);
@@ -204,7 +266,8 @@ public class BootStrap {
 
         {
             // Container for CameraFactory
-            cameraFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            cameraFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Camera
             cameraFactoryContainer.addComponent(Camera.class);
@@ -220,7 +283,8 @@ public class BootStrap {
 
         {
             // Container for MeshFactory
-            meshFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            meshFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Mesh
             meshFactoryContainer.addComponent(Mesh.class);
@@ -251,8 +315,23 @@ public class BootStrap {
         }
 
         {
+            // Container for RenderingPipelineFactory
+            renderingPipelineFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
+
+            // Pipeline
+            renderingPipelineFactoryContainer.addComponent(DeferredLightingPipeline.class);
+            renderingPipelineFactoryContainer.addComponent(DeferredRenderingPipeline.class);
+            renderingPipelineFactoryContainer.addComponent(ForwardRenderingPipeline.class);
+
+            // Add container for RenderingPipelineFactory
+            parentContainer.addComponent("renderingPipelineFactoryContainer", renderingPipelineFactoryContainer);
+        }
+
+        {
             // Container for RenderableFactoryGL1
-            renderableFactoryGL1Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            renderableFactoryGL1Container = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable
             renderableFactoryGL1Container.addComponent(DisplayListGL1Renderable.class);
@@ -270,7 +349,8 @@ public class BootStrap {
 
         {
             // Container for RenderableFactoryGL2
-            renderableFactoryGL2Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            renderableFactoryGL2Container = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable
             renderableFactoryGL2Container.addComponent(DynamicVertexArrayGL2Renderable.class);
@@ -286,7 +366,8 @@ public class BootStrap {
 
         {
             // Container for RenderableFactoryGL3
-            renderableFactoryGL3Container = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            renderableFactoryGL3Container = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable
             renderableFactoryGL3Container.addComponent(DynamicVertexArrayObjectInterleavedGL3Renderable.class);
@@ -299,30 +380,48 @@ public class BootStrap {
         }
 
         {
+            // Container for RendererFactory
+            rendererFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
+
+            // Renderer
+            rendererFactoryContainer.addComponent(AngelCodeFontRenderer.class);
+            rendererFactoryContainer.addComponent(AwtFontRenderer.class);
+
+            // Add container for RendererFactory
+            parentContainer.addComponent("rendererFactoryContainer", rendererFactoryContainer);
+        }
+
+        {
             // Container for DisplayListRenderCallFactory
-            displayListRenderCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            displayListRenderCallFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable display list
             displayListRenderCallFactoryContainer.addComponent(DisplayListRenderCall.class);
 
             // Add container for DisplayListRenderCallFactory
-            parentContainer.addComponent("displayListRenderCallFactoryContainer", displayListRenderCallFactoryContainer);
+            parentContainer.addComponent("displayListRenderCallFactoryContainer",
+                    displayListRenderCallFactoryContainer);
         }
 
         {
             // Container for ImmediateModeRenderCallFactory
-            immediateModeRenderCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            immediateModeRenderCallFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable immediate mode
             immediateModeRenderCallFactoryContainer.addComponent(ImmediateModeRenderCall.class);
 
             // Add container for ImmediateModeRenderCallFactory
-            parentContainer.addComponent("immediateModeRenderCallFactoryContainer", immediateModeRenderCallFactoryContainer);
+            parentContainer.addComponent("immediateModeRenderCallFactoryContainer",
+                    immediateModeRenderCallFactoryContainer);
         }
 
         {
             // Container for VADrawCallFactory
-            vaDrawCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            vaDrawCallFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable VA
             vaDrawCallFactoryContainer.addComponent(VADrawArrays.class);
@@ -334,7 +433,8 @@ public class BootStrap {
 
         {
             // Container for VBODrawCallFactory
-            vboDrawCallFactoryContainer = new PicoBuilder(parentContainer).withConstructorInjection().build(); // NO caching!
+            vboDrawCallFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
 
             // Renderable VBO
             vboDrawCallFactoryContainer.addComponent(VBODrawArrays.class);
@@ -359,6 +459,7 @@ public class BootStrap {
         container.addComponent(Audio.class);
         container.addComponent(Files.class);
         container.addComponent(Graphics.class);
+        container.addComponent(GUI.class);
         container.addComponent(Input.class);
         container.addComponent(Logging.class);
         container.addComponent(Network.class);
@@ -371,26 +472,48 @@ public class BootStrap {
 
         // Framework factories
         container.as(Characteristics.USE_NAMES).addComponent(GameObjectFactory.class);
+        container.as(Characteristics.USE_NAMES).addComponent(GUIFactory.class);
 
         // Framework helpers
         container.addComponent(KeyboardHelper.class);
         container.addComponent(MouseHelper.class);
 
-        // OpenGL components
+        // OpenAL components
+        container.addComponent(OpenAL.class);
+
+        // Codecs
+        container.addComponent(MIDICodec.class);
+        container.addComponent(MP3Codec.class);
+        container.addComponent(OGGCodec.class);
+        container.addComponent(WAVCodec.class);
+
+        // Factory
+        container.as(Characteristics.USE_NAMES).addComponent(ALFactory.class);
+
+        // Helpers
+        container.addComponent(ALBufferHelper.class);
+        container.addComponent(ALListenerHelper.class);
+        container.addComponent(ALSourceHelper.class);
+
+        // OpenGL Components
         container.addComponent(OpenGL1.class);
         container.addComponent(OpenGL2.class);
         container.addComponent(OpenGL3.class);
 
-        // OpenGL camera factory
+        // Camera factory
         container.as(Characteristics.USE_NAMES).addComponent(CameraFactory.class);
 
-        // OpenGL factory
+        // Factory
         container.as(Characteristics.USE_NAMES).addComponent(GLFactory.class);
 
-        // OpenGL font
-        container.addComponent(GLFontBuilder.class);
+        // FBO
+        container.addComponent(FrameBufferObjectBuilder.class);
 
-        // OpenGL helpers
+        // Font
+        container.addComponent(AngelCodeFontBuilder.class);
+        container.addComponent(AwtFontBuilder.class);
+
+        // Helpers
         container.addComponent(BufferHelper.class);
         container.addComponent(DisplayListHelper.class);
         container.addComponent(FrameBufferObjectHelper.class);
@@ -409,7 +532,6 @@ public class BootStrap {
         container.addComponent(GIFReader.class);
         container.addComponent(JPGReader.class);
         container.addComponent(PNGReader.class);
-        container.addComponent(TGAImage.class);
         container.addComponent(TGAReader.class);
         container.addComponent(TIFFReader.class);
 
@@ -425,6 +547,9 @@ public class BootStrap {
         // Model
         container.addComponent(MaterialReader.class);
         container.addComponent(ObjReader.class);
+
+        // Pipeline factory
+        container.as(Characteristics.USE_NAMES).addComponent(RenderingPipelineFactory.class);
 
         // Renderable factory
         container.as(Characteristics.USE_NAMES).addComponent(RenderableFactoryGL1.class);
@@ -445,6 +570,7 @@ public class BootStrap {
 
         // Renderable shared
         container.addComponent(BindState.class);
+        container.addComponent(MaterialLightPool.class);
         container.addComponent(RenderableBuilder.class);
         container.addComponent(RenderableConfigurationPool.class);
         container.addComponent(ShaderBindState.class);
@@ -467,14 +593,17 @@ public class BootStrap {
         container.as(Characteristics.USE_NAMES).addComponent(VBODrawCallFactory.class);
 
         // Renderers
-        container.addComponent(GLFontRenderer.class);
         container.addComponent(RendererGL1.class);
         container.addComponent(RendererGL2.class);
         container.addComponent(RendererGL3.class);
 
+        // Renderer factory
+        container.as(Characteristics.USE_NAMES).addComponent(RendererFactory.class);
+
         // Shader
         container.addComponent(DefaultAttribLocations.class);
         container.addComponent(ShaderBuilder.class);
+        container.addComponent(UniformVariables.class);
 
         // Texture
         container.addComponent(TextureBuilder.class);
@@ -490,22 +619,33 @@ public class BootStrap {
         Fw.files = container.getComponent(Files.class);
         Fw.gof = container.getComponent(GameObjectFactory.class);
         Fw.graphics = container.getComponent(Graphics.class);
+        Fw.gui = container.getComponent(GUI.class);
+        Fw.guiFactory = container.getComponent(GUIFactory.class);
         Fw.input = container.getComponent(Input.class);
         Fw.net = container.getComponent(Network.class);
         Fw.timer = container.getComponent(Timer.class);
         Fw.window = container.getComponent(Window.class);
     }
 
+    protected void createStaticOpenAL(MutablePicoContainer container) {
+        AL.alFactory = container.getComponent(ALFactory.class);
+        AL.bufferHelper = container.getComponent(ALBufferHelper.class);
+        AL.listenerHelper = container.getComponent(ALListenerHelper.class);
+        AL.openal = container.getComponent(OpenAL.class);
+        AL.sourceHelper = container.getComponent(ALSourceHelper.class);
+    }
+
     protected void createStaticOpenGL(MutablePicoContainer container) {
+        GL.angelCodeFontBuilder = container.getComponent(AngelCodeFontBuilder.class);
+        GL.awtFontBuilder = container.getComponent(AwtFontBuilder.class);
         GL.bufferHelper = container.getComponent(BufferHelper.class);
         GL.cameraFactory = container.getComponent(CameraFactory.class);
         GL.defaultAttribLocations = container.getComponent(DefaultAttribLocations.class);
         GL.displayListHelper = container.getComponent(DisplayListHelper.class);
         GL.dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
+        GL.fboBuilder = container.getComponent(FrameBufferObjectBuilder.class);
         GL.fboHelper = container.getComponent(FrameBufferObjectHelper.class);
         GL.glFactory = container.getComponent(GLFactory.class);
-        GL.glFontBuilder = container.getComponent(GLFontBuilder.class);
-        GL.glFontRenderer = container.getComponent(GLFontRenderer.class);
         GL.matrixHelper = container.getComponent(MatrixHelper.class);
         GL.meshReader = container.getComponent(MeshReader.class);
         GL.meshFactory = container.getComponent(MeshFactory.class);
@@ -518,8 +658,10 @@ public class BootStrap {
         GL.renderer1 = container.getComponent(RendererGL1.class);
         GL.renderer2 = container.getComponent(RendererGL2.class);
         GL.renderer3 = container.getComponent(RendererGL3.class);
+        GL.rendererFactory = container.getComponent(RendererFactory.class);
         GL.rboHelper = container.getComponent(RenderBufferObjectHelper.class);
         GL.renderHelper = container.getComponent(LegacyRenderHelper.class);
+        GL.rpFactory = container.getComponent(RenderingPipelineFactory.class);
         GL.shaderBuilder = container.getComponent(ShaderBuilder.class);
         GL.shaderHelper = container.getComponent(ShaderHelper.class);
         GL.shaderUniformHelper = container.getComponent(ShaderUniformHelper.class);
@@ -527,6 +669,7 @@ public class BootStrap {
         GL.textureBuilder = container.getComponent(TextureBuilder.class);
         GL.textureHelper = container.getComponent(TextureHelper.class);
         GL.textureReader = container.getComponent(TextureReader.class);
+        GL.uniformVariables = container.getComponent(UniformVariables.class);
         GL.vaHelper = container.getComponent(VertexArrayHelper.class);
         GL.vaoHelper = container.getComponent(VertexArrayObjectHelper.class);
         GL.vboHelper = container.getComponent(VertexBufferObjectHelper.class);
@@ -539,6 +682,7 @@ public class BootStrap {
         Renderable.displayListRenderCallBuilder = container.getComponent(DisplayListRenderCallBuilder.class);
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);
         Renderable.immediateModeRenderCallBuilder = container.getComponent(ImmediateModeRenderCallBuilder.class);
+        Renderable.materialLightPool = container.getComponent(MaterialLightPool.class);
         Renderable.renderableBuilder = container.getComponent(RenderableBuilder.class);
         Renderable.shaderBindState = container.getComponent(ShaderBindState.class);
         Renderable.shaderPool = container.getComponent(ShaderPool.class);
@@ -554,6 +698,7 @@ public class BootStrap {
         // Create instances
         DynamicMeshBuilder dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         MeshReader meshReader = container.getComponent(MeshReader.class);
+        OpenAL openal = container.getComponent(OpenAL.class);
         TextureReader textureReader = container.getComponent(TextureReader.class);
 
         // Register dynamic meshes
@@ -571,6 +716,13 @@ public class BootStrap {
         dynamicMeshBuilder.register("sphere", GL.meshFactory.createDynamicPrimitiveSphere());
         dynamicMeshBuilder.register("toriod", GL.meshFactory.createDynamicPrimitiveToriod());
         dynamicMeshBuilder.register("view_frustum", GL.meshFactory.createDynamicViewFrustum());
+
+        // Register codecs and set listener
+        openal.registerCodec("mid", container.getComponent(MIDICodec.class));
+        openal.registerCodec("mp3", container.getComponent(MP3Codec.class));
+        openal.registerCodec("ogg", container.getComponent(OGGCodec.class));
+        openal.registerCodec("wav", container.getComponent(WAVCodec.class));
+        openal.setListener(alFactoryContainer.getComponent(OpenALListener.class));
 
         // Register extensions
         meshReader.registerExtension("obj", container.getComponent(ObjReader.class));
@@ -596,6 +748,7 @@ public class BootStrap {
         // Classes may be instantiated past this point
         modifyDependencies(container);
         createStaticFramework(container);
+        createStaticOpenAL(container);
         createStaticOpenGL(container);
         createStaticRenderable(container);
         initialize(container);

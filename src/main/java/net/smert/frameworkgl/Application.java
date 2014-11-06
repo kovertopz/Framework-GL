@@ -126,7 +126,8 @@ public class Application {
         screen.pause();
         screen.destroy();
         Fw.audio.destroy();
-        Fw.graphics.destroy();
+        Fw.gui.destroy();
+        Fw.graphics.destroy(); // Must be last
         Display.destroy();
     }
 

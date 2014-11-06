@@ -14,7 +14,9 @@ package net.smert.frameworkgl.opengl;
 
 import net.smert.frameworkgl.opengl.camera.factory.CameraFactory;
 import net.smert.frameworkgl.opengl.factory.GLFactory;
-import net.smert.frameworkgl.opengl.font.GLFontBuilder;
+import net.smert.frameworkgl.opengl.fbo.FrameBufferObjectBuilder;
+import net.smert.frameworkgl.opengl.font.AngelCodeFontBuilder;
+import net.smert.frameworkgl.opengl.font.AwtFontBuilder;
 import net.smert.frameworkgl.opengl.helpers.BufferHelper;
 import net.smert.frameworkgl.opengl.helpers.DisplayListHelper;
 import net.smert.frameworkgl.opengl.helpers.FrameBufferObjectHelper;
@@ -31,15 +33,17 @@ import net.smert.frameworkgl.opengl.mesh.DynamicMeshBuilder;
 import net.smert.frameworkgl.opengl.mesh.MeshReader;
 import net.smert.frameworkgl.opengl.mesh.Tessellator;
 import net.smert.frameworkgl.opengl.mesh.factory.MeshFactory;
+import net.smert.frameworkgl.opengl.pipeline.factory.RenderingPipelineFactory;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL1;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL2;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactoryGL3;
-import net.smert.frameworkgl.opengl.renderer.GLFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.RendererGL1;
 import net.smert.frameworkgl.opengl.renderer.RendererGL2;
 import net.smert.frameworkgl.opengl.renderer.RendererGL3;
+import net.smert.frameworkgl.opengl.renderer.factory.RendererFactory;
 import net.smert.frameworkgl.opengl.shader.DefaultAttribLocations;
 import net.smert.frameworkgl.opengl.shader.ShaderBuilder;
+import net.smert.frameworkgl.opengl.shader.UniformVariables;
 import net.smert.frameworkgl.opengl.texture.TextureBuilder;
 import net.smert.frameworkgl.opengl.texture.TextureReader;
 
@@ -49,15 +53,16 @@ import net.smert.frameworkgl.opengl.texture.TextureReader;
  */
 public class GL {
 
+    public static AngelCodeFontBuilder angelCodeFontBuilder;
+    public static AwtFontBuilder awtFontBuilder;
     public static CameraFactory cameraFactory;
     public static BufferHelper bufferHelper;
     public static DefaultAttribLocations defaultAttribLocations;
     public static DisplayListHelper displayListHelper;
     public static DynamicMeshBuilder dynamicMeshBuilder;
+    public static FrameBufferObjectBuilder fboBuilder;
     public static FrameBufferObjectHelper fboHelper;
     public static GLFactory glFactory;
-    public static GLFontBuilder glFontBuilder;
-    public static GLFontRenderer glFontRenderer;
     public static LegacyRenderHelper renderHelper;
     public static MatrixHelper matrixHelper;
     public static MeshFactory meshFactory;
@@ -68,10 +73,12 @@ public class GL {
     public static RenderableFactoryGL1 rf1;
     public static RenderableFactoryGL2 rf2;
     public static RenderableFactoryGL3 rf3;
+    public static RenderBufferObjectHelper rboHelper;
+    public static RendererFactory rendererFactory;
     public static RendererGL1 renderer1;
     public static RendererGL2 renderer2;
     public static RendererGL3 renderer3;
-    public static RenderBufferObjectHelper rboHelper;
+    public static RenderingPipelineFactory rpFactory;
     public static ShaderBuilder shaderBuilder;
     public static ShaderHelper shaderHelper;
     public static ShaderUniformHelper shaderUniformHelper;
@@ -79,6 +86,7 @@ public class GL {
     public static TextureBuilder textureBuilder;
     public static TextureHelper textureHelper;
     public static TextureReader textureReader;
+    public static UniformVariables uniformVariables;
     public static VertexArrayHelper vaHelper;
     public static VertexArrayObjectHelper vaoHelper;
     public static VertexBufferObjectHelper vboHelper;
