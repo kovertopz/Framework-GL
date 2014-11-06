@@ -12,7 +12,8 @@
  */
 package net.smert.frameworkgl.opengl.renderer;
 
-import net.smert.frameworkgl.opengl.font.GLFont;
+import net.smert.frameworkgl.Fw;
+import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -21,75 +22,102 @@ import net.smert.frameworkgl.utils.Color;
  */
 public abstract class AbstractRendererGL implements Renderer, TextHelperRenderer, TextRenderer {
 
-    protected final GLFontRenderer glFontRenderer;
+    protected static FontRenderer defaultFontRenderer;
 
-    public AbstractRendererGL(GLFontRenderer glFontRenderer) {
-        this.glFontRenderer = glFontRenderer;
-    }
+    protected int textDefaultX;
+    protected int textDefaultY;
+    protected final Color textColor;
+    protected final Vector2f textPosition;
 
-    @Override
-    public void drawString(String text, float x, float y) {
-        glFontRenderer.drawString(text, x, y, this);
-    }
-
-    @Override
-    public void drawString(String text, float x, float y, GLFont font) {
-        glFontRenderer.drawString(text, x, y, font, this);
+    public AbstractRendererGL() {
+        textColor = new Color();
+        textPosition = new Vector2f();
     }
 
     @Override
     public void drawString(String text) {
-        glFontRenderer.drawString(text, this);
+        defaultFontRenderer.drawString(text, this);
     }
 
     @Override
-    public void drawString(String text, GLFont font) {
-        glFontRenderer.drawString(text, font, this);
+    public void drawString(String text, float x, float y) {
+        defaultFontRenderer.drawString(text, x, y, this);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, FontRenderer fontRenderer) {
+        fontRenderer.drawString(text, x, y, this);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, float sizeX, float sizeY) {
+        defaultFontRenderer.drawString(text, x, y, sizeX, sizeY, this);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, float sizeX, float sizeY, FontRenderer fontRenderer) {
+        fontRenderer.drawString(text, x, y, sizeX, sizeY, this);
+    }
+
+    @Override
+    public void drawString(String text, FontRenderer fontRenderer) {
+        fontRenderer.drawString(text, this);
+    }
+
+    @Override
+    public Color getTextColor() {
+        return textColor;
     }
 
     @Override
     public void resetTextRendering() {
-        glFontRenderer.reset();
+        textPosition.setX(textDefaultX);
+        textPosition.setY(Fw.config.getCurrentHeight() - textDefaultY);
+    }
+
+    @Override
+    public void setDefaultFontRenderer(FontRenderer defaultFontRenderer) {
+        this.defaultFontRenderer = defaultFontRenderer;
     }
 
     @Override
     public void setTextColor(float r, float g, float b, float a) {
-        glFontRenderer.setColor(r, g, b, a);
+        textColor.set(r, g, b, a);
     }
 
     @Override
     public void setTextColor(Color color) {
-        glFontRenderer.setColor(color);
+        textColor.set(color);
     }
 
     @Override
     public void setTextColor(String colorName) {
-        glFontRenderer.setColor(colorName);
+        textColor.set(colorName);
     }
 
     @Override
     public void setTextColorHex(String hexCode) {
-        glFontRenderer.setColorHex(hexCode);
+        textColor.setHex(hexCode);
     }
 
     @Override
     public void textNewHalfLine() {
-        glFontRenderer.newHalfLine();
+        defaultFontRenderer.newHalfLine(this, textPosition);
     }
 
     @Override
-    public void textNewHalfLine(GLFont font) {
-        glFontRenderer.newHalfLine(font);
+    public void textNewHalfLine(FontRenderer fontRenderer) {
+        fontRenderer.newHalfLine(this, textPosition);
     }
 
     @Override
     public void textNewLine() {
-        glFontRenderer.newLine();
+        defaultFontRenderer.newLine(this, textPosition);
     }
 
     @Override
-    public void textNewLine(GLFont font) {
-        glFontRenderer.newLine(font);
+    public void textNewLine(FontRenderer fontRenderer) {
+        fontRenderer.newLine(this, textPosition);
     }
 
 }
