@@ -32,7 +32,10 @@
     </scm>
 
     <properties>
+        <jlayer.version>1.0.2-gdx</jlayer.version>
+        <jorbis.version>0.0.17</jorbis.version>
         <junit.version>4.11</junit.version>
+        <lessvoid.version>1.4.1-SNAPSHOT</lessvoid.version>
         <licensemaven.version>2.6</licensemaven.version>
         <lwjgl.version>2.9.1</lwjgl.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
@@ -40,18 +43,17 @@
         <mavennatives.version>0.0.7</mavennatives.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <paulscode.soundsystem.version>2013.04.17</paulscode.soundsystem.version>
         <picocontainer.version>2.14.3</picocontainer.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.7</slf4j.version>
-        <twelvemonkeys.imageio.version>3.0-rc5</twelvemonkeys.imageio.version>
+        <twelvemonkeys.imageio.version>3.1-SNAPSHOT</twelvemonkeys.imageio.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.paulscode</groupId>
-            <artifactId>Paulscode-SoundSystem</artifactId>
-            <version>${paulscode.soundsystem.version}</version>
+            <groupId>com.badlogicgames.jlayer</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>${jlayer.version}</version>
         </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
@@ -60,8 +62,38 @@
         </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tga</artifactId>
+            <version>${twelvemonkeys.imageio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-tiff</artifactId>
             <version>${twelvemonkeys.imageio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>lessvoid</groupId>
+            <artifactId>nifty</artifactId>
+            <version>${lessvoid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>lessvoid</groupId>
+            <artifactId>nifty-default-controls</artifactId>
+            <version>${lessvoid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>lessvoid</groupId>
+            <artifactId>nifty-lwjgl-renderer</artifactId>
+            <version>${lessvoid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>lessvoid</groupId>
+            <artifactId>nifty-style-black</artifactId>
+            <version>${lessvoid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jcraft</groupId>
+            <artifactId>jorbis</artifactId>
+            <version>${jorbis.version}</version>
         </dependency>
         <dependency>
             <groupId>org.lwjgl.lwjgl</groupId>
