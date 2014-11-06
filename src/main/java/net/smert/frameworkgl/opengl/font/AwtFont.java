@@ -24,6 +24,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +43,7 @@ import net.smert.frameworkgl.utils.HashMapIntGeneric;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class AwtFont {
+public class AwtFont implements GLFont {
 
     private final Builder builder;
     private Glyph missingGlyph;
@@ -247,6 +248,16 @@ public class AwtFont {
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
         }
+    }
+
+    @Override
+    public int getCharacterAdvance(char currentCharacter, char nextCharacter, float sizeX) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getWidth(String text, float sizeX) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public static class Builder {
