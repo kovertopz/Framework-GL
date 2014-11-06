@@ -189,9 +189,9 @@ public class MouseHelper {
         org.lwjgl.input.Mouse.setCursorPosition(x, y);
     }
 
-    public void setNativeCursor(MouseCursor mouseCursor) {
+    public void setNativeCursor(Cursor cursor) {
         try {
-            org.lwjgl.input.Mouse.setNativeCursor(mouseCursor.getCursor());
+            org.lwjgl.input.Mouse.setNativeCursor(cursor);
         } catch (LWJGLException ex) {
             throw new RuntimeException(ex);
         }

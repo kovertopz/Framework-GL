@@ -20,6 +20,7 @@ import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.Mouse;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.utils.HashMapStringInt;
+import org.lwjgl.input.Cursor;
 
 /**
  *
@@ -288,10 +289,10 @@ public class Input {
     /**
      * Set the native cursor image
      *
-     * @param mouseCursor
+     * @param cursor
      */
-    public void setNativeCursor(MouseHelper.MouseCursor mouseCursor) {
-        mouseHelper.setNativeCursor(mouseCursor);
+    public void setNativeCursor(Cursor cursor) {
+        mouseHelper.setNativeCursor(cursor);
     }
 
     /**
