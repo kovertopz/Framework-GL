@@ -18,6 +18,7 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.font.AwtFont;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
+import net.smert.frameworkgl.opengl.mesh.Segment;
 import net.smert.frameworkgl.opengl.mesh.SegmentMaterial;
 
 /**
@@ -50,7 +51,6 @@ public class AwtFontRenderer implements FontRenderer {
             // Create quad
             Mesh mesh = GL.meshFactory.createMesh();
             GL.dynamicMeshBuilder.
-                    setColor(0, "white").
                     setLocalPosition(0f, 0f, 1f).
                     setQuality(1, 1, 1).
                     setSize(glyph.w, glyph.h, 0f).
@@ -60,14 +60,15 @@ public class AwtFontRenderer implements FontRenderer {
                     createMesh(true, mesh);
 
             // Create segment material
-            SegmentMaterial segmentMaterial = mesh.getSegment(0).getMaterial();
+            Segment segment = mesh.getSegment(0);
+            SegmentMaterial segmentMaterial = segment.getMaterial();
             if (segmentMaterial == null) {
                 segmentMaterial = GL.meshFactory.createSegmentMaterial();
-                mesh.getSegment(0).setMaterial(segmentMaterial);
+                segment.setMaterial(segmentMaterial);
             }
 
             // Set the diffuse texture
-            mesh.getSegment(0).getMaterial().setTexture(TextureType.DIFFUSE, fontTextureFilename);
+            segmentMaterial.setTexture(TextureType.DIFFUSE, fontTextureFilename);
 
             // Create renderable from mesh
             glyph.renderable = renderer.createGlyphRenderable();
@@ -86,6 +87,9 @@ public class AwtFontRenderer implements FontRenderer {
                 continue;
             }
             AwtFont.Glyph glyph = awtFont.getGlyph(codePoint);
+            if (glyph == null) {
+                continue;
+            }
             createGlyphRenderable(glyph, renderer);
             renderer.translateText((glyph.w / 2) * sizeX, 0f);
             renderer.colorText(renderer.getTextColor());

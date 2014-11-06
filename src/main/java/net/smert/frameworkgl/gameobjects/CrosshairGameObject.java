@@ -30,7 +30,6 @@ public class CrosshairGameObject extends GameObject {
         // Create quad
         Mesh mesh = GL.meshFactory.createMesh();
         GL.dynamicMeshBuilder.
-                setColor(0, "white").
                 setQuality(1, 1, 1).
                 setSize(width, height, 1.0f).
                 build("quad").

@@ -70,7 +70,8 @@ public class Texture {
     }
 
     public void setWidthAndHeight(int width, int height) {
-
+        this.height = height;
+        this.width = width;
     }
 
 }

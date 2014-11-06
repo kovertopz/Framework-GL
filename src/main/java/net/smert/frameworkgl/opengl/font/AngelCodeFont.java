@@ -586,7 +586,17 @@ public class AngelCodeFont implements GLFont {
     }
 
     public Glyph getGlyph(int codePoint) {
-        return null;
+        Glyph glyph = glyphs.get(codePoint);
+        if (glyph == null) {
+            Character character = characters.get(codePoint);
+            if (character == null) {
+                return missingGlyph;
+            }
+            glyph = new Glyph();
+            glyph.character = character;
+            glyphs.put(codePoint, glyph);
+        }
+        return glyph;
     }
 
     public Glyph getMissingGlyph() {
@@ -613,8 +623,8 @@ public class AngelCodeFont implements GLFont {
         return fontFace;
     }
 
-    public String getPage(int codePoint) {
-        return pages.get(codePoint);
+    public String getPage(int page) {
+        return pages.get(page);
     }
 
     public boolean isFontBold() {

@@ -31,7 +31,7 @@ public class AngelCodeFontBuilder {
     private AngelCodeFont angelCodeFont;
     private String fontFilename;
 
-    public void buildFont() throws IOException {
+    public AngelCodeFontBuilder buildFont() throws IOException {
 
         angelCodeFont = new AngelCodeFont();
         angelCodeFont.load(fontFilename);
@@ -59,6 +59,8 @@ public class AngelCodeFontBuilder {
             }
             Renderable.texturePool.add(textureFilename, texture);
         }
+
+        return this;
     }
 
     public AngelCodeFont createFont(boolean reset) {
@@ -73,27 +75,31 @@ public class AngelCodeFontBuilder {
         return useMipmap;
     }
 
-    public void setUseMipmap(boolean useMipmap) {
+    public AngelCodeFontBuilder setUseMipmap(boolean useMipmap) {
         this.useMipmap = useMipmap;
+        return this;
     }
 
     public float getLodBias() {
         return lodBias;
     }
 
-    public void setLodBias(float lodBias) {
+    public AngelCodeFontBuilder setLodBias(float lodBias) {
         this.lodBias = lodBias;
+        return this;
     }
 
-    public void load(String fontFilename) {
+    public AngelCodeFontBuilder load(String fontFilename) {
         this.fontFilename = fontFilename;
+        return this;
     }
 
-    public void reset() {
+    public AngelCodeFontBuilder reset() {
         useMipmap = false;
         lodBias = 0;
         angelCodeFont = null;
         fontFilename = null;
+        return this;
     }
 
 }
