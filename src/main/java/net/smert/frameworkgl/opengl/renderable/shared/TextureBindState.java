@@ -103,6 +103,13 @@ public class TextureBindState {
         setBindTexture(texture);
     }
 
+    public void bindTexture(TextureType textureType, String textureFilename) {
+        int textureUnit = Renderable.shaderBindState.getTextureUnit(textureType);
+        int uniqueTextureID = Renderable.texturePool.getUniqueID(textureFilename);
+        Texture texture = Renderable.texturePool.get(uniqueTextureID);
+        bindTexture(textureUnit, texture);
+    }
+
     public void bindTexture0(Texture texture) {
         bindTexture(TextureUnit.TEXTURE0, texture);
     }
@@ -176,10 +183,7 @@ public class TextureBindState {
         Iterator<Map.Entry<TextureType, String>> iterator = material.getTextures().entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<TextureType, String> entry = iterator.next();
-            int textureUnit = Renderable.shaderBindState.getTextureUnit(entry.getKey());
-            int uniqueTextureID = Renderable.texturePool.getUniqueID(entry.getValue());
-            Texture texture = Renderable.texturePool.get(uniqueTextureID);
-            bindTexture(textureUnit, texture);
+            bindTexture(entry.getKey(), entry.getValue());
         }
     }
 
