@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
-import net.smert.frameworkgl.opengl.font.GLFont.CodePage;
+import net.smert.frameworkgl.opengl.font.AwtFont.CodePage;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.utils.HashMapIntGeneric;
 import net.smert.frameworkgl.utils.HashMapIntGeneric.Entry;
@@ -27,7 +27,7 @@ import net.smert.frameworkgl.utils.HashMapIntGeneric.Entry;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GLFontBuilder {
+public class AwtFontBuilder {
 
     private boolean antiAliasing;
     private boolean bold;
@@ -36,40 +36,40 @@ public class GLFontBuilder {
     private boolean useMipmap;
     private float lodBias;
     private int size;
-    private GLFont glFont;
-    private final List<GLFont.CodePointRange> glyphsToLoad;
+    private AwtFont awtFont;
+    private final List<AwtFont.CodePointRange> glyphsToLoad;
     private String family;
 
-    public GLFontBuilder() {
+    public AwtFontBuilder() {
         glyphsToLoad = new ArrayList<>();
         reset();
     }
 
-    protected GLFont createFontClass(boolean antiAliasing, boolean leftToRight, Font font) {
-        return new GLFont(antiAliasing, leftToRight, font);
+    protected AwtFont createFontClass(boolean antiAliasing, boolean leftToRight, Font font) {
+        return new AwtFont(antiAliasing, leftToRight, font);
     }
 
-    public GLFontBuilder addAscii7BitGlyphs() {
+    public AwtFontBuilder addAscii7BitGlyphs() {
         addGlyphs(32, 127);
         return this;
     }
 
-    public GLFontBuilder addAscii8BitGlyphs() {
+    public AwtFontBuilder addAscii8BitGlyphs() {
         addGlyphs(32, 255);
         return this;
     }
 
-    public GLFontBuilder addGlyphs(int startCodePoint, int endCodePoint) {
-        glyphsToLoad.add(new GLFont.CodePointRange(startCodePoint, endCodePoint));
+    public AwtFontBuilder addGlyphs(int startCodePoint, int endCodePoint) {
+        glyphsToLoad.add(new AwtFont.CodePointRange(startCodePoint, endCodePoint));
         return this;
     }
 
-    public GLFontBuilder addUsAsciiGlyphs() {
+    public AwtFontBuilder addUsAsciiGlyphs() {
         addAscii7BitGlyphs();
         return this;
     }
 
-    public GLFontBuilder buildFont() {
+    public AwtFontBuilder buildFont() {
 
         // Configure font style
         int style = 0;
@@ -78,16 +78,16 @@ public class GLFontBuilder {
 
         // Create fonts
         Font font = new Font(family, style, size);
-        glFont = createFontClass(antiAliasing, leftToRight, font);
+        awtFont = createFontClass(antiAliasing, leftToRight, font);
 
         // Add and load glyphs
-        for (GLFont.CodePointRange codePointRange : glyphsToLoad) {
-            glFont.addGlyphs(codePointRange.getStartCodePoint(), codePointRange.getEndCodePoint());
+        for (AwtFont.CodePointRange codePointRange : glyphsToLoad) {
+            awtFont.addGlyphs(codePointRange.getStartCodePoint(), codePointRange.getEndCodePoint());
         }
-        glFont.loadGlyphs();
+        awtFont.loadGlyphs();
 
         // Get each image from the code pages so we can create textures
-        HashMapIntGeneric<GLFont.CodePage> codePageIndexToCodePage = glFont.getCodePages();
+        HashMapIntGeneric<AwtFont.CodePage> codePageIndexToCodePage = awtFont.getCodePages();
         Iterator<Entry<CodePage>> iterator = codePageIndexToCodePage.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<CodePage> entry = iterator.next();
@@ -106,7 +106,7 @@ public class GLFontBuilder {
 
             // Remove texture from the pool if it exists. Add texture
             // to the pool and set filename of the texture in the code page.
-            String textureFilename = glFont.getFilename(key);
+            String textureFilename = awtFont.getFilename(key);
             Texture existingTexture = Renderable.texturePool.remove(textureFilename);
             if (existingTexture != null) {
                 existingTexture.destroy();
@@ -118,69 +118,69 @@ public class GLFontBuilder {
         return this;
     }
 
-    public GLFont createFont(boolean reset) {
-        GLFont temp = glFont;
+    public AwtFont createFont(boolean reset) {
+        AwtFont temp = awtFont;
         if (reset) {
             reset();
         }
         return temp;
     }
 
-    public final GLFontBuilder reset() {
+    public final AwtFontBuilder reset() {
         antiAliasing = true;
         bold = true;
         italic = false;
         useMipmap = false;
         lodBias = 0f;
         size = 16;
-        glFont = null;
+        awtFont = null;
         glyphsToLoad.clear();
         family = "Dialog";
         return this;
     }
 
-    public GLFontBuilder setAntiAliasing(boolean antiAliasing) {
+    public AwtFontBuilder setAntiAliasing(boolean antiAliasing) {
         this.antiAliasing = antiAliasing;
         return this;
     }
 
-    public GLFontBuilder setBold(boolean bold) {
+    public AwtFontBuilder setBold(boolean bold) {
         this.bold = bold;
         return this;
     }
 
-    public GLFontBuilder setFamily(String family) {
+    public AwtFontBuilder setFamily(String family) {
         this.family = family;
         return this;
     }
 
-    public GLFontBuilder setItalic(boolean italic) {
+    public AwtFontBuilder setItalic(boolean italic) {
         this.italic = italic;
         return this;
     }
 
-    public GLFontBuilder setLeftToRight(boolean leftToRight) {
+    public AwtFontBuilder setLeftToRight(boolean leftToRight) {
         this.leftToRight = leftToRight;
         return this;
     }
 
-    public GLFontBuilder setLodBias(float lodBias) {
+    public AwtFontBuilder setLodBias(float lodBias) {
         this.lodBias = lodBias;
         return this;
     }
 
-    public GLFontBuilder setPlain() {
+    public AwtFontBuilder setPlain() {
         this.bold = false;
         this.italic = false;
         return this;
     }
 
-    public GLFontBuilder setSize(int size) {
+    public AwtFontBuilder setSize(int size) {
         this.size = size;
         return this;
     }
 
-    public GLFontBuilder setUseMipmap(boolean useMipmap) {
+    public AwtFontBuilder setUseMipmap(boolean useMipmap) {
         this.useMipmap = useMipmap;
         return this;
     }

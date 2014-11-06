@@ -30,7 +30,7 @@ import net.smert.frameworkgl.opengl.Texture;
 import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.constants.ShaderTypes;
 import net.smert.frameworkgl.opengl.constants.TextureTargets;
-import net.smert.frameworkgl.opengl.font.GLFont;
+import net.smert.frameworkgl.opengl.font.AwtFont;
 import net.smert.frameworkgl.opengl.image.ImageReader;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
@@ -41,6 +41,8 @@ import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.factory.RenderableFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderer.AbstractRendererGL;
+import net.smert.frameworkgl.opengl.renderer.AwtFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.FontRenderer;
 import net.smert.frameworkgl.opengl.renderer.Renderer;
 import net.smert.frameworkgl.opengl.renderer.TextRenderer;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
@@ -55,7 +57,7 @@ public class Graphics implements Renderer, TextRenderer {
     private static RenderableComparison renderableComparison = new RenderableComparison();
 
     private AbstractRendererGL renderer;
-    private GLFont defaultFont;
+    private FontRenderer defaultFontRenderer;
     private RenderableFactory renderableFactory;
 
     public Shader buildShader(String fragmentShaderFilename, String vertexShaderFilename, String shaderName)
@@ -174,12 +176,8 @@ public class Graphics implements Renderer, TextRenderer {
         Graphics.renderableComparison = renderableComparison;
     }
 
-    public GLFont getDefaultFont() {
-        return defaultFont;
-    }
-
-    public void setDefaultFont(GLFont defaultFont) {
-        this.defaultFont = defaultFont;
+    public FontRenderer getDefaultFontRenderer() {
+        return defaultFontRenderer;
     }
 
     public Texture getTexture(String filename) {
@@ -198,7 +196,7 @@ public class Graphics implements Renderer, TextRenderer {
         Renderable.bindState.setAttribLocations(GL.defaultAttribLocations);
         Renderable.materialLightPool.add("default", materialLight);
         Renderable.shaderBindState.init();
-        defaultFont = GL.glFontBuilder.
+        AwtFont awtFont = GL.awtFontBuilder.
                 addUsAsciiGlyphs().
                 setAntiAliasing(true).
                 setBold(true).
@@ -207,8 +205,11 @@ public class Graphics implements Renderer, TextRenderer {
                 setSize(16).
                 buildFont().
                 createFont(true);
-        switchDefaultFont();
+        AwtFontRenderer awtFontRenderer = GL.rendererFactory.createAwtFontRenderer();
+        awtFontRenderer.init(awtFont);
+        defaultFontRenderer = awtFontRenderer;
         switchRenderableFactoryAndRenderer(1); // Switch to OpenGL 1.X
+        switchDefaultFontRenderer(); // Set default font renderer after switching renderer
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
@@ -277,8 +278,8 @@ public class Graphics implements Renderer, TextRenderer {
         Collections.sort(gameObjects, renderableComparison);
     }
 
-    public void switchDefaultFont() {
-        GL.glFontRenderer.setDefaultFont(defaultFont);
+    public void switchDefaultFontRenderer() {
+        setDefaultFontRenderer(defaultFontRenderer);
     }
 
     public void switchRenderableFactoryAndRenderer(int openglMajorVersion) {
@@ -432,28 +433,43 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
-    public void drawString(String text, float x, float y) {
-        renderer.drawString(text, x, y);
-    }
-
-    @Override
-    public void drawString(String text, float x, float y, GLFont font) {
-        renderer.drawString(text, x, y, font);
-    }
-
-    @Override
     public void drawString(String text) {
         renderer.drawString(text);
     }
 
     @Override
-    public void drawString(String text, GLFont font) {
-        renderer.drawString(text, font);
+    public void drawString(String text, float x, float y) {
+        renderer.drawString(text, x, y);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, FontRenderer fontRenderer) {
+        renderer.drawString(text, x, y, fontRenderer);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, float sizeX, float sizeY) {
+        renderer.drawString(text, x, y, sizeX, sizeY);
+    }
+
+    @Override
+    public void drawString(String text, float x, float y, float sizeX, float sizeY, FontRenderer fontRenderer) {
+        renderer.drawString(text, x, y, sizeX, sizeY, fontRenderer);
+    }
+
+    @Override
+    public void drawString(String text, FontRenderer fontRenderer) {
+        renderer.drawString(text, fontRenderer);
     }
 
     @Override
     public void resetTextRendering() {
         renderer.resetTextRendering();
+    }
+
+    @Override
+    public void setDefaultFontRenderer(FontRenderer defaultFontRenderer) {
+        renderer.setDefaultFontRenderer(defaultFontRenderer);
     }
 
     @Override
@@ -482,8 +498,8 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
-    public void textNewHalfLine(GLFont font) {
-        renderer.textNewHalfLine(font);
+    public void textNewHalfLine(FontRenderer fontRenderer) {
+        renderer.textNewHalfLine(fontRenderer);
     }
 
     @Override
@@ -492,8 +508,8 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
-    public void textNewLine(GLFont font) {
-        renderer.textNewLine(font);
+    public void textNewLine(FontRenderer fontRenderer) {
+        renderer.textNewLine(fontRenderer);
     }
 
     public static class RenderableComparison implements Comparator<GameObject> {

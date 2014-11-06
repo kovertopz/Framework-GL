@@ -12,7 +12,6 @@
  */
 package net.smert.frameworkgl.opengl.renderer;
 
-import net.smert.frameworkgl.opengl.font.GLFont;
 import net.smert.frameworkgl.utils.Color;
 
 /**
@@ -21,15 +20,21 @@ import net.smert.frameworkgl.utils.Color;
  */
 public interface TextRenderer {
 
-    public void drawString(String text, float x, float y);
-
-    public void drawString(String text, float x, float y, GLFont font);
-
     public void drawString(String text);
 
-    public void drawString(String text, GLFont font);
+    public void drawString(String text, float x, float y);
+
+    public void drawString(String text, float x, float y, FontRenderer fontRenderer);
+
+    public void drawString(String text, float x, float y, float sizeX, float sizeY);
+
+    public void drawString(String text, float x, float y, float sizeX, float sizeY, FontRenderer fontRenderer);
+
+    public void drawString(String text, FontRenderer fontRenderer);
 
     public void resetTextRendering();
+
+    public void setDefaultFontRenderer(FontRenderer defaultFontRenderer);
 
     public void setTextColor(float r, float g, float b, float a);
 
@@ -41,10 +46,10 @@ public interface TextRenderer {
 
     public void textNewHalfLine();
 
-    public void textNewHalfLine(GLFont font);
+    public void textNewHalfLine(FontRenderer fontRenderer);
 
     public void textNewLine();
 
-    public void textNewLine(GLFont font);
+    public void textNewLine(FontRenderer fontRenderer);
 
 }

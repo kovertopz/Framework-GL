@@ -13,35 +13,27 @@
 package net.smert.frameworkgl.opengl.renderer;
 
 import net.smert.frameworkgl.math.Vector2f;
-import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
-import net.smert.frameworkgl.utils.Color;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface TextHelperRenderer {
+public interface FontRenderer {
 
-    public void colorText(Color color);
+    public void drawString(String text, float x, float y, TextHelperRenderer renderer);
 
-    public AbstractRenderable createGlyphRenderable();
+    public void drawString(String text, float x, float y, float sizeX, float sizeY, TextHelperRenderer renderer);
 
-    public float getTextDefaultX();
+    public void drawString(String text, TextHelperRenderer renderer);
 
-    public float getTextDefaultY();
+    public int getExtraFontAdvanceX();
 
-    public Color getTextColor();
+    public void setExtraFontAdvanceX(int extraFontAdvanceX);
 
-    public Vector2f getTextPosition();
+    public void newHalfLine(TextHelperRenderer renderer, Vector2f position);
 
-    public void popMatrix();
+    public void newLine(TextHelperRenderer renderer, Vector2f position);
 
-    public void pushMatrix();
-
-    public void renderGlyph(AbstractRenderable renderable);
-
-    public void scaleText(float x, float y);
-
-    public void translateText(float x, float y);
+    public void reset(TextHelperRenderer renderer, Vector2f position);
 
 }

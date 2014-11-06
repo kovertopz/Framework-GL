@@ -42,22 +42,22 @@ import net.smert.frameworkgl.utils.HashMapIntGeneric;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GLFont {
+public class AwtFont {
 
     private final Builder builder;
     private Glyph missingGlyph;
     private final HashMapIntGeneric<CodePage> codePageIndexToCodePage;
     private final List<CodePointRange> glyphsToLoad;
 
-    public GLFont(Font font) {
+    public AwtFont(Font font) {
         this(true, true, font);
     }
 
-    public GLFont(boolean leftToRight, Font font) {
+    public AwtFont(boolean leftToRight, Font font) {
         this(true, leftToRight, font);
     }
 
-    public GLFont(boolean antiAliasing, boolean leftToRight, Font font) {
+    public AwtFont(boolean antiAliasing, boolean leftToRight, Font font) {
         builder = new Builder(antiAliasing, leftToRight, font);
         builder.createDefault();
         codePageIndexToCodePage = new HashMapIntGeneric<>();
@@ -168,7 +168,7 @@ public class GLFont {
 
     public String getFilename(int codePoint) {
         int codePageIndex = CodePage.GetPageIndex(codePoint);
-        return "__Internal_GLFont_" + builder.hashCode() + "_CPI_" + codePageIndex;
+        return "__Internal_AwtFont_" + builder.hashCode() + "_CPI_" + codePageIndex;
     }
 
     public void loadGlyphs() {

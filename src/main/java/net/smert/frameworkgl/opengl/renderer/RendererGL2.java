@@ -16,6 +16,7 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.Transform4f;
+import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
@@ -35,8 +36,8 @@ import net.smert.frameworkgl.utils.Color;
  */
 public class RendererGL2 extends AbstractRendererGL {
 
-    public RendererGL2(GLFontRenderer glFontRenderer) {
-        super(glFontRenderer);
+    public RendererGL2() {
+        super();
     }
 
     private void render(AbstractRenderable renderable) {
@@ -239,6 +240,21 @@ public class RendererGL2 extends AbstractRendererGL {
     }
 
     @Override
+    public float getTextDefaultX() {
+        return textDefaultX;
+    }
+
+    @Override
+    public float getTextDefaultY() {
+        return textDefaultY;
+    }
+
+    @Override
+    public Vector2f getTextPosition() {
+        return textPosition;
+    }
+
+    @Override
     public void popMatrix() {
         GL.matrixHelper.setModeModel();
         GL.matrixHelper.pop();
@@ -253,6 +269,12 @@ public class RendererGL2 extends AbstractRendererGL {
     @Override
     public void renderGlyph(AbstractRenderable renderable) {
         render(renderable);
+    }
+
+    @Override
+    public void scaleText(float x, float y) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.scale(x, y, 1f);
     }
 
     @Override
