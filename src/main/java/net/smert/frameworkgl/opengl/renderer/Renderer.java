@@ -40,6 +40,12 @@ public interface Renderer {
 
     public void enableTextureCubeMap();
 
+    public void popMatrix();
+
+    public void pushMatrix();
+
+    public void render(AbstractRenderable renderable);
+
     public void render(AbstractRenderable renderable, float x, float y, float z);
 
     public void render(AbstractRenderable renderable, Transform4f transform);
@@ -58,6 +64,10 @@ public interface Renderer {
 
     public void renderOpaque(List<GameObject> gameObjects);
 
+    public void scale(float x, float y, float z);
+
+    public void scale(Vector3f scaling);
+
     public void set2DMode();
 
     public void set2DMode(int width, int height);
@@ -65,6 +75,10 @@ public interface Renderer {
     public void setCamera(Camera camera);
 
     public void switchShader(AbstractShader shader);
+
+    public void translate(float x, float y, float z);
+
+    public void translate(Vector3f position);
 
     public void unbindShader();
 

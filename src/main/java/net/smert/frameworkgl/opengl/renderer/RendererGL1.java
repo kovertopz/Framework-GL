@@ -47,10 +47,10 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     private void render(AbstractRenderable renderable, FloatBuffer modelMatrixFloatBuffer) {
-        GL.o1.pushMatrix();
+        pushMatrix();
         GL.o1.multiplyMatrix(modelMatrixFloatBuffer);
         renderable.render();
-        GL.o1.popMatrix();
+        popMatrix();
     }
 
     public VertexArrayGL1Renderable createArrayRenderable() {
@@ -126,11 +126,26 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
-    public void render(AbstractRenderable renderable, float x, float y, float z) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(x, y, z);
-        renderable.render();
+    public void popMatrix() {
         GL.o1.popMatrix();
+    }
+
+    @Override
+    public void pushMatrix() {
+        GL.o1.pushMatrix();
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable) {
+        renderable.render();
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable, float x, float y, float z) {
+        pushMatrix();
+        translate(x, y, z);
+        render(renderable);
+        popMatrix();
     }
 
     @Override
@@ -142,10 +157,10 @@ public class RendererGL1 extends AbstractRendererGL {
 
     @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
-        GL.o1.pushMatrix();
-        GL.o1.translate(position.getX(), position.getY(), position.getZ());
-        renderable.render();
-        GL.o1.popMatrix();
+        pushMatrix();
+        translate(position);
+        render(renderable);
+        popMatrix();
     }
 
     @Override
@@ -203,6 +218,16 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
+    public void scale(float x, float y, float z) {
+        GL.o1.scale(x, y, z);
+    }
+
+    @Override
+    public void scale(Vector3f scaling) {
+        GL.o1.scale(scaling.getX(), scaling.getY(), scaling.getZ());
+    }
+
+    @Override
     public void set2DMode() {
         GL.o1.setProjectionOrtho(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
         GL.o1.setModelViewIdentity();
@@ -233,13 +258,23 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
+    public void translate(float x, float y, float z) {
+        GL.o1.translate(x, y, z);
+    }
+
+    @Override
+    public void translate(Vector3f position) {
+        GL.o1.translate(position.getX(), position.getY(), position.getZ());
+    }
+
+    @Override
     public void unbindShader() {
         throw new UnsupportedOperationException("Not supported by this renderer");
     }
 
     @Override
     public void colorText(Color color) {
-        GL.o1.color(color.getR(), color.getG(), color.getB(), color.getA());
+        color(color.getR(), color.getG(), color.getB(), color.getA());
     }
 
     @Override
@@ -263,28 +298,18 @@ public class RendererGL1 extends AbstractRendererGL {
     }
 
     @Override
-    public void popMatrix() {
-        GL.o1.popMatrix();
-    }
-
-    @Override
-    public void pushMatrix() {
-        GL.o1.pushMatrix();
-    }
-
-    @Override
     public void renderGlyph(AbstractRenderable renderable) {
-        renderable.render();
+        render(renderable);
     }
 
     @Override
     public void scaleText(float x, float y) {
-        GL.o1.scale(x, y, 1f);
+        scale(x, y, 1f);
     }
 
     @Override
     public void translateText(float x, float y) {
-        GL.o1.translate(x, y, 0f);
+        translate(x, y, 0f);
     }
 
 }

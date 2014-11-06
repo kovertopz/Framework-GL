@@ -77,7 +77,7 @@ public abstract class AbstractRendererGL implements Renderer, TextHelperRenderer
 
     @Override
     public void setDefaultFontRenderer(FontRenderer defaultFontRenderer) {
-        this.defaultFontRenderer = defaultFontRenderer;
+        AbstractRendererGL.defaultFontRenderer = defaultFontRenderer;
     }
 
     @Override

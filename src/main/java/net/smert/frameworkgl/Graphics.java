@@ -363,6 +363,21 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
+    public void popMatrix() {
+        renderer.popMatrix();
+    }
+
+    @Override
+    public void pushMatrix() {
+        renderer.pushMatrix();
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable) {
+        renderer.render(renderable);
+    }
+
+    @Override
     public void render(AbstractRenderable renderable, float x, float y, float z) {
         renderer.render(renderable, x, y, z);
     }
@@ -408,6 +423,16 @@ public class Graphics implements Renderer, TextRenderer {
     }
 
     @Override
+    public void scale(float x, float y, float z) {
+        renderer.scale(x, y, z);
+    }
+
+    @Override
+    public void scale(Vector3f scaling) {
+        renderer.scale(scaling);
+    }
+
+    @Override
     public void set2DMode() {
         renderer.set2DMode();
     }
@@ -425,6 +450,16 @@ public class Graphics implements Renderer, TextRenderer {
     @Override
     public void switchShader(AbstractShader shader) {
         renderer.switchShader(shader);
+    }
+
+    @Override
+    public void translate(float x, float y, float z) {
+        renderer.translate(x, y, z);
+    }
+
+    @Override
+    public void translate(Vector3f position) {
+        renderer.translate(position);
     }
 
     @Override
@@ -460,6 +495,11 @@ public class Graphics implements Renderer, TextRenderer {
     @Override
     public void drawString(String text, FontRenderer fontRenderer) {
         renderer.drawString(text, fontRenderer);
+    }
+
+    @Override
+    public Color getTextColor() {
+        return renderer.getTextColor();
     }
 
     @Override

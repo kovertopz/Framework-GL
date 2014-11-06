@@ -39,11 +39,6 @@ public class RendererGL3 extends AbstractRendererGL {
         super();
     }
 
-    private void render(AbstractRenderable renderable) {
-        Renderable.shaderBindState.sendUniformMatrices();
-        renderable.render();
-    }
-
     public AbstractRenderable createArrayRenderable() {
         return GL.rf3.createArrayRenderable();
     }
@@ -108,34 +103,54 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
-    public void render(AbstractRenderable renderable, float x, float y, float z) {
+    public void popMatrix() {
         GL.matrixHelper.setModeModel();
-        GL.matrixHelper.loadIdentity();
-        GL.matrixHelper.translate(x, y, z);
+        GL.matrixHelper.pop();
+    }
+
+    @Override
+    public void pushMatrix() {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.push();
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable) {
+        Renderable.shaderBindState.sendUniformMatrices();
+        renderable.render();
+    }
+
+    @Override
+    public void render(AbstractRenderable renderable, float x, float y, float z) {
+        pushMatrix();
+        translate(x, y, z);
         render(renderable);
+        popMatrix();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Transform4f transform) {
-        GL.matrixHelper.setModeModel();
+        pushMatrix();
         GL.matrixHelper.load(transform);
         render(renderable);
+        popMatrix();
     }
 
     @Override
     public void render(AbstractRenderable renderable, Vector3f position) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.loadIdentity();
-        GL.matrixHelper.translate(position.getX(), position.getY(), position.getZ());
+        pushMatrix();
+        translate(position);
         render(renderable);
+        popMatrix();
     }
 
     @Override
     public void render(GameObject gameObject) {
-        GL.matrixHelper.setModeModel();
+        pushMatrix();
         GL.matrixHelper.load(gameObject.getWorldTransform());
         Renderable.shaderBindState.sendUniformsOncePerGameObject(gameObject);
         render(gameObject.getRenderable());
+        popMatrix();
     }
 
     @Override
@@ -186,6 +201,18 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
+    public void scale(float x, float y, float z) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.scale(x, y, z);
+    }
+
+    @Override
+    public void scale(Vector3f scaling) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.scale(scaling.getX(), scaling.getY(), scaling.getZ());
+    }
+
+    @Override
     public void set2DMode() {
         GL.matrixHelper.setModeProjection();
         GL.matrixHelper.setOrthogonal(0f, Fw.config.getCurrentWidth(), 0f, Fw.config.getCurrentHeight(), -1f, 1f);
@@ -213,11 +240,24 @@ public class RendererGL3 extends AbstractRendererGL {
         GL.matrixHelper.setModeView();
         GL.matrixHelper.load(camera.getViewMatrix());
         GL.matrixHelper.setModeModel();
+        GL.matrixHelper.loadIdentity();
     }
 
     @Override
     public void switchShader(AbstractShader shader) {
         Renderable.shaderBindState.switchShader(shader);
+    }
+
+    @Override
+    public void translate(float x, float y, float z) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.translate(x, y, z);
+    }
+
+    @Override
+    public void translate(Vector3f position) {
+        GL.matrixHelper.setModeModel();
+        GL.matrixHelper.translate(position.getX(), position.getY(), position.getZ());
     }
 
     @Override
@@ -227,8 +267,7 @@ public class RendererGL3 extends AbstractRendererGL {
 
     @Override
     public void colorText(Color color) {
-        GL.o2.vertexAttrib(GL.defaultAttribLocations.getIndex("color"), color.getR(), color.getG(), color.getB(),
-                color.getA());
+        color(color.getR(), color.getG(), color.getB(), color.getA());
     }
 
     @Override
@@ -252,32 +291,18 @@ public class RendererGL3 extends AbstractRendererGL {
     }
 
     @Override
-    public void popMatrix() {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.pop();
-    }
-
-    @Override
-    public void pushMatrix() {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.push();
-    }
-
-    @Override
     public void renderGlyph(AbstractRenderable renderable) {
         render(renderable);
     }
 
     @Override
     public void scaleText(float x, float y) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.scale(x, y, 1f);
+        scale(x, y, 1f);
     }
 
     @Override
     public void translateText(float x, float y) {
-        GL.matrixHelper.setModeModel();
-        GL.matrixHelper.translate(x, y, 0f);
+        translate(x, y, 0f);
     }
 
 }

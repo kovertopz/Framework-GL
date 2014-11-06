@@ -32,6 +32,8 @@ public interface TextRenderer {
 
     public void drawString(String text, FontRenderer fontRenderer);
 
+    public Color getTextColor();
+
     public void resetTextRendering();
 
     public void setDefaultFontRenderer(FontRenderer defaultFontRenderer);
