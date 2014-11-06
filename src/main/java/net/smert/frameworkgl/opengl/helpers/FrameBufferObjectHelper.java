@@ -75,10 +75,6 @@ public class FrameBufferObjectHelper {
         GL20.glDrawBuffers(intBuffer);
     }
 
-    public void generateMipmap(int textureTarget) {
-        GL30.glGenerateMipmap(textureTarget);
-    }
-
     public void readBuffer(int mode) {
         GL11.glReadBuffer(mode);
     }
