@@ -46,11 +46,6 @@ public class GUI {
         }
     }
 
-    public void fromXml(String filename, String startScreen) throws IOException {
-        Files.FileAsset fileAsset = Fw.files.getGui(filename);
-        nifty.fromXml(fileAsset.getFullPathToFile(), fileAsset.openStream(), startScreen);
-    }
-
     public void init() {
         if (initialized) {
             return;
@@ -73,6 +68,11 @@ public class GUI {
 
     public void setClearScreen(boolean clearScreen) {
         this.clearScreen = clearScreen;
+    }
+
+    public void loadGuiFromXml(String filename, String startScreen) throws IOException {
+        Files.FileAsset fileAsset = Fw.files.getGui(filename);
+        nifty.fromXml(fileAsset.getFullPathToFile(), fileAsset.openStream(), startScreen);
     }
 
     public synchronized void render() {
