@@ -7,20 +7,22 @@ modern practices using OpenGL 3.3.
 
 Framework-GL has the following features :
 
+- 3D sound system through OpenAL. Playback supports (FLAC, MIDI, MP3, OGG and WAV).
 - Basic rendering with immediate mode, display lists, vertex arrays,
   vertex buffer objects (dynamic & interleaved) using OpenGL 1.X.
 - Basic rendering with vertex arrays, vertex buffer objects (dynamic
   & interleaved) and shaders using OpenGL 2.X.
 - Basic rendering with vertex array objects and shaders using OpenGL
   3.X.
+- Bitmap font rendering (using Awt or Angel Code)
 - Builders (FBOs, shaders & textures)
 - Built-in shaders (Diffuse, Blinn-Phong and Phong either pixel or
   vertex lit)
 - Cube maps
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.
-- Bitmap font rendering (using Java2D)
 - Frustum culling in clip space.
+- GUI support with Nifty GUI (http://nifty-gui.lessvoid.com/)
 - Math library (AABBs, matrices, quaternions and vectors)
 - Model loading (OBJ & MTL)
 - OpenGL constants have been organized to be more useful.
