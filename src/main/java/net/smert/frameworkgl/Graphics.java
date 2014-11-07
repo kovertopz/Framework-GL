@@ -43,7 +43,7 @@ import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderer.AbstractRendererGL;
 import net.smert.frameworkgl.opengl.renderer.AwtFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.FontRenderer;
-import net.smert.frameworkgl.opengl.renderer.Renderer;
+import net.smert.frameworkgl.opengl.renderer.GLRenderer;
 import net.smert.frameworkgl.opengl.renderer.TextRenderer;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.Color;
@@ -52,7 +52,7 @@ import net.smert.frameworkgl.utils.Color;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Graphics implements Renderer, TextRenderer {
+public class Graphics implements GLRenderer, TextRenderer {
 
     private static RenderableComparison renderableComparison = new RenderableComparison();
 

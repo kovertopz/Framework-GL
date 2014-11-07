@@ -24,7 +24,7 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface Renderer {
+public interface GLRenderer {
 
     public void color(float r, float g, float b, float a);
 

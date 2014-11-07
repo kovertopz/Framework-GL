@@ -20,7 +20,7 @@ import net.smert.frameworkgl.utils.Color;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractRendererGL implements Renderer, TextHelperRenderer, TextRenderer {
+public abstract class AbstractRendererGL implements GLRenderer, TextHelperRenderer, TextRenderer {
 
     protected int textDefaultX;
     protected int textDefaultY;
