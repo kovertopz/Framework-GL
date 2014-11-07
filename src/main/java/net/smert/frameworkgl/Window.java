@@ -15,6 +15,7 @@ package net.smert.frameworkgl;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +92,7 @@ public class Window {
 
         // Set display mode and title
         Display.setDisplayMode(displayMode);
-        Display.setTitle(config.windowTitle);
+        setTitle(config.windowTitle);
 
         // Only create the display when it hasn't already done so. We would get an error when switching from
         // windowed to full screen otherwise.
@@ -120,11 +121,31 @@ public class Window {
         Display.setVSyncEnabled(vSync);
 
         // Create "LWJGL Timer" thread so Thread.sleep() is more accurate.
-        Display.sync(3000);
+        sync(3000);
 
         // Save the current window width and height
-        config.currentHeight = Display.getHeight();
-        config.currentWidth = Display.getWidth();
+        config.currentHeight = getHeight();
+        config.currentWidth = getWidth();
+    }
+
+    public void destroy() {
+        Display.destroy();
+    }
+
+    public int getHeight() {
+        return Display.getHeight();
+    }
+
+    public int getWidth() {
+        return Display.getWidth();
+    }
+
+    public boolean isActive() {
+        return Display.isActive();
+    }
+
+    public boolean isCloseRequested() {
+        return Display.isCloseRequested();
     }
 
     public void printDisplayModes() throws LWJGLException {
@@ -141,8 +162,16 @@ public class Window {
         }
     }
 
+    public void processMessages() {
+        Display.processMessages();
+    }
+
     public void setTitle(String title) {
         Display.setTitle(title);
+    }
+
+    public void sync(int fps) {
+        Display.sync(fps);
     }
 
     public void toggleFullscreen() throws LWJGLException {
@@ -153,6 +182,15 @@ public class Window {
     public void toggleVSync() throws LWJGLException {
         vSync = !vSync;
         create();
+    }
+
+    public void update() {
+        Display.update(false); // Do not process operating system events again
+        Util.checkGLError();
+    }
+
+    public boolean wasResized() {
+        return Display.wasResized();
     }
 
 }

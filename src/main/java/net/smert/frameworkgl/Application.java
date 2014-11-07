@@ -13,9 +13,6 @@
 package net.smert.frameworkgl;
 
 import java.io.IOException;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +42,20 @@ public class Application {
             @Override
             public void run() {
                 try {
+                    Fw.window.create();
+                    Fw.graphics.init();
+                    Fw.input.init();
                     Application.this.mainLoop();
                 } catch (Throwable t) {
                     log.error("Main Loop Exception", t);
                     Application.this.handleThrowable(t);
                     System.exit(-1);
+                } finally {
+                    Fw.audio.destroy();
+                    Fw.gui.destroy();
+                    Fw.input.destroy(); // Shutdown in reverse order
+                    Fw.graphics.destroy();
+                    Fw.window.destroy();
                 }
             }
         };
@@ -61,23 +67,24 @@ public class Application {
         throwableHandler.process(t);
     }
 
-    void mainLoop() throws LWJGLException {
+    void mainLoop() {
 
-        // Initialization of OpenGL must happen here since we are in a new thread
-        Fw.window.create();
-        Fw.graphics.init();
-        Fw.input.init();
+        // Initialize screen
         screen.init();
+
+        // Reset timer so delta is correct
         Fw.timer.reset();
 
+        // Set the window previously active and created
         boolean wasActive = true;
+        boolean wasCreated = true;
 
         while (isRunning()) {
 
             // Process operating system events
-            Display.processMessages();
+            Fw.window.processMessages();
 
-            config.inFocus = Display.isActive();
+            config.inFocus = Fw.window.isActive();
 
             // Lost focus
             if (wasActive && !config.inFocus && config.pauseNotInFocus) {
@@ -91,15 +98,16 @@ public class Application {
             }
 
             // Was the window closed?
-            if (Display.isCloseRequested()) {
+            if (Fw.window.isCloseRequested()) {
                 stopRunning();
                 break;
             }
 
             // Was the window resized?
-            if (Display.wasResized()) {
-                int x = Display.getWidth();
-                int y = Display.getHeight();
+            if (Fw.window.wasResized() || wasCreated) {
+                wasCreated = false;
+                int x = Fw.window.getWidth();
+                int y = Fw.window.getHeight();
                 config.currentHeight = y;
                 config.currentWidth = x;
                 screen.resize(x, y);
@@ -109,8 +117,7 @@ public class Application {
             Fw.input.update();
             Fw.timer.update();
             screen.render();
-            Display.update(false); // Do not process operating system events again
-            Util.checkGLError();
+            Fw.window.update();
 
             // Limit frame rate
             int frameRateLimit;
@@ -119,16 +126,12 @@ public class Application {
             } else {
                 frameRateLimit = config.backgroundFrameRate;
             }
-            Display.sync(frameRateLimit);
+            Fw.window.sync(frameRateLimit);
         }
 
         // Shutdown
         screen.pause();
         screen.destroy();
-        Fw.audio.destroy();
-        Fw.gui.destroy();
-        Fw.graphics.destroy(); // Must be last
-        Display.destroy();
     }
 
     public boolean isRunning() {

@@ -71,8 +71,9 @@ public class Input {
         actionToMouse.clear();
     }
 
-    public boolean isGrabbed() {
-        return mouseHelper.isGrabbed();
+    public void destroy() {
+        keyboardHelper.destroy();
+        mouseHelper.destroy();
     }
 
     public float getDeltaWheel() {
@@ -109,6 +110,10 @@ public class Input {
 
     public List<MouseHelper.MouseEvent> getMouseEvents() {
         return mouseHelper.getMouseEvents();
+    }
+
+    public boolean isGrabbed() {
+        return mouseHelper.isGrabbed();
     }
 
     /**

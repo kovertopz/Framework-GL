@@ -147,6 +147,10 @@ public class KeyboardHelper {
         }
     }
 
+    public void destroy() {
+        org.lwjgl.input.Keyboard.destroy();
+    }
+
     public List<KeyboardEvent> getKeyboardEvents() {
         return keyboardEvents;
     }

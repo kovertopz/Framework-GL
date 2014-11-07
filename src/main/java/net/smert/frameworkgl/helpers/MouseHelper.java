@@ -111,6 +111,10 @@ public class MouseHelper {
         mouseY = org.lwjgl.input.Mouse.getY();
     }
 
+    public void destroy() {
+        org.lwjgl.input.Mouse.destroy();
+    }
+
     public float getDeltaWheel() {
         return deltaWheel;
     }
