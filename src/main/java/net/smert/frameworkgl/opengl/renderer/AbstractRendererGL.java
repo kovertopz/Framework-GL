@@ -22,11 +22,10 @@ import net.smert.frameworkgl.utils.Color;
  */
 public abstract class AbstractRendererGL implements Renderer, TextHelperRenderer, TextRenderer {
 
-    protected static FontRenderer defaultFontRenderer;
-
     protected int textDefaultX;
     protected int textDefaultY;
     protected final Color textColor;
+    protected FontRenderer defaultFontRenderer;
     protected final Vector2f textPosition;
 
     public AbstractRendererGL() {
@@ -77,7 +76,7 @@ public abstract class AbstractRendererGL implements Renderer, TextHelperRenderer
 
     @Override
     public void setDefaultFontRenderer(FontRenderer defaultFontRenderer) {
-        AbstractRendererGL.defaultFontRenderer = defaultFontRenderer;
+        this.defaultFontRenderer = defaultFontRenderer;
     }
 
     @Override

@@ -212,8 +212,7 @@ public class Graphics implements Renderer, TextRenderer {
         AwtFontRenderer awtFontRenderer = GL.rendererFactory.createAwtFontRenderer();
         awtFontRenderer.init(awtFont);
         setFontRenderer(awtFontRenderer);
-        switchRenderableFactoryAndRenderer(1); // Switch to OpenGL 1.X
-        switchFontRenderer(); // Set default font renderer after switching renderer
+        switchOpenGLVersion(1); // Switch to OpenGL 1.X
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
@@ -282,11 +281,7 @@ public class Graphics implements Renderer, TextRenderer {
         Collections.sort(gameObjects, renderableComparison);
     }
 
-    public void switchFontRenderer() {
-        setDefaultFontRenderer(fontRenderer);
-    }
-
-    public void switchRenderableFactoryAndRenderer(int openglMajorVersion) {
+    public void switchOpenGLVersion(int openglMajorVersion) {
         switch (openglMajorVersion) {
             case 1:
                 renderableFactory = GL.rf1;
@@ -303,6 +298,7 @@ public class Graphics implements Renderer, TextRenderer {
             default:
                 throw new RuntimeException("Unknown OpenGL version: " + openglMajorVersion);
         }
+        setDefaultFontRenderer(fontRenderer);
     }
 
     public void updateAabb(GameObject gameObject) {

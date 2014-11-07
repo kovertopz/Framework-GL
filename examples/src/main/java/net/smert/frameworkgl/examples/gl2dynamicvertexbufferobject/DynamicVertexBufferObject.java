@@ -132,7 +132,7 @@ public class DynamicVertexBufferObject extends Screen {
     public void init() {
 
         // Switch renderer and factory to OpenGL 2
-        Fw.graphics.switchRenderableFactoryAndRenderer(2);
+        Fw.graphics.switchOpenGLVersion(2);
 
         // Create timer
         fpsTimer = new FpsTimer();

@@ -334,7 +334,7 @@ public class PixelLit extends Screen {
         }
 
         // Switch renderer and factory to OpenGL 3
-        Fw.graphics.switchRenderableFactoryAndRenderer(3);
+        Fw.graphics.switchOpenGLVersion(3);
 
         // Create timer
         fpsTimer = new FpsTimer();
