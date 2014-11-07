@@ -39,7 +39,7 @@ public class Files {
 
     private final static Logger log = LoggerFactory.getLogger(Files.class);
     private final static String AUDIO_LOCATION = "audio";
-    private final static String FONT_LOCATION = "font";
+    private final static String FONT_LOCATION = "fonts";
     private final static String GUI_LOCATION = "gui";
     private final static String MATERIAL_LOCATION = "materials";
     private final static String MESH_LOCATION = "meshes";
