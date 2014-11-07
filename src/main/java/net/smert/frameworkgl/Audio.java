@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl;
 
+import java.io.IOException;
 import net.smert.frameworkgl.openal.AL;
 import net.smert.frameworkgl.openal.OpenAL;
 import net.smert.frameworkgl.openal.OpenALListener;
@@ -222,34 +223,35 @@ public class Audio {
         openal.pause(soundID);
     }
 
-    public int playMusic(String audioFile, boolean loop) {
+    public int playMusic(String audioFile, boolean loop) throws IOException {
         return openal.playMusic(audioFile, loop);
     }
 
-    public int playMusic(String audioFile, boolean loop, boolean priority) {
+    public int playMusic(String audioFile, boolean loop, boolean priority) throws IOException {
         return openal.playMusic(audioFile, loop, priority);
     }
 
-    public int playSound(String audioFile, boolean loop, boolean priority) {
+    public int playSound(String audioFile, boolean loop, boolean priority) throws IOException {
         return openal.playSound(audioFile, loop, priority);
     }
 
-    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z) {
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z)
+            throws IOException {
         return openal.playSound(audioFile, loop, priority, x, y, z);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance) {
+            float maxDistance) throws IOException {
         return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance, float referenceDistance) {
+            float maxDistance, float referenceDistance) throws IOException {
         return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance, referenceDistance);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance, float referenceDistance, float rolloff) {
+            float maxDistance, float referenceDistance, float rolloff) throws IOException {
         return openal.playSound(audioFile, loop, priority, x, y, z, maxDistance, referenceDistance, rolloff);
     }
 

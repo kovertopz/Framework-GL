@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.openal.codecs.midi;
 
+import java.io.IOException;
 import net.smert.frameworkgl.openal.codecs.Codec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class MIDICodec implements Codec {
     private final static Logger log = LoggerFactory.getLogger(MIDICodec.class);
 
     @Override
-    public Data load(String audioFile) {
+    public Data load(String audioFile) throws IOException {
         log.info("Loading MIDI audio file: {}", audioFile);
         return new Codec.Data();
     }

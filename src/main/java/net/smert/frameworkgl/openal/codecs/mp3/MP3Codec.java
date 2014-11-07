@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.openal.codecs.mp3;
 
+import java.io.IOException;
 import net.smert.frameworkgl.openal.codecs.Codec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class MP3Codec implements Codec {
     private final static Logger log = LoggerFactory.getLogger(MP3Codec.class);
 
     @Override
-    public Data load(String audioFile) {
+    public Data load(String audioFile) throws IOException {
         log.info("Loading MP3 audio file: {}", audioFile);
         return new Codec.Data();
     }

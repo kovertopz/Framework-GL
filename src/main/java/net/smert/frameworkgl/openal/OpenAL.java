@@ -92,7 +92,7 @@ public class OpenAL {
         return source;
     }
 
-    protected Codec getCodec(String filename) {
+    protected Codec.Data getCodecData(String filename) throws IOException {
 
         // Get the extension from the filename
         int posOfLastPeriod = filename.lastIndexOf(".");
@@ -107,7 +107,8 @@ public class OpenAL {
         }
 
         // Load the filename using the codec
-        return extensionToCodec.get(extension);
+        Codec codec = extensionToCodec.get(extension);
+        return codec.load(filename);
     }
 
     public void destroy() {
@@ -365,20 +366,14 @@ public class OpenAL {
         checkForError("pausing sound");
     }
 
-    public int playMusic(String audioFile, boolean loop) {
+    public int playMusic(String audioFile, boolean loop) throws IOException {
         return playMusic(audioFile, loop, true);
     }
 
-    public int playMusic(String audioFile, boolean loop, boolean priority) {
+    public int playMusic(String audioFile, boolean loop, boolean priority) throws IOException {
 
         // Get codec and load the audio file
-        Codec codec = getCodec(audioFile);
-        Codec.Data codecData;
-        try {
-            codecData = codec.load(audioFile);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        Codec.Data codecData = getCodecData(audioFile);
 
         // Create a new source
         OpenALSource source = createTempALSource();
@@ -400,44 +395,40 @@ public class OpenAL {
         AL.sourceHelper.setVelocity(sourceID, 0, 0, 0);
         checkForError("setting source parameters");
 
+        // Play music
         AL.sourceHelper.play(sourceID);
         checkForError("playing music");
 
         return sourceID;
     }
 
-    public int playSound(String audioFile, boolean loop, boolean priority) {
+    public int playSound(String audioFile, boolean loop, boolean priority) throws IOException {
         return playSound(audioFile, loop, priority, 0, 0, 0, defaultSourceMaxDistance, defaultSourceReferenceDistance,
                 defaultSourceRolloff);
     }
 
-    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z) {
+    public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z)
+            throws IOException {
         return playSound(audioFile, loop, priority, x, y, z, defaultSourceMaxDistance, defaultSourceReferenceDistance,
                 defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance) {
+            float maxDistance) throws IOException {
         return playSound(audioFile, loop, priority, x, y, z, maxDistance, defaultSourceReferenceDistance,
                 defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance, float referenceDistance) {
+            float maxDistance, float referenceDistance) throws IOException {
         return playSound(audioFile, loop, priority, x, y, z, maxDistance, referenceDistance, defaultSourceRolloff);
     }
 
     public int playSound(String audioFile, boolean loop, boolean priority, float x, float y, float z,
-            float maxDistance, float referenceDistance, float rolloff) {
+            float maxDistance, float referenceDistance, float rolloff) throws IOException {
 
         // Get codec and load the audio file
-        Codec codec = getCodec(audioFile);
-        Codec.Data codecData;
-        try {
-            codecData = codec.load(audioFile);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        Codec.Data codecData = getCodecData(audioFile);
 
         // Create a new source
         OpenALSource source = createTempALSource();
@@ -462,6 +453,7 @@ public class OpenAL {
         AL.sourceHelper.setVelocity(sourceID, 0, 0, 0);
         checkForError("setting source parameters");
 
+        // Play sound
         AL.sourceHelper.play(sourceID);
         checkForError("playing sound");
 

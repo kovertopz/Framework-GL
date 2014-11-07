@@ -15,6 +15,7 @@ package net.smert.frameworkgl.gui;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import java.io.IOException;
 import net.smert.frameworkgl.Fw;
 
 /**
@@ -92,8 +93,12 @@ public class SoundDevice implements de.lessvoid.nifty.spi.sound.SoundDevice {
 
         @Override
         public void play() {
-            sourceID = Fw.audio.playMusic(audioFile, false);
-            setVolume(volume);
+            try {
+                sourceID = Fw.audio.playMusic(audioFile, false);
+                setVolume(volume);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }
@@ -106,8 +111,12 @@ public class SoundDevice implements de.lessvoid.nifty.spi.sound.SoundDevice {
 
         @Override
         public void play() {
-            sourceID = Fw.audio.playSound(audioFile, false, true);
-            setVolume(volume);
+            try {
+                sourceID = Fw.audio.playSound(audioFile, false, true);
+                setVolume(volume);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }
