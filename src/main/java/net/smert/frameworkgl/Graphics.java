@@ -57,7 +57,7 @@ public class Graphics implements Renderer, TextRenderer {
     private static RenderableComparison renderableComparison = new RenderableComparison();
 
     private AbstractRendererGL renderer;
-    private FontRenderer defaultFontRenderer;
+    private FontRenderer fontRenderer;
     private RenderableFactory renderableFactory;
 
     public Shader buildShader(String fragmentShaderFilename, String vertexShaderFilename, String shaderName)
@@ -176,8 +176,12 @@ public class Graphics implements Renderer, TextRenderer {
         Graphics.renderableComparison = renderableComparison;
     }
 
-    public FontRenderer getDefaultFontRenderer() {
-        return defaultFontRenderer;
+    public FontRenderer getFontRenderer() {
+        return fontRenderer;
+    }
+
+    public void setFontRenderer(FontRenderer fontRenderer) {
+        this.fontRenderer = fontRenderer;
     }
 
     public Texture getTexture(String filename) {
@@ -207,9 +211,9 @@ public class Graphics implements Renderer, TextRenderer {
                 createFont(true);
         AwtFontRenderer awtFontRenderer = GL.rendererFactory.createAwtFontRenderer();
         awtFontRenderer.init(awtFont);
-        defaultFontRenderer = awtFontRenderer;
+        setFontRenderer(awtFontRenderer);
         switchRenderableFactoryAndRenderer(1); // Switch to OpenGL 1.X
-        switchDefaultFontRenderer(); // Set default font renderer after switching renderer
+        switchFontRenderer(); // Set default font renderer after switching renderer
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
@@ -278,8 +282,8 @@ public class Graphics implements Renderer, TextRenderer {
         Collections.sort(gameObjects, renderableComparison);
     }
 
-    public void switchDefaultFontRenderer() {
-        setDefaultFontRenderer(defaultFontRenderer);
+    public void switchFontRenderer() {
+        setDefaultFontRenderer(fontRenderer);
     }
 
     public void switchRenderableFactoryAndRenderer(int openglMajorVersion) {

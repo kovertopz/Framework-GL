@@ -229,6 +229,13 @@ public class TextureBindState {
         }
     }
 
+    public void unbindAllForce() {
+        for (int i = 0; i < maxTextureUnits; i++) {
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
+            GL.textureHelper.unbind();
+        }
+    }
+
     public void unbindCurrent() {
         int activeTextureID = textureUnitToTextureID.get(activeTextureUnit);
 
@@ -259,9 +266,23 @@ public class TextureBindState {
         }
     }
 
+    public void unbindModelForce() {
+        for (int i = 0; i < maxModelTextureUnits; i++) {
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
+            GL.textureHelper.unbind();
+        }
+    }
+
     public void unbindShader() {
         for (int i = maxModelTextureUnits; i < maxShaderTextureUnits; i++) {
             bindTexture(TextureUnit.TEXTURE0 + i, null);
+        }
+    }
+
+    public void unbindShaderForce() {
+        for (int i = maxModelTextureUnits; i < maxShaderTextureUnits; i++) {
+            bindTexture(TextureUnit.TEXTURE0 + i, null);
+            GL.textureHelper.unbind();
         }
     }
 
