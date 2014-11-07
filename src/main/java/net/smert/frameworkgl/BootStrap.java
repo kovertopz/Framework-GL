@@ -161,6 +161,7 @@ import net.smert.frameworkgl.opengl.renderable.vbo.VBODrawRangeElements;
 import net.smert.frameworkgl.opengl.renderable.vbo.factory.VBODrawCallFactory;
 import net.smert.frameworkgl.opengl.renderer.AngelCodeFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.AwtFontRenderer;
+import net.smert.frameworkgl.opengl.renderer.NiftyGuiRenderer;
 import net.smert.frameworkgl.opengl.renderer.RendererGL1;
 import net.smert.frameworkgl.opengl.renderer.RendererGL2;
 import net.smert.frameworkgl.opengl.renderer.RendererGL3;
@@ -387,6 +388,7 @@ public class BootStrap {
             // Renderer
             rendererFactoryContainer.addComponent(AngelCodeFontRenderer.class);
             rendererFactoryContainer.addComponent(AwtFontRenderer.class);
+            rendererFactoryContainer.addComponent(NiftyGuiRenderer.class);
 
             // Add container for RendererFactory
             parentContainer.addComponent("rendererFactoryContainer", rendererFactoryContainer);
