@@ -50,7 +50,11 @@ public class AudioWav extends Screen {
 
         fpsTimer = new FpsTimer();
         Fw.audio.init();
-        sourceID = Fw.audio.playMusic("237729__flathill__rain-and-thunder-4.wav", true);
+        try {
+            sourceID = Fw.audio.playMusic("237729__flathill__rain-and-thunder-4.wav", true);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
         GL.o1.clear();
     }
 

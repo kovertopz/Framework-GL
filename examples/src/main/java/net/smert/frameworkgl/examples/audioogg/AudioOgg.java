@@ -50,7 +50,11 @@ public class AudioOgg extends Screen {
 
         fpsTimer = new FpsTimer();
         Fw.audio.init();
-        sourceID = Fw.audio.playMusic("244053__lennyboy__thunder.ogg", true);
+        try {
+            sourceID = Fw.audio.playMusic("244053__lennyboy__thunder.ogg", true);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
         GL.o1.clear();
     }
 
