@@ -32,6 +32,7 @@ import net.smert.frameworkgl.opengl.image.Conversion;
  */
 public class TextureBuilder {
 
+    private boolean convertToRGBA;
     private boolean flipHorizontally;
     private boolean flipVertically;
     private boolean nullData;
@@ -386,6 +387,11 @@ public class TextureBuilder {
         return this;
     }
 
+    public TextureBuilder convertImageARGBToBGRABytePixelArray() {
+        pixelByteArray = Conversion.ConvertImageARGBToBGRAByteArray(bufferedImage);
+        return this;
+    }
+
     public TextureBuilder convertImageARGBToRGBABytePixelArray() {
         pixelByteArray = Conversion.ConvertImageARGBToRGBAByteArray(bufferedImage);
         return this;
@@ -554,7 +560,11 @@ public class TextureBuilder {
 
         setImage(textureImage);
         setHeightAndWidthFromImage();
-        convertImageARGBToRGBABytePixelArray();
+        if (convertToRGBA) {
+            convertImageARGBToRGBABytePixelArray();
+        } else {
+            convertImageARGBToBGRABytePixelArray();
+        }
         if (flipHorizontally) {
             pixelByteArray = Conversion.FlipHorizontally(pixelByteArray, textureImage.getWidth(),
                     textureImage.getHeight());
@@ -572,7 +582,11 @@ public class TextureBuilder {
 
         setImage(textureImage);
         setHeightAndWidthFromImage();
-        convertImageARGBToRGBABytePixelArray();
+        if (convertToRGBA) {
+            convertImageARGBToRGBABytePixelArray();
+        } else {
+            convertImageARGBToBGRABytePixelArray();
+        }
         if (flipHorizontally) {
             pixelByteArray = Conversion.FlipHorizontally(pixelByteArray, textureImage.getWidth(),
                     textureImage.getHeight());
@@ -613,6 +627,7 @@ public class TextureBuilder {
 
     public final TextureBuilder reset() {
 
+        convertToRGBA = true;
         flipHorizontally = false;
         flipVertically = false;
         nullData = false;
@@ -743,6 +758,20 @@ public class TextureBuilder {
 
     public TextureBuilder setCompareModeNone() {
         textureCompareMode = TextureCompareMode.NONE;
+        return this;
+    }
+
+    /**
+     * Converts the image to RGBA to be used by OpenGL. If false the format will be BGRA which is useful for LWJGL mouse
+     * cursors. The documentation for LWJGL Cursor says "Cursor images are in ARGB format, but only one bit transparancy
+     * is guaranteed to be supported." but converting to the format swaps red and blue colors leading me to believe
+     * there is an error with the documentation.
+     *
+     * @param enabled
+     * @return
+     */
+    public TextureBuilder setConvertToRGBA(boolean enabled) {
+        convertToRGBA = enabled;
         return this;
     }
 

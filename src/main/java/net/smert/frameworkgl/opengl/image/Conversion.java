@@ -53,6 +53,29 @@ public class Conversion {
         return intARGB;
     }
 
+    public static byte[] ConvertImageARGBToBGRAByteArray(BufferedImage image) {
+        int ARGB[] = new int[image.getHeight() * image.getWidth()];
+        byte BGRA[] = new byte[image.getHeight() * image.getWidth() * 4];
+
+        image.getRGB(0, 0, image.getWidth(), image.getHeight(), ARGB, 0, image.getWidth());
+
+        for (int i = 0; i < ARGB.length; i++) {
+            int cur = ARGB[i];
+            int alpha = cur >> 24 & 0xff;
+            int red = cur >> 16 & 0xff;
+            int green = cur >> 8 & 0xff;
+            int blue = cur & 0xff;
+            int stride = i * 4;
+
+            BGRA[stride + 0] = (byte) blue;
+            BGRA[stride + 1] = (byte) green;
+            BGRA[stride + 2] = (byte) red;
+            BGRA[stride + 3] = (byte) alpha;
+        }
+
+        return BGRA;
+    }
+
     public static byte[] ConvertImageARGBToRGBAByteArray(BufferedImage image) {
         int ARGB[] = new int[image.getHeight() * image.getWidth()];
         byte RGBA[] = new byte[image.getHeight() * image.getWidth() * 4];
