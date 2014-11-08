@@ -7,7 +7,8 @@ modern practices using OpenGL 3.3.
 
 Framework-GL has the following features :
 
-- 3D sound system through OpenAL. Playback supports (FLAC, MIDI, MP3, OGG and WAV).
+- 3D sound system through OpenAL. Playback supports (AIFF, AU, FLAC,
+  MP3, OGG and WAV). MIDI playback is available through Java Sound API.
 - Basic rendering with immediate mode, display lists, vertex arrays,
   vertex buffer objects (dynamic & interleaved) using OpenGL 1.X.
 - Basic rendering with vertex arrays, vertex buffer objects (dynamic
