@@ -41,21 +41,25 @@ public class Application {
         mainLoopThread = new Thread("LWJGL Application - Main Loop") {
             @Override
             public void run() {
+                boolean exceptionCaught = false;
                 try {
                     Fw.window.create();
                     Fw.graphics.init();
                     Fw.input.init();
                     Application.this.mainLoop();
                 } catch (Throwable t) {
+                    exceptionCaught = true;
                     log.error("Main Loop Exception", t);
                     Application.this.handleThrowable(t);
-                    System.exit(-1);
                 } finally {
                     Fw.audio.destroy();
                     Fw.gui.destroy();
                     Fw.input.destroy(); // Shutdown in reverse order
                     Fw.graphics.destroy();
                     Fw.window.destroy();
+                    if (exceptionCaught) {
+                        System.exit(-1);
+                    }
                 }
             }
         };
