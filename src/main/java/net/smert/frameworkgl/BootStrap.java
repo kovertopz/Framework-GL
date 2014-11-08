@@ -28,6 +28,9 @@ import net.smert.frameworkgl.openal.OpenAL;
 import net.smert.frameworkgl.openal.OpenALBuffer;
 import net.smert.frameworkgl.openal.OpenALListener;
 import net.smert.frameworkgl.openal.OpenALSource;
+import net.smert.frameworkgl.openal.codecs.aiff.AIFFCodec;
+import net.smert.frameworkgl.openal.codecs.au.AUCodec;
+import net.smert.frameworkgl.openal.codecs.flac.FLACCodec;
 import net.smert.frameworkgl.openal.codecs.midi.MIDICodec;
 import net.smert.frameworkgl.openal.codecs.mp3.MP3Codec;
 import net.smert.frameworkgl.openal.codecs.ogg.OGGCodec;
@@ -484,6 +487,9 @@ public class BootStrap {
         container.addComponent(OpenAL.class);
 
         // Codecs
+        container.addComponent(AIFFCodec.class);
+        container.addComponent(AUCodec.class);
+        container.addComponent(FLACCodec.class);
         container.addComponent(MIDICodec.class);
         container.addComponent(MP3Codec.class);
         container.addComponent(OGGCodec.class);
@@ -720,7 +726,12 @@ public class BootStrap {
         dynamicMeshBuilder.register("view_frustum", GL.meshFactory.createDynamicViewFrustum());
 
         // Register codecs and set listener
+        openal.registerCodec("aif", container.getComponent(AIFFCodec.class));
+        openal.registerCodec("aiff", container.getComponent(AIFFCodec.class));
+        openal.registerCodec("au", container.getComponent(AUCodec.class));
+        openal.registerCodec("flac", container.getComponent(FLACCodec.class));
         openal.registerCodec("mid", container.getComponent(MIDICodec.class));
+        openal.registerCodec("midi", container.getComponent(MIDICodec.class));
         openal.registerCodec("mp3", container.getComponent(MP3Codec.class));
         openal.registerCodec("ogg", container.getComponent(OGGCodec.class));
         openal.registerCodec("wav", container.getComponent(WAVCodec.class));
