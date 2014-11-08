@@ -136,13 +136,14 @@ public class OggInputStream extends InputStream {
     }
 
     private void readPCM() throws IOException {
-        boolean finished = false;
-        boolean needsData = false;
 
         // Return if we are at the end of the stream
         if (endOfStream) {
             return;
         }
+
+        boolean finished = false;
+        boolean needsData = false;
 
         while (!finished) {
             if (needsData) {
