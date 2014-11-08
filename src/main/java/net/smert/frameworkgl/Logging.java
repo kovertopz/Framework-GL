@@ -28,7 +28,7 @@ import java.util.logging.SimpleFormatter;
 public class Logging {
 
     private final static int MAX_LOG_COUNT = 4;
-    private final static int MAX_LOG_SIZE = 131072;
+    private final static int MAX_LOG_SIZE = 1024 * 1024;
 
     private final SimpleFormatter simpleFormatter;
 
