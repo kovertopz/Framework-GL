@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+    <useControls filename="nifty-default-controls.xml" />
+    <useStyles filename="nifty-default-styles.xml" />
+
+    <screen id="start" controller="net.smert.frameworkgl.examples.gl3gui.StartScreenController">
+        <layer id="layer" childLayout="vertical">
+            <effect>
+                <onActive name="gradient">
+                    <value color="#cccf" offset="0%" />
+                    <value color="#888f" offset="80%" />
+                    <value color="#888f" offset="100%" />
+                </onActive>
+            </effect>
+
+            <panel id="panel" align="center" backgroundColor="#ff0f" childLayout="center" height="10%" valign="center" visibleToMouse="true" width="15%">
+                <effect>
+                    <onStartScreen name="move" direction="top" inherit="true" length="300" mode="in" startDelay="0" />
+                    <onEndScreen name="move" direction="bottom" inherit="true" length="300" mode="out" startDelay="0" />
+                    <onHover name="pulsate" post="true" scaleFactor="0.008" startColor="#ff00" endColor="#ffff" />
+                </effect>
+                <interact onClick="quit()" />
+                <text id="text" align="center" color="#000f" font="aurulent-sans-16.fnt" text="Quit Screen!" valign="center" />
+            </panel>
+
+            <panel childLayout="horizontal" height="80%" padding="20px">
+                <panel id="mouseEvents" align="center" childLayout="center" height="100%" style="nifty-panel-red" valign="center" visibleToMouse="true" width="50%">
+                    <effect>
+                        <onStartScreen name="move" direction="left" inherit="true" length="300" mode="in" startDelay="0" />
+                        <onEndScreen name="move" direction="left" inherit="true" length="300" mode="out" startDelay="0" />
+                    </effect>
+                    <panel align="center" childLayout="vertical" height="100%" valign="top" width="100%">
+                        <control name="label" align="center" color="#111f" text="[Primary Mouse]" valign="top" width="100%" />
+                        <control id="mouseEventsPrimaryText" name="label" align="center" color="#eeef" text="(click with left mouse button)" valign="top" width="100%" />
+                        <control name="label" align="center" color="#111f" text="[Secondary Mouse]" valign="top" width="100%" />
+                        <control id="mouseEventsSecondaryText" name="label" align="center" color="#eeef" text="(click with right mouse button)" valign="top" width="100%" />
+                        <control name="label" align="center" color="#111f" text="[Tertiary Mouse]" valign="top" width="100%" />
+                        <control id="mouseEventsTertiaryText" name="label" align="center" color="#eeef" text="(click with middle mouse button)" valign="top" width="100%" />
+                        <control name="label" align="center" color="#111f" text="[Mouse Move]" valign="top" width="100%" />
+                        <control id="mouseEventsMoveText" name="label" align="center" color="#eeef" text="(hover this panel)" valign="top" width="100%" />
+                        <control name="label" align="center" color="#111f" text="[Mouse Wheel]" valign="top" width="100%" />
+                        <control id="mouseEventsWheelText" name="label" align="center" color="#eeef" text="(move mouse wheel)" valign="top" width="100%" />
+                        <control name="label" align="center" color="#111f" text="[General Mouse Event]" valign="top" width="100%" />
+                        <control id="mouseEventsText" name="label" align="center" color="#eeef" text="(do anything with the mouse)&#10;" valign="top" width="100%" />
+                    </panel>
+                </panel>
+                <panel childLayout="vertical" height="100%" paddingLeft="30px" width="50%">
+                    <effect>
+                        <onStartScreen name="fade" end="#f" inherit="true" length="750" start="#0" startDelay="300" />
+                        <onEndScreen name="fade" end="#0" inherit="true" length="750" start="#f" startDelay="300" />
+                    </effect>
+                    <control name="label" align="right" color="#000f" font="nifty/verdana-32-regular.fnt" marginTop="10px" text="EventBus Events:" />
+                    <control name="label" align="right" color="#000f" text="&#10;NiftyMousePrimaryClickedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMousePrimaryClickedMovedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMousePrimaryReleaseEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseSecondaryClickedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseSecondaryClickedMovedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseSecondaryReleaseEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseTertiaryClickedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseTertiaryClickedMovedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseTertiaryReleaseEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseMovedEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseWheelEvent" />
+                    <control name="label" align="right" color="#000f" text="NiftyMouseEvent" />
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+
+    <screen id="quit" controller="net.smert.frameworkgl.examples.gl3gui.QuitScreenController">
+    </screen>
+</nifty>
