@@ -67,6 +67,7 @@ public class AudioWav extends Screen {
     @Override
     public void render() {
         fpsTimer.update();
+        Fw.audio.update();
     }
 
     @Override
