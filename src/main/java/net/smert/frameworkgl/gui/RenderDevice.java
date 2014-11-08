@@ -20,10 +20,10 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
+import net.smert.frameworkgl.gui.render.factory.MouseCursorFactory;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.Texture;
@@ -57,10 +57,12 @@ public class RenderDevice implements de.lessvoid.nifty.spi.render.RenderDevice {
     private BlendMode blendMode;
     private final List<AbstractRenderable> renderables;
     private MouseCursor mouseCursor;
+    private final MouseCursorFactory mouseCursorFactory;
     private NiftyResourceLoader niftyResourceLoader;
 
     public RenderDevice() {
         renderables = new ArrayList<>();
+        mouseCursorFactory = new MouseCursorFactory();
     }
 
     private void tesselateQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight,
@@ -385,26 +387,7 @@ public class RenderDevice implements de.lessvoid.nifty.spi.render.RenderDevice {
 
     @Override
     public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) throws IOException {
-        net.smert.frameworkgl.gui.render.MouseCursor cursor = new net.smert.frameworkgl.gui.render.MouseCursor();
-
-        // Get image reader and load the image
-        BufferedImage bufferedImage = GL.textureReader.getBufferedImage(filename);
-
-        // Load the texture which creates a byte buffer
-        GL.textureBuilder.load2D(bufferedImage);
-
-        // Extract data from texture builder
-        int height = GL.textureBuilder.getTextureHeight();
-        int width = GL.textureBuilder.getTextureWidth();
-        ByteBuffer pixelData = GL.textureBuilder.getPixelByteBuffer();
-
-        // Reset the builder
-        GL.textureBuilder.reset();
-
-        // Create the cursor
-        cursor.create(width, height, hotspotX, height - hotspotY - 1, 1, pixelData.asIntBuffer(), null);
-
-        return cursor;
+        return mouseCursorFactory.create(filename, hotspotX, hotspotY, niftyResourceLoader);
     }
 
     @Override

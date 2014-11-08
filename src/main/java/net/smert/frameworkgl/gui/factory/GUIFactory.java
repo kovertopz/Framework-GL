@@ -16,6 +16,11 @@ import net.smert.frameworkgl.gui.InputSystem;
 import net.smert.frameworkgl.gui.RenderDevice;
 import net.smert.frameworkgl.gui.SoundDevice;
 import net.smert.frameworkgl.gui.TimeProvider;
+import net.smert.frameworkgl.gui.render.GLCompatibility;
+import net.smert.frameworkgl.gui.render.GLCore;
+import net.smert.frameworkgl.gui.render.factory.BufferFactory;
+import net.smert.frameworkgl.gui.render.factory.ImageFactory;
+import net.smert.frameworkgl.gui.render.factory.MouseCursorFactory;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -30,8 +35,28 @@ public class GUIFactory {
         container = guiFactoryContainer;
     }
 
+    public BufferFactory createBufferFactory() {
+        return container.getComponent(BufferFactory.class);
+    }
+
+    public GLCompatibility createGLCompatibility() {
+        return container.getComponent(GLCompatibility.class);
+    }
+
+    public GLCore createGLCore() {
+        return container.getComponent(GLCore.class);
+    }
+
+    public ImageFactory createImageFactory() {
+        return container.getComponent(ImageFactory.class);
+    }
+
     public InputSystem createInputSystem() {
         return container.getComponent(InputSystem.class);
+    }
+
+    public MouseCursorFactory createMouseCursorFactory() {
+        return container.getComponent(MouseCursorFactory.class);
     }
 
     public RenderDevice createRenderDevice() {

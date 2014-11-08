@@ -14,7 +14,8 @@ package net.smert.frameworkgl;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendCoreProfileFactory;
+import de.lessvoid.nifty.render.batch.core.BatchRenderBackendCoreProfileInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import java.io.IOException;
 import net.smert.frameworkgl.gui.InputSystem;
 import net.smert.frameworkgl.gui.RenderDevice;
@@ -56,8 +57,13 @@ public class GUI {
         renderDevice.setViewportWidth(Fw.config.getCurrentWidth(), Fw.config.getCurrentHeight());
         soundDevice = Fw.guiFactory.createSoundDevice();
         timeProvider = Fw.guiFactory.createTimeProvider();
-        de.lessvoid.nifty.spi.render.RenderDevice batchRenderDevice
-                = new BatchRenderDevice(LwjglBatchRenderBackendCoreProfileFactory.create());
+        BatchRenderBackend batchRenderBackendCoreProfileInternal
+                = new BatchRenderBackendCoreProfileInternal(
+                        Fw.guiFactory.createGLCore(),
+                        Fw.guiFactory.createBufferFactory(),
+                        Fw.guiFactory.createImageFactory(),
+                        Fw.guiFactory.createMouseCursorFactory());
+        BatchRenderDevice batchRenderDevice = new BatchRenderDevice(batchRenderBackendCoreProfileInternal);
         nifty = new Nifty(batchRenderDevice, soundDevice, inputSystem, timeProvider);
         initialized = true;
     }

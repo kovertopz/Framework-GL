@@ -21,6 +21,11 @@ import net.smert.frameworkgl.gui.RenderDevice;
 import net.smert.frameworkgl.gui.SoundDevice;
 import net.smert.frameworkgl.gui.TimeProvider;
 import net.smert.frameworkgl.gui.factory.GUIFactory;
+import net.smert.frameworkgl.gui.render.GLCompatibility;
+import net.smert.frameworkgl.gui.render.GLCore;
+import net.smert.frameworkgl.gui.render.factory.BufferFactory;
+import net.smert.frameworkgl.gui.render.factory.ImageFactory;
+import net.smert.frameworkgl.gui.render.factory.MouseCursorFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.openal.AL;
@@ -220,7 +225,12 @@ public class BootStrap {
                     .withConstructorInjection().build(); // NO caching!
 
             // GUI
+            guiFactoryContainer.addComponent(BufferFactory.class);
+            guiFactoryContainer.addComponent(GLCompatibility.class);
+            guiFactoryContainer.addComponent(GLCore.class);
+            guiFactoryContainer.addComponent(ImageFactory.class);
             guiFactoryContainer.addComponent(InputSystem.class);
+            guiFactoryContainer.addComponent(MouseCursorFactory.class);
             guiFactoryContainer.addComponent(RenderDevice.class);
             guiFactoryContainer.addComponent(SoundDevice.class);
             guiFactoryContainer.addComponent(TimeProvider.class);
