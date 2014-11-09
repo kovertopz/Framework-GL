@@ -49,11 +49,7 @@ public class StartScreenController implements ScreenController {
     private Screen screen;
 
     public void quit() {
-        try {
-            Fw.gui.loadGuiFromXml("gl3gui.xml", "quit");
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        Fw.gui.gotoScreen("quit");
     }
 
     // Mouse general

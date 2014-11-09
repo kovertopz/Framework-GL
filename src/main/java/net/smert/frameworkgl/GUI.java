@@ -30,6 +30,8 @@ public class GUI {
 
     private boolean clearScreen;
     private boolean initialized;
+    private BatchRenderBackend batchRenderBackend;
+    private BatchRenderDevice batchRenderDevice;
     private InputSystem inputSystem;
     private RenderDevice renderDevice;
     private SoundDevice soundDevice;
@@ -52,20 +54,26 @@ public class GUI {
             return;
         }
 
+        batchRenderBackend = new BatchRenderBackendCoreProfileInternal(
+                Fw.guiFactory.createGLCore(),
+                Fw.guiFactory.createBufferFactory(),
+                Fw.guiFactory.createImageFactory(),
+                Fw.guiFactory.createMouseCursorFactory());
+        batchRenderDevice = new BatchRenderDevice(batchRenderBackend);
         inputSystem = Fw.guiFactory.createInputSystem();
         renderDevice = Fw.guiFactory.createRenderDevice();
-        renderDevice.setViewportWidth(Fw.config.getCurrentWidth(), Fw.config.getCurrentHeight());
         soundDevice = Fw.guiFactory.createSoundDevice();
         timeProvider = Fw.guiFactory.createTimeProvider();
-        BatchRenderBackend batchRenderBackendCoreProfileInternal
-                = new BatchRenderBackendCoreProfileInternal(
-                        Fw.guiFactory.createGLCore(),
-                        Fw.guiFactory.createBufferFactory(),
-                        Fw.guiFactory.createImageFactory(),
-                        Fw.guiFactory.createMouseCursorFactory());
-        BatchRenderDevice batchRenderDevice = new BatchRenderDevice(batchRenderBackendCoreProfileInternal);
         nifty = new Nifty(batchRenderDevice, soundDevice, inputSystem, timeProvider);
         initialized = true;
+    }
+
+    public void gotoScreen(String screenId) {
+        nifty.gotoScreen(screenId);
+    }
+
+    public boolean isActive(String filename, String screenId) {
+        return nifty.isActive(filename, screenId);
     }
 
     public boolean isClearScreen() {
@@ -83,12 +91,6 @@ public class GUI {
 
     public synchronized void render() {
         nifty.render(clearScreen);
-    }
-
-    public void setViewportWidth(int width, int height) {
-        if (renderDevice != null) {
-            renderDevice.setViewportWidth(width, height);
-        }
     }
 
     public synchronized boolean update() {
