@@ -89,11 +89,11 @@ public class GUI {
         nifty.fromXml(fileAsset.getFullPathToFile(), fileAsset.openStream(), startScreen);
     }
 
-    public synchronized void render() {
+    public void render() {
         nifty.render(clearScreen);
     }
 
-    public synchronized boolean update() {
+    public boolean update() {
         return nifty.update();
     }
 
