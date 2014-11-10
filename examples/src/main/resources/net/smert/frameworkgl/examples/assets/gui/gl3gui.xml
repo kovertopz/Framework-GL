@@ -17,7 +17,7 @@
                 <effect>
                     <onStartScreen name="move" direction="top" inherit="true" length="300" mode="in" startDelay="0" />
                     <onEndScreen name="move" direction="bottom" inherit="true" length="300" mode="out" startDelay="0" />
-                    <onHover name="pulsate" post="true" scaleFactor="0.008" startColor="#ff00" endColor="#ffff" />
+                    <onHover name="pulsate" endColor="#ffff" post="true" scaleFactor="0.008" startColor="#ff00" />
                 </effect>
                 <interact onClick="quit()" />
                 <text id="text" align="center" color="#000f" font="aurulent-sans-16.fnt" text="Quit Screen!" valign="center" />
