@@ -12,8 +12,6 @@
  */
 package net.smert.frameworkgl.gui;
 
-import org.lwjgl.Sys;
-
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -22,7 +20,7 @@ public class TimeProvider implements de.lessvoid.nifty.spi.time.TimeProvider {
 
     @Override
     public long getMsTime() {
-        return (Sys.getTime() * 1000L) / Sys.getTimerResolution();
+        return System.nanoTime() / 1000000L;
     }
 
 }

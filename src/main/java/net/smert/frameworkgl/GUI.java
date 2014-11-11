@@ -49,6 +49,14 @@ public class GUI {
         }
     }
 
+    public void disableDebugPanelColors() {
+        nifty.setDebugOptionPanelColors(false);
+    }
+
+    public void enableDebugPanelColors() {
+        nifty.setDebugOptionPanelColors(true);
+    }
+
     public void init() {
         if (initialized) {
             return;
@@ -68,12 +76,16 @@ public class GUI {
         initialized = true;
     }
 
-    public void gotoScreen(String screenId) {
-        nifty.gotoScreen(screenId);
+    public de.lessvoid.nifty.screen.Screen getScreen(String screenID) {
+        return nifty.getScreen(screenID);
     }
 
-    public boolean isActive(String filename, String screenId) {
-        return nifty.isActive(filename, screenId);
+    public void gotoScreen(String screenID) {
+        nifty.gotoScreen(screenID);
+    }
+
+    public boolean isActive(String filename, String screenID) {
+        return nifty.isActive(filename, screenID);
     }
 
     public boolean isClearScreen() {
@@ -95,6 +107,11 @@ public class GUI {
 
     public boolean update() {
         return nifty.update();
+    }
+
+    public void validateXml(String filename) throws Exception {
+        Files.FileAsset fileAsset = Fw.files.getGui(filename);
+        nifty.validateXml(fileAsset.openStream());
     }
 
 }
