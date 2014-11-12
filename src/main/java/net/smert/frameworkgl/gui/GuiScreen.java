@@ -10,31 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl;
-
-import net.smert.frameworkgl.gui.GuiScreen;
+package net.smert.frameworkgl.gui;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GUI {
+public interface GuiScreen {
 
-    private GuiScreen currentGuiScreen;
+    public void onEnd();
 
-    public GuiScreen getCurrentGuiScreen() {
-        return currentGuiScreen;
-    }
+    public void onStart();
 
-    public void setCurrentGuiScreen(GuiScreen currentGuiScreen) {
-        this.currentGuiScreen = currentGuiScreen;
-    }
-
-    public void render() {
-    }
-
-    public void update() {
-        currentGuiScreen.update();
-    }
+    public void update();
 
 }
