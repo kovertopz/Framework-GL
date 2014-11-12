@@ -73,14 +73,14 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
             // Updating AABBs this way is costly
             aabbGameObject.update(worldAabb);
             // AABB is already in world coordinates so we don't translate
-            openglRenderer.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
+            Fw.graphics.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
         }
     }
 
     protected void renderSimpleOrientationAxis(List<GameObject> gameObjects) {
         for (GameObject gameObject : gameObjects) {
             simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-            openglRenderer.render(simpleOrientationAxisGameObject);
+            Fw.graphics.render(simpleOrientationAxisGameObject);
         }
     }
 
@@ -290,7 +290,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         GL.o1.clear();
 
         // Update camera
-        openglRenderer.setCamera(camera);
+        Fw.graphics.setCamera(camera);
 
         // Frustum culling
         if (frustumCulling) {
@@ -298,33 +298,33 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         }
 
         // Render 3D
-        openglRenderer.switchShader(skyboxShader);
-        openglRenderer.color(skyboxColor.getR(), skyboxColor.getG(), skyboxColor.getB(), skyboxColor.getA());
+        Fw.graphics.switchShader(skyboxShader);
+        Fw.graphics.color(skyboxColor.getR(), skyboxColor.getG(), skyboxColor.getB(), skyboxColor.getA());
         skyboxGameObject.getWorldTransform().setPosition(camera.getPosition());
         GL.o1.disableCulling();
         GL.o1.disableDepthTest();
-        openglRenderer.render(skyboxGameObject);
+        Fw.graphics.render(skyboxGameObject);
         GL.o1.enableDepthTest();
         GL.o1.enableCulling();
-        openglRenderer.unbindShader();
+        Fw.graphics.unbindShader();
 
         if (shadowsEnabled) {
 
         }
 
         switchPolygonFillMode();
-        openglRenderer.switchShader(currentDefaultShader);
-        openglRenderer.render(worldGameObjectsToRender);
-        openglRenderer.render(entityGameObjectsToRender);
-        openglRenderer.renderBlend(nonOpaqueGameObjects);
-        openglRenderer.unbindShader();
+        Fw.graphics.switchShader(currentDefaultShader);
+        Fw.graphics.render(worldGameObjectsToRender);
+        Fw.graphics.render(entityGameObjectsToRender);
+        Fw.graphics.renderBlend(nonOpaqueGameObjects);
+        Fw.graphics.unbindShader();
 
-        openglRenderer.switchShader(diffuseTextureShader); // No lighting
+        Fw.graphics.switchShader(diffuseTextureShader); // No lighting
         if (debug) {
 
             // View frustum
             if (renderViewFrustum) {
-                openglRenderer.renderBlend(viewFrustumGameObject);
+                Fw.graphics.renderBlend(viewFrustumGameObject);
             }
 
             // AABBs
@@ -343,18 +343,18 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
                 GL.o1.enableDepthTest();
             }
         }
-        openglRenderer.unbindShader();
+        Fw.graphics.unbindShader();
 
         // Render 2D
         GL.o1.setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha();
         GL.o1.enableBlending();
         GL.o1.disableDepthTest();
         GL.o1.setPolygonModeFrontAndBackFill();
-        openglRenderer.switchShader(diffuseTextureShader);
-        openglRenderer.set2DMode();
-        openglRenderer.resetTextRendering();
+        Fw.graphics.switchShader(diffuseTextureShader);
+        Fw.graphics.set2DMode();
+        Fw.graphics.resetTextRendering();
         guiRenderer.render();
-        openglRenderer.unbindShader();
+        Fw.graphics.unbindShader();
         GL.o1.enableDepthTest();
         GL.o1.disableBlending();
     }

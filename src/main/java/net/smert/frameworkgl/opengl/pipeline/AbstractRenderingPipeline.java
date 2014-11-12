@@ -15,7 +15,6 @@ package net.smert.frameworkgl.opengl.pipeline;
 import java.io.IOException;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
-import net.smert.frameworkgl.opengl.renderer.AbstractRendererGL;
 
 /**
  *
@@ -27,7 +26,6 @@ public abstract class AbstractRenderingPipeline {
     protected boolean frustumCulling;
     protected boolean shadowsEnabled;
     protected boolean wireframe;
-    protected AbstractRendererGL openglRenderer;
     protected Camera camera;
 
     public void destroy() {
@@ -87,21 +85,6 @@ public abstract class AbstractRenderingPipeline {
             GL.o1.setPolygonModeFrontAndBackLine();
         } else {
             GL.o1.setPolygonModeFrontAndBackFill();
-        }
-    }
-
-    public void switchRenderer(int openglMajorVersion) {
-        switch (openglMajorVersion) {
-            case 1:
-                throw new IllegalArgumentException("Pipelines are for OpenGL 2.1 and greater");
-            case 2:
-                openglRenderer = GL.renderer2;
-                break;
-            case 3:
-                openglRenderer = GL.renderer3;
-                break;
-            default:
-                throw new RuntimeException("Unknown OpenGL version: " + openglMajorVersion);
         }
     }
 
