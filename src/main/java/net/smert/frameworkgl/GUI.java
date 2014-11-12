@@ -12,15 +12,7 @@
  */
 package net.smert.frameworkgl;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.render.batch.BatchRenderDevice;
-import de.lessvoid.nifty.render.batch.core.BatchRenderBackendCoreProfileInternal;
-import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
-import java.io.IOException;
-import net.smert.frameworkgl.gui.InputSystem;
-import net.smert.frameworkgl.gui.RenderDevice;
-import net.smert.frameworkgl.gui.SoundDevice;
-import net.smert.frameworkgl.gui.TimeProvider;
+import net.smert.frameworkgl.gui.AbstractGuiScreen;
 
 /**
  *
@@ -28,90 +20,21 @@ import net.smert.frameworkgl.gui.TimeProvider;
  */
 public class GUI {
 
-    private boolean clearScreen;
-    private boolean initialized;
-    private BatchRenderBackend batchRenderBackend;
-    private BatchRenderDevice batchRenderDevice;
-    private InputSystem inputSystem;
-    private RenderDevice renderDevice;
-    private SoundDevice soundDevice;
-    private TimeProvider timeProvider;
-    private Nifty nifty;
+    private AbstractGuiScreen currentGuiScreen;
 
-    public GUI() {
-        clearScreen = false;
-        initialized = false;
+    public AbstractGuiScreen getCurrentGuiScreen() {
+        return currentGuiScreen;
     }
 
-    public void destroy() {
-        if (nifty != null) {
-            nifty.exit();
-        }
-    }
-
-    public void disableDebugPanelColors() {
-        nifty.setDebugOptionPanelColors(false);
-    }
-
-    public void enableDebugPanelColors() {
-        nifty.setDebugOptionPanelColors(true);
-    }
-
-    public void init() {
-        if (initialized) {
-            return;
-        }
-
-        batchRenderBackend = new BatchRenderBackendCoreProfileInternal(
-                Fw.guiFactory.createGLCore(),
-                Fw.guiFactory.createBufferFactory(),
-                Fw.guiFactory.createImageFactory(),
-                Fw.guiFactory.createMouseCursorFactory());
-        batchRenderDevice = new BatchRenderDevice(batchRenderBackend);
-        inputSystem = Fw.guiFactory.createInputSystem();
-        renderDevice = Fw.guiFactory.createRenderDevice();
-        soundDevice = Fw.guiFactory.createSoundDevice();
-        timeProvider = Fw.guiFactory.createTimeProvider();
-        nifty = new Nifty(batchRenderDevice, soundDevice, inputSystem, timeProvider);
-        initialized = true;
-    }
-
-    public de.lessvoid.nifty.screen.Screen getScreen(String screenID) {
-        return nifty.getScreen(screenID);
-    }
-
-    public void gotoScreen(String screenID) {
-        nifty.gotoScreen(screenID);
-    }
-
-    public boolean isActive(String filename, String screenID) {
-        return nifty.isActive(filename, screenID);
-    }
-
-    public boolean isClearScreen() {
-        return clearScreen;
-    }
-
-    public void setClearScreen(boolean clearScreen) {
-        this.clearScreen = clearScreen;
-    }
-
-    public void loadGuiFromXml(String filename, String startScreen) throws IOException {
-        Files.FileAsset fileAsset = Fw.files.getGui(filename);
-        nifty.fromXml(fileAsset.getFullPathToFile(), fileAsset.openStream(), startScreen);
+    public void setCurrentGuiScreen(AbstractGuiScreen currentGuiScreen) {
+        this.currentGuiScreen = currentGuiScreen;
     }
 
     public void render() {
-        nifty.render(clearScreen);
     }
 
-    public boolean update() {
-        return nifty.update();
-    }
-
-    public void validateXml(String filename) throws Exception {
-        Files.FileAsset fileAsset = Fw.files.getGui(filename);
-        nifty.validateXml(fileAsset.openStream());
+    public void update() {
+        currentGuiScreen.update();
     }
 
 }

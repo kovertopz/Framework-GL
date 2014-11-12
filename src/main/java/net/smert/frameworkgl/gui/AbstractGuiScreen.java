@@ -10,26 +10,21 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.gui.render.factory;
-
-import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
-import java.nio.ByteBuffer;
-import net.smert.frameworkgl.gui.render.ByteBufferedImage;
+package net.smert.frameworkgl.gui;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class ImageFactory implements de.lessvoid.nifty.render.batch.spi.ImageFactory {
+public abstract class AbstractGuiScreen {
 
-    @Override
-    public BatchRenderBackend.Image create(ByteBuffer buffer, int imageWidth, int imageHeight) {
-        return new ByteBufferedImage(buffer, imageWidth, imageHeight);
+    public void onEnd() {
     }
 
-    @Override
-    public ByteBuffer asByteBuffer(BatchRenderBackend.Image image) {
-        return (image instanceof ByteBufferedImage) ? ((ByteBufferedImage) image).getBuffer() : null;
+    public void onStart() {
+    }
+
+    public void update() {
     }
 
 }

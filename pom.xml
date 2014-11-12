@@ -35,7 +35,6 @@
         <jlayer.version>1.0.2-gdx</jlayer.version>
         <jorbis.version>0.0.17</jorbis.version>
         <junit.version>4.11</junit.version>
-        <lessvoid.version>1.4.1-SNAPSHOT</lessvoid.version>
         <licensemaven.version>2.6</licensemaven.version>
         <lwjgl.version>2.9.1</lwjgl.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
@@ -69,26 +68,6 @@
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-tiff</artifactId>
             <version>${twelvemonkeys.imageio.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>lessvoid</groupId>
-            <artifactId>nifty</artifactId>
-            <version>${lessvoid.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>lessvoid</groupId>
-            <artifactId>nifty-default-controls</artifactId>
-            <version>${lessvoid.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>lessvoid</groupId>
-            <artifactId>nifty-lwjgl-renderer</artifactId>
-            <version>${lessvoid.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>lessvoid</groupId>
-            <artifactId>nifty-style-black</artifactId>
-            <version>${lessvoid.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jcraft</groupId>

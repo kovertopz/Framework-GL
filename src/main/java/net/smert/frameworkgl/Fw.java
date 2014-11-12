@@ -13,7 +13,6 @@
 package net.smert.frameworkgl;
 
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
-import net.smert.frameworkgl.gui.factory.GUIFactory;
 
 /**
  *
@@ -28,7 +27,6 @@ public class Fw {
     public static GameObjectFactory gof;
     public static Graphics graphics;
     public static GUI gui;
-    public static GUIFactory guiFactory;
     public static Input input;
     public static Network net;
     public static Timer timer;

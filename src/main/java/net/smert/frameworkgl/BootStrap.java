@@ -16,16 +16,6 @@ import java.io.IOException;
 import java.util.logging.SimpleFormatter;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
-import net.smert.frameworkgl.gui.InputSystem;
-import net.smert.frameworkgl.gui.RenderDevice;
-import net.smert.frameworkgl.gui.SoundDevice;
-import net.smert.frameworkgl.gui.TimeProvider;
-import net.smert.frameworkgl.gui.factory.GUIFactory;
-import net.smert.frameworkgl.gui.render.GLCompatibility;
-import net.smert.frameworkgl.gui.render.GLCore;
-import net.smert.frameworkgl.gui.render.factory.BufferFactory;
-import net.smert.frameworkgl.gui.render.factory.ImageFactory;
-import net.smert.frameworkgl.gui.render.factory.MouseCursorFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.openal.AL;
@@ -194,7 +184,6 @@ public class BootStrap {
     protected MutablePicoContainer gameObjectFactoryContainer;
     protected MutablePicoContainer displayListRenderCallFactoryContainer;
     protected MutablePicoContainer glFactoryContainer;
-    protected MutablePicoContainer guiFactoryContainer;
     protected MutablePicoContainer immediateModeRenderCallFactoryContainer;
     protected MutablePicoContainer meshFactoryContainer;
     protected MutablePicoContainer renderableFactoryGL1Container;
@@ -217,26 +206,6 @@ public class BootStrap {
 
             // Add container for GameObjectFactory
             parentContainer.addComponent("gameObjectFactoryContainer", gameObjectFactoryContainer);
-        }
-
-        {
-            // Container for GUIFactory
-            guiFactoryContainer = new PicoBuilder(parentContainer)
-                    .withConstructorInjection().build(); // NO caching!
-
-            // GUI
-            guiFactoryContainer.addComponent(BufferFactory.class);
-            guiFactoryContainer.addComponent(GLCompatibility.class);
-            guiFactoryContainer.addComponent(GLCore.class);
-            guiFactoryContainer.addComponent(ImageFactory.class);
-            guiFactoryContainer.addComponent(InputSystem.class);
-            guiFactoryContainer.addComponent(MouseCursorFactory.class);
-            guiFactoryContainer.addComponent(RenderDevice.class);
-            guiFactoryContainer.addComponent(SoundDevice.class);
-            guiFactoryContainer.addComponent(TimeProvider.class);
-
-            // Add container for CameraFactory
-            parentContainer.addComponent("guiFactoryContainer", guiFactoryContainer);
         }
 
         {
@@ -486,7 +455,6 @@ public class BootStrap {
 
         // Framework factories
         container.as(Characteristics.USE_NAMES).addComponent(GameObjectFactory.class);
-        container.as(Characteristics.USE_NAMES).addComponent(GUIFactory.class);
 
         // Framework helpers
         container.addComponent(KeyboardHelper.class);
@@ -636,7 +604,6 @@ public class BootStrap {
         Fw.gof = container.getComponent(GameObjectFactory.class);
         Fw.graphics = container.getComponent(Graphics.class);
         Fw.gui = container.getComponent(GUI.class);
-        Fw.guiFactory = container.getComponent(GUIFactory.class);
         Fw.input = container.getComponent(Input.class);
         Fw.net = container.getComponent(Network.class);
         Fw.timer = container.getComponent(Timer.class);
