@@ -34,7 +34,6 @@ public class GUI {
     }
 
     public void update() {
-        currentGuiScreen.update();
     }
 
 }
