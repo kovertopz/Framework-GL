@@ -14,7 +14,7 @@ package net.smert.frameworkgl.opengl.renderer.factory;
 
 import net.smert.frameworkgl.opengl.renderer.AngelCodeFontRenderer;
 import net.smert.frameworkgl.opengl.renderer.AwtFontRenderer;
-import net.smert.frameworkgl.opengl.renderer.NiftyGuiRenderer;
+import net.smert.frameworkgl.opengl.renderer.DefaultGuiRenderer;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -37,8 +37,8 @@ public class RendererFactory {
         return container.getComponent(AwtFontRenderer.class);
     }
 
-    public NiftyGuiRenderer createNiftyGuiRenderer() {
-        return container.getComponent(NiftyGuiRenderer.class);
+    public DefaultGuiRenderer createDefaultGuiRenderer() {
+        return container.getComponent(DefaultGuiRenderer.class);
     }
 
 }
