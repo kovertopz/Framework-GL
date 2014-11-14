@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2014 Jason Sorensen <sorensenj@smert.net>.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="https://github.com/kovertopz/Framework-GL"
+           xmlns="https://github.com/kovertopz/Framework-GL">
+
+    <!-- Root -->
+    <xs:element name="clumsyRoot" type="clumsyRootType" />
+
+    <xs:complexType name="clumsyRootType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="layer" type="layerType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerControls" type="registerControlsType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerCursor" type="registerCursorType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerEffect" type="registerEffectType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerLang" type="registerLangType" minOccurs="0" maxOccurs="1" />
+            <xs:element name="registerMusic" type="registerMusicType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerSound" type="registerSoundType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="registerStyles" type="registerStylesType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="screen" type="screenType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:choice>
+    </xs:complexType>
+
+    <!-- depth 1 -->
+    <xs:complexType name="elementType">
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="align" type="alignType" default="left" />
+        <xs:attribute name="backgroundColor" type="colorType" default="#0000" />
+        <xs:attribute name="backgroundImage" type="xs:string" />
+        <xs:attribute name="backgroundRepeat" type="imageRepeatType" default="noRepeat" />
+        <xs:attribute name="controllerClass" type="xs:string" />
+        <xs:attribute name="display" type="displayType" default="block" />
+        <xs:attribute name="height" type="heightWidthType" default="100%" />
+        <xs:attribute name="inherit" type="xs:boolean" default="true" />
+        <xs:attribute name="margin" type="pixelBoxType" default="0px 0px 0px 0px" />
+        <xs:attribute name="marginBottom" type="pixelHeightWidthType" />
+        <xs:attribute name="marginLeft" type="pixelHeightWidthType" />
+        <xs:attribute name="marginRight" type="pixelHeightWidthType" />
+        <xs:attribute name="marginTop" type="pixelHeightWidthType" />
+        <xs:attribute name="overflow" type="overflowType" default="visible" />
+        <xs:attribute name="overflowX" type="overflowType" />
+        <xs:attribute name="overflowY" type="overflowType" />
+        <xs:attribute name="padding" type="pixelBoxType" default="0px 0px 0px 0px" />
+        <xs:attribute name="paddingBottom" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingLeft" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingRight" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingTop" type="pixelHeightWidthType" />
+        <xs:attribute name="position" type="positionType" />
+        <xs:attribute name="renderClass" type="xs:string" />
+        <xs:attribute name="style" type="xs:string" />
+        <xs:attribute name="valign" type="valignType" />
+        <xs:attribute name="visible" type="xs:boolean" default="true" />
+        <xs:attribute name="visibleToMouse" type="xs:boolean" default="true" />
+        <xs:attribute name="width" type="heightWidthType" default="100%" />
+        <xs:attribute name="x" type="xs:int" />
+        <xs:attribute name="y" type="xs:int" />
+        <xs:attribute name="zIndex" type="xs:int" default="0" />
+    </xs:complexType>
+
+    <xs:complexType name="layerType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="panelType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="registerControlsType">
+        <xs:attribute name="filename" type="xs:string" use="required" />
+        <xs:attribute name="xsdFilename" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="registerCursorType">
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="filename" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="registerEffectType">
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="class" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="registerLangType">
+        <xs:attribute name="filename" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="registerMusicType">
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="filename" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="registerSoundType">
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="filename" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="registerStylesType">
+        <xs:attribute name="filename" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="screenType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="layer" type="layerType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- depth 2 -->
+    <xs:complexType name="controlType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute name="type" type="xs:string" />
+                <xs:anyAttribute />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="imageType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute name="filename" type="xs:string" use="required" />
+                <xs:attribute name="imageRepeat" type="imageRepeatType" default="noRepeat" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="textType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute name="color" type="colorType" default="#ffff" />
+                <xs:attribute name="font" type="xs:string" />
+                <xs:attribute name="lineHeight" type="heightWidthType" />
+                <xs:attribute name="text" type="xs:string" use="required" />
+                <xs:attribute name="wrap" type="xs:boolean" default="false" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- Attributes -->
+    <xs:simpleType name="alignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="center" />
+            <xs:enumeration value="left" />
+            <xs:enumeration value="right" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="colorType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="5" />
+            <xs:maxLength value="9" />
+            <xs:pattern value="#[a-f,0-9]{4,4}" />
+            <xs:pattern value="#[a-f,0-9]{8,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="displayType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="block" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="heightWidthType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2" />
+            <xs:maxLength value="7" />
+            <xs:pattern value="[0-9]{1,5}em" />
+            <xs:pattern value="[0-9]{1,5}px" />
+            <xs:pattern value="[0-9]{1,3}%" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="imageRepeatType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="noRepeat" />
+            <xs:enumeration value="repeat" />
+            <xs:enumeration value="repeatX" />
+            <xs:enumeration value="repeatY" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="overflowType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="auto" />
+            <xs:enumeration value="hidden" />
+            <xs:enumeration value="scroll" />
+            <xs:enumeration value="visible" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="pixelBoxType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="12" />
+            <xs:maxLength value="28" />
+            <xs:pattern value="[0-9]{1,5}px [0-9]{1,5}px [0-9]{1,5}px [0-9]{1,5}px" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="pixelHeightWidthType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3" />
+            <xs:maxLength value="7" />
+            <xs:pattern value="[0-9]{1,5}px" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="positionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute" />
+            <xs:enumeration value="relative" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="valignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="top" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

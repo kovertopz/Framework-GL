@@ -10,27 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl;
+package net.smert.frameworkgl.gui;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GUI {
+public interface GuiScreenController {
 
-    public void loadXml(String filename) {
-    }
+    public void onBind();
 
-    public void loadXml(String filename, String startScreenID) {
-    }
+    public void onEnd();
 
-    public void render() {
-    }
+    public void onStart();
 
-    public void switchScreen(String screenID) {
-    }
-
-    public void update() {
-    }
+    public void update();
 
 }

@@ -16,12 +16,9 @@ package net.smert.frameworkgl.gui;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public interface GuiScreen {
+public class GuiScreen {
 
-    public void onEnd();
-
-    public void onStart();
-
-    public void update();
+    public void render() {
+    }
 
 }
