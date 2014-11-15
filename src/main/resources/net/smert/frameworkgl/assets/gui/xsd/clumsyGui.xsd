@@ -66,7 +66,7 @@ limitations under the License.
         <xs:attribute name="position" type="positionType" />
         <xs:attribute name="renderClass" type="xs:string" />
         <xs:attribute name="style" type="xs:string" />
-        <xs:attribute name="valign" type="valignType" />
+        <xs:attribute name="vAlign" type="vAlignType" />
         <xs:attribute name="visible" type="xs:boolean" default="true" />
         <xs:attribute name="visibleToMouse" type="xs:boolean" default="true" />
         <xs:attribute name="width" type="heightWidthType" default="100%" />
@@ -255,7 +255,7 @@ limitations under the License.
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="valignType">
+    <xs:simpleType name="vAlignType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="bottom" />
             <xs:enumeration value="center" />
