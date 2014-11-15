@@ -19,12 +19,12 @@ import net.smert.frameworkgl.gui.ClumsyGui;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Guis {
+public class Gui {
 
     private boolean initialized;
     private ClumsyGui clumsyGui;
 
-    public Guis() {
+    public Gui() {
         initialized = false;
     }
 
