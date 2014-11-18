@@ -10,28 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl;
-
-import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
-import net.smert.frameworkgl.gui.factory.GuiFactory;
+package net.smert.frameworkgl.gui;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Fw {
+public class GuiImageElement extends GuiElement {
 
-    public static Application app;
-    public static Audio audio;
-    public static Configuration config;
-    public static Files files;
-    public static GameObjectFactory gof;
-    public static Graphics graphics;
-    public static Gui gui;
-    public static GuiFactory guiFactory;
-    public static Input input;
-    public static Network net;
-    public static Timer timer;
-    public static Window window;
+    private ImageRepeat imageRepeat;
+    private String filename;
 
 }
