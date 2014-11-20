@@ -18,6 +18,9 @@ package net.smert.frameworkgl.gui;
  */
 public class GuiScreen {
 
+    public void init(GuiXmlElement screen) {
+    }
+
     public void render() {
     }
 
