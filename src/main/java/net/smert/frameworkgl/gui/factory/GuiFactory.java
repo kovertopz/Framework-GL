@@ -13,7 +13,6 @@
 package net.smert.frameworkgl.gui.factory;
 
 import net.smert.frameworkgl.gui.ClumsyGui;
-import net.smert.frameworkgl.gui.GuiElement;
 import net.smert.frameworkgl.gui.GuiScreen;
 import net.smert.frameworkgl.gui.GuiXmlElement;
 import net.smert.frameworkgl.gui.GuiXmlSchema;
@@ -33,10 +32,6 @@ public class GuiFactory {
 
     public ClumsyGui createClumsyGui() {
         return container.getComponent(ClumsyGui.class);
-    }
-
-    public GuiElement createGuiElement() {
-        return container.getComponent(GuiElement.class);
     }
 
     public GuiScreen createGuiScreen() {

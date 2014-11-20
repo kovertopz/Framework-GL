@@ -17,7 +17,6 @@ import java.util.logging.SimpleFormatter;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 import net.smert.frameworkgl.gui.ClumsyGui;
-import net.smert.frameworkgl.gui.GuiElement;
 import net.smert.frameworkgl.gui.GuiScreen;
 import net.smert.frameworkgl.gui.GuiXmlElement;
 import net.smert.frameworkgl.gui.GuiXmlSchema;
@@ -222,7 +221,6 @@ public class BootStrap {
 
             // GUI factory
             guiFactoryContainer.addComponent(ClumsyGui.class);
-            guiFactoryContainer.addComponent(GuiElement.class);
             guiFactoryContainer.addComponent(GuiScreen.class);
             guiFactoryContainer.addComponent(GuiXmlElement.class);
             guiFactoryContainer.addComponent(GuiXmlSchema.class);
