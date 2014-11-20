@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -45,34 +46,64 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class GuiXmlSchema {
 
     private GuiXmlElement root;
-    private final Map<String, String> defaultAttributes;
+    private final Map<String, Map<String, String>> defaultAttributes;
+    private final Map<String, String> defaultAttributesToLoad;
     private final Stack<GuiXmlElement> stack;
+    private String rootElementType;
     private XmlPullParser xmlPullParser;
 
     public GuiXmlSchema() {
         defaultAttributes = new HashMap<>();
+        defaultAttributesToLoad = new HashMap<>();
         stack = new Stack<>();
+
+        defaultAttributesToLoad.put("element", "elementType");
+        defaultAttributesToLoad.put("image", "imageType");
+        defaultAttributesToLoad.put("screenElement", "screenElementType");
+        defaultAttributesToLoad.put("text", "textType");
+        rootElementType = "clumsyRoot";
     }
 
-    private void parseAttributeNodeList(NodeList attributeNodeList) {
+    private void parseAttributeNodeList(Map<String, String> attributes, NodeList attributeNodeList) {
         for (int i = 0; i < attributeNodeList.getLength(); i++) {
             Element element = (Element) attributeNodeList.item(i);
-            if (element.hasAttributes()) {
-                String defaultValue = element.getAttribute("default");
-                String name = element.getAttribute("name");
-                if (defaultValue.length() > 0) {
-                    defaultAttributes.put(name, defaultValue);
-                }
+
+            // Skip if the tag has no attributes
+            if (!element.hasAttributes()) {
+                continue;
+            }
+
+            // Get the default value if the tag has one
+            String defaultValue = element.getAttribute("default");
+            String name = element.getAttribute("name");
+            if (defaultValue.length() > 0) {
+                attributes.put(name, defaultValue);
             }
         }
+    }
+
+    public void addDefaultAttributesToLoad(String key, String tag) {
+        defaultAttributesToLoad.put(key, tag);
+    }
+
+    public void clearDefaultAttributesToLoad() {
+        defaultAttributesToLoad.clear();
     }
 
     public GuiXmlElement getRoot() {
         return root;
     }
 
-    public Map<String, String> getDefaultAttributes() {
+    public Map<String, Map<String, String>> getDefaultAttributes() {
         return defaultAttributes;
+    }
+
+    public String getRootElementType() {
+        return rootElementType;
+    }
+
+    public void setRootElementType(String rootElementType) {
+        this.rootElementType = rootElementType;
     }
 
     public void init() {
@@ -95,30 +126,45 @@ public class GuiXmlSchema {
                     stack.pop();
                 } else if (eventType == XmlPullParser.START_TAG) {
                     GuiXmlElement guiXmlElement = Fw.guiFactory.createGuiXmlElement();
+
+                    // Set element type
                     String elementType = xmlPullParser.getName();
                     guiXmlElement.setElementType(elementType);
-                    if (root == null) {
+
+                    // Set root element
+                    if ((root == null) && (elementType.equals(rootElementType))) {
                         root = guiXmlElement;
                     }
+
+                    // Get the parent element
                     GuiXmlElement parentGuiXmlElement;
                     try {
                         parentGuiXmlElement = stack.peek();
                     } catch (EmptyStackException ex) {
                         parentGuiXmlElement = null;
                     }
+
+                    // Set the parent and add a child
                     if (parentGuiXmlElement != null) {
                         guiXmlElement.setParent(parentGuiXmlElement);
                         parentGuiXmlElement.addChild(guiXmlElement);
                     }
+
+                    // Parse attributes for the tag
                     int attributeCount = xmlPullParser.getAttributeCount();
                     if (attributeCount > 0) {
                         guiXmlElement.loadAttributes(attributeCount, xmlPullParser);
                     }
+
                     stack.push(guiXmlElement);
                 }
             }
         } catch (XmlPullParserException ex) {
             throw new RuntimeException(ex);
+        }
+
+        if (root == null) {
+            throw new RuntimeException("The root element was not found: " + rootElementType);
         }
     }
 
@@ -129,28 +175,57 @@ public class GuiXmlSchema {
         Document document = documentBuilder.parse(isSchema);
         NodeList complexTypeNodeList = document.getElementsByTagName("xs:complexType");
 
-        for (int i = 0; i < complexTypeNodeList.getLength(); i++) {
-            Element element = (Element) complexTypeNodeList.item(i);
-            if (element.hasAttributes()) {
-                String name = element.getAttribute("name");
-                if ("elementType".equals(name)) {
-                    NodeList attributeNodeList = element.getElementsByTagName("xs:attribute");
-                    parseAttributeNodeList(attributeNodeList);
-                    break;
+        Iterator<Map.Entry<String, String>> iterator = defaultAttributesToLoad.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> entry = iterator.next();
+            String key = entry.getKey();
+            String tag = entry.getValue();
+
+            for (int i = 0; i < complexTypeNodeList.getLength(); i++) {
+                Element element = (Element) complexTypeNodeList.item(i);
+
+                // If the element has no attributes
+                if (!element.hasAttributes()) {
+                    continue;
                 }
+
+                // If the tag doesnt match
+                String name = element.getAttribute("name");
+                if (!tag.equals(name)) {
+                    continue;
+                }
+
+                // Add a new hashmap for the key
+                Map<String, String> attributes = new HashMap<>();
+                defaultAttributes.put(key, attributes);
+
+                // Find attributes with defaults
+                NodeList attributeNodeList = element.getElementsByTagName("xs:attribute");
+                parseAttributeNodeList(attributes, attributeNodeList);
+
+                break;
             }
         }
     }
 
-    public void printChildren(GuiXmlElement current) {
-        if (current != null) {
-            List<GuiXmlElement> children = current.getChildren();
-            System.out.println("Element " + current.getElementType() + " has " + children.size() + " children.");
-            for (int i = 0; i < children.size(); i++) {
-                System.out.println("Child #" + i + " of parent " + current.getElementType());
-                GuiXmlElement child = children.get(i);
-                printChildren(child);
-            }
+    public void printChildren(GuiXmlElement current, int depth) {
+
+        // Create a string based on the depth
+        StringBuilder sb = new StringBuilder();
+        int count = depth;
+        while (count > 0) {
+            count--;
+            sb.append("  ");
+        }
+        String indent = sb.toString();
+
+        // Loop over all children and recurse
+        List<GuiXmlElement> children = current.getChildren();
+        Map<String, String> attributes = current.getAttributes();
+        System.out.println(indent + "Element " + current.getElementType()
+                + " has " + children.size() + " children and " + attributes.size() + " attributes.");
+        for (GuiXmlElement child : children) {
+            printChildren(child, depth + 1);
         }
     }
 

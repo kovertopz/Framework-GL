@@ -62,6 +62,10 @@ public class GuiXmlElement {
         return children;
     }
 
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
     public String getElementType() {
         return elementType;
     }
