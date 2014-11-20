@@ -26,8 +26,6 @@ limitations under the License.
 
     <xs:complexType name="clumsyRootType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="layer" type="layerType" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="registerControls" type="registerControlsType" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="registerCursor" type="registerCursorType" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="registerEffect" type="registerEffectType" minOccurs="0" maxOccurs="unbounded" />
@@ -40,65 +38,16 @@ limitations under the License.
     </xs:complexType>
 
     <!-- depth 1 -->
-    <xs:complexType name="elementType">
+    <xs:complexType name="screenElementType">
         <xs:attribute name="id" type="xs:string" />
-        <xs:attribute name="align" type="alignType" default="left" />
         <xs:attribute name="backgroundColor" type="colorType" default="#0000" />
         <xs:attribute name="backgroundImage" type="xs:string" />
         <xs:attribute name="backgroundRepeat" type="imageRepeatType" default="noRepeat" />
         <xs:attribute name="controllerClass" type="xs:string" />
-        <xs:attribute name="display" type="displayType" default="block" />
-        <xs:attribute name="height" type="heightWidthType" default="100%" />
-        <xs:attribute name="inherit" type="xs:boolean" default="true" />
-        <xs:attribute name="margin" type="pixelBoxType" default="0px 0px 0px 0px" />
-        <xs:attribute name="marginBottom" type="pixelHeightWidthType" />
-        <xs:attribute name="marginLeft" type="pixelHeightWidthType" />
-        <xs:attribute name="marginRight" type="pixelHeightWidthType" />
-        <xs:attribute name="marginTop" type="pixelHeightWidthType" />
         <xs:attribute name="overflow" type="overflowType" default="visible" />
         <xs:attribute name="overflowX" type="overflowType" />
         <xs:attribute name="overflowY" type="overflowType" />
-        <xs:attribute name="padding" type="pixelBoxType" default="0px 0px 0px 0px" />
-        <xs:attribute name="paddingBottom" type="pixelHeightWidthType" />
-        <xs:attribute name="paddingLeft" type="pixelHeightWidthType" />
-        <xs:attribute name="paddingRight" type="pixelHeightWidthType" />
-        <xs:attribute name="paddingTop" type="pixelHeightWidthType" />
-        <xs:attribute name="position" type="positionType" />
         <xs:attribute name="renderClass" type="xs:string" />
-        <xs:attribute name="style" type="xs:string" />
-        <xs:attribute name="vAlign" type="vAlignType" />
-        <xs:attribute name="visible" type="xs:boolean" default="true" />
-        <xs:attribute name="visibleToMouse" type="xs:boolean" default="true" />
-        <xs:attribute name="width" type="heightWidthType" default="100%" />
-        <xs:attribute name="x" type="xs:int" />
-        <xs:attribute name="y" type="xs:int" />
-        <xs:attribute name="zIndex" type="xs:int" default="0" />
-    </xs:complexType>
-
-    <xs:complexType name="layerType">
-        <xs:complexContent>
-            <xs:extension base="elementType">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
-                </xs:choice>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="panelType">
-        <xs:complexContent>
-            <xs:extension base="elementType">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
-                </xs:choice>
-            </xs:extension>
-        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="registerControlsType">
@@ -136,7 +85,7 @@ limitations under the License.
 
     <xs:complexType name="screenType">
         <xs:complexContent>
-            <xs:extension base="elementType">
+            <xs:extension base="screenElementType">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
@@ -149,10 +98,45 @@ limitations under the License.
     </xs:complexType>
 
     <!-- depth 2 -->
+    <xs:complexType name="elementType">
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="align" type="alignType" default="left" />
+        <xs:attribute name="backgroundColor" type="colorType" default="#0000" />
+        <xs:attribute name="backgroundImage" type="xs:string" />
+        <xs:attribute name="backgroundRepeat" type="imageRepeatType" default="noRepeat" />
+        <xs:attribute name="controllerClass" type="xs:string" />
+        <xs:attribute name="display" type="displayType" default="block" />
+        <xs:attribute name="height" type="heightWidthType" default="100%" />
+        <xs:attribute name="inherit" type="xs:boolean" default="true" />
+        <xs:attribute name="margin" type="pixelBoxType" default="0px 0px 0px 0px" />
+        <xs:attribute name="marginBottom" type="pixelHeightWidthType" />
+        <xs:attribute name="marginLeft" type="pixelHeightWidthType" />
+        <xs:attribute name="marginRight" type="pixelHeightWidthType" />
+        <xs:attribute name="marginTop" type="pixelHeightWidthType" />
+        <xs:attribute name="overflow" type="overflowType" default="visible" />
+        <xs:attribute name="overflowX" type="overflowType" />
+        <xs:attribute name="overflowY" type="overflowType" />
+        <xs:attribute name="padding" type="pixelBoxType" default="0px 0px 0px 0px" />
+        <xs:attribute name="paddingBottom" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingLeft" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingRight" type="pixelHeightWidthType" />
+        <xs:attribute name="paddingTop" type="pixelHeightWidthType" />
+        <xs:attribute name="position" type="positionType" />
+        <xs:attribute name="renderClass" type="xs:string" />
+        <xs:attribute name="style" type="xs:string" />
+        <xs:attribute name="vAlign" type="vAlignType" />
+        <xs:attribute name="visible" type="xs:boolean" default="true" />
+        <xs:attribute name="visibleToMouse" type="xs:boolean" default="true" />
+        <xs:attribute name="width" type="heightWidthType" default="100%" />
+        <xs:attribute name="x" type="xs:int" />
+        <xs:attribute name="y" type="xs:int" />
+        <xs:attribute name="zIndex" type="xs:int" default="0" />
+    </xs:complexType>
+
     <xs:complexType name="controlType">
         <xs:complexContent>
             <xs:extension base="elementType">
-                <xs:attribute name="type" type="xs:string" />
+                <xs:attribute name="type" type="typeType" use="required" />
                 <xs:anyAttribute />
             </xs:extension>
         </xs:complexContent>
@@ -163,6 +147,34 @@ limitations under the License.
             <xs:extension base="elementType">
                 <xs:attribute name="filename" type="xs:string" use="required" />
                 <xs:attribute name="imageRepeat" type="imageRepeatType" default="noRepeat" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="layerType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+                <xs:attribute name="ref" type="xs:string" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="panelType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="control" type="controlType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="image" type="imageType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="panel" type="panelType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+                <xs:attribute name="ref" type="xs:string" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -252,6 +264,12 @@ limitations under the License.
         <xs:restriction base="xs:string">
             <xs:enumeration value="absolute" />
             <xs:enumeration value="relative" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="button" />
         </xs:restriction>
     </xs:simpleType>
 
