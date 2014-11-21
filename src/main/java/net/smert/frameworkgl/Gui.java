@@ -14,6 +14,7 @@ package net.smert.frameworkgl;
 
 import java.io.IOException;
 import net.smert.frameworkgl.gui.ClumsyGui;
+import net.smert.frameworkgl.gui.UI;
 
 /**
  *
@@ -53,7 +54,7 @@ public class Gui {
         Fw.audio.init();
 
         // Initialize clumsy
-        clumsyGui = Fw.guiFactory.createClumsyGui();
+        clumsyGui = UI.gui;
         initialized = true;
     }
 

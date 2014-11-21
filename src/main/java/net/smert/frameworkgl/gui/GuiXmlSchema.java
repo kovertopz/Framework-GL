@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import net.smert.frameworkgl.Fw;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -125,7 +124,7 @@ public class GuiXmlSchema {
                 if (eventType == XmlPullParser.END_TAG) {
                     stack.pop();
                 } else if (eventType == XmlPullParser.START_TAG) {
-                    GuiXmlElement guiXmlElement = Fw.guiFactory.createGuiXmlElement();
+                    GuiXmlElement guiXmlElement = UI.guiFactory.createGuiXmlElement();
 
                     // Set element type
                     String elementType = xmlPullParser.getName();

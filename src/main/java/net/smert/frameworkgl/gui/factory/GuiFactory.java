@@ -30,10 +30,6 @@ public class GuiFactory {
         container = guiFactoryContainer;
     }
 
-    public ClumsyGui createClumsyGui() {
-        return container.getComponent(ClumsyGui.class);
-    }
-
     public GuiScreen createGuiScreen() {
         return container.getComponent(GuiScreen.class);
     }

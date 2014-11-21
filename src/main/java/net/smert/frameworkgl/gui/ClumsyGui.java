@@ -35,6 +35,7 @@ public class ClumsyGui {
     private final String SCREEN_ELEMENT_TYPE = "screen";
 
     private boolean validateXml;
+    private GuiScreen currentScreen;
     private final Map<String, Map<String, String>> defaultAttributes;
     private final Map<String, GuiScreen> screens;
     private String schemaFilename;
@@ -70,7 +71,7 @@ public class ClumsyGui {
             }
 
             // Create and initialize screen
-            GuiScreen screen = Fw.guiFactory.createGuiScreen();
+            GuiScreen screen = UI.guiFactory.createGuiScreen();
             screen.init(child);
 
             // Save screen
@@ -117,7 +118,7 @@ public class ClumsyGui {
         Files.FileAsset schemaFileAsset = Fw.files.getGui(schemaFilename);
 
         // Create schema
-        GuiXmlSchema guiXmlSchema = Fw.guiFactory.createGuiXmlSchema();
+        GuiXmlSchema guiXmlSchema = UI.guiFactory.createGuiXmlSchema();
         guiXmlSchema.init();
 
         // Validate if necessary
@@ -152,6 +153,11 @@ public class ClumsyGui {
     }
 
     public void switchScreen(String screenID) {
+        GuiScreen screen = screens.get(screenID);
+        if (screen == null) {
+            throw new RuntimeException("There is no screen defined for ID: " + screenID);
+        }
+        currentScreen = screen;
     }
 
     public void update() {

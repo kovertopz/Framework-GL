@@ -24,4 +24,7 @@ public class GuiScreen {
     public void render() {
     }
 
+    public void update() {
+    }
+
 }

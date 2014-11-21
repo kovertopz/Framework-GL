@@ -20,6 +20,13 @@ import net.smert.frameworkgl.gui.ClumsyGui;
 import net.smert.frameworkgl.gui.GuiScreen;
 import net.smert.frameworkgl.gui.GuiXmlElement;
 import net.smert.frameworkgl.gui.GuiXmlSchema;
+import net.smert.frameworkgl.gui.UI;
+import net.smert.frameworkgl.gui.builders.GuiControlBuilder;
+import net.smert.frameworkgl.gui.builders.GuiImageBuilder;
+import net.smert.frameworkgl.gui.builders.GuiLayerBuilder;
+import net.smert.frameworkgl.gui.builders.GuiPanelBuilder;
+import net.smert.frameworkgl.gui.builders.GuiScreenBuilder;
+import net.smert.frameworkgl.gui.builders.GuiTextBuilder;
 import net.smert.frameworkgl.gui.factory.GuiFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
@@ -220,7 +227,6 @@ public class BootStrap {
                     .withConstructorInjection().build(); // NO caching!
 
             // GUI factory
-            guiFactoryContainer.addComponent(ClumsyGui.class);
             guiFactoryContainer.addComponent(GuiScreen.class);
             guiFactoryContainer.addComponent(GuiXmlElement.class);
             guiFactoryContainer.addComponent(GuiXmlSchema.class);
@@ -474,13 +480,26 @@ public class BootStrap {
         // Framework component dependencies
         container.addComponent(SimpleFormatter.class);
 
-        // Framework factories
+        // Framework gameobject factory
         container.as(Characteristics.USE_NAMES).addComponent(GameObjectFactory.class);
-        container.as(Characteristics.USE_NAMES).addComponent(GuiFactory.class);
 
         // Framework helpers
         container.addComponent(KeyboardHelper.class);
         container.addComponent(MouseHelper.class);
+
+        // GUI
+        container.addComponent(ClumsyGui.class);
+
+        // Builder
+        container.addComponent(GuiControlBuilder.class);
+        container.addComponent(GuiImageBuilder.class);
+        container.addComponent(GuiLayerBuilder.class);
+        container.addComponent(GuiPanelBuilder.class);
+        container.addComponent(GuiScreenBuilder.class);
+        container.addComponent(GuiTextBuilder.class);
+
+        // Factory
+        container.as(Characteristics.USE_NAMES).addComponent(GuiFactory.class);
 
         // OpenAL components
         container.addComponent(OpenAL.class);
@@ -598,7 +617,7 @@ public class BootStrap {
         // Renderable VBO factory
         container.as(Characteristics.USE_NAMES).addComponent(VBODrawCallFactory.class);
 
-        // Renderers
+        // Renderer
         container.addComponent(RendererGL1.class);
         container.addComponent(RendererGL2.class);
         container.addComponent(RendererGL3.class);
@@ -626,7 +645,6 @@ public class BootStrap {
         Fw.gof = container.getComponent(GameObjectFactory.class);
         Fw.graphics = container.getComponent(Graphics.class);
         Fw.gui = container.getComponent(Gui.class);
-        Fw.guiFactory = container.getComponent(GuiFactory.class);
         Fw.input = container.getComponent(Input.class);
         Fw.net = container.getComponent(Network.class);
         Fw.timer = container.getComponent(Timer.class);
@@ -699,6 +717,17 @@ public class BootStrap {
         Renderable.vertexArrays = container.getComponent(VertexArrays.class);
     }
 
+    protected void createStaticUserInterface(MutablePicoContainer container) {
+        UI.controlBuiler = container.getComponent(GuiControlBuilder.class);
+        UI.gui = container.getComponent(ClumsyGui.class);
+        UI.guiFactory = container.getComponent(GuiFactory.class);
+        UI.imageBuilder = container.getComponent(GuiImageBuilder.class);
+        UI.layerBuilder = container.getComponent(GuiLayerBuilder.class);
+        UI.panelBuilder = container.getComponent(GuiPanelBuilder.class);
+        UI.screenBuilder = container.getComponent(GuiScreenBuilder.class);
+        UI.textBuilder = container.getComponent(GuiTextBuilder.class);
+    }
+
     protected void initialize(MutablePicoContainer container) {
 
         // Create instances
@@ -761,6 +790,7 @@ public class BootStrap {
         createStaticOpenAL(container);
         createStaticOpenGL(container);
         createStaticRenderable(container);
+        createStaticUserInterface(container);
         initialize(container);
 
         // Start the application
