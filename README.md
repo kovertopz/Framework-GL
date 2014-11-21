@@ -23,7 +23,7 @@ Framework-GL has the following features :
 - Dynamic mesh builder for capsules, cones, cubes, cylinders,
   frustums, grids, pyramids, quads, spheres and toriods.
 - Frustum culling in clip space.
-- GUI support with Nifty GUI (http://nifty-gui.lessvoid.com/)
+- GUI support (created from builders or XML)
 - Math library (AABBs, matrices, quaternions and vectors)
 - Model loading (OBJ & MTL)
 - OpenGL constants have been organized to be more useful.
