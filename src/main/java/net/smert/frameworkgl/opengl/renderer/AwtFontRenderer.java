@@ -37,43 +37,45 @@ public class AwtFontRenderer implements FontRenderer {
     }
 
     private void createGlyphRenderable(AwtFont.Glyph glyph, TextHelperRenderer renderer) {
-        if (glyph.renderable == null) {
-            int fontHeight = glyph.codePage.getImage().getHeight();
-            int fontWidth = glyph.codePage.getImage().getWidth();
-            String fontTextureFilename = glyph.codePage.getFontTextureFilename();
-
-            // Calculate texture coordinates for the glyph
-            float maxX = (float) (glyph.x + glyph.w) / fontWidth;
-            float minX = (float) (glyph.x) / fontWidth;
-            float maxY = (float) (glyph.y + glyph.h) / fontHeight;
-            float minY = (float) (glyph.y) / fontHeight;
-
-            // Create quad
-            Mesh mesh = GL.meshFactory.createMesh();
-            GL.dynamicMeshBuilder.
-                    setLocalPosition(0f, 0f, 1f).
-                    setQuality(1, 1, 1).
-                    setSize(glyph.w, glyph.h, 0f).
-                    setTexCoordMinMaxX(minX, maxX).
-                    setTexCoordMinMaxY(1f - maxY, 1f - minY).
-                    build("quad").
-                    createMesh(true, mesh);
-
-            // Create segment material
-            Segment segment = mesh.getSegment(0);
-            SegmentMaterial segmentMaterial = segment.getMaterial();
-            if (segmentMaterial == null) {
-                segmentMaterial = GL.meshFactory.createSegmentMaterial();
-                segment.setMaterial(segmentMaterial);
-            }
-
-            // Set the diffuse texture
-            segmentMaterial.setTexture(TextureType.DIFFUSE, fontTextureFilename);
-
-            // Create renderable from mesh
-            glyph.renderable = renderer.createGlyphRenderable();
-            glyph.renderable.create(mesh);
+        if (glyph.renderable != null) {
+            return;
         }
+
+        int fontHeight = glyph.codePage.getImage().getHeight();
+        int fontWidth = glyph.codePage.getImage().getWidth();
+        String fontTextureFilename = glyph.codePage.getFontTextureFilename();
+
+        // Calculate texture coordinates for the glyph
+        float maxX = (float) (glyph.x + glyph.w) / fontWidth;
+        float minX = (float) (glyph.x) / fontWidth;
+        float maxY = (float) (glyph.y + glyph.h) / fontHeight;
+        float minY = (float) (glyph.y) / fontHeight;
+
+        // Create quad
+        Mesh mesh = GL.meshFactory.createMesh();
+        GL.dynamicMeshBuilder.
+                setLocalPosition(0f, 0f, 1f).
+                setQuality(1, 1, 1).
+                setSize(glyph.w, glyph.h, 0f).
+                setTexCoordMinMaxX(minX, maxX).
+                setTexCoordMinMaxY(1f - maxY, 1f - minY).
+                build("quad").
+                createMesh(true, mesh);
+
+        // Create segment material
+        Segment segment = mesh.getSegment(0);
+        SegmentMaterial segmentMaterial = segment.getMaterial();
+        if (segmentMaterial == null) {
+            segmentMaterial = GL.meshFactory.createSegmentMaterial();
+            segment.setMaterial(segmentMaterial);
+        }
+
+        // Set the diffuse texture
+        segmentMaterial.setTexture(TextureType.DIFFUSE, fontTextureFilename);
+
+        // Create renderable from mesh
+        glyph.renderable = renderer.createGlyphRenderable();
+        glyph.renderable.create(mesh);
     }
 
     private void drawString(String text, Vector2f position, float sizeX, float sizeY, TextHelperRenderer renderer) {

@@ -38,58 +38,60 @@ public class AngelCodeFontRenderer implements FontRenderer {
     }
 
     private void createGlyphRenderable(AngelCodeFont.Glyph glyph, TextHelperRenderer renderer) {
-        if (glyph.renderable == null) {
-            int fontHeight = angelCodeFont.getFontScaleHeight();
-            int fontWidth = angelCodeFont.getFontScaleWidth();
-            int page = glyph.character.getPage();
-            String fontTextureFilename = angelCodeFont.getPage(page);
-
-            // Calculate texture coordinates for the glyph
-            float height = glyph.character.getHeight();
-            float maxX = (float) (glyph.character.getX() + glyph.character.getWidth()) / fontWidth;
-            float minX = (float) (glyph.character.getX()) / fontWidth;
-            float maxY = (float) (glyph.character.getY() + glyph.character.getHeight()) / fontHeight;
-            float minY = (float) (glyph.character.getY()) / fontHeight;
-            float width = glyph.character.getWidth();
-            float x = glyph.character.getXOffset();
-            float y = -glyph.character.getYOffset();
-
-            // Use tessellator to create a quad
-            GL.tessellator.setConvertToTriangles(true);
-            GL.tessellator.reset();
-            GL.tessellator.setLocalPosition(0, 0, 0);
-            GL.tessellator.start(Primitives.QUADS);
-
-            GL.tessellator.addTexCoord(minX, 1f - maxY);
-            GL.tessellator.addVertex(x, y - height, 0);
-            GL.tessellator.addTexCoord(maxX, 1f - maxY);
-            GL.tessellator.addVertex(x + width, y - height, 0);
-            GL.tessellator.addTexCoord(maxX, 1f - minY);
-            GL.tessellator.addVertex(x + width, y, 0);
-            GL.tessellator.addTexCoord(minX, 1f - minY);
-            GL.tessellator.addVertex(x, y, 0);
-
-            GL.tessellator.stop();
-            GL.tessellator.addSegment("Angel Code Font Renderer Quad");
-
-            // Create mesh
-            Mesh mesh = Fw.graphics.createMesh(GL.tessellator);
-
-            // Create segment material
-            Segment segment = mesh.getSegment(0);
-            SegmentMaterial segmentMaterial = segment.getMaterial();
-            if (segmentMaterial == null) {
-                segmentMaterial = GL.meshFactory.createSegmentMaterial();
-                segment.setMaterial(segmentMaterial);
-            }
-
-            // Set the diffuse texture
-            segmentMaterial.setTexture(TextureType.DIFFUSE, fontTextureFilename);
-
-            // Create renderable from mesh
-            glyph.renderable = renderer.createGlyphRenderable();
-            glyph.renderable.create(mesh);
+        if (glyph.renderable != null) {
+            return;
         }
+
+        int fontHeight = angelCodeFont.getFontScaleHeight();
+        int fontWidth = angelCodeFont.getFontScaleWidth();
+        int page = glyph.character.getPage();
+        String fontTextureFilename = angelCodeFont.getPage(page);
+
+        // Calculate texture coordinates for the glyph
+        float height = glyph.character.getHeight();
+        float maxX = (float) (glyph.character.getX() + glyph.character.getWidth()) / fontWidth;
+        float minX = (float) (glyph.character.getX()) / fontWidth;
+        float maxY = (float) (glyph.character.getY() + glyph.character.getHeight()) / fontHeight;
+        float minY = (float) (glyph.character.getY()) / fontHeight;
+        float width = glyph.character.getWidth();
+        float x = glyph.character.getXOffset();
+        float y = -glyph.character.getYOffset();
+
+        // Use tessellator to create a quad
+        GL.tessellator.setConvertToTriangles(true);
+        GL.tessellator.reset();
+        GL.tessellator.setLocalPosition(0, 0, 0);
+        GL.tessellator.start(Primitives.QUADS);
+
+        GL.tessellator.addTexCoord(minX, 1f - maxY);
+        GL.tessellator.addVertex(x, y - height, 0);
+        GL.tessellator.addTexCoord(maxX, 1f - maxY);
+        GL.tessellator.addVertex(x + width, y - height, 0);
+        GL.tessellator.addTexCoord(maxX, 1f - minY);
+        GL.tessellator.addVertex(x + width, y, 0);
+        GL.tessellator.addTexCoord(minX, 1f - minY);
+        GL.tessellator.addVertex(x, y, 0);
+
+        GL.tessellator.stop();
+        GL.tessellator.addSegment("Angel Code Font Renderer Quad");
+
+        // Create mesh
+        Mesh mesh = Fw.graphics.createMesh(GL.tessellator);
+
+        // Create segment material
+        Segment segment = mesh.getSegment(0);
+        SegmentMaterial segmentMaterial = segment.getMaterial();
+        if (segmentMaterial == null) {
+            segmentMaterial = GL.meshFactory.createSegmentMaterial();
+            segment.setMaterial(segmentMaterial);
+        }
+
+        // Set the diffuse texture
+        segmentMaterial.setTexture(TextureType.DIFFUSE, fontTextureFilename);
+
+        // Create renderable from mesh
+        glyph.renderable = renderer.createGlyphRenderable();
+        glyph.renderable.create(mesh);
     }
 
     private void drawString(String text, Vector2f position, float sizeX, float sizeY, TextHelperRenderer renderer) {

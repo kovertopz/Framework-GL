@@ -115,51 +115,53 @@ public class CustomClassLoader extends SecureClassLoader {
 
     private void defineNewPackage(String className, FileEntryInJar fileEntryInJar) {
         int lastPeriod = className.lastIndexOf('.');
-        if (lastPeriod != -1) {
-            JarFileEntry jarFileEntry = fileEntryInJar.getJarFileEntry();
-            Manifest manifest = jarFileEntry.getManifest();
-            String packageName = className.substring(0, lastPeriod);
-            URL sealBase = jarFileEntry.getSealBase(packageName);
+        if (lastPeriod == -1) {
+            return;
+        }
 
-            Package pkg = getPackage(packageName);
-            if (pkg != null) {
-                if (pkg.isSealed()) {
-                    // The package is already defined and the new class needs to be verified to match the seal
-                    if (!pkg.isSealed(sealBase)) {
+        JarFileEntry jarFileEntry = fileEntryInJar.getJarFileEntry();
+        Manifest manifest = jarFileEntry.getManifest();
+        String packageName = className.substring(0, lastPeriod);
+        URL sealBase = jarFileEntry.getSealBase(packageName);
+
+        Package pkg = getPackage(packageName);
+        if (pkg != null) {
+            if (pkg.isSealed()) {
+                // The package is already defined and the new class needs to be verified to match the seal
+                if (!pkg.isSealed(sealBase)) {
+                    throw new SecurityException("Sealing violation: package " + packageName
+                            + " is sealed but new class " + className + " is not defined in the same JAR");
+                }
+            } else {
+                // The package is already defined and sealing was disabled. We need to make sure the new class
+                // being defined does not have sealing enabled. We cannot redefine a package.
+                if (manifest != null) {
+                    String sealed = jarFileEntry.getSealed(packageName);
+                    if ("true".equalsIgnoreCase(sealed)) {
                         throw new SecurityException("Sealing violation: package " + packageName
-                                + " is sealed but new class " + className + " is not defined in the same JAR");
-                    }
-                } else {
-                    // The package is already defined and sealing was disabled. We need to make sure the new class
-                    // being defined does not have sealing enabled. We cannot redefine a package.
-                    if (manifest != null) {
-                        String sealed = jarFileEntry.getSealed(packageName);
-                        if ("true".equalsIgnoreCase(sealed)) {
-                            throw new SecurityException("Sealing violation: package " + packageName
-                                    + " is not sealed but new class " + className + " has sealing enabled");
-                        }
+                                + " is not sealed but new class " + className + " has sealing enabled");
                     }
                 }
-                return; // Return if there are no errors
             }
+            return; // Return if there are no errors
+        }
 
-            SecurityManager securityManager = System.getSecurityManager();
-            if (securityManager != null) {
-                securityManager.checkPackageDefinition(packageName);
-            }
+        SecurityManager securityManager = System.getSecurityManager();
+        if (securityManager != null) {
+            securityManager.checkPackageDefinition(packageName);
+        }
 
-            // Define a new package for the class
-            if (manifest != null) {
-                String implTitle = jarFileEntry.getImplementationTitle(packageName);
-                String implVendor = jarFileEntry.getImplementationVendor(packageName);
-                String implVersion = jarFileEntry.getImplementationVersion(packageName);
-                String specTitle = jarFileEntry.getSpecificationTitle(packageName);
-                String specVendor = jarFileEntry.getSpecificationVendor(packageName);
-                String specVersion = jarFileEntry.getSpecificationVersion(packageName);
-                definePackage(packageName, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase);
-            } else {
-                definePackage(packageName, null, null, null, null, null, null, null);
-            }
+        // Define a new package for the class
+        if (manifest != null) {
+            String implTitle = jarFileEntry.getImplementationTitle(packageName);
+            String implVendor = jarFileEntry.getImplementationVendor(packageName);
+            String implVersion = jarFileEntry.getImplementationVersion(packageName);
+            String specTitle = jarFileEntry.getSpecificationTitle(packageName);
+            String specVendor = jarFileEntry.getSpecificationVendor(packageName);
+            String specVersion = jarFileEntry.getSpecificationVersion(packageName);
+            definePackage(packageName, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase);
+        } else {
+            definePackage(packageName, null, null, null, null, null, null, null);
         }
     }
 
