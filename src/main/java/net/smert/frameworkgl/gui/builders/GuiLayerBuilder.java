@@ -29,6 +29,7 @@ public class GuiLayerBuilder {
 
     public GuiLayer create(GuiXmlElement layer) {
         GuiLayer guiLayer = UI.guiFactory.createWidgetLayer();
+        GuiBuilder.BuildCommon(guiLayer, layer);
 
         // Create each child
         for (GuiXmlElement child : layer.getChildren()) {

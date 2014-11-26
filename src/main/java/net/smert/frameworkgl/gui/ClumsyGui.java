@@ -31,8 +31,6 @@ import org.xml.sax.SAXException;
 public class ClumsyGui {
 
     private final static Logger log = LoggerFactory.getLogger(ClumsyGui.class);
-    private final String ID_ATTRIBUTE = "id";
-    private final String SCREEN_ELEMENT_TYPE = "screen";
 
     private boolean validateXml;
     private GuiScreen currentScreen;
@@ -60,14 +58,15 @@ public class ClumsyGui {
             String type = child.getElementType();
 
             // If we are not a screen element
-            if (!SCREEN_ELEMENT_TYPE.equals(type)) {
+            if (!GuiXmlElementType.SCREEN_TYPE.equals(type)) {
                 continue;
             }
 
             // Make sure the screen element has an ID attribute
-            String screenID = child.getAttributes().get(ID_ATTRIBUTE);
+            String screenID = child.getAttributes().get(GuiXmlElementAttribute.ID);
             if (screenID == null) {
-                throw new RuntimeException("XML element screen is missing the \"" + ID_ATTRIBUTE + "\" attribute");
+                throw new RuntimeException("XML element screen is missing the \"" + GuiXmlElementAttribute.ID
+                        + "\" attribute");
             }
 
             // Build screen from XML element
@@ -149,6 +148,7 @@ public class ClumsyGui {
     }
 
     public void render() {
+        currentScreen.render();
     }
 
     public void switchScreen(String screenID) {
@@ -160,6 +160,7 @@ public class ClumsyGui {
     }
 
     public void update() {
+        currentScreen.update();
     }
 
 }

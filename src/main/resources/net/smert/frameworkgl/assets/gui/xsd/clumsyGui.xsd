@@ -39,11 +39,11 @@ limitations under the License.
 
     <!-- depth 1 -->
     <xs:complexType name="screenElementType">
-        <xs:attribute name="id" type="xs:string" />
         <xs:attribute name="backgroundColor" type="colorType" default="#0000" />
         <xs:attribute name="backgroundImage" type="xs:string" />
         <xs:attribute name="backgroundRepeat" type="imageRepeatType" default="noRepeat" />
         <xs:attribute name="controllerClass" type="xs:string" />
+        <xs:attribute name="id" type="xs:string" />
         <xs:attribute name="overflow" type="overflowType" default="visible" />
         <xs:attribute name="overflowX" type="overflowType" />
         <xs:attribute name="overflowY" type="overflowType" />
@@ -99,7 +99,6 @@ limitations under the License.
 
     <!-- depth 2 -->
     <xs:complexType name="elementType">
-        <xs:attribute name="id" type="xs:string" />
         <xs:attribute name="align" type="alignType" default="left" />
         <xs:attribute name="backgroundColor" type="colorType" default="#0000" />
         <xs:attribute name="backgroundImage" type="xs:string" />
@@ -107,6 +106,7 @@ limitations under the License.
         <xs:attribute name="controllerClass" type="xs:string" />
         <xs:attribute name="display" type="displayType" default="block" />
         <xs:attribute name="height" type="heightWidthType" default="100%" />
+        <xs:attribute name="id" type="xs:string" />
         <xs:attribute name="inherit" type="xs:boolean" default="true" />
         <xs:attribute name="margin" type="pixelBoxType" default="0px 0px 0px 0px" />
         <xs:attribute name="marginBottom" type="pixelHeightWidthType" />

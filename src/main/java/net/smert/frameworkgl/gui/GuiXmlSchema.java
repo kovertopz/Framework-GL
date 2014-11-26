@@ -102,7 +102,7 @@ public class GuiXmlSchema {
     }
 
     public final void setRootElementType(String rootElementType) {
-        this.rootElementType = rootElementType.toLowerCase();
+        this.rootElementType = rootElementType;
     }
 
     public void init() {
@@ -127,7 +127,7 @@ public class GuiXmlSchema {
                     GuiXmlElement guiXmlElement = UI.guiFactory.createXmlElement();
 
                     // Set element type
-                    String elementType = xmlPullParser.getName().toLowerCase();
+                    String elementType = xmlPullParser.getName();
                     guiXmlElement.setElementType(elementType);
 
                     // Set root element

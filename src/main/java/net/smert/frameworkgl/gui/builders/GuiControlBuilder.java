@@ -58,7 +58,9 @@ public class GuiControlBuilder {
         if (clazz == null) {
             throw new RuntimeException("The control type has not been registered: " + attributeType);
         }
-        return newInstance(clazz);
+        AbstractGuiControl guiControl = newInstance(clazz);
+        GuiBuilder.BuildCommon(guiControl, control);
+        return guiControl;
     }
 
     public void register(String name, Class clazz) {

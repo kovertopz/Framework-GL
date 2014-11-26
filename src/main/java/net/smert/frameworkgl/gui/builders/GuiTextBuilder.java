@@ -24,6 +24,7 @@ public class GuiTextBuilder {
 
     public GuiText create(GuiXmlElement text) {
         GuiText guiText = UI.guiFactory.createWidgetText();
+        GuiBuilder.BuildCommon(guiText, text);
         return guiText;
     }
 

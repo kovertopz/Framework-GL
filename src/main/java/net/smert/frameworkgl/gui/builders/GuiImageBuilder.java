@@ -24,6 +24,7 @@ public class GuiImageBuilder {
 
     public GuiImage create(GuiXmlElement image) {
         GuiImage guiImage = UI.guiFactory.createWidgetImage();
+        GuiBuilder.BuildCommon(guiImage, image);
         return guiImage;
     }
 

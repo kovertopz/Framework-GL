@@ -28,6 +28,7 @@ public class GuiPanelBuilder {
 
     public GuiPanel create(GuiXmlElement panel) {
         GuiPanel guiPanel = UI.guiFactory.createWidgetPanel();
+        GuiBuilder.BuildCommon(guiPanel, panel);
 
         // Create each child
         for (GuiXmlElement child : panel.getChildren()) {

@@ -34,6 +34,7 @@ public class GuiScreenBuilder {
         // Create root widget
         GuiRoot guiRoot = UI.guiFactory.createWidgetRoot();
         GuiScreen guiScreen = UI.guiFactory.createScreen();
+        guiScreen.setDefaultAttributes(screen.getAttributes());
         guiScreen.setRoot(guiRoot);
 
         // Create each child

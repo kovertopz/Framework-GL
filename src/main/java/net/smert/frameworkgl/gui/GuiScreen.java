@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.gui;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.smert.frameworkgl.gui.widgets.AbstractGuiWidget;
 import net.smert.frameworkgl.gui.widgets.GuiRoot;
 
@@ -22,8 +24,14 @@ import net.smert.frameworkgl.gui.widgets.GuiRoot;
 public class GuiScreen {
 
     private GuiRoot root;
+    private final Map<String, String> defaultAttributes;
 
     public GuiScreen() {
+        defaultAttributes = new HashMap<>();
+    }
+
+    public void addChild(AbstractGuiWidget widget) {
+        root.addChild(widget);
     }
 
     public GuiRoot getRoot() {
@@ -34,8 +42,12 @@ public class GuiScreen {
         this.root = root;
     }
 
-    public void addChild(AbstractGuiWidget widget) {
-        root.addChild(widget);
+    public Map<String, String> getDefaultAttributes() {
+        return defaultAttributes;
+    }
+
+    public void setDefaultAttributes(Map<String, String> defaultAttributes) {
+        this.defaultAttributes.putAll(defaultAttributes);
     }
 
     public boolean removeChild(AbstractGuiWidget widget) {
