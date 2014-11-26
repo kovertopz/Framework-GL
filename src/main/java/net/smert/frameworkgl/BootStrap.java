@@ -28,6 +28,14 @@ import net.smert.frameworkgl.gui.builders.GuiPanelBuilder;
 import net.smert.frameworkgl.gui.builders.GuiScreenBuilder;
 import net.smert.frameworkgl.gui.builders.GuiTextBuilder;
 import net.smert.frameworkgl.gui.factory.GuiFactory;
+import net.smert.frameworkgl.gui.widgets.GuiButton;
+import net.smert.frameworkgl.gui.widgets.GuiImage;
+import net.smert.frameworkgl.gui.widgets.GuiLayer;
+import net.smert.frameworkgl.gui.widgets.GuiPanel;
+import net.smert.frameworkgl.gui.widgets.GuiRoot;
+import net.smert.frameworkgl.gui.widgets.GuiScrollBar;
+import net.smert.frameworkgl.gui.widgets.GuiScrollContainer;
+import net.smert.frameworkgl.gui.widgets.GuiText;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.openal.AL;
@@ -227,7 +235,14 @@ public class BootStrap {
                     .withConstructorInjection().build(); // NO caching!
 
             // GUI factory
+            guiFactoryContainer.addComponent(GuiImage.class);
+            guiFactoryContainer.addComponent(GuiLayer.class);
+            guiFactoryContainer.addComponent(GuiPanel.class);
+            guiFactoryContainer.addComponent(GuiRoot.class);
             guiFactoryContainer.addComponent(GuiScreen.class);
+            guiFactoryContainer.addComponent(GuiScrollBar.class);
+            guiFactoryContainer.addComponent(GuiScrollContainer.class);
+            guiFactoryContainer.addComponent(GuiText.class);
             guiFactoryContainer.addComponent(GuiXmlElement.class);
             guiFactoryContainer.addComponent(GuiXmlSchema.class);
 
@@ -731,10 +746,14 @@ public class BootStrap {
     protected void initialize(MutablePicoContainer container) {
 
         // Create instances
+        GuiControlBuilder guiControlBuiler = container.getComponent(GuiControlBuilder.class);
         DynamicMeshBuilder dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         MeshReader meshReader = container.getComponent(MeshReader.class);
         OpenAL openal = container.getComponent(OpenAL.class);
         TextureReader textureReader = container.getComponent(TextureReader.class);
+
+        // Register controls
+        guiControlBuiler.register("button", GuiButton.class);
 
         // Register dynamic meshes
         dynamicMeshBuilder.register("aabb", GL.meshFactory.createDynamicAABB());

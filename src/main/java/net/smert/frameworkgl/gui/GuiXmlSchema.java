@@ -60,7 +60,7 @@ public class GuiXmlSchema {
         defaultAttributesToLoad.put("image", "imageType");
         defaultAttributesToLoad.put("screenElement", "screenElementType");
         defaultAttributesToLoad.put("text", "textType");
-        rootElementType = "clumsyRoot";
+        setRootElementType("clumsyRoot");
     }
 
     private void parseAttributeNodeList(Map<String, String> attributes, NodeList attributeNodeList) {
@@ -101,8 +101,8 @@ public class GuiXmlSchema {
         return rootElementType;
     }
 
-    public void setRootElementType(String rootElementType) {
-        this.rootElementType = rootElementType;
+    public final void setRootElementType(String rootElementType) {
+        this.rootElementType = rootElementType.toLowerCase();
     }
 
     public void init() {
@@ -124,10 +124,10 @@ public class GuiXmlSchema {
                 if (eventType == XmlPullParser.END_TAG) {
                     stack.pop();
                 } else if (eventType == XmlPullParser.START_TAG) {
-                    GuiXmlElement guiXmlElement = UI.guiFactory.createGuiXmlElement();
+                    GuiXmlElement guiXmlElement = UI.guiFactory.createXmlElement();
 
                     // Set element type
-                    String elementType = xmlPullParser.getName();
+                    String elementType = xmlPullParser.getName().toLowerCase();
                     guiXmlElement.setElementType(elementType);
 
                     // Set root element

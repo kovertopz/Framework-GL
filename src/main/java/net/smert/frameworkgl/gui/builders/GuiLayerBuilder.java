@@ -12,10 +12,51 @@
  */
 package net.smert.frameworkgl.gui.builders;
 
+import net.smert.frameworkgl.gui.GuiXmlElement;
+import net.smert.frameworkgl.gui.GuiXmlElementType;
+import net.smert.frameworkgl.gui.UI;
+import net.smert.frameworkgl.gui.widgets.AbstractGuiControl;
+import net.smert.frameworkgl.gui.widgets.GuiImage;
+import net.smert.frameworkgl.gui.widgets.GuiLayer;
+import net.smert.frameworkgl.gui.widgets.GuiPanel;
+import net.smert.frameworkgl.gui.widgets.GuiText;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class GuiLayerBuilder {
+
+    public GuiLayer create(GuiXmlElement layer) {
+        GuiLayer guiLayer = UI.guiFactory.createWidgetLayer();
+
+        // Create each child
+        for (GuiXmlElement child : layer.getChildren()) {
+            String elementType = child.getElementType();
+
+            switch (elementType) {
+                case GuiXmlElementType.CONTROL_TYPE:
+                    AbstractGuiControl guiControl = UI.controlBuiler.create(child);
+                    guiLayer.addChild(guiControl);
+                    break;
+                case GuiXmlElementType.IMAGE_TYPE:
+                    GuiImage guiImage = UI.imageBuilder.create(child);
+                    guiLayer.addChild(guiImage);
+                    break;
+                case GuiXmlElementType.PANEL_TYPE:
+                    GuiPanel guiPanelChild = UI.panelBuilder.create(child);
+                    guiLayer.addChild(guiPanelChild);
+                    break;
+                case GuiXmlElementType.TEXT_TYPE:
+                    GuiText guiText = UI.textBuilder.create(child);
+                    guiLayer.addChild(guiText);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown element type: " + elementType);
+            }
+        }
+        return guiLayer;
+    }
 
 }

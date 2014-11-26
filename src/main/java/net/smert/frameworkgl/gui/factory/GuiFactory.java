@@ -12,10 +12,16 @@
  */
 package net.smert.frameworkgl.gui.factory;
 
-import net.smert.frameworkgl.gui.ClumsyGui;
 import net.smert.frameworkgl.gui.GuiScreen;
 import net.smert.frameworkgl.gui.GuiXmlElement;
 import net.smert.frameworkgl.gui.GuiXmlSchema;
+import net.smert.frameworkgl.gui.widgets.GuiImage;
+import net.smert.frameworkgl.gui.widgets.GuiLayer;
+import net.smert.frameworkgl.gui.widgets.GuiPanel;
+import net.smert.frameworkgl.gui.widgets.GuiRoot;
+import net.smert.frameworkgl.gui.widgets.GuiScrollBar;
+import net.smert.frameworkgl.gui.widgets.GuiScrollContainer;
+import net.smert.frameworkgl.gui.widgets.GuiText;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -30,15 +36,43 @@ public class GuiFactory {
         container = guiFactoryContainer;
     }
 
-    public GuiScreen createGuiScreen() {
+    public GuiScreen createScreen() {
         return container.getComponent(GuiScreen.class);
     }
 
-    public GuiXmlElement createGuiXmlElement() {
+    public GuiImage createWidgetImage() {
+        return container.getComponent(GuiImage.class);
+    }
+
+    public GuiLayer createWidgetLayer() {
+        return container.getComponent(GuiLayer.class);
+    }
+
+    public GuiPanel createWidgetPanel() {
+        return container.getComponent(GuiPanel.class);
+    }
+
+    public GuiRoot createWidgetRoot() {
+        return container.getComponent(GuiRoot.class);
+    }
+
+    public GuiScrollBar createWidgetScrollBar() {
+        return container.getComponent(GuiScrollBar.class);
+    }
+
+    public GuiScrollContainer createWidgetScrollContainer() {
+        return container.getComponent(GuiScrollContainer.class);
+    }
+
+    public GuiText createWidgetText() {
+        return container.getComponent(GuiText.class);
+    }
+
+    public GuiXmlElement createXmlElement() {
         return container.getComponent(GuiXmlElement.class);
     }
 
-    public GuiXmlSchema createGuiXmlSchema() {
+    public GuiXmlSchema createXmlSchema() {
         return container.getComponent(GuiXmlSchema.class);
     }
 

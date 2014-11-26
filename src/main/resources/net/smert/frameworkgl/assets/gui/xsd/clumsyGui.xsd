@@ -136,7 +136,7 @@ limitations under the License.
     <xs:complexType name="controlType">
         <xs:complexContent>
             <xs:extension base="elementType">
-                <xs:attribute name="type" type="typeType" use="required" />
+                <xs:attribute name="type" type="xs:string" use="required" />
                 <xs:anyAttribute />
             </xs:extension>
         </xs:complexContent>
@@ -264,12 +264,6 @@ limitations under the License.
         <xs:restriction base="xs:string">
             <xs:enumeration value="absolute" />
             <xs:enumeration value="relative" />
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="typeType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="button" />
         </xs:restriction>
     </xs:simpleType>
 

@@ -10,16 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.gui.widgets;
+package net.smert.frameworkgl.gui;
 
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GuiButton extends AbstractGuiControl {
+public class GuiXmlElementAttribute {
 
-    @Override
-    public void render() {
+    public final static String TYPE = "type";
+
+    private GuiXmlElementAttribute() {
     }
 
 }

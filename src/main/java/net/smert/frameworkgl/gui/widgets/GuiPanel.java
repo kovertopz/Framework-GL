@@ -12,11 +12,28 @@
  */
 package net.smert.frameworkgl.gui.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class GuiPanel extends AbstractGuiWidget {
+
+    private final List<AbstractGuiWidget> children;
+
+    public GuiPanel() {
+        children = new ArrayList<>();
+    }
+
+    public void addChild(AbstractGuiWidget child) {
+        children.add(child);
+    }
+
+    public boolean removeChild(AbstractGuiWidget child) {
+        return children.remove(child);
+    }
 
     @Override
     public void render() {

@@ -12,10 +12,19 @@
  */
 package net.smert.frameworkgl.gui.builders;
 
+import net.smert.frameworkgl.gui.GuiXmlElement;
+import net.smert.frameworkgl.gui.UI;
+import net.smert.frameworkgl.gui.widgets.GuiText;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class GuiTextBuilder {
+
+    public GuiText create(GuiXmlElement text) {
+        GuiText guiText = UI.guiFactory.createWidgetText();
+        return guiText;
+    }
 
 }

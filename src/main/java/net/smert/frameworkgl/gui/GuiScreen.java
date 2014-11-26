@@ -12,13 +12,34 @@
  */
 package net.smert.frameworkgl.gui;
 
+import net.smert.frameworkgl.gui.widgets.AbstractGuiWidget;
+import net.smert.frameworkgl.gui.widgets.GuiRoot;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class GuiScreen {
 
-    public void init(GuiXmlElement screen) {
+    private GuiRoot root;
+
+    public GuiScreen() {
+    }
+
+    public GuiRoot getRoot() {
+        return root;
+    }
+
+    public void setRoot(GuiRoot root) {
+        this.root = root;
+    }
+
+    public void addChild(AbstractGuiWidget widget) {
+        root.addChild(widget);
+    }
+
+    public boolean removeChild(AbstractGuiWidget widget) {
+        return root.removeChild(widget);
     }
 
     public void render() {

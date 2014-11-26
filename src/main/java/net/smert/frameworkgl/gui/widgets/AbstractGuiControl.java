@@ -16,10 +16,6 @@ package net.smert.frameworkgl.gui.widgets;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class GuiButton extends AbstractGuiControl {
-
-    @Override
-    public void render() {
-    }
+public abstract class AbstractGuiControl extends AbstractGuiWidget {
 
 }

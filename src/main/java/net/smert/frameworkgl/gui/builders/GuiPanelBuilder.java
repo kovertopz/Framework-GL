@@ -12,10 +12,50 @@
  */
 package net.smert.frameworkgl.gui.builders;
 
+import net.smert.frameworkgl.gui.GuiXmlElement;
+import net.smert.frameworkgl.gui.GuiXmlElementType;
+import net.smert.frameworkgl.gui.UI;
+import net.smert.frameworkgl.gui.widgets.AbstractGuiControl;
+import net.smert.frameworkgl.gui.widgets.GuiImage;
+import net.smert.frameworkgl.gui.widgets.GuiPanel;
+import net.smert.frameworkgl.gui.widgets.GuiText;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class GuiPanelBuilder {
+
+    public GuiPanel create(GuiXmlElement panel) {
+        GuiPanel guiPanel = UI.guiFactory.createWidgetPanel();
+
+        // Create each child
+        for (GuiXmlElement child : panel.getChildren()) {
+            String elementType = child.getElementType();
+
+            switch (elementType) {
+                case GuiXmlElementType.CONTROL_TYPE:
+                    AbstractGuiControl guiControl = UI.controlBuiler.create(child);
+                    guiPanel.addChild(guiControl);
+                    break;
+                case GuiXmlElementType.IMAGE_TYPE:
+                    GuiImage guiImage = UI.imageBuilder.create(child);
+                    guiPanel.addChild(guiImage);
+                    break;
+                case GuiXmlElementType.PANEL_TYPE:
+                    GuiPanel guiPanelChild = UI.panelBuilder.create(child);
+                    guiPanel.addChild(guiPanelChild);
+                    break;
+                case GuiXmlElementType.TEXT_TYPE:
+                    GuiText guiText = UI.textBuilder.create(child);
+                    guiPanel.addChild(guiText);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown element type: " + elementType);
+            }
+        }
+        return guiPanel;
+    }
 
 }

@@ -70,9 +70,8 @@ public class ClumsyGui {
                 throw new RuntimeException("XML element screen is missing the \"" + ID_ATTRIBUTE + "\" attribute");
             }
 
-            // Create and initialize screen
-            GuiScreen screen = UI.guiFactory.createGuiScreen();
-            screen.init(child);
+            // Build screen from XML element
+            GuiScreen screen = UI.screenBuilder.create(child);
 
             // Save screen
             GuiScreen oldScreen = screens.put(screenID, screen);
@@ -118,7 +117,7 @@ public class ClumsyGui {
         Files.FileAsset schemaFileAsset = Fw.files.getGui(schemaFilename);
 
         // Create schema
-        GuiXmlSchema guiXmlSchema = UI.guiFactory.createGuiXmlSchema();
+        GuiXmlSchema guiXmlSchema = UI.guiFactory.createXmlSchema();
         guiXmlSchema.init();
 
         // Validate if necessary
