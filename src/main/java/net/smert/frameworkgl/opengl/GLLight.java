@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl;
 import java.nio.FloatBuffer;
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.math.Vector4f;
+import net.smert.frameworkgl.opengl.constants.Light;
 
 /**
  *
@@ -201,7 +202,7 @@ public class GLLight {
         spotOuterCutoff = 180f;
         spotInnerCutoffCos = MathHelper.Cos(spotInnerCutoff * MathHelper.DEG_TO_RAD);
         spotOuterCutoffCos = MathHelper.Cos(spotOuterCutoff * MathHelper.DEG_TO_RAD);
-        lightNumber = net.smert.frameworkgl.opengl.constants.Light.LIGHT0;
+        lightNumber = Light.LIGHT0;
         spotExponent = 0;
         ambient.set(0f, 0f, 0f, 1f);
         diffuse.set(1f, 1f, 1f, 1f);
@@ -214,26 +215,26 @@ public class GLLight {
     }
 
     public void updateOpenGL(FloatBuffer lightFloatBuffer) {
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.CONSTANT_ATTENUATION, constantAttenuation);
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.LINEAR_ATTENUATION, linearAttenuation);
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.QUADRATIC_ATTENUATION, quadraticAttenuation);
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.SPOT_CUTOFF, spotOuterCutoff);
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.SPOT_EXPONENT, spotExponent);
+        GL.o1.light(lightNumber, Light.CONSTANT_ATTENUATION, constantAttenuation);
+        GL.o1.light(lightNumber, Light.LINEAR_ATTENUATION, linearAttenuation);
+        GL.o1.light(lightNumber, Light.QUADRATIC_ATTENUATION, quadraticAttenuation);
+        GL.o1.light(lightNumber, Light.SPOT_CUTOFF, spotOuterCutoff);
+        GL.o1.light(lightNumber, Light.SPOT_EXPONENT, spotExponent);
         ambient.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.AMBIENT, lightFloatBuffer);
+        GL.o1.light(lightNumber, Light.AMBIENT, lightFloatBuffer);
         diffuse.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.DIFFUSE, lightFloatBuffer);
+        GL.o1.light(lightNumber, Light.DIFFUSE, lightFloatBuffer);
         position.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.POSITION, lightFloatBuffer);
+        GL.o1.light(lightNumber, Light.POSITION, lightFloatBuffer);
         specular.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.SPECULAR, lightFloatBuffer);
+        GL.o1.light(lightNumber, Light.SPECULAR, lightFloatBuffer);
         spotDirection.toFloatBuffer(lightFloatBuffer);
         lightFloatBuffer.flip();
-        GL.o1.light(lightNumber, net.smert.frameworkgl.opengl.constants.Light.SPOT_DIRECTION, lightFloatBuffer);
+        GL.o1.light(lightNumber, Light.SPOT_DIRECTION, lightFloatBuffer);
     }
 
 }
