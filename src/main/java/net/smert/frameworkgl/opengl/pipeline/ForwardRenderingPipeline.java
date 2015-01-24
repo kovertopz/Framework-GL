@@ -93,6 +93,15 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         }
     }
 
+    public void addAllGameObjectsToRender() {
+        worldGameObjectsToRender.clear();
+        entityGameObjectsToRender.clear();
+        nonOpaqueGameObjectsToRender.clear();
+        worldGameObjectsToRender.addAll(worldGameObjects);
+        entityGameObjectsToRender.addAll(entityGameObjects);
+        nonOpaqueGameObjectsToRender.addAll(nonOpaqueGameObjects);
+    }
+
     public AABBGameObject getAabbGameObject() {
         return aabbGameObject;
     }
@@ -200,15 +209,6 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         updateGameObjectsToRender(worldGameObjectsToRender, worldGameObjects);
         updateGameObjectsToRender(entityGameObjectsToRender, entityGameObjects);
         updateGameObjectsToRender(nonOpaqueGameObjectsToRender, nonOpaqueGameObjects);
-    }
-
-    public void updateAllGameObjectsToRender() {
-        worldGameObjectsToRender.clear();
-        entityGameObjectsToRender.clear();
-        nonOpaqueGameObjectsToRender.clear();
-        worldGameObjectsToRender.addAll(worldGameObjects);
-        entityGameObjectsToRender.addAll(entityGameObjects);
-        nonOpaqueGameObjectsToRender.addAll(nonOpaqueGameObjects);
     }
 
     public void updateCurrentShader() {

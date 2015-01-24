@@ -57,6 +57,7 @@ public class GuiLayerBuilder {
                     throw new IllegalArgumentException("Unknown element type: " + elementType);
             }
         }
+
         return guiLayer;
     }
 

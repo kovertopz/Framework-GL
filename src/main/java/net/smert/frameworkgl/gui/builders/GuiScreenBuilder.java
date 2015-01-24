@@ -67,6 +67,7 @@ public class GuiScreenBuilder {
                     throw new IllegalArgumentException("Unknown element type: " + elementType);
             }
         }
+
         return guiScreen;
     }
 

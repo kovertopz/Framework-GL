@@ -56,6 +56,7 @@ public class GuiPanelBuilder {
                     throw new IllegalArgumentException("Unknown element type: " + elementType);
             }
         }
+
         return guiPanel;
     }
 

@@ -39,11 +39,12 @@ public class Audio {
     }
 
     public void destroy() {
-        if (openal != null) {
-            openal.destroy();
-            openal = null;
-            initialized = false;
+        if (openal == null) {
+            return;
         }
+        openal.destroy();
+        openal = null;
+        initialized = false;
     }
 
     public float getDefaultSourceMaxDistance() {
