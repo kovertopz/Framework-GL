@@ -12,10 +12,6 @@
  */
 package net.smert.frameworkgl;
 
-import java.io.IOException;
-import net.smert.frameworkgl.gui.ClumsyGui;
-import net.smert.frameworkgl.gui.UI;
-
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -23,26 +19,9 @@ import net.smert.frameworkgl.gui.UI;
 public class Gui {
 
     private boolean initialized;
-    private ClumsyGui clumsyGui;
 
     public Gui() {
         initialized = false;
-    }
-
-    public boolean isValidateXml() {
-        return clumsyGui.isValidateXml();
-    }
-
-    public void setValidateXml(boolean validateXml) {
-        clumsyGui.setValidateXml(validateXml);
-    }
-
-    public String getSchemaFilename() {
-        return clumsyGui.getSchemaFilename();
-    }
-
-    public void setSchemaFilename(String schemaFilename) {
-        clumsyGui.setSchemaFilename(schemaFilename);
     }
 
     public void init() {
@@ -53,30 +32,13 @@ public class Gui {
         // Initialize audio
         Fw.audio.init();
 
-        // Initialize clumsy
-        clumsyGui = UI.gui;
         initialized = true;
     }
 
-    public void loadXml(String filename) throws IOException {
-        clumsyGui.loadXml(filename);
-    }
-
-    public void loadXml(String filename, String startScreenID) throws IOException {
-        loadXml(filename);
-        switchScreen(startScreenID);
-    }
-
     public void render() {
-        clumsyGui.render();
-    }
-
-    public void switchScreen(String screenID) {
-        clumsyGui.switchScreen(screenID);
     }
 
     public void update() {
-        clumsyGui.update();
     }
 
 }

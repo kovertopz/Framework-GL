@@ -16,26 +16,6 @@ import java.io.IOException;
 import java.util.logging.SimpleFormatter;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
-import net.smert.frameworkgl.gui.ClumsyGui;
-import net.smert.frameworkgl.gui.GuiScreen;
-import net.smert.frameworkgl.gui.GuiXmlElement;
-import net.smert.frameworkgl.gui.GuiXmlSchema;
-import net.smert.frameworkgl.gui.UI;
-import net.smert.frameworkgl.gui.builders.GuiControlBuilder;
-import net.smert.frameworkgl.gui.builders.GuiImageBuilder;
-import net.smert.frameworkgl.gui.builders.GuiLayerBuilder;
-import net.smert.frameworkgl.gui.builders.GuiPanelBuilder;
-import net.smert.frameworkgl.gui.builders.GuiScreenBuilder;
-import net.smert.frameworkgl.gui.builders.GuiTextBuilder;
-import net.smert.frameworkgl.gui.factory.GuiFactory;
-import net.smert.frameworkgl.gui.widgets.GuiButton;
-import net.smert.frameworkgl.gui.widgets.GuiImage;
-import net.smert.frameworkgl.gui.widgets.GuiLayer;
-import net.smert.frameworkgl.gui.widgets.GuiPanel;
-import net.smert.frameworkgl.gui.widgets.GuiRoot;
-import net.smert.frameworkgl.gui.widgets.GuiScrollBar;
-import net.smert.frameworkgl.gui.widgets.GuiScrollContainer;
-import net.smert.frameworkgl.gui.widgets.GuiText;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.openal.AL;
@@ -204,7 +184,6 @@ public class BootStrap {
     protected MutablePicoContainer gameObjectFactoryContainer;
     protected MutablePicoContainer displayListRenderCallFactoryContainer;
     protected MutablePicoContainer glFactoryContainer;
-    protected MutablePicoContainer guiFactoryContainer;
     protected MutablePicoContainer immediateModeRenderCallFactoryContainer;
     protected MutablePicoContainer meshFactoryContainer;
     protected MutablePicoContainer renderableFactoryGL1Container;
@@ -227,27 +206,6 @@ public class BootStrap {
 
             // Add container for GameObjectFactory
             parentContainer.addComponent("gameObjectFactoryContainer", gameObjectFactoryContainer);
-        }
-
-        {
-            // Container for GuiFactory
-            guiFactoryContainer = new PicoBuilder(parentContainer)
-                    .withConstructorInjection().build(); // NO caching!
-
-            // GUI factory
-            guiFactoryContainer.addComponent(GuiImage.class);
-            guiFactoryContainer.addComponent(GuiLayer.class);
-            guiFactoryContainer.addComponent(GuiPanel.class);
-            guiFactoryContainer.addComponent(GuiRoot.class);
-            guiFactoryContainer.addComponent(GuiScreen.class);
-            guiFactoryContainer.addComponent(GuiScrollBar.class);
-            guiFactoryContainer.addComponent(GuiScrollContainer.class);
-            guiFactoryContainer.addComponent(GuiText.class);
-            guiFactoryContainer.addComponent(GuiXmlElement.class);
-            guiFactoryContainer.addComponent(GuiXmlSchema.class);
-
-            // Add container for GuiFactory
-            parentContainer.addComponent("guiFactoryContainer", guiFactoryContainer);
         }
 
         {
@@ -502,20 +460,6 @@ public class BootStrap {
         container.addComponent(KeyboardHelper.class);
         container.addComponent(MouseHelper.class);
 
-        // GUI
-        container.addComponent(ClumsyGui.class);
-
-        // Builder
-        container.addComponent(GuiControlBuilder.class);
-        container.addComponent(GuiImageBuilder.class);
-        container.addComponent(GuiLayerBuilder.class);
-        container.addComponent(GuiPanelBuilder.class);
-        container.addComponent(GuiScreenBuilder.class);
-        container.addComponent(GuiTextBuilder.class);
-
-        // Factory
-        container.as(Characteristics.USE_NAMES).addComponent(GuiFactory.class);
-
         // OpenAL components
         container.addComponent(OpenAL.class);
 
@@ -732,28 +676,13 @@ public class BootStrap {
         Renderable.vertexArrays = container.getComponent(VertexArrays.class);
     }
 
-    protected void createStaticUserInterface(MutablePicoContainer container) {
-        UI.controlBuiler = container.getComponent(GuiControlBuilder.class);
-        UI.gui = container.getComponent(ClumsyGui.class);
-        UI.guiFactory = container.getComponent(GuiFactory.class);
-        UI.imageBuilder = container.getComponent(GuiImageBuilder.class);
-        UI.layerBuilder = container.getComponent(GuiLayerBuilder.class);
-        UI.panelBuilder = container.getComponent(GuiPanelBuilder.class);
-        UI.screenBuilder = container.getComponent(GuiScreenBuilder.class);
-        UI.textBuilder = container.getComponent(GuiTextBuilder.class);
-    }
-
     protected void initialize(MutablePicoContainer container) {
 
         // Create instances
-        GuiControlBuilder guiControlBuiler = container.getComponent(GuiControlBuilder.class);
         DynamicMeshBuilder dynamicMeshBuilder = container.getComponent(DynamicMeshBuilder.class);
         MeshReader meshReader = container.getComponent(MeshReader.class);
         OpenAL openal = container.getComponent(OpenAL.class);
         TextureReader textureReader = container.getComponent(TextureReader.class);
-
-        // Register controls
-        guiControlBuiler.register("button", GuiButton.class);
 
         // Register dynamic meshes
         dynamicMeshBuilder.register("aabb", GL.meshFactory.createDynamicAABB());
@@ -809,7 +738,6 @@ public class BootStrap {
         createStaticOpenAL(container);
         createStaticOpenGL(container);
         createStaticRenderable(container);
-        createStaticUserInterface(container);
         initialize(container);
 
         // Start the application
