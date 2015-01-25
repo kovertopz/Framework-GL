@@ -95,7 +95,7 @@ public class AwtFontBuilder {
             CodePage codePage = entry.getValue();
 
             // Use texture builder to create texture
-            GL.textureBuilder.setLoadFlipVertically(true).load2D(codePage.getImage());
+            GL.textureBuilder.setLoadFlipVertically(false).load2D(codePage.getImage());
             if (useMipmap) {
                 GL.textureBuilder.setLodBias(lodBias).setUseMipmaps(useMipmap).
                         setFilterMagLinear().setFilterMinLinearMipmapLinear();

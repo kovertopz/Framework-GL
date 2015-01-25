@@ -50,8 +50,8 @@ public class AwtFontRenderer implements FontRenderer {
         float height = glyph.h;
         float maxX = (float) (glyph.x + glyph.w) / fontWidth;
         float minX = (float) (glyph.x) / fontWidth;
-        float maxY = (float) (glyph.y + glyph.h) / fontHeight;
-        float minY = (float) (glyph.y) / fontHeight;
+        float maxY = (float) (glyph.y) / fontHeight;
+        float minY = (float) (glyph.y + glyph.h) / fontHeight;
         float width = glyph.w;
         float x = -glyph.w / 2f;
         float y = -glyph.h;
@@ -62,13 +62,13 @@ public class AwtFontRenderer implements FontRenderer {
         GL.tessellator.setLocalPosition(0, 0, 0);
         GL.tessellator.start(Primitives.QUADS);
 
-        GL.tessellator.addTexCoord(maxX, 1f - minY);
+        GL.tessellator.addTexCoord(maxX, maxY);
         GL.tessellator.addVertex(x + width, y + height, 0);
-        GL.tessellator.addTexCoord(minX, 1f - minY);
+        GL.tessellator.addTexCoord(minX, maxY);
         GL.tessellator.addVertex(x, y + height, 0);
-        GL.tessellator.addTexCoord(minX, 1f - maxY);
+        GL.tessellator.addTexCoord(minX, minY);
         GL.tessellator.addVertex(x, y, 0);
-        GL.tessellator.addTexCoord(maxX, 1f - maxY);
+        GL.tessellator.addTexCoord(maxX, minY);
         GL.tessellator.addVertex(x + width, y, 0);
 
         GL.tessellator.stop();
