@@ -444,6 +444,7 @@ public class Graphics implements GLRenderer, TextRenderer {
 
     @Override
     public void setCamera(Camera camera) {
+        renderableComparison.setCameraPosition(camera.getPosition());
         renderer.setCamera(camera);
     }
 

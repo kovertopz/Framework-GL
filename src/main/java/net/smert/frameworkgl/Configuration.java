@@ -65,8 +65,8 @@ public class Configuration {
         logConsole = true;
         logFile = true;
         pauseNotInFocus = true;
-        vSyncEnabled = false;
         validateShaders = true;
+        vSyncEnabled = false;
         vSyncRequested = false;
         mouseMoveSensitivity = 1f;
         mouseWheelSensitivity = 1f;
