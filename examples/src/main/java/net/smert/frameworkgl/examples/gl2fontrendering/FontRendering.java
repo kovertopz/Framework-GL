@@ -19,8 +19,8 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.FontRenderingGuiScreen;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
-import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
@@ -57,11 +57,11 @@ public class FontRendering extends Screen {
     private DiffusePointShader vertexLitSingleDiffusePointShader;
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
+    private FontRenderingGuiScreen fontRenderingGuiScreen;
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
-    private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private ViewFrustumGameObject viewFrustumGameObject;
 
@@ -159,10 +159,6 @@ public class FontRendering extends Screen {
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
 
-        // Render statistics game object
-        renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(Fw.graphics);
-
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
         simpleOrientationAxisGameObject.getColor0().set("red");
@@ -188,6 +184,14 @@ public class FontRendering extends Screen {
 
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
+
+        // Initialize GUI
+        Fw.gui.init();
+
+        // Create GUI screen
+        fontRenderingGuiScreen = new FontRenderingGuiScreen();
+        fontRenderingGuiScreen.init(Fw.graphics.getRenderer());
+        Fw.gui.setScreen(fontRenderingGuiScreen);
 
         // Build shaders
         try {
@@ -224,7 +228,6 @@ public class FontRendering extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
-        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -284,21 +287,8 @@ public class FontRendering extends Screen {
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
             Fw.graphics.set2DMode();
-            Fw.graphics.resetTextRendering();
-            Fw.graphics.textNewHalfLine();
-            Fw.graphics.setTextColor("red");
-            Fw.graphics.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?");
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("green");
-            Fw.graphics.drawString("the quick brown fox jumps over the lazy dog!");
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("blue");
-            Fw.graphics.drawString("0123456789!@#$%^&*()-_=+[]{}\\|;':\",./<>?");
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("yellow");
-            Fw.graphics.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.");
-            Fw.graphics.textNewLine();
-            renderStatisticsGameObject.render(); // Game object has no renderable
+            Fw.gui.update();
+            Fw.gui.render();
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

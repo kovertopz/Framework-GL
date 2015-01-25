@@ -19,9 +19,9 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.VertexLitGuiScreen;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
 import net.smert.frameworkgl.gameobjects.GameObject;
-import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.SkyboxGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
@@ -63,8 +63,6 @@ public class VertexLit extends Screen {
     private boolean renderAabbs;
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
-    private float spotCutoff;
-    private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
     private BlinnPhongSpecularDirectionalShader vertexLitSingleBlinnPhongSpecularDirectionalShader;
@@ -87,10 +85,10 @@ public class VertexLit extends Screen {
     private PhongSpecularDirectionalShader vertexLitSinglePhongSpecularDirectionalShader;
     private PhongSpecularPointShader vertexLitSinglePhongSpecularPointShader;
     private PhongSpecularSpotShader vertexLitSinglePhongSpecularSpotShader;
-    private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
     private SkyboxShader skyboxShader;
+    private VertexLitGuiScreen vertexLitGuiScreen;
     private ViewFrustumGameObject viewFrustumGameObject;
 
     public VertexLit(String[] args) {
@@ -129,80 +127,37 @@ public class VertexLit extends Screen {
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             updateGameObjectsToRender();
         }
+        float spotOuterCutoff = vertexLitGuiScreen.getSpotOuterCutoff();
         if (Fw.input.isKeyDown(Keyboard.C)) {
-            if ((spotCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
-                spotCutoff = 180f;
-            } else if ((spotCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
-                spotCutoff = 0f;
-            } else if ((spotCutoff != 90f) && (spotCutoff != 180f)) {
-                spotCutoff += Fw.timer.getDelta() * 3f;
-                if (spotCutoff > 180f) {
-                    spotCutoff = 0f;
+            if ((spotOuterCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
+                spotOuterCutoff = 180f;
+            } else if ((spotOuterCutoff == 180f) && !Fw.input.wasKeyDown(Keyboard.C)) {
+                spotOuterCutoff = 0f;
+            } else if ((spotOuterCutoff != 90f) && (spotOuterCutoff != 180f)) {
+                spotOuterCutoff += Fw.timer.getDelta() * 3f;
+                if (spotOuterCutoff > 180f) {
+                    spotOuterCutoff = 0f;
                 }
-                if (spotCutoff > 90f) {
-                    spotCutoff = 90f;
+                if (spotOuterCutoff > 90f) {
+                    spotOuterCutoff = 90f;
                 }
             }
-            glLightSpot.setSpotCutoff(spotCutoff);
+            glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
         }
         if (Fw.input.isKeyDown(Keyboard.LBRACKET) && !Fw.input.wasKeyDown(Keyboard.LBRACKET)) {
-            if (--shaderIndex < 0) {
-                shaderIndex += 9;
-            }
+            vertexLitGuiScreen.decrementShaderIndex();
             updateCurrentShader();
         }
         if (Fw.input.isKeyDown(Keyboard.RBRACKET) && !Fw.input.wasKeyDown(Keyboard.RBRACKET)) {
-            shaderIndex = ++shaderIndex % 9;
+            vertexLitGuiScreen.incrementShaderIndex();
             updateCurrentShader();
         }
+        vertexLitGuiScreen.setSpotOuterCutoff(spotOuterCutoff);
         cameraController.update();
     }
 
-    private void renderCurrentShaderName() {
-        Fw.graphics.textNewLine();
-        Fw.graphics.setTextColor("yellow");
-        String shaderName = "";
-
-        switch (shaderIndex) {
-            case 0:
-                shaderName = "BlinnPhongSpecularDirectionalShader";
-                break;
-            case 1:
-                shaderName = "BlinnPhongSpecularPointShader";
-                break;
-            case 2:
-                shaderName = "BlinnPhongSpecularSpotShader";
-                break;
-            case 3:
-                shaderName = "DiffuseDirectionalShader";
-                break;
-            case 4:
-                shaderName = "DiffusePointShader";
-                break;
-            case 5:
-                shaderName = "DiffuseSpotShader";
-                break;
-            case 6:
-                shaderName = "PhongSpecularDirectionalShader";
-                break;
-            case 7:
-                shaderName = "PhongSpecularPointShader";
-                break;
-            case 8:
-                shaderName = "PhongSpecularSpotShader";
-                break;
-        }
-
-        Fw.graphics.drawString(shaderName);
-        if ((shaderIndex == 2) || (shaderIndex == 5) || (shaderIndex == 8)) {
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("lime");
-            Fw.graphics.drawString("Spot cutoff: " + spotCutoff);
-        }
-    }
-
     private void updateCurrentLight() {
-        switch (shaderIndex) {
+        switch (vertexLitGuiScreen.getShaderIndex()) {
             case 0:
             case 3:
             case 6:
@@ -222,7 +177,7 @@ public class VertexLit extends Screen {
     }
 
     private void updateCurrentShader() {
-        switch (shaderIndex) {
+        switch (vertexLitGuiScreen.getShaderIndex()) {
             case 0:
                 currentShader = vertexLitSingleBlinnPhongSpecularDirectionalShader;
                 break;
@@ -311,8 +266,7 @@ public class VertexLit extends Screen {
         glLightSpot = GL.glFactory.createGLLight();
         glLightSpot.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLightSpot.setRadius(256f); // Shader uses this value and OpenGL does not
-        spotCutoff = 180f;
-        glLightSpot.setSpotCutoff(spotCutoff);
+        glLightSpot.setSpotCutoff(180f);
         glLightSpot.setSpotDirection(new Vector4f(0f, -15f, -10f, 1f));
         GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         GL.uniformVariables.getDefaultMaterialLight().setSpecular(new Vector4f(.3f, .3f, .3f, 1f));
@@ -336,10 +290,6 @@ public class VertexLit extends Screen {
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
-
-        // Render statistics game object
-        renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(Fw.graphics);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -371,6 +321,15 @@ public class VertexLit extends Screen {
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
 
+        // Initialize GUI
+        Fw.gui.init();
+
+        // Create GUI screen
+        vertexLitGuiScreen = new VertexLitGuiScreen();
+        vertexLitGuiScreen.setSpotOuterCutoff(180f);
+        vertexLitGuiScreen.init(Fw.graphics.getRenderer());
+        Fw.gui.setScreen(vertexLitGuiScreen);
+
         // Build shaders
         try {
             diffuseTextureShader = DiffuseTextureShader.Factory.Create();
@@ -400,7 +359,6 @@ public class VertexLit extends Screen {
         }
 
         // Set current shader
-        shaderIndex = 4;
         updateCurrentShader();
 
         // OpenGL settings
@@ -428,7 +386,6 @@ public class VertexLit extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
-        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -506,10 +463,8 @@ public class VertexLit extends Screen {
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
             Fw.graphics.set2DMode();
-            Fw.graphics.resetTextRendering();
-            Fw.graphics.textNewHalfLine();
-            renderStatisticsGameObject.render(); // Game object has no renderable
-            renderCurrentShaderName();
+            Fw.gui.update();
+            Fw.gui.render();
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

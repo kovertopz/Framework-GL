@@ -19,10 +19,10 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.HybridPixelOrVertexLitGuiScreen;
 import net.smert.frameworkgl.examples.common.MultipleLightsOfTheSameType;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
 import net.smert.frameworkgl.gameobjects.GameObject;
-import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.SkyboxGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
@@ -58,10 +58,6 @@ public class HybridPixelLit extends Screen {
     private boolean renderAabbs;
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
-    private float spotInnerCutoff;
-    private float spotOuterCutoff;
-    private int lightsIndex;
-    private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
     private BlinnPhongSpecularHybridShader pixelLitMultiBlinnPhongSpecularHybridShader;
@@ -71,12 +67,12 @@ public class HybridPixelLit extends Screen {
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
     private FpsTimer fpsTimer;
+    private HybridPixelOrVertexLitGuiScreen hybridPixelOrVertexLitGuiScreen;
     private final List<GameObject> gameObjectsToRender;
     private List<GLLight> currentLights;
     private MemoryUsage memoryUsage;
     private MultipleLightsOfTheSameType multipleLightsOfTheSameType;
     private PhongSpecularHybridShader pixelLitMultiPhongSpecularHybridShader;
-    private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
     private SkyboxShader skyboxShader;
@@ -118,6 +114,8 @@ public class HybridPixelLit extends Screen {
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             updateGameObjectsToRender();
         }
+        float spotInnerCutoff = hybridPixelOrVertexLitGuiScreen.getSpotInnerCutoff();
+        float spotOuterCutoff = hybridPixelOrVertexLitGuiScreen.getSpotOuterCutoff();
         if (Fw.input.isKeyDown(Keyboard.C)) {
             if ((spotOuterCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
                 spotOuterCutoff = 180f;
@@ -155,74 +153,26 @@ public class HybridPixelLit extends Screen {
             }
         }
         if (Fw.input.isKeyDown(Keyboard.LBRACKET) && !Fw.input.wasKeyDown(Keyboard.LBRACKET)) {
-            if (--shaderIndex < 0) {
-                shaderIndex += 3;
-            }
+            hybridPixelOrVertexLitGuiScreen.decrementShaderIndex();
             updateCurrentShader();
         }
         if (Fw.input.isKeyDown(Keyboard.RBRACKET) && !Fw.input.wasKeyDown(Keyboard.RBRACKET)) {
-            shaderIndex = ++shaderIndex % 3;
+            hybridPixelOrVertexLitGuiScreen.incrementShaderIndex();
             updateCurrentShader();
         }
         if (Fw.input.isKeyDown(Keyboard.SEMICOLON) && !Fw.input.wasKeyDown(Keyboard.SEMICOLON)) {
-            if (--lightsIndex < 0) {
-                lightsIndex += 3;
-            }
+            hybridPixelOrVertexLitGuiScreen.decrementLightIndex();
         }
         if (Fw.input.isKeyDown(Keyboard.APOSTROPHE) && !Fw.input.wasKeyDown(Keyboard.APOSTROPHE)) {
-            lightsIndex = ++lightsIndex % 3;
+            hybridPixelOrVertexLitGuiScreen.incrementLightIndex();
         }
+        hybridPixelOrVertexLitGuiScreen.setSpotInnerCutoff(spotInnerCutoff);
+        hybridPixelOrVertexLitGuiScreen.setSpotOuterCutoff(spotOuterCutoff);
         cameraController.update();
     }
 
-    private void renderCurrentLightsName() {
-        Fw.graphics.textNewLine();
-        Fw.graphics.setTextColor("lime");
-        String lightsName = "";
-
-        switch (lightsIndex) {
-            case 0:
-                lightsName = "Directional Lights";
-                break;
-            case 1:
-                lightsName = "Point Lights";
-                break;
-            case 2:
-                lightsName = "Spot Lights";
-                break;
-        }
-
-        Fw.graphics.drawString(lightsName);
-        if (lightsIndex == 2) {
-            Fw.graphics.textNewLine();
-            Fw.graphics.drawString("Spot outer cutoff: " + spotOuterCutoff);
-            Fw.graphics.textNewLine();
-            Fw.graphics.drawString("Spot inner cutoff: " + spotInnerCutoff);
-        }
-    }
-
-    private void renderCurrentShaderName() {
-        Fw.graphics.textNewLine();
-        Fw.graphics.setTextColor("yellow");
-        String shaderName = "";
-
-        switch (shaderIndex) {
-            case 0:
-                shaderName = "BlinnPhongSpecularHybridShader";
-                break;
-            case 1:
-                shaderName = "DiffuseHybridShader";
-                break;
-            case 2:
-                shaderName = "PhongSpecularHybridShader";
-                break;
-        }
-
-        Fw.graphics.drawString(shaderName);
-    }
-
     private void updateCurrentLights() {
-        switch (lightsIndex) {
+        switch (hybridPixelOrVertexLitGuiScreen.getLightsIndex()) {
             case 0:
                 currentLights = multipleLightsOfTheSameType.getDirectionalLights();
                 break;
@@ -236,7 +186,7 @@ public class HybridPixelLit extends Screen {
     }
 
     private void updateCurrentShader() {
-        switch (shaderIndex) {
+        switch (hybridPixelOrVertexLitGuiScreen.getShaderIndex()) {
             case 0:
                 currentShader = pixelLitMultiBlinnPhongSpecularHybridShader;
                 break;
@@ -300,8 +250,6 @@ public class HybridPixelLit extends Screen {
         // Create glLights and material light
         multipleLightsOfTheSameType = new MultipleLightsOfTheSameType();
         multipleLightsOfTheSameType.init();
-        spotInnerCutoff = 180f;
-        spotOuterCutoff = 180f;
         GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
         GL.uniformVariables.getDefaultMaterialLight().setDiffuse(new Vector4f(1f, 1f, 1f, 1f));
@@ -326,10 +274,6 @@ public class HybridPixelLit extends Screen {
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
-
-        // Render statistics game object
-        renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(Fw.graphics);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -361,6 +305,17 @@ public class HybridPixelLit extends Screen {
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
 
+        // Initialize GUI
+        Fw.gui.init();
+
+        // Create GUI screen
+        hybridPixelOrVertexLitGuiScreen = new HybridPixelOrVertexLitGuiScreen();
+        hybridPixelOrVertexLitGuiScreen.setIsPixelLit(true);
+        hybridPixelOrVertexLitGuiScreen.setSpotInnerCutoff(180f);
+        hybridPixelOrVertexLitGuiScreen.setSpotOuterCutoff(180f);
+        hybridPixelOrVertexLitGuiScreen.init(Fw.graphics.getRenderer());
+        Fw.gui.setScreen(hybridPixelOrVertexLitGuiScreen);
+
         // Build shaders
         try {
             diffuseTextureShader = DiffuseTextureShader.Factory.Create();
@@ -378,8 +333,6 @@ public class HybridPixelLit extends Screen {
         }
 
         // Set current shader
-        lightsIndex = 0;
-        shaderIndex = 1;
         updateCurrentShader();
 
         // OpenGL settings
@@ -407,7 +360,6 @@ public class HybridPixelLit extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
-        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -485,11 +437,8 @@ public class HybridPixelLit extends Screen {
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
             Fw.graphics.set2DMode();
-            Fw.graphics.resetTextRendering();
-            Fw.graphics.textNewHalfLine();
-            renderStatisticsGameObject.render(); // Game object has no renderable
-            renderCurrentShaderName();
-            renderCurrentLightsName();
+            Fw.gui.update();
+            Fw.gui.render();
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

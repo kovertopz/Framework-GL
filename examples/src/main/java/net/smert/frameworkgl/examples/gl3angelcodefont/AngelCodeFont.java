@@ -21,8 +21,8 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.FontRenderingGuiScreen;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
-import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
 import net.smert.frameworkgl.helpers.Keyboard;
@@ -62,11 +62,11 @@ public class AngelCodeFont extends Screen {
     private DiffusePointShader vertexLitSingleDiffusePointShader;
     private DiffuseTextureShader diffuseTextureShader;
     private DynamicMeshWorld dynamicMeshesWorld;
+    private FontRenderingGuiScreen fontRenderingGuiScreen;
     private FpsTimer fpsTimer;
     private GLLight glLight;
     private final List<GameObject> gameObjectsToRender;
     private MemoryUsage memoryUsage;
-    private RenderStatisticsGameObject renderStatisticsGameObject;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private ViewFrustumGameObject viewFrustumGameObject;
 
@@ -171,10 +171,6 @@ public class AngelCodeFont extends Screen {
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
 
-        // Render statistics game object
-        renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(Fw.graphics);
-
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
         simpleOrientationAxisGameObject.getColor0().set("red");
@@ -201,6 +197,14 @@ public class AngelCodeFont extends Screen {
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
 
+        // Initialize GUI
+        Fw.gui.init();
+
+        // Create GUI screen
+        fontRenderingGuiScreen = new FontRenderingGuiScreen();
+        fontRenderingGuiScreen.init(Fw.graphics.getRenderer());
+        Fw.gui.setScreen(fontRenderingGuiScreen);
+
         // Build shaders
         try {
             diffuseTextureShader = DiffuseTextureShader.Factory.Create();
@@ -216,6 +220,7 @@ public class AngelCodeFont extends Screen {
             angelCodeFont = GL.angelCodeFontBuilder.load("Verdana.fnt").buildFont().createFont(true);
             angelCodeFontRenderer = GL.rendererFactory.createAngelCodeFontRenderer();
             angelCodeFontRenderer.init(angelCodeFont);
+            Fw.graphics.setDefaultFontRenderer(angelCodeFontRenderer);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(AngelCodeFont.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -245,7 +250,6 @@ public class AngelCodeFont extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
-        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -305,21 +309,8 @@ public class AngelCodeFont extends Screen {
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
             Fw.graphics.set2DMode();
-            Fw.graphics.resetTextRendering();
-            Fw.graphics.setTextColor("red");
-            Fw.graphics.drawString("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG?", angelCodeFontRenderer);
-            Fw.graphics.textNewLine(angelCodeFontRenderer);
-            Fw.graphics.setTextColor("green");
-            Fw.graphics.drawString("the quick brown fox jumps over the lazy dog!", angelCodeFontRenderer);
-            Fw.graphics.textNewLine(angelCodeFontRenderer);
-            Fw.graphics.setTextColor("blue");
-            Fw.graphics.drawString("0123456789!@#$%^&*()-_=+[]{}\\|;':\",./<>?", angelCodeFontRenderer);
-            Fw.graphics.textNewLine(angelCodeFontRenderer);
-            Fw.graphics.setTextColor("yellow");
-            Fw.graphics.drawString("The Quick Brown Fox Jumps Over The Lazy Dog.", angelCodeFontRenderer);
-            Fw.graphics.textNewLine(angelCodeFontRenderer);
-            Fw.graphics.textNewHalfLine(angelCodeFontRenderer);
-            renderStatisticsGameObject.render(); // Game object has no renderable
+            Fw.gui.update();
+            Fw.gui.render();
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

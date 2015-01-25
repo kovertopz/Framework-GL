@@ -19,9 +19,9 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.Screen;
 import net.smert.frameworkgl.examples.common.DynamicMeshWorld;
+import net.smert.frameworkgl.examples.common.PixelLitGuiScreen;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
 import net.smert.frameworkgl.gameobjects.GameObject;
-import net.smert.frameworkgl.gameobjects.RenderStatisticsGameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.SkyboxGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
@@ -66,9 +66,6 @@ public class PixelLit extends Screen {
     private boolean renderAabbs;
     private boolean renderSimpleOrientationAxis;
     private boolean wireframe;
-    private float spotInnerCutoff;
-    private float spotOuterCutoff;
-    private int shaderIndex;
     private AbstractShader currentShader;
     private AABBGameObject aabbGameObject;
     private BlinnPhongSpecularDirectionalShader pixelLitSingleBlinnPhongSpecularDirectionalShader;
@@ -94,7 +91,7 @@ public class PixelLit extends Screen {
     private PhongSpecularPointShader pixelLitSinglePhongSpecularPointShader;
     private PhongSpecularSpotShader pixelLitSinglePhongSpecularSpotShader;
     private PhongSpecularSpotTwoConeShader pixelLitSinglePhongSpecularSpotTwoConeShader;
-    private RenderStatisticsGameObject renderStatisticsGameObject;
+    private PixelLitGuiScreen pixelLitGuiScreen;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
     private SkyboxShader skyboxShader;
@@ -136,6 +133,8 @@ public class PixelLit extends Screen {
             Fw.graphics.performCulling(camera, dynamicMeshesWorld.getGameObjects());
             updateGameObjectsToRender();
         }
+        float spotInnerCutoff = pixelLitGuiScreen.getSpotInnerCutoff();
+        float spotOuterCutoff = pixelLitGuiScreen.getSpotOuterCutoff();
         if (Fw.input.isKeyDown(Keyboard.C)) {
             if ((spotOuterCutoff == 90f) && !Fw.input.wasKeyDown(Keyboard.C)) {
                 spotOuterCutoff = 180f;
@@ -169,79 +168,20 @@ public class PixelLit extends Screen {
             glLightSpot.setSpotInnerCutoff(spotInnerCutoff);
         }
         if (Fw.input.isKeyDown(Keyboard.LBRACKET) && !Fw.input.wasKeyDown(Keyboard.LBRACKET)) {
-            if (--shaderIndex < 0) {
-                shaderIndex += 12;
-            }
+            pixelLitGuiScreen.decrementShaderIndex();
             updateCurrentShader();
         }
         if (Fw.input.isKeyDown(Keyboard.RBRACKET) && !Fw.input.wasKeyDown(Keyboard.RBRACKET)) {
-            shaderIndex = ++shaderIndex % 12;
+            pixelLitGuiScreen.incrementShaderIndex();
             updateCurrentShader();
         }
+        pixelLitGuiScreen.setSpotInnerCutoff(spotInnerCutoff);
+        pixelLitGuiScreen.setSpotOuterCutoff(spotOuterCutoff);
         cameraController.update();
     }
 
-    private void renderCurrentShaderName() {
-        Fw.graphics.textNewLine();
-        Fw.graphics.setTextColor("yellow");
-        String shaderName = "";
-
-        switch (shaderIndex) {
-            case 0:
-                shaderName = "BlinnPhongSpecularDirectionalShader";
-                break;
-            case 1:
-                shaderName = "BlinnPhongSpecularPointShader";
-                break;
-            case 2:
-                shaderName = "BlinnPhongSpecularSpotShader";
-                break;
-            case 3:
-                shaderName = "BlinnPhongSpecularSpotTwoConeShader";
-                break;
-            case 4:
-                shaderName = "DiffuseDirectionalShader";
-                break;
-            case 5:
-                shaderName = "DiffusePointShader";
-                break;
-            case 6:
-                shaderName = "DiffuseSpotShader";
-                break;
-            case 7:
-                shaderName = "DiffuseSpotTwoConeShader";
-                break;
-            case 8:
-                shaderName = "PhongSpecularDirectionalShader";
-                break;
-            case 9:
-                shaderName = "PhongSpecularPointShader";
-                break;
-            case 10:
-                shaderName = "PhongSpecularSpotShader";
-                break;
-            case 11:
-                shaderName = "PhongSpecularSpotTwoConeShader";
-                break;
-        }
-
-        Fw.graphics.drawString(shaderName);
-        if ((shaderIndex == 2) || (shaderIndex == 6) || (shaderIndex == 10)) {
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("lime");
-            Fw.graphics.drawString("Spot cutoff: " + spotOuterCutoff);
-        }
-        if ((shaderIndex == 3) || (shaderIndex == 7) || (shaderIndex == 11)) {
-            Fw.graphics.textNewLine();
-            Fw.graphics.setTextColor("lime");
-            Fw.graphics.drawString("Spot outer cutoff: " + spotOuterCutoff);
-            Fw.graphics.textNewLine();
-            Fw.graphics.drawString("Spot inner cutoff: " + spotInnerCutoff);
-        }
-    }
-
     private void updateCurrentLight() {
-        switch (shaderIndex) {
+        switch (pixelLitGuiScreen.getShaderIndex()) {
             case 0:
             case 4:
             case 8:
@@ -264,7 +204,7 @@ public class PixelLit extends Screen {
     }
 
     private void updateCurrentShader() {
-        switch (shaderIndex) {
+        switch (pixelLitGuiScreen.getShaderIndex()) {
             case 0:
                 currentShader = pixelLitSingleBlinnPhongSpecularDirectionalShader;
                 break;
@@ -362,10 +302,8 @@ public class PixelLit extends Screen {
         glLightSpot = GL.glFactory.createGLLight();
         glLightSpot.setPosition(new Vector4f(0f, 15f, 10f, 1f));
         glLightSpot.setRadius(256f); // Shader uses this value and OpenGL does not
-        spotInnerCutoff = 180f;
-        spotOuterCutoff = 180f;
-        glLightSpot.setSpotInnerCutoff(spotInnerCutoff);
-        glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
+        glLightSpot.setSpotInnerCutoff(180f);
+        glLightSpot.setSpotOuterCutoff(180f);
         glLightSpot.setSpotDirection(new Vector4f(0f, -15f, -10f, 1f));
         GL.uniformVariables.getDefaultMaterialLight().setShininess(16);
         // Effectively disables diffuse and per vertex color will be used
@@ -391,10 +329,6 @@ public class PixelLit extends Screen {
         // Create dynamic mesh world
         dynamicMeshesWorld = new DynamicMeshWorld();
         dynamicMeshesWorld.init();
-
-        // Render statistics game object
-        renderStatisticsGameObject = new RenderStatisticsGameObject();
-        renderStatisticsGameObject.init(Fw.graphics);
 
         // Simple axis game object
         simpleOrientationAxisGameObject = new SimpleOrientationAxisGameObject();
@@ -425,6 +359,16 @@ public class PixelLit extends Screen {
 
         // Update AABBs
         Fw.graphics.updateAabb(dynamicMeshesWorld.getGameObjects());
+
+        // Initialize GUI
+        Fw.gui.init();
+
+        // Create GUI screen
+        pixelLitGuiScreen = new PixelLitGuiScreen();
+        pixelLitGuiScreen.setSpotInnerCutoff(180f);
+        pixelLitGuiScreen.setSpotOuterCutoff(180f);
+        pixelLitGuiScreen.init(Fw.graphics.getRenderer());
+        Fw.gui.setScreen(pixelLitGuiScreen);
 
         // Build shaders
         try {
@@ -461,7 +405,6 @@ public class PixelLit extends Screen {
         }
 
         // Set current shader
-        shaderIndex = 5;
         updateCurrentShader();
 
         // OpenGL settings
@@ -489,7 +432,6 @@ public class PixelLit extends Screen {
     public void render() {
         fpsTimer.update();
         memoryUsage.update();
-        renderStatisticsGameObject.update();
 
         if (Fw.timer.isGameTick()) {
             // Do nothing
@@ -567,10 +509,8 @@ public class PixelLit extends Screen {
             GL.o1.enableBlending();
             GL.o1.disableDepthTest();
             Fw.graphics.set2DMode();
-            Fw.graphics.resetTextRendering();
-            Fw.graphics.textNewHalfLine();
-            renderStatisticsGameObject.render(); // Game object has no renderable
-            renderCurrentShaderName();
+            Fw.gui.update();
+            Fw.gui.render();
             GL.o1.enableDepthTest();
             GL.o1.disableBlending();
 

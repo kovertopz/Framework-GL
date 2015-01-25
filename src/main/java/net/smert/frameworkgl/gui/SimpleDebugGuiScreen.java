@@ -25,8 +25,8 @@ public class SimpleDebugGuiScreen implements GuiScreen {
     private int currentFps;
     private int displayFps;
     private final Color textureColor0;
-    private TextRenderer textRenderer;
     private final TimeSpan fpsTimeSpan;
+    protected TextRenderer textRenderer;
 
     public SimpleDebugGuiScreen() {
         currentFps = 0;
@@ -66,6 +66,7 @@ public class SimpleDebugGuiScreen implements GuiScreen {
         textRenderer.drawString("Current FPS: " + displayFps);
         textRenderer.textNewLine();
         textRenderer.drawString("Used memory: " + percentUsed + "% " + memoryUsed + "MB of " + memoryTotal + "MB");
+        textRenderer.textNewLine();
     }
 
     @Override
