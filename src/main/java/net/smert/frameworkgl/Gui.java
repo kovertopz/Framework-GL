@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl;
 
+import net.smert.frameworkgl.gui.GuiScreen;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -19,6 +21,7 @@ package net.smert.frameworkgl;
 public class Gui {
 
     private boolean initialized;
+    private GuiScreen guiScreen;
 
     public Gui() {
         initialized = false;
@@ -36,9 +39,19 @@ public class Gui {
     }
 
     public void render() {
+        guiScreen.render();
+    }
+
+    public void setScreen(GuiScreen guiScreen) {
+        if (this.guiScreen != null) {
+            this.guiScreen.onEnd();
+        }
+        guiScreen.onStart();
+        this.guiScreen = guiScreen;
     }
 
     public void update() {
+        guiScreen.update();
     }
 
 }

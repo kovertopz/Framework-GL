@@ -352,7 +352,6 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         GL.o1.setPolygonModeFrontAndBackFill();
         Fw.graphics.switchShader(diffuseTextureShader);
         Fw.graphics.set2DMode();
-        Fw.graphics.resetTextRendering();
         guiRenderer.render();
         Fw.graphics.unbindShader();
         GL.o1.enableDepthTest();

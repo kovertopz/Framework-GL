@@ -16,6 +16,7 @@ import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.opengl.constants.Primitives;
 import net.smert.frameworkgl.opengl.font.AwtFont;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.mesh.Segment;
@@ -46,21 +47,35 @@ public class AwtFontRenderer implements FontRenderer {
         String fontTextureFilename = glyph.codePage.getFontTextureFilename();
 
         // Calculate texture coordinates for the glyph
+        float height = glyph.h;
         float maxX = (float) (glyph.x + glyph.w) / fontWidth;
         float minX = (float) (glyph.x) / fontWidth;
         float maxY = (float) (glyph.y + glyph.h) / fontHeight;
         float minY = (float) (glyph.y) / fontHeight;
+        float width = glyph.w;
+        float x = -glyph.w / 2f;
+        float y = -glyph.h;
 
-        // Create quad
-        Mesh mesh = GL.meshFactory.createMesh();
-        GL.dynamicMeshBuilder.
-                setLocalPosition(0f, 0f, 1f).
-                setQuality(1, 1, 1).
-                setSize(glyph.w, glyph.h, 0f).
-                setTexCoordMinMaxX(minX, maxX).
-                setTexCoordMinMaxY(1f - maxY, 1f - minY).
-                build("quad").
-                createMesh(true, mesh);
+        // Use tessellator to create a quad
+        GL.tessellator.setConvertToTriangles(true);
+        GL.tessellator.reset();
+        GL.tessellator.setLocalPosition(0, 0, 0);
+        GL.tessellator.start(Primitives.QUADS);
+
+        GL.tessellator.addTexCoord(maxX, 1f - minY);
+        GL.tessellator.addVertex(x + width, y + height, 0);
+        GL.tessellator.addTexCoord(minX, 1f - minY);
+        GL.tessellator.addVertex(x, y + height, 0);
+        GL.tessellator.addTexCoord(minX, 1f - maxY);
+        GL.tessellator.addVertex(x, y, 0);
+        GL.tessellator.addTexCoord(maxX, 1f - maxY);
+        GL.tessellator.addVertex(x + width, y, 0);
+
+        GL.tessellator.stop();
+        GL.tessellator.addSegment("Awt Font Renderer Quad");
+
+        // Create mesh
+        Mesh mesh = Fw.graphics.createMesh(GL.tessellator);
 
         // Create segment material
         Segment segment = mesh.getSegment(0);

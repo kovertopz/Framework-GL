@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.smert.frameworkgl.gameobjects;
+package net.smert.frameworkgl.gui;
 
 import net.smert.frameworkgl.opengl.renderer.TextRenderer;
 import net.smert.frameworkgl.utils.Color;
@@ -20,29 +20,38 @@ import net.smert.frameworkgl.utils.TimeSpan;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class RenderStatisticsGameObject extends GameObject {
+public class SimpleDebugGuiScreen implements GuiScreen {
 
     private int currentFps;
     private int displayFps;
-    private final Color color0;
-    private TextRenderer renderer;
+    private final Color textureColor0;
+    private TextRenderer textRenderer;
     private final TimeSpan fpsTimeSpan;
 
-    public RenderStatisticsGameObject() {
+    public SimpleDebugGuiScreen() {
         currentFps = 0;
         displayFps = 0;
-        color0 = new Color();
+        textureColor0 = new Color();
         fpsTimeSpan = new TimeSpan();
     }
 
-    public Color getColor0() {
-        return color0;
+    public Color getTextureColor0() {
+        return textureColor0;
     }
 
-    public void init(TextRenderer renderer) {
-        this.renderer = renderer;
+    public void init(TextRenderer textRenderer) {
+        this.textRenderer = textRenderer;
     }
 
+    @Override
+    public void onEnd() {
+    }
+
+    @Override
+    public void onStart() {
+    }
+
+    @Override
     public void render() {
         long freeMem = Runtime.getRuntime().freeMemory();
         long maxMem = Runtime.getRuntime().maxMemory();
@@ -52,10 +61,11 @@ public class RenderStatisticsGameObject extends GameObject {
         String memoryTotal = (maxMem / 1024L / 1024L) + "";
         String percentUsed = ((usedMem * 100L) / maxMem) + "";
 
-        renderer.setTextColor(color0);
-        renderer.drawString("Current FPS: " + displayFps);
-        renderer.textNewLine();
-        renderer.drawString("Used memory: " + percentUsed + "% " + memoryUsed + "MB of " + memoryTotal + "MB");
+        textRenderer.resetTextRendering();
+        textRenderer.setTextColor(textureColor0);
+        textRenderer.drawString("Current FPS: " + displayFps);
+        textRenderer.textNewLine();
+        textRenderer.drawString("Used memory: " + percentUsed + "% " + memoryUsed + "MB of " + memoryTotal + "MB");
     }
 
     @Override
