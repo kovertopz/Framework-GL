@@ -73,6 +73,9 @@ public class ForwardRenderingPipeline extends Screen {
         if (Fw.input.isKeyDown(Keyboard.B) && !Fw.input.wasKeyDown(Keyboard.B)) {
             boolean not = !forwardRenderingPipeline.isRenderAabbs();
             forwardRenderingPipeline.setRenderAabbs(not);
+            if (not) {
+                forwardRenderingPipeline.updateAabbs(); // Update AABBs each time it is enabled
+            }
         }
         if (Fw.input.isKeyDown(Keyboard.O) && !Fw.input.wasKeyDown(Keyboard.O)) {
             boolean not = !forwardRenderingPipeline.isRenderSimpleOrientationAxis();
