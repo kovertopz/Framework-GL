@@ -211,6 +211,12 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         updateGameObjectsToRender(nonOpaqueGameObjectsToRender, nonOpaqueGameObjects);
     }
 
+    public void updateAabbs() {
+        Fw.graphics.updateAabb(worldGameObjects);
+        Fw.graphics.updateAabb(entityGameObjects);
+        Fw.graphics.updateAabb(nonOpaqueGameObjects);
+    }
+
     public void updateCurrentShader() {
         if (shadowsEnabled) {
             currentDefaultShader = defaultShaderWithShadows;
