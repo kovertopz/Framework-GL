@@ -325,8 +325,8 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         Fw.graphics.renderBlend(nonOpaqueGameObjects);
         Fw.graphics.unbindShader();
 
-        Fw.graphics.switchShader(diffuseTextureShader); // No lighting
         if (debug) {
+            Fw.graphics.switchShader(diffuseTextureShader); // No lighting
 
             // View frustum
             if (renderViewFrustum) {
@@ -348,8 +348,9 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
                 renderSimpleOrientationAxis(nonOpaqueGameObjectsToRender);
                 GL.o1.enableDepthTest();
             }
+
+            Fw.graphics.unbindShader();
         }
-        Fw.graphics.unbindShader();
 
         // Render 2D
         GL.o1.setBlendingFunctionSrcAlphaAndOneMinusSrcAlpha();
