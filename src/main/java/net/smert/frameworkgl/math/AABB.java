@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.math;
 
+import java.util.Objects;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
@@ -34,6 +36,23 @@ public class AABB {
     public AABB(Vector3f min, Vector3f max) {
         this.max = max;
         this.min = min;
+    }
+
+    public void combine(AABB aabb0, AABB aabb1) {
+        float x, y, z;
+        x = Math.max(aabb0.getMax().x, aabb1.getMax().x);
+        y = Math.max(aabb0.getMax().y, aabb1.getMax().y);
+        z = Math.max(aabb0.getMax().z, aabb1.getMax().z);
+        max.set(x, y, z);
+        x = Math.min(aabb0.getMin().x, aabb1.getMin().x);
+        y = Math.min(aabb0.getMin().y, aabb1.getMin().y);
+        z = Math.min(aabb0.getMin().z, aabb1.getMin().z);
+        min.set(x, y, z);
+    }
+
+    public void expand(Vector3f amount) {
+        max.add(amount);
+        min.subtract(amount);
     }
 
     public Vector3f getMax() {
@@ -68,6 +87,18 @@ public class AABB {
         min.set(x, y, z);
     }
 
+    public void set(AABB aabb) {
+        max.set(aabb.max);
+        min.set(aabb.min);
+    }
+
+    public float getVolume() {
+        float x = max.getX() - min.getX();
+        float y = max.getY() - min.getY();
+        float z = max.getZ() - min.getZ();
+        return (x * y * z);
+    }
+
     public boolean testCollision(AABB aabb) {
         if ((max.getX() < aabb.min.getX()) || (aabb.max.getX() < min.getX())) {
             return false;
@@ -76,6 +107,29 @@ public class AABB {
             return false;
         }
         return ((max.getY() >= aabb.min.getY()) && (aabb.max.getY() >= min.getY()));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.max);
+        hash = 89 * hash + Objects.hashCode(this.min);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AABB other = (AABB) obj;
+        if (!Objects.equals(this.max, other.max)) {
+            return false;
+        }
+        return Objects.equals(this.min, other.min);
     }
 
     @Override

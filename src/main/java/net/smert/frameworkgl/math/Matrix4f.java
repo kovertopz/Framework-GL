@@ -713,6 +713,85 @@ public class Matrix4f {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Float.floatToIntBits(this.d0);
+        hash = 47 * hash + Float.floatToIntBits(this.d1);
+        hash = 47 * hash + Float.floatToIntBits(this.d2);
+        hash = 47 * hash + Float.floatToIntBits(this.d3);
+        hash = 47 * hash + Float.floatToIntBits(this.d4);
+        hash = 47 * hash + Float.floatToIntBits(this.d5);
+        hash = 47 * hash + Float.floatToIntBits(this.d6);
+        hash = 47 * hash + Float.floatToIntBits(this.d7);
+        hash = 47 * hash + Float.floatToIntBits(this.d8);
+        hash = 47 * hash + Float.floatToIntBits(this.d9);
+        hash = 47 * hash + Float.floatToIntBits(this.d10);
+        hash = 47 * hash + Float.floatToIntBits(this.d11);
+        hash = 47 * hash + Float.floatToIntBits(this.d12);
+        hash = 47 * hash + Float.floatToIntBits(this.d13);
+        hash = 47 * hash + Float.floatToIntBits(this.d14);
+        hash = 47 * hash + Float.floatToIntBits(this.d15);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Matrix4f other = (Matrix4f) obj;
+        if (Float.floatToIntBits(this.d0) != Float.floatToIntBits(other.d0)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d1) != Float.floatToIntBits(other.d1)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d2) != Float.floatToIntBits(other.d2)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d3) != Float.floatToIntBits(other.d3)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d4) != Float.floatToIntBits(other.d4)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d5) != Float.floatToIntBits(other.d5)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d6) != Float.floatToIntBits(other.d6)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d7) != Float.floatToIntBits(other.d7)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d8) != Float.floatToIntBits(other.d8)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d9) != Float.floatToIntBits(other.d9)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d10) != Float.floatToIntBits(other.d10)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d11) != Float.floatToIntBits(other.d11)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d12) != Float.floatToIntBits(other.d12)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d13) != Float.floatToIntBits(other.d13)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.d14) != Float.floatToIntBits(other.d14)) {
+            return false;
+        }
+        return Float.floatToIntBits(this.d15) == Float.floatToIntBits(other.d15);
+    }
+
+    @Override
     public String toString() {
         return "(d0: " + d0 + " d4: " + d4 + " d8: " + d8 + " d12: " + d12 + ")\n"
                 + "(d1: " + d1 + " d5: " + d5 + " d9: " + d9 + " d13: " + d13 + ")\n"

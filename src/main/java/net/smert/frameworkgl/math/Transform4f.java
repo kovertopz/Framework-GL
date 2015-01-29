@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.math;
 
 import java.nio.FloatBuffer;
+import java.util.Objects;
 
 /**
  *
@@ -246,6 +247,29 @@ public class Transform4f {
         out.set(vector).subtract(position);
         rotation.multiplyTransposeOut(out, out);
         return out;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.rotation);
+        hash = 59 * hash + Objects.hashCode(this.position);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Transform4f other = (Transform4f) obj;
+        if (!Objects.equals(this.rotation, other.rotation)) {
+            return false;
+        }
+        return Objects.equals(this.position, other.position);
     }
 
     @Override

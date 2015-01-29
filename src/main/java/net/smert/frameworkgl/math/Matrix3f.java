@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.math;
 
 import java.nio.FloatBuffer;
+import java.util.Objects;
 
 /**
  *
@@ -514,6 +515,33 @@ public class Matrix3f {
                 yAxis.dot(vector),
                 zAxis.dot(vector));
         return out;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.xAxis);
+        hash = 79 * hash + Objects.hashCode(this.yAxis);
+        hash = 79 * hash + Objects.hashCode(this.zAxis);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Matrix3f other = (Matrix3f) obj;
+        if (!Objects.equals(this.xAxis, other.xAxis)) {
+            return false;
+        }
+        if (!Objects.equals(this.yAxis, other.yAxis)) {
+            return false;
+        }
+        return Objects.equals(this.zAxis, other.zAxis);
     }
 
     @Override

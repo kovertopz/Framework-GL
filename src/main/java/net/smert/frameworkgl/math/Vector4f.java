@@ -267,6 +267,37 @@ public class Vector4f {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Float.floatToIntBits(this.w);
+        hash = 89 * hash + Float.floatToIntBits(this.x);
+        hash = 89 * hash + Float.floatToIntBits(this.y);
+        hash = 89 * hash + Float.floatToIntBits(this.z);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vector4f other = (Vector4f) obj;
+        if (Float.floatToIntBits(this.w) != Float.floatToIntBits(other.w)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        return Float.floatToIntBits(this.z) == Float.floatToIntBits(other.z);
+    }
+
+    @Override
     public String toString() {
         return "(x: " + x + " y: " + y + " z: " + z + " w: " + w + ")";
     }

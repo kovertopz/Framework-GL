@@ -363,6 +363,33 @@ public class Vector3f {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Float.floatToIntBits(this.x);
+        hash = 53 * hash + Float.floatToIntBits(this.y);
+        hash = 53 * hash + Float.floatToIntBits(this.z);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vector3f other = (Vector3f) obj;
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        return Float.floatToIntBits(this.z) == Float.floatToIntBits(other.z);
+    }
+
+    @Override
     public String toString() {
         return "(x: " + x + " y: " + y + " z: " + z + ")";
     }
