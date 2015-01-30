@@ -12,20 +12,13 @@
  */
 package net.smert.frameworkgl.math;
 
+import net.smert.frameworkgl.utils.ThreadLocalVars;
+
 /**
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class AABBUtilities {
-
-    private final static Matrix3f rotationAbsolute = new Matrix3f();
-    private final static Vector3f centerA = new Vector3f();
-    private final static Vector3f centerB = new Vector3f();
-    private final static Vector3f extent = new Vector3f();
-    private final static Vector3f margin = new Vector3f();
-    private final static Vector3f localCenter = new Vector3f();
-    private final static Vector3f localExtent = new Vector3f();
-    private final static Vector3f swap = new Vector3f();
 
     private AABBUtilities() {
     }
@@ -43,46 +36,94 @@ public class AABBUtilities {
     }
 
     public static float ManhattanDistance(AABB aabb0, AABB aabb1) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Vector3f centerA = vars.v3f0;
+        Vector3f centerB = vars.v3f1;
+
+        // Calculate centers
         centerA.set(aabb0.min).add(aabb0.max).multiply(.5f);
         centerB.set(aabb1.min).add(aabb1.max).multiply(.5f);
+
+        // Absolute vector between both centers
         centerA.subtract(centerB).abs();
-        return centerA.getX() + centerA.getY() + centerA.getZ();
+        float dist = centerA.getX() + centerA.getY() + centerA.getZ();
+
+        // Release vars instance
+        vars.release();
+
+        return dist;
     }
 
     public static void Swap(AABB aabb0, AABB aabb1) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Vector3f swap = vars.v3f0;
+
+        // Swap AABBs
         swap.set(aabb0.min);
         aabb0.min.set(aabb1.min);
         aabb1.min.set(swap);
         swap.set(aabb0.max);
         aabb0.max.set(aabb1.max);
         aabb1.max.set(swap);
+
+        // Release vars instance
+        vars.release();
     }
 
     public static void Transform(AABB localAabb, Transform4f worldTransform, AABB worldAabb) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Matrix3f rotationAbsolute = vars.m3f0;
+        Vector3f localCenter = vars.v3f0;
+        Vector3f localExtent = vars.v3f1;
+        Vector3f worldCenter = vars.v3f2;
+        Vector3f worldExtent = vars.v3f3;
+
         localCenter.set(localAabb.min).add(localAabb.max).multiply(.5f);
-        worldTransform.multiplyOut(localCenter, centerA);
+        worldTransform.multiplyOut(localCenter, worldCenter);
         localExtent.set(localAabb.max).subtract(localAabb.min).multiply(.5f);
         rotationAbsolute.set(worldTransform.getRotation()).absolute();
-        extent.set(
+        worldExtent.set(
                 rotationAbsolute.dotRow(0, localExtent),
                 rotationAbsolute.dotRow(1, localExtent),
                 rotationAbsolute.dotRow(2, localExtent));
-        worldAabb.max.set(centerA).add(extent);
-        worldAabb.min.set(centerA).subtract(extent);
+        worldAabb.max.set(worldCenter).add(worldExtent);
+        worldAabb.min.set(worldCenter).subtract(worldExtent);
+
+        // Release vars instance
+        vars.release();
     }
 
     public static void Transform(AABB localAabb, float margin, Transform4f worldTransform, AABB worldAabb) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Matrix3f rotationAbsolute = vars.m3f0;
+        Vector3f localCenter = vars.v3f0;
+        Vector3f localExtent = vars.v3f1;
+        Vector3f margins = vars.v3f2;
+        Vector3f worldCenter = vars.v3f3;
+        Vector3f worldExtent = vars.v3f4;
+
         localCenter.set(localAabb.min).add(localAabb.max).multiply(.5f);
-        worldTransform.multiplyOut(localCenter, centerA);
-        AABBUtilities.margin.set(margin, margin, margin);
-        localExtent.set(localAabb.max).subtract(localAabb.min).multiply(.5f).add(AABBUtilities.margin);
+        worldTransform.multiplyOut(localCenter, worldCenter);
+        margins.set(margin, margin, margin);
+        localExtent.set(localAabb.max).subtract(localAabb.min).multiply(.5f).add(margins);
         rotationAbsolute.set(worldTransform.getRotation()).absolute();
-        extent.set(
+        worldExtent.set(
                 rotationAbsolute.dotRow(0, localExtent),
                 rotationAbsolute.dotRow(1, localExtent),
                 rotationAbsolute.dotRow(2, localExtent));
-        worldAabb.max.set(centerA).add(extent);
-        worldAabb.min.set(centerA).subtract(extent);
+        worldAabb.max.set(worldCenter).add(worldExtent);
+        worldAabb.min.set(worldCenter).subtract(worldExtent);
+
+        // Release vars instance
+        vars.release();
     }
 
 }

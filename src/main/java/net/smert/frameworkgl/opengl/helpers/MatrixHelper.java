@@ -16,6 +16,7 @@ import java.util.Stack;
 import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
+import net.smert.frameworkgl.utils.ThreadLocalVars;
 
 /**
  *
@@ -28,18 +29,14 @@ public class MatrixHelper {
     public final static int MATRIX_VIEW = 2;
 
     private int mode;
-    private final Matrix4f scale;
     private final Stack<Matrix4f> modelMatrixStack;
     private final Stack<Matrix4f> projectionMatrixStack;
     private final Stack<Matrix4f> viewMatrixStack;
-    private final Vector3f vector;
 
     public MatrixHelper() {
-        scale = new Matrix4f();
         modelMatrixStack = new Stack<>();
         projectionMatrixStack = new Stack<>();
         viewMatrixStack = new Stack<>();
-        vector = new Vector3f();
         reset();
     }
 
@@ -128,20 +125,26 @@ public class MatrixHelper {
 
     public final void reset() {
         mode = MATRIX_MODEL;
-        scale.identity();
         modelMatrixStack.clear();
         modelMatrixStack.push(new Matrix4f());
         projectionMatrixStack.clear();
         projectionMatrixStack.push(new Matrix4f());
         viewMatrixStack.clear();
         viewMatrixStack.push(new Matrix4f());
-        vector.zero();
     }
 
     public void rotate(float degrees, float x, float y, float z) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Vector3f vector = vars.v3f0;
+
         Matrix4f matrix = getCurrentMatrix();
         vector.set(x, y, z);
         matrix.fromAxisAngle(vector, degrees);
+
+        // Release vars instance
+        vars.release();
     }
 
     public void setFrustum(float left, float right, float bottom, float top, float zNear, float zFar) {
@@ -160,15 +163,31 @@ public class MatrixHelper {
     }
 
     public void scale(float x, float y, float z) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Matrix4f scale = vars.m4f0;
+
         Matrix4f matrix = getCurrentMatrix();
         scale.setDiagonal(x, y, z);
         matrix.multiply(scale);
+
+        // Release vars instance
+        vars.release();
     }
 
     public void translate(float x, float y, float z) {
+
+        // Temp vars from thread local storage
+        ThreadLocalVars vars = ThreadLocalVars.Get();
+        Vector3f vector = vars.v3f0;
+
         Matrix4f matrix = getCurrentMatrix();
         vector.set(x, y, z);
         matrix.multiply(vector);
+
+        // Release vars instance
+        vars.release();
     }
 
 }
