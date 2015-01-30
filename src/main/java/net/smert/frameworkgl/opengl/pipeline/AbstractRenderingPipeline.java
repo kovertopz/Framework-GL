@@ -13,6 +13,8 @@
 package net.smert.frameworkgl.opengl.pipeline;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 
@@ -27,6 +29,15 @@ public abstract class AbstractRenderingPipeline {
     protected boolean shadowsEnabled;
     protected boolean wireframe;
     protected Camera camera;
+    protected final List<DebugRenderCallback> debugRenderCallbacks;
+
+    public AbstractRenderingPipeline() {
+        debugRenderCallbacks = new ArrayList<>();
+    }
+
+    public void addDebugRenderCallback(DebugRenderCallback callback) {
+        debugRenderCallbacks.add(callback);
+    }
 
     public void destroy() {
     }
@@ -34,36 +45,8 @@ public abstract class AbstractRenderingPipeline {
     public void init() throws IOException {
     }
 
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
-    public boolean isFrustumCulling() {
-        return frustumCulling;
-    }
-
-    public void setFrustumCulling(boolean frustumCulling) {
-        this.frustumCulling = frustumCulling;
-    }
-
-    public boolean isShadowsEnabled() {
-        return shadowsEnabled;
-    }
-
-    public void setShadowsEnabled(boolean shadowsEnabled) {
-        this.shadowsEnabled = shadowsEnabled;
-    }
-
-    public boolean isWireframe() {
-        return wireframe;
-    }
-
-    public void setWireframe(boolean wireframe) {
-        this.wireframe = wireframe;
+    public void removeDebugRenderCallback(DebugRenderCallback callback) {
+        debugRenderCallbacks.remove(callback);
     }
 
     public void render() {
@@ -76,16 +59,63 @@ public abstract class AbstractRenderingPipeline {
         wireframe = false;
     }
 
-    public void setCamera(Camera camera) {
-        this.camera = camera;
-    }
-
     public void switchPolygonFillMode() {
         if (wireframe) {
             GL.o1.setPolygonModeFrontAndBackLine();
         } else {
             GL.o1.setPolygonModeFrontAndBackFill();
+
         }
+    }
+
+    public class Config {
+
+        public boolean isDebug() {
+            return debug;
+        }
+
+        public void setDebug(boolean debug) {
+            AbstractRenderingPipeline.this.debug = debug;
+        }
+
+        public boolean isFrustumCulling() {
+            return frustumCulling;
+        }
+
+        public void setFrustumCulling(boolean frustumCulling) {
+            AbstractRenderingPipeline.this.frustumCulling = frustumCulling;
+        }
+
+        public boolean isShadowsEnabled() {
+            return shadowsEnabled;
+        }
+
+        public void setShadowsEnabled(boolean shadowsEnabled) {
+            AbstractRenderingPipeline.this.shadowsEnabled = shadowsEnabled;
+        }
+
+        public boolean isWireframe() {
+            return wireframe;
+        }
+
+        public void setWireframe(boolean wireframe) {
+            AbstractRenderingPipeline.this.wireframe = wireframe;
+        }
+
+        public Camera getCamera() {
+            return AbstractRenderingPipeline.this.camera;
+        }
+
+        public void setCamera(Camera camera) {
+            AbstractRenderingPipeline.this.camera = camera;
+        }
+
+    }
+
+    public static interface DebugRenderCallback {
+
+        public void render();
+
     }
 
 }

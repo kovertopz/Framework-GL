@@ -15,7 +15,6 @@ package net.smert.frameworkgl;
 import java.io.IOException;
 import net.smert.frameworkgl.openal.AL;
 import net.smert.frameworkgl.openal.OpenAL;
-import net.smert.frameworkgl.openal.OpenALListener;
 import net.smert.frameworkgl.openal.codecs.Codec;
 
 /**
@@ -45,46 +44,6 @@ public class Audio {
         openal.destroy();
         openal = null;
         initialized = false;
-    }
-
-    public float getDefaultSourceMaxDistance() {
-        return openal.getDefaultSourceMaxDistance();
-    }
-
-    public void setDefaultSourceMaxDistance(float defaultSourceMaxDistance) {
-        openal.setDefaultSourceMaxDistance(defaultSourceMaxDistance);
-    }
-
-    public float getDefaultSourceMusicVolume() {
-        return openal.getDefaultSourceMusicVolume();
-    }
-
-    public void setDefaultSourceMusicVolume(float defaultSourceMusicVolume) {
-        openal.setDefaultSourceMusicVolume(defaultSourceMusicVolume);
-    }
-
-    public float getDefaultSourceReferenceDistance() {
-        return openal.getDefaultSourceReferenceDistance();
-    }
-
-    public void setDefaultSourceReferenceDistance(float defaultSourceReferenceDistance) {
-        openal.setDefaultSourceReferenceDistance(defaultSourceReferenceDistance);
-    }
-
-    public float getDefaultSourceRolloff() {
-        return openal.getDefaultSourceRolloff();
-    }
-
-    public void setDefaultSourceRolloff(float defaultSourceRolloff) {
-        openal.setDefaultSourceRolloff(defaultSourceRolloff);
-    }
-
-    public float getDefaultSourceSoundVolume() {
-        return openal.getDefaultSourceSoundVolume();
-    }
-
-    public void setDefaultSourceSoundVolume(float defaultSourceSoundVolume) {
-        openal.setDefaultSourceSoundVolume(defaultSourceSoundVolume);
     }
 
     public float getDopplerFactor() {
@@ -119,48 +78,8 @@ public class Audio {
         openal.setVolume(soundID, volume);
     }
 
-    public int getContextFrequency() {
-        return openal.getContextFrequency();
-    }
-
-    public void setContextFrequency(int contextFrequency) {
-        openal.setContextFrequency(contextFrequency);
-    }
-
-    public int getContextRefresh() {
-        return openal.getContextRefresh();
-    }
-
-    public void setContextRefresh(int contextRefresh) {
-        openal.setContextRefresh(contextRefresh);
-    }
-
     public int getDistanceModel() {
         return openal.getDistanceModel();
-    }
-
-    public int getMaxChannels() {
-        return openal.getMaxChannels();
-    }
-
-    public void setMaxChannels(int maxChannels) {
-        openal.setMaxChannels(maxChannels);
-    }
-
-    public int getNumberOfMusicChannels() {
-        return openal.getNumberOfMusicChannels();
-    }
-
-    public void setNumberOfMusicChannels(int numberOfMusicChannels) {
-        openal.setNumberOfMusicChannels(numberOfMusicChannels);
-    }
-
-    public int getNumberOfSoundChannels() {
-        return openal.getNumberOfSoundChannels();
-    }
-
-    public void setNumberOfSoundChannels(int numberOfSoundChannels) {
-        openal.setNumberOfSoundChannels(numberOfSoundChannels);
     }
 
     public void setDistanceModelInverseDistance() {
@@ -175,36 +94,8 @@ public class Audio {
         openal.setDistanceModelNone();
     }
 
-    public OpenALListener getListener() {
-        return openal.getListener();
-    }
-
-    public void setListener(OpenALListener listener) {
-        openal.setListener(listener);
-    }
-
-    public String getDeviceArguments() {
-        return openal.getDeviceArguments();
-    }
-
-    public void setDeviceArguments(String deviceArguments) {
-        openal.setDeviceArguments(deviceArguments);
-    }
-
-    public boolean isContextSynchronized() {
-        return openal.isContextSynchronized();
-    }
-
-    public void setContextSynchronized(boolean contextSynchronized) {
-        openal.setContextSynchronized(contextSynchronized);
-    }
-
-    public boolean isOpenDevice() {
-        return openal.isOpenDevice();
-    }
-
-    public void setOpenDevice(boolean openDevice) {
-        openal.setOpenDevice(openDevice);
+    public OpenAL.Config getConfig() {
+        return openal.getConfig();
     }
 
     public void init() {

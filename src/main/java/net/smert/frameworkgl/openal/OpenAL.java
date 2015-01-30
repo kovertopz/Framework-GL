@@ -41,6 +41,7 @@ public class OpenAL {
     private int maxChannels;
     private int numberOfMusicChannels;
     private int numberOfSoundChannels;
+    private final Config config;
     private final List<Integer> musicSourcesPlaying;
     private final List<Integer> soundSourcesPlaying;
     private final List<OpenALSource> tempSources;
@@ -51,6 +52,7 @@ public class OpenAL {
     private String deviceArguments;
 
     public OpenAL() {
+        config = new Config();
         musicSourcesPlaying = new ArrayList<>();
         soundSourcesPlaying = new ArrayList<>();
         tempSources = new ArrayList<>();
@@ -115,46 +117,6 @@ public class OpenAL {
         org.lwjgl.openal.AL.destroy();
     }
 
-    public float getDefaultSourceMaxDistance() {
-        return defaultSourceMaxDistance;
-    }
-
-    public void setDefaultSourceMaxDistance(float defaultSourceMaxDistance) {
-        this.defaultSourceMaxDistance = defaultSourceMaxDistance;
-    }
-
-    public float getDefaultSourceMusicVolume() {
-        return defaultSourceMusicVolume;
-    }
-
-    public void setDefaultSourceMusicVolume(float defaultSourceMusicVolume) {
-        this.defaultSourceMusicVolume = defaultSourceMusicVolume;
-    }
-
-    public float getDefaultSourceReferenceDistance() {
-        return defaultSourceReferenceDistance;
-    }
-
-    public void setDefaultSourceReferenceDistance(float defaultSourceReferenceDistance) {
-        this.defaultSourceReferenceDistance = defaultSourceReferenceDistance;
-    }
-
-    public float getDefaultSourceRolloff() {
-        return defaultSourceRolloff;
-    }
-
-    public void setDefaultSourceRolloff(float defaultSourceRolloff) {
-        this.defaultSourceRolloff = defaultSourceRolloff;
-    }
-
-    public float getDefaultSourceSoundVolume() {
-        return defaultSourceSoundVolume;
-    }
-
-    public void setDefaultSourceSoundVolume(float defaultSourceSoundVolume) {
-        this.defaultSourceSoundVolume = defaultSourceSoundVolume;
-    }
-
     public float getDopplerFactor() {
         return AL10.alGetFloat(AL10.AL_DOPPLER_FACTOR);
     }
@@ -196,48 +158,8 @@ public class OpenAL {
         checkForError("setting sound volume");
     }
 
-    public int getContextFrequency() {
-        return contextFrequency;
-    }
-
-    public void setContextFrequency(int contextFrequency) {
-        this.contextFrequency = contextFrequency;
-    }
-
-    public int getContextRefresh() {
-        return contextRefresh;
-    }
-
-    public void setContextRefresh(int contextRefresh) {
-        this.contextRefresh = contextRefresh;
-    }
-
     public int getDistanceModel() {
         return AL10.alGetInteger(AL10.AL_DISTANCE_MODEL);
-    }
-
-    public int getMaxChannels() {
-        return maxChannels;
-    }
-
-    public void setMaxChannels(int maxChannels) {
-        this.maxChannels = maxChannels;
-    }
-
-    public int getNumberOfMusicChannels() {
-        return numberOfMusicChannels;
-    }
-
-    public void setNumberOfMusicChannels(int numberOfMusicChannels) {
-        this.numberOfMusicChannels = numberOfMusicChannels;
-    }
-
-    public int getNumberOfSoundChannels() {
-        return numberOfSoundChannels;
-    }
-
-    public void setNumberOfSoundChannels(int numberOfSoundChannels) {
-        this.numberOfSoundChannels = numberOfSoundChannels;
     }
 
     public void setDistanceModelInverseDistance() {
@@ -252,20 +174,16 @@ public class OpenAL {
         AL10.alDistanceModel(AL10.AL_NONE);
     }
 
+    public Config getConfig() {
+        return config;
+    }
+
     public OpenALListener getListener() {
         return listener;
     }
 
     public void setListener(OpenALListener listener) {
         this.listener = listener;
-    }
-
-    public String getDeviceArguments() {
-        return deviceArguments;
-    }
-
-    public void setDeviceArguments(String deviceArguments) {
-        this.deviceArguments = deviceArguments;
     }
 
     public String getErrorMessage(int error) {
@@ -310,22 +228,6 @@ public class OpenAL {
 
     public String getVersion() {
         return AL10.alGetString(AL10.AL_VERSION);
-    }
-
-    public boolean isContextSynchronized() {
-        return contextSynchronized;
-    }
-
-    public void setContextSynchronized(boolean contextSynchronized) {
-        this.contextSynchronized = contextSynchronized;
-    }
-
-    public boolean isOpenDevice() {
-        return openDevice;
-    }
-
-    public void setOpenDevice(boolean openDevice) {
-        this.openDevice = openDevice;
     }
 
     public void init() {
@@ -532,6 +434,114 @@ public class OpenAL {
         checkForError("updating listener");
 
         Util.checkALError();
+    }
+
+    public class Config {
+
+        public float getDefaultSourceMaxDistance() {
+            return defaultSourceMaxDistance;
+        }
+
+        public void setDefaultSourceMaxDistance(float defaultSourceMaxDistance) {
+            OpenAL.this.defaultSourceMaxDistance = defaultSourceMaxDistance;
+        }
+
+        public float getDefaultSourceMusicVolume() {
+            return defaultSourceMusicVolume;
+        }
+
+        public void setDefaultSourceMusicVolume(float defaultSourceMusicVolume) {
+            OpenAL.this.defaultSourceMusicVolume = defaultSourceMusicVolume;
+        }
+
+        public float getDefaultSourceReferenceDistance() {
+            return defaultSourceReferenceDistance;
+        }
+
+        public void setDefaultSourceReferenceDistance(float defaultSourceReferenceDistance) {
+            OpenAL.this.defaultSourceReferenceDistance = defaultSourceReferenceDistance;
+        }
+
+        public float getDefaultSourceRolloff() {
+            return defaultSourceRolloff;
+        }
+
+        public void setDefaultSourceRolloff(float defaultSourceRolloff) {
+            OpenAL.this.defaultSourceRolloff = defaultSourceRolloff;
+        }
+
+        public float getDefaultSourceSoundVolume() {
+            return defaultSourceSoundVolume;
+        }
+
+        public void setDefaultSourceSoundVolume(float defaultSourceSoundVolume) {
+            OpenAL.this.defaultSourceSoundVolume = defaultSourceSoundVolume;
+        }
+
+        public int getContextFrequency() {
+            return contextFrequency;
+        }
+
+        public void setContextFrequency(int contextFrequency) {
+            OpenAL.this.contextFrequency = contextFrequency;
+        }
+
+        public int getContextRefresh() {
+            return contextRefresh;
+        }
+
+        public void setContextRefresh(int contextRefresh) {
+            OpenAL.this.contextRefresh = contextRefresh;
+        }
+
+        public int getMaxChannels() {
+            return maxChannels;
+        }
+
+        public void setMaxChannels(int maxChannels) {
+            OpenAL.this.maxChannels = maxChannels;
+        }
+
+        public int getNumberOfMusicChannels() {
+            return numberOfMusicChannels;
+        }
+
+        public void setNumberOfMusicChannels(int numberOfMusicChannels) {
+            OpenAL.this.numberOfMusicChannels = numberOfMusicChannels;
+        }
+
+        public int getNumberOfSoundChannels() {
+            return numberOfSoundChannels;
+        }
+
+        public void setNumberOfSoundChannels(int numberOfSoundChannels) {
+            OpenAL.this.numberOfSoundChannels = numberOfSoundChannels;
+        }
+
+        public String getDeviceArguments() {
+            return deviceArguments;
+        }
+
+        public void setDeviceArguments(String deviceArguments) {
+            OpenAL.this.deviceArguments = deviceArguments;
+        }
+
+        public boolean isContextSynchronized() {
+            return contextSynchronized;
+        }
+
+        public void setContextSynchronized(boolean contextSynchronized) {
+            OpenAL.this.contextSynchronized = contextSynchronized;
+        }
+
+        public boolean isOpenDevice() {
+            return openDevice;
+        }
+
+        public void setOpenDevice(boolean openDevice) {
+            OpenAL.this.openDevice = openDevice;
+        }
+
     }
 
 }

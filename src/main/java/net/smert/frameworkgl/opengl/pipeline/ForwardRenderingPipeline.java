@@ -36,6 +36,7 @@ import net.smert.frameworkgl.utils.Color;
 public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
     private boolean renderAabbs;
+    private boolean renderDebugRenderCallbacks;
     private boolean renderViewFrustum;
     private boolean renderSimpleOrientationAxis;
     private AABBGameObject aabbGameObject;
@@ -43,6 +44,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     private AbstractShader defaultShader;
     private AbstractShader defaultShaderWithShadows;
     private final Color skyboxColor;
+    private final Config config;
     private DiffuseTextureShader diffuseTextureShader;
     private GuiRenderer guiRenderer;
     private List<GameObject> entityGameObjects;
@@ -58,6 +60,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
     public ForwardRenderingPipeline() {
         skyboxColor = new Color();
+        config = new Config();
         entityGameObjects = new ArrayList<>();
         entityGameObjectsToRender = new ArrayList<>();
         nonOpaqueGameObjects = new ArrayList<>();
@@ -102,100 +105,8 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         nonOpaqueGameObjectsToRender.addAll(nonOpaqueGameObjects);
     }
 
-    public AABBGameObject getAabbGameObject() {
-        return aabbGameObject;
-    }
-
-    public AbstractShader getDefaultShader() {
-        return defaultShader;
-    }
-
-    public void setDefaultShader(AbstractShader defaultShader) {
-        this.defaultShader = defaultShader;
-    }
-
-    public AbstractShader getDefaultShaderWithShadows() {
-        return defaultShaderWithShadows;
-    }
-
-    public void setDefaultShaderWithShadows(AbstractShader defaultShaderWithShadows) {
-        this.defaultShaderWithShadows = defaultShaderWithShadows;
-    }
-
-    public Color getSkyboxColor() {
-        return skyboxColor;
-    }
-
-    public GuiRenderer getGuiRenderer() {
-        return guiRenderer;
-    }
-
-    public void setGuiRenderer(GuiRenderer guiRenderer) {
-        this.guiRenderer = guiRenderer;
-    }
-
-    public List<GameObject> getEntityGameObjects() {
-        return entityGameObjects;
-    }
-
-    public void setEntityGameObjects(List<GameObject> entityGameObjects) {
-        this.entityGameObjects = entityGameObjects;
-    }
-
-    public List<GameObject> getNonOpaqueGameObjects() {
-        return nonOpaqueGameObjects;
-    }
-
-    public void setNonOpaqueGameObjects(List<GameObject> nonOpaqueGameObjects) {
-        this.nonOpaqueGameObjects = nonOpaqueGameObjects;
-    }
-
-    public List<GameObject> getWorldGameObjects() {
-        return worldGameObjects;
-    }
-
-    public void setWorldGameObjects(List<GameObject> worldGameObjects) {
-        this.worldGameObjects = worldGameObjects;
-    }
-
-    public SimpleOrientationAxisGameObject getSimpleOrientationAxisGameObject() {
-        return simpleOrientationAxisGameObject;
-    }
-
-    public SkyboxGameObject getSkyboxGameObject() {
-        return skyboxGameObject;
-    }
-
-    public void setSkyboxGameObject(SkyboxGameObject skyboxGameObject) {
-        this.skyboxGameObject = skyboxGameObject;
-    }
-
-    public ViewFrustumGameObject getViewFrustumGameObject() {
-        return viewFrustumGameObject;
-    }
-
-    public boolean isRenderAabbs() {
-        return renderAabbs;
-    }
-
-    public void setRenderAabbs(boolean renderAabbs) {
-        this.renderAabbs = renderAabbs;
-    }
-
-    public boolean isRenderViewFrustum() {
-        return renderViewFrustum;
-    }
-
-    public void setRenderViewFrustum(boolean renderViewFrustum) {
-        this.renderViewFrustum = renderViewFrustum;
-    }
-
-    public boolean isRenderSimpleOrientationAxis() {
-        return renderSimpleOrientationAxis;
-    }
-
-    public void setRenderSimpleOrientationAxis(boolean renderSimpleOrientationAxis) {
-        this.renderSimpleOrientationAxis = renderSimpleOrientationAxis;
+    public Config getConfig() {
+        return config;
     }
 
     public void performFrustumCulling() {
@@ -277,12 +188,6 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     }
 
     @Override
-    public void setShadowsEnabled(boolean shadowsEnabled) {
-        super.setShadowsEnabled(shadowsEnabled);
-        updateCurrentShader();
-    }
-
-    @Override
     public void render() {
 
         // Reset state and clear
@@ -322,7 +227,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         Fw.graphics.switchShader(currentDefaultShader);
         Fw.graphics.render(worldGameObjectsToRender);
         Fw.graphics.render(entityGameObjectsToRender);
-        Fw.graphics.renderBlend(nonOpaqueGameObjects);
+        Fw.graphics.renderBlend(nonOpaqueGameObjectsToRender);
         Fw.graphics.unbindShader();
 
         if (debug) {
@@ -347,6 +252,13 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
                 renderSimpleOrientationAxis(entityGameObjectsToRender);
                 renderSimpleOrientationAxis(nonOpaqueGameObjectsToRender);
                 GL.o1.enableDepthTest();
+            }
+
+            // Debug render callbacks
+            if (renderDebugRenderCallbacks) {
+                for (DebugRenderCallback callback : debugRenderCallbacks) {
+                    callback.render();
+                }
             }
 
             Fw.graphics.unbindShader();
@@ -374,6 +286,124 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         shadowsEnabled = false;
         wireframe = false;
         skyboxColor.setWhite();
+    }
+
+    public class Config extends AbstractRenderingPipeline.Config {
+
+        public AABBGameObject getAabbGameObject() {
+            return aabbGameObject;
+        }
+
+        public void setAabbGameObject(AABBGameObject aabbGameObject) {
+            ForwardRenderingPipeline.this.aabbGameObject = aabbGameObject;
+        }
+
+        public AbstractShader getDefaultShader() {
+            return defaultShader;
+        }
+
+        public void setDefaultShader(AbstractShader defaultShader) {
+            ForwardRenderingPipeline.this.defaultShader = defaultShader;
+        }
+
+        public AbstractShader getDefaultShaderWithShadows() {
+            return defaultShaderWithShadows;
+        }
+
+        public void setDefaultShaderWithShadows(AbstractShader defaultShaderWithShadows) {
+            ForwardRenderingPipeline.this.defaultShaderWithShadows = defaultShaderWithShadows;
+        }
+
+        public Color getSkyboxColor() {
+            return skyboxColor;
+        }
+
+        public GuiRenderer getGuiRenderer() {
+            return guiRenderer;
+        }
+
+        public void setGuiRenderer(GuiRenderer guiRenderer) {
+            ForwardRenderingPipeline.this.guiRenderer = guiRenderer;
+        }
+
+        public List<GameObject> getEntityGameObjects() {
+            return entityGameObjects;
+        }
+
+        public void setEntityGameObjects(List<GameObject> entityGameObjects) {
+            ForwardRenderingPipeline.this.entityGameObjects = entityGameObjects;
+        }
+
+        public List<GameObject> getNonOpaqueGameObjects() {
+            return nonOpaqueGameObjects;
+        }
+
+        public void setNonOpaqueGameObjects(List<GameObject> nonOpaqueGameObjects) {
+            ForwardRenderingPipeline.this.nonOpaqueGameObjects = nonOpaqueGameObjects;
+        }
+
+        public List<GameObject> getWorldGameObjects() {
+            return worldGameObjects;
+        }
+
+        public void setWorldGameObjects(List<GameObject> worldGameObjects) {
+            ForwardRenderingPipeline.this.worldGameObjects = worldGameObjects;
+        }
+
+        public SimpleOrientationAxisGameObject getSimpleOrientationAxisGameObject() {
+            return simpleOrientationAxisGameObject;
+        }
+
+        public void setSimpleOrientationAxisGameObject(SimpleOrientationAxisGameObject simpleOrientationAxisGameObject) {
+            ForwardRenderingPipeline.this.simpleOrientationAxisGameObject = simpleOrientationAxisGameObject;
+        }
+
+        public SkyboxGameObject getSkyboxGameObject() {
+            return skyboxGameObject;
+        }
+
+        public void setSkyboxGameObject(SkyboxGameObject skyboxGameObject) {
+            ForwardRenderingPipeline.this.skyboxGameObject = skyboxGameObject;
+        }
+
+        public ViewFrustumGameObject getViewFrustumGameObject() {
+            return viewFrustumGameObject;
+        }
+
+        public void setViewFrustumGameObject(ViewFrustumGameObject viewFrustumGameObject) {
+            ForwardRenderingPipeline.this.viewFrustumGameObject = viewFrustumGameObject;
+        }
+
+        public boolean isRenderAabbs() {
+            return renderAabbs;
+        }
+
+        public void setRenderAabbs(boolean renderAabbs) {
+            ForwardRenderingPipeline.this.renderAabbs = renderAabbs;
+        }
+
+        public boolean isRenderViewFrustum() {
+            return renderViewFrustum;
+        }
+
+        public void setRenderViewFrustum(boolean renderViewFrustum) {
+            ForwardRenderingPipeline.this.renderViewFrustum = renderViewFrustum;
+        }
+
+        public boolean isRenderSimpleOrientationAxis() {
+            return renderSimpleOrientationAxis;
+        }
+
+        public void setRenderSimpleOrientationAxis(boolean renderSimpleOrientationAxis) {
+            ForwardRenderingPipeline.this.renderSimpleOrientationAxis = renderSimpleOrientationAxis;
+        }
+
+        @Override
+        public void setShadowsEnabled(boolean shadowsEnabled) {
+            super.setShadowsEnabled(shadowsEnabled);
+            updateCurrentShader();
+        }
+
     }
 
 }
