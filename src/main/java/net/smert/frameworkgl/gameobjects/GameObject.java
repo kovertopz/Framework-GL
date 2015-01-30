@@ -27,10 +27,8 @@ public class GameObject {
 
     private final AABB worldAabb;
     private AbstractRenderable renderable;
-    private Object collisionShape;
     private Mesh mesh;
     private final RenderableState renderableState;
-    private Object rigidBody;
     private Transform4f scalingTransform;
     private final Transform4f worldTransform;
 
@@ -65,22 +63,6 @@ public class GameObject {
 
     public void setMesh(Mesh mesh) {
         this.mesh = mesh;
-    }
-
-    public Object getCollisionShape() {
-        return collisionShape;
-    }
-
-    public void setCollisionShape(Object collisionShape) {
-        this.collisionShape = collisionShape;
-    }
-
-    public Object getRigidBody() {
-        return rigidBody;
-    }
-
-    public void setRigidBody(Object rigidBody) {
-        this.rigidBody = rigidBody;
     }
 
     public RenderableState getRenderableState() {

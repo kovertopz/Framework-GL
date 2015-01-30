@@ -28,9 +28,10 @@ import net.smert.frameworkgl.opengl.renderable.AbstractRenderable;
  */
 public class BulletGameObject extends GameObject {
 
-    public final btRigidBody body;
-    public final MotionState motionState;
-    public final String name;
+    private final btCollisionShape shape;
+    private final btRigidBody body;
+    private final MotionState motionState;
+    private final String name;
 
     public BulletGameObject(AbstractRenderable renderable, Transform4f scaling,
             MotionState motionState, String name, btRigidBody.btRigidBodyConstructionInfo constructionInfo) {
@@ -41,8 +42,7 @@ public class BulletGameObject extends GameObject {
         body = new btRigidBody(constructionInfo);
         body.setMotionState(motionState);
         body.proceedToTransform(motionState.worldTransform);
-        setCollisionShape(constructionInfo.getCollisionShape()); // Attach to game object
-        setRigidBody(body); // Attach to game object
+        shape = constructionInfo.getCollisionShape(); // Disposed in Constructor class
     }
 
     @Override
@@ -50,6 +50,10 @@ public class BulletGameObject extends GameObject {
         body.dispose();
         motionState.dispose();
         super.destroy();
+    }
+
+    public btCollisionShape getShape() {
+        return shape;
     }
 
     public btRigidBody getBody() {
