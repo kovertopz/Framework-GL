@@ -67,23 +67,23 @@ public class ForwardRenderingPipeline extends Screen {
             Fw.app.stopRunning();
         }
         if (Fw.input.isKeyDown(Keyboard.F1) && !Fw.input.wasKeyDown(Keyboard.F1)) {
-            boolean not = !forwardRenderingPipeline.isWireframe();
-            forwardRenderingPipeline.setWireframe(not);
+            boolean not = !forwardRenderingPipeline.getConfig().isWireframe();
+            forwardRenderingPipeline.getConfig().setWireframe(not);
         }
         if (Fw.input.isKeyDown(Keyboard.B) && !Fw.input.wasKeyDown(Keyboard.B)) {
-            boolean not = !forwardRenderingPipeline.isRenderAabbs();
-            forwardRenderingPipeline.setRenderAabbs(not);
+            boolean not = !forwardRenderingPipeline.getConfig().isRenderAabbs();
+            forwardRenderingPipeline.getConfig().setRenderAabbs(not);
             if (not) {
                 forwardRenderingPipeline.updateAabbs(); // Update AABBs each time it is enabled
             }
         }
         if (Fw.input.isKeyDown(Keyboard.O) && !Fw.input.wasKeyDown(Keyboard.O)) {
-            boolean not = !forwardRenderingPipeline.isRenderSimpleOrientationAxis();
-            forwardRenderingPipeline.setRenderSimpleOrientationAxis(not);
+            boolean not = !forwardRenderingPipeline.getConfig().isRenderSimpleOrientationAxis();
+            forwardRenderingPipeline.getConfig().setRenderSimpleOrientationAxis(not);
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {
+            forwardRenderingPipeline.getConfig().setRenderViewFrustum(true);
             forwardRenderingPipeline.performFrustumCulling();
-            forwardRenderingPipeline.setRenderViewFrustum(true);
             forwardRenderingPipeline.updateViewFrustumGameObjectWithCamera();
         }
         float spotInnerCutoff = hybridPixelOrVertexLitGuiScreen.getSpotInnerCutoff();
@@ -178,8 +178,7 @@ public class ForwardRenderingPipeline extends Screen {
                 currentShader = diffuseAndSpecularHybridShaders.getVertexLitMultiPhongSpecularHybridShader();
                 break;
         }
-        forwardRenderingPipeline.setDefaultShader(currentShader);
-        forwardRenderingPipeline.updateCurrentShader();
+        forwardRenderingPipeline.getConfig().setDefaultShader(currentShader);
     }
 
     @Override
@@ -255,12 +254,13 @@ public class ForwardRenderingPipeline extends Screen {
 
         // Create pipeline
         forwardRenderingPipeline = GL.rpFactory.createForwardRenderingPipeline();
-        forwardRenderingPipeline.setCamera(camera);
-        forwardRenderingPipeline.setDebug(true);
-        forwardRenderingPipeline.setFrustumCulling(false);
-        forwardRenderingPipeline.setGuiRenderer(GL.rendererFactory.createDefaultGuiRenderer());
-        forwardRenderingPipeline.setSkyboxGameObject(skyboxGameObject);
-        forwardRenderingPipeline.setWorldGameObjects(dynamicMeshesWorld.getGameObjects());
+        net.smert.frameworkgl.opengl.pipeline.ForwardRenderingPipeline.Config config = forwardRenderingPipeline.getConfig();
+        config.setCamera(camera);
+        config.setDebug(true);
+        config.setFrustumCulling(false);
+        config.setGuiRenderer(GL.rendererFactory.createDefaultGuiRenderer());
+        config.setSkyboxGameObject(skyboxGameObject);
+        config.setWorldGameObjects(dynamicMeshesWorld.getGameObjects());
         forwardRenderingPipeline.addAllGameObjectsToRender(); // Since we turned off frustum culling
 
         // Initialize GUI

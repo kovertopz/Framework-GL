@@ -304,6 +304,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
         public void setDefaultShader(AbstractShader defaultShader) {
             ForwardRenderingPipeline.this.defaultShader = defaultShader;
+            updateCurrentShader();
         }
 
         public AbstractShader getDefaultShaderWithShadows() {
@@ -312,6 +313,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
         public void setDefaultShaderWithShadows(AbstractShader defaultShaderWithShadows) {
             ForwardRenderingPipeline.this.defaultShaderWithShadows = defaultShaderWithShadows;
+            updateCurrentShader();
         }
 
         public Color getSkyboxColor() {
@@ -380,6 +382,14 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
         public void setRenderAabbs(boolean renderAabbs) {
             ForwardRenderingPipeline.this.renderAabbs = renderAabbs;
+        }
+
+        public boolean isRenderDebugRenderCallbacks() {
+            return renderDebugRenderCallbacks;
+        }
+
+        public void setRenderDebugRenderCallbacks(boolean renderDebugRenderCallbacks) {
+            ForwardRenderingPipeline.this.renderDebugRenderCallbacks = renderDebugRenderCallbacks;
         }
 
         public boolean isRenderViewFrustum() {
