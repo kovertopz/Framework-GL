@@ -13,8 +13,8 @@
 package net.smert.frameworkgl.opengl.renderable.vbo;
 
 import java.nio.ByteBuffer;
+import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.renderable.shared.MultipleBuffers;
-import org.lwjgl.BufferUtils;
 
 /**
  *
@@ -32,7 +32,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createColor(int bufferSize) {
         if ((color == null) || (color.capacity() < bufferSize)) {
-            color = BufferUtils.createByteBuffer(bufferSize);
+            color = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         color.clear();
     }
@@ -40,7 +40,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createInterleaved(int bufferSize) {
         if ((interleaved == null) || (interleaved.capacity() < bufferSize)) {
-            interleaved = BufferUtils.createByteBuffer(bufferSize);
+            interleaved = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         interleaved.clear();
     }
@@ -48,7 +48,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createNormal(int bufferSize) {
         if ((normal == null) || (normal.capacity() < bufferSize)) {
-            normal = BufferUtils.createByteBuffer(bufferSize);
+            normal = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         normal.clear();
     }
@@ -56,7 +56,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createTexCoord(int bufferSize) {
         if ((texCoord == null) || (texCoord.capacity() < bufferSize)) {
-            texCoord = BufferUtils.createByteBuffer(bufferSize);
+            texCoord = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         texCoord.clear();
     }
@@ -64,7 +64,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createVertex(int bufferSize) {
         if ((vertex == null) || (vertex.capacity() < bufferSize)) {
-            vertex = BufferUtils.createByteBuffer(bufferSize);
+            vertex = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         vertex.clear();
     }
@@ -72,7 +72,7 @@ public class ByteBuffers implements MultipleBuffers {
     @Override
     public void createVertexIndex(int bufferSize) {
         if ((vertexIndex == null) || (vertexIndex.capacity() < bufferSize)) {
-            vertexIndex = BufferUtils.createByteBuffer(bufferSize);
+            vertexIndex = GL.bufferHelper.createByteBuffer(bufferSize);
         }
         vertexIndex.clear();
     }
