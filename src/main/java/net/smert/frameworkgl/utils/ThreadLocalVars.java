@@ -12,10 +12,13 @@
  */
 package net.smert.frameworkgl.utils;
 
+import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.math.Transform4f;
+import net.smert.frameworkgl.math.Vector2f;
 import net.smert.frameworkgl.math.Vector3f;
+import net.smert.frameworkgl.math.Vector4f;
 
 /**
  *
@@ -27,12 +30,16 @@ public class ThreadLocalVars {
     private static final ThreadLocal<LocalStack> localStack;
 
     private boolean isUsed = false;
+    public final AABB aabb0 = new AABB();
+    public final AABB aabb1 = new AABB();
     public final Matrix3f m3f0 = new Matrix3f();
     public final Matrix3f m3f1 = new Matrix3f();
     public final Matrix4f m4f0 = new Matrix4f();
     public final Matrix4f m4f1 = new Matrix4f();
     public final Transform4f t0 = new Transform4f();
     public final Transform4f t1 = new Transform4f();
+    public final Vector2f v2f0 = new Vector2f();
+    public final Vector2f v2f1 = new Vector2f();
     public final Vector3f v3f0 = new Vector3f();
     public final Vector3f v3f1 = new Vector3f();
     public final Vector3f v3f2 = new Vector3f();
@@ -43,6 +50,8 @@ public class ThreadLocalVars {
     public final Vector3f v3f7 = new Vector3f();
     public final Vector3f v3f8 = new Vector3f();
     public final Vector3f v3f9 = new Vector3f();
+    public final Vector4f v4f0 = new Vector4f();
+    public final Vector4f v4f1 = new Vector4f();
 
     private ThreadLocalVars() {
     }
