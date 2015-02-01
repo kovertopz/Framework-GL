@@ -39,7 +39,7 @@ public class NarrowphaseDispatch {
     public NarrowphaseAlgorithm findAlgorithm(CollisionGameObject collisionGameObject0,
             CollisionGameObject collisionGameObject1) {
         int value0 = collisionGameObject0.getShapeType().ordinal();
-        int value1 = collisionGameObject0.getShapeType().ordinal();
+        int value1 = collisionGameObject1.getShapeType().ordinal();
         return doubleDispatch[value0][value1];
     }
 
