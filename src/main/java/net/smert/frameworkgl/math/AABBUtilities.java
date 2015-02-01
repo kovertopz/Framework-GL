@@ -39,16 +39,16 @@ public class AABBUtilities {
 
         // Temp vars from thread local storage
         ThreadLocalVars vars = ThreadLocalVars.Get();
-        Vector3f centerA = vars.v3f0;
-        Vector3f centerB = vars.v3f1;
+        Vector3f posA = vars.v3f0;
+        Vector3f posB = vars.v3f1;
 
-        // Calculate centers
-        centerA.set(aabb0.min).add(aabb0.max).multiply(.5f);
-        centerB.set(aabb1.min).add(aabb1.max).multiply(.5f);
+        // Calculate position
+        posA.set(aabb0.min).add(aabb0.max).multiply(.5f);
+        posB.set(aabb1.min).add(aabb1.max).multiply(.5f);
 
-        // Absolute vector between both centers
-        centerA.subtract(centerB).abs();
-        float dist = centerA.getX() + centerA.getY() + centerA.getZ();
+        // Absolute vector between both positions
+        posA.subtract(posB).abs();
+        float dist = posA.getX() + posA.getY() + posA.getZ();
 
         // Release vars instance
         vars.release();
@@ -79,21 +79,21 @@ public class AABBUtilities {
         // Temp vars from thread local storage
         ThreadLocalVars vars = ThreadLocalVars.Get();
         Matrix3f rotationAbsolute = vars.m3f0;
-        Vector3f localCenter = vars.v3f0;
-        Vector3f localExtent = vars.v3f1;
-        Vector3f worldCenter = vars.v3f2;
-        Vector3f worldExtent = vars.v3f3;
+        Vector3f localExtent = vars.v3f0;
+        Vector3f localPosition = vars.v3f1;
+        Vector3f worldExtent = vars.v3f2;
+        Vector3f worldPosition = vars.v3f3;
 
-        localCenter.set(localAabb.min).add(localAabb.max).multiply(.5f);
-        worldTransform.multiplyOut(localCenter, worldCenter);
+        localPosition.set(localAabb.min).add(localAabb.max).multiply(.5f);
+        worldTransform.multiplyOut(localPosition, worldPosition);
         localExtent.set(localAabb.max).subtract(localAabb.min).multiply(.5f);
         rotationAbsolute.set(worldTransform.getRotation()).absolute();
         worldExtent.set(
                 rotationAbsolute.dotRow(0, localExtent),
                 rotationAbsolute.dotRow(1, localExtent),
                 rotationAbsolute.dotRow(2, localExtent));
-        worldAabb.max.set(worldCenter).add(worldExtent);
-        worldAabb.min.set(worldCenter).subtract(worldExtent);
+        worldAabb.max.set(worldPosition).add(worldExtent);
+        worldAabb.min.set(worldPosition).subtract(worldExtent);
 
         // Release vars instance
         vars.release();
@@ -104,14 +104,14 @@ public class AABBUtilities {
         // Temp vars from thread local storage
         ThreadLocalVars vars = ThreadLocalVars.Get();
         Matrix3f rotationAbsolute = vars.m3f0;
-        Vector3f localCenter = vars.v3f0;
-        Vector3f localExtent = vars.v3f1;
+        Vector3f localExtent = vars.v3f0;
+        Vector3f localPosition = vars.v3f1;
         Vector3f margins = vars.v3f2;
-        Vector3f worldCenter = vars.v3f3;
-        Vector3f worldExtent = vars.v3f4;
+        Vector3f worldExtent = vars.v3f3;
+        Vector3f worldPosition = vars.v3f4;
 
-        localCenter.set(localAabb.min).add(localAabb.max).multiply(.5f);
-        worldTransform.multiplyOut(localCenter, worldCenter);
+        localPosition.set(localAabb.min).add(localAabb.max).multiply(.5f);
+        worldTransform.multiplyOut(localPosition, worldPosition);
         margins.set(margin, margin, margin);
         localExtent.set(localAabb.max).subtract(localAabb.min).multiply(.5f).add(margins);
         rotationAbsolute.set(worldTransform.getRotation()).absolute();
@@ -119,8 +119,8 @@ public class AABBUtilities {
                 rotationAbsolute.dotRow(0, localExtent),
                 rotationAbsolute.dotRow(1, localExtent),
                 rotationAbsolute.dotRow(2, localExtent));
-        worldAabb.max.set(worldCenter).add(worldExtent);
-        worldAabb.min.set(worldCenter).subtract(worldExtent);
+        worldAabb.max.set(worldPosition).add(worldExtent);
+        worldAabb.min.set(worldPosition).subtract(worldExtent);
 
         // Release vars instance
         vars.release();
