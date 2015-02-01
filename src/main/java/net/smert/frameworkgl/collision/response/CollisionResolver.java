@@ -102,8 +102,8 @@ public class CollisionResolver {
         for (Contact contact : contactsToFree) {
             CollisionGameObject collisionGameObject0 = contact.collisionGameObject0;
             CollisionGameObject collisionGameObject1 = contact.collisionGameObject1;
-            collisionGameObject0.collidedWith(collisionGameObject1);
-            collisionGameObject1.collidedWith(collisionGameObject0);
+            collisionGameObject0.collidedWith(collisionGameObject1, contact);
+            collisionGameObject1.collidedWith(collisionGameObject0, contact);
         }
 
         // Free all contacts

@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.collision;
 
 import net.smert.frameworkgl.collision.broadphase.BroadphaseProxy;
+import net.smert.frameworkgl.collision.narrowphase.Contact;
 import net.smert.frameworkgl.collision.shapes.ShapeType;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.math.MathHelper;
@@ -94,7 +95,7 @@ public class CollisionGameObject extends GameObject {
         this.canSleep = canSleep;
     }
 
-    public void collidedWith(CollisionGameObject other) {
+    public void collidedWith(CollisionGameObject other, Contact contact) {
     }
 
     public float getInverseMass() {
