@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.gameobjects;
 
 import net.smert.frameworkgl.math.AABB;
+import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Transform4f;
 import net.smert.frameworkgl.math.Vector3f;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
@@ -57,6 +58,15 @@ public class GameObject {
         this.renderable = renderable;
     }
 
+    public Matrix3f getWorldRotation() {
+        return worldTransform.getRotation();
+    }
+
+    public GameObject setWorldRotation(Vector3f axis, float angle) {
+        worldTransform.getRotation().fromAxisAngle(axis, angle);
+        return this;
+    }
+
     public Mesh getMesh() {
         return mesh;
     }
@@ -73,12 +83,22 @@ public class GameObject {
         return scalingTransform;
     }
 
-    public void setScalingTransform(Transform4f scalingTransform) {
+    public GameObject setScalingTransform(Transform4f scalingTransform) {
         this.scalingTransform = scalingTransform;
+        return this;
     }
 
     public Transform4f getWorldTransform() {
         return worldTransform;
+    }
+
+    public GameObject setWorldTransform(Transform4f worldTransform) {
+        this.worldTransform.set(worldTransform);
+        return this;
+    }
+
+    public Vector3f getWorldPosition() {
+        return worldTransform.getPosition();
     }
 
     public GameObject setWorldPosition(float x, float y, float z) {
@@ -88,16 +108,6 @@ public class GameObject {
 
     public GameObject setWorldPosition(Vector3f position) {
         worldTransform.setPosition(position);
-        return this;
-    }
-
-    public GameObject setWorldRotation(Vector3f axis, float angle) {
-        worldTransform.getRotation().fromAxisAngle(axis, angle);
-        return this;
-    }
-
-    public GameObject setWorldTransform(Transform4f worldTransform) {
-        this.worldTransform.set(worldTransform);
         return this;
     }
 

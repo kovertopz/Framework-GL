@@ -39,8 +39,10 @@ public class CollisionGameObject extends GameObject {
     private final Vector3f linearAcceleration;
     private final Vector3f linearForce;
     private final Vector3f linearVelocity;
+    private final Vector3f position;
 
     public CollisionGameObject() {
+        super();
         awake = true;
         canSleep = true;
         enabled = true;
@@ -54,6 +56,7 @@ public class CollisionGameObject extends GameObject {
         linearAcceleration = new Vector3f();
         linearForce = new Vector3f();
         linearVelocity = new Vector3f();
+        position = getWorldPosition(); // From game object
     }
 
     public void applyForce(Vector3f force) {
@@ -79,7 +82,6 @@ public class CollisionGameObject extends GameObject {
             return;
         }
 
-        Vector3f position = getWorldTransform().getPosition(); // From game object
         position.addScaled(delta, inverseMass);
         awake = true;
     }
@@ -204,7 +206,6 @@ public class CollisionGameObject extends GameObject {
 
         // Integrate
         linearVelocity.multiply(MathHelper.Pow(linearDamping, delta));
-        Vector3f position = getWorldTransform().getPosition(); // From game object
         position.addScaled(linearVelocity, delta);
         linearAcceleration.addScaled(linearForce, inverseMass);
         linearVelocity.addScaled(linearAcceleration, delta);
@@ -230,7 +231,6 @@ public class CollisionGameObject extends GameObject {
         linearAcceleration.addScaled(linearForce, inverseMass);
         linearVelocity.addScaled(linearAcceleration, delta);
         linearVelocity.multiply(MathHelper.Pow(linearDamping, delta));
-        Vector3f position = getWorldTransform().getPosition(); // From game object
         position.addScaled(linearVelocity, delta);
 
         // Restore
