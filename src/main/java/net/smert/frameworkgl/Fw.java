@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl;
 
+import net.smert.frameworkgl.collision.factory.CollisionFactory;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 
 /**
@@ -22,6 +23,7 @@ public class Fw {
 
     public static Application app;
     public static Audio audio;
+    public static CollisionFactory collisionFactory;
     public static Configuration config;
     public static Files files;
     public static GameObjectFactory gof;

@@ -40,14 +40,15 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
     private final StackInt stackOfIndexes;
     private final Vector3f margin;
 
-    public DynamicAABBTreeBroadphase() {
+    public DynamicAABBTreeBroadphase(OverlappingPairCache overlappingPairCache) {
+        this.overlappingPairCache = overlappingPairCache;
+
         displacementMultiplier = 2f;
         capacity = 16;
         free = 0;
         root = NULL;
         size = 0;
         proxies = new DynamicAABBTreeBroadphaseProxy[capacity];
-        overlappingPairCache = new HashedOverlappingPairCache();
         stackOfIndexes = new StackInt();
         margin = new Vector3f(.1f, .1f, .1f);
         createProxies(free);

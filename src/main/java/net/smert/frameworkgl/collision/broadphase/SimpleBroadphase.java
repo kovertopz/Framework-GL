@@ -35,12 +35,13 @@ public class SimpleBroadphase implements BroadphaseAlgorithm {
     private SimpleBroadphaseProxy[] proxies;
     private final Vector3f margin;
 
-    public SimpleBroadphase() {
+    public SimpleBroadphase(OverlappingPairCache overlappingPairCache) {
+        this.overlappingPairCache = overlappingPairCache;
+
         displacementMultiplier = 2f;
         capacity = 16;
         free = 0;
         size = 0;
-        overlappingPairCache = new HashedOverlappingPairCache();
         proxies = new SimpleBroadphaseProxy[capacity];
         margin = new Vector3f(.1f, .1f, .1f);
         createProxies(free);

@@ -14,6 +14,22 @@ package net.smert.frameworkgl;
 
 import java.io.IOException;
 import java.util.logging.SimpleFormatter;
+import net.smert.frameworkgl.collision.CollisionGameObject;
+import net.smert.frameworkgl.collision.CollisionWorld;
+import net.smert.frameworkgl.collision.broadphase.BroadphaseAlgorithm;
+import net.smert.frameworkgl.collision.broadphase.DefaultOverlappingPairFilterCallback;
+import net.smert.frameworkgl.collision.broadphase.DynamicAABBTreeBroadphase;
+import net.smert.frameworkgl.collision.broadphase.HashedOverlappingPairCache;
+import net.smert.frameworkgl.collision.broadphase.OverlappingPairCache;
+import net.smert.frameworkgl.collision.broadphase.OverlappingPairFilterCallback;
+import net.smert.frameworkgl.collision.broadphase.SimpleBroadphase;
+import net.smert.frameworkgl.collision.factory.CollisionFactory;
+import net.smert.frameworkgl.collision.narrowphase.DefaultNarrowphaseFilterCallback;
+import net.smert.frameworkgl.collision.narrowphase.NarrowphaseDispatch;
+import net.smert.frameworkgl.collision.narrowphase.NarrowphaseFilterCallback;
+import net.smert.frameworkgl.collision.response.CollisionResolver;
+import net.smert.frameworkgl.collision.response.CollisionResponseFilterCallback;
+import net.smert.frameworkgl.collision.response.DefaultCollisionResponseFilterCallback;
 import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.factory.GameObjectFactory;
 import net.smert.frameworkgl.helpers.KeyboardHelper;
@@ -181,6 +197,7 @@ public class BootStrap {
 
     protected MutablePicoContainer alFactoryContainer;
     protected MutablePicoContainer cameraFactoryContainer;
+    protected MutablePicoContainer collisionFactoryContainer;
     protected MutablePicoContainer gameObjectFactoryContainer;
     protected MutablePicoContainer displayListRenderCallFactoryContainer;
     protected MutablePicoContainer glFactoryContainer;
@@ -195,6 +212,27 @@ public class BootStrap {
     protected MutablePicoContainer vboDrawCallFactoryContainer;
 
     private void addContainersForFactories(MutablePicoContainer parentContainer) {
+
+        {
+            // Container for CollisionFactory
+            collisionFactoryContainer = new PicoBuilder(parentContainer)
+                    .withConstructorInjection().build(); // NO caching!
+
+            // Framework multiple instance components
+            collisionFactoryContainer.addComponent(CollisionGameObject.class);
+            collisionFactoryContainer.addComponent(CollisionResolver.class);
+            collisionFactoryContainer.addComponent(CollisionWorld.class);
+            collisionFactoryContainer.addComponent(CollisionResponseFilterCallback.class, DefaultCollisionResponseFilterCallback.class);
+            collisionFactoryContainer.addComponent(NarrowphaseFilterCallback.class, DefaultNarrowphaseFilterCallback.class);
+            collisionFactoryContainer.addComponent(OverlappingPairFilterCallback.class, DefaultOverlappingPairFilterCallback.class);
+            collisionFactoryContainer.addComponent(BroadphaseAlgorithm.class, DynamicAABBTreeBroadphase.class);
+            collisionFactoryContainer.addComponent(OverlappingPairCache.class, HashedOverlappingPairCache.class);
+            collisionFactoryContainer.addComponent(NarrowphaseDispatch.class);
+            collisionFactoryContainer.addComponent(SimpleBroadphase.class);
+
+            // Add container for CollisionFactory
+            parentContainer.addComponent("collisionFactoryContainer", collisionFactoryContainer);
+        }
 
         {
             // Container for GameObjectFactory
@@ -453,6 +491,9 @@ public class BootStrap {
         // Framework component dependencies
         container.addComponent(SimpleFormatter.class);
 
+        // Framework collision factory
+        container.as(Characteristics.USE_NAMES).addComponent(CollisionFactory.class);
+
         // Framework gameobject factory
         container.as(Characteristics.USE_NAMES).addComponent(GameObjectFactory.class);
 
@@ -599,6 +640,7 @@ public class BootStrap {
     protected void createStaticFramework(MutablePicoContainer container) {
         Fw.app = container.getComponent(Application.class);
         Fw.audio = container.getComponent(Audio.class);
+        Fw.collisionFactory = container.getComponent(CollisionFactory.class);
         Fw.config = container.getComponent(Configuration.class);
         Fw.files = container.getComponent(Files.class);
         Fw.gof = container.getComponent(GameObjectFactory.class);

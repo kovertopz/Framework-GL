@@ -29,10 +29,10 @@ public class NarrowphaseDispatch {
     private final NarrowphaseAlgorithm[][] doubleDispatch;
     private final NarrowphaseFilterCallback narrowphaseFilterCallback;
 
-    public NarrowphaseDispatch() {
+    public NarrowphaseDispatch(NarrowphaseFilterCallback narrowphaseFilterCallback) {
+        this.narrowphaseFilterCallback = narrowphaseFilterCallback;
         contactData = new ContactData();
         doubleDispatch = new NarrowphaseAlgorithm[ShapeType.MAX_SHAPE.ordinal()][ShapeType.MAX_SHAPE.ordinal()];
-        narrowphaseFilterCallback = new DefaultNarrowphaseFilterCallback();
         registerAlgorithm(new AABBAABBAlgorithm(), ShapeType.AABB, ShapeType.AABB);
     }
 

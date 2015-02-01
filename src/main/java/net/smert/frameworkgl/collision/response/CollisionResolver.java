@@ -26,8 +26,8 @@ public class CollisionResolver {
 
     private final CollisionResponseFilterCallback collisionResponseFilterCallback;
 
-    public CollisionResolver() {
-        collisionResponseFilterCallback = new DefaultCollisionResponseFilterCallback();
+    public CollisionResolver(CollisionResponseFilterCallback collisionResponseFilterCallback) {
+        this.collisionResponseFilterCallback = collisionResponseFilterCallback;
     }
 
     private void resolveCollision(Contact contact) {

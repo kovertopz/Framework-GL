@@ -17,7 +17,6 @@ import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.collision.broadphase.BroadphaseAlgorithm;
 import net.smert.frameworkgl.collision.broadphase.BroadphaseProxy;
-import net.smert.frameworkgl.collision.broadphase.DynamicAABBTreeBroadphase;
 import net.smert.frameworkgl.collision.narrowphase.NarrowphaseDispatch;
 import net.smert.frameworkgl.collision.response.CollisionResolver;
 import net.smert.frameworkgl.opengl.pipeline.AbstractRenderingPipeline.DebugRenderCallback;
@@ -33,11 +32,11 @@ public class CollisionWorld {
     private final List<CollisionGameObject> collisionGameObjects;
     private final NarrowphaseDispatch dispatch;
 
-    public CollisionWorld() {
-        broadphase = new DynamicAABBTreeBroadphase();
-        resolver = new CollisionResolver();
+    public CollisionWorld(BroadphaseAlgorithm broadphase, CollisionResolver resolver, NarrowphaseDispatch dispatch) {
+        this.broadphase = broadphase;
+        this.resolver = resolver;
+        this.dispatch = dispatch;
         collisionGameObjects = new ArrayList<>();
-        dispatch = new NarrowphaseDispatch();
     }
 
     public void addCollisionGameObject(CollisionGameObject collisionGameObject) {

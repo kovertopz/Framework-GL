@@ -35,13 +35,12 @@ public class CollisionGameObject extends GameObject {
     private int collisionGroup;
     private int collisionCollidesWith;
     private BroadphaseProxy broadphaseProxy;
-    private final ShapeType shapeType;
+    private ShapeType shapeType;
     private final Vector3f linearAcceleration;
     private final Vector3f linearForce;
     private final Vector3f linearVelocity;
 
-    public CollisionGameObject(ShapeType shapeType) {
-        this.shapeType = shapeType;
+    public CollisionGameObject() {
         awake = true;
         canSleep = true;
         enabled = true;
@@ -155,6 +154,10 @@ public class CollisionGameObject extends GameObject {
 
     public ShapeType getShapeType() {
         return shapeType;
+    }
+
+    public void initSetShapeType(ShapeType shapeType) {
+        this.shapeType = shapeType;
     }
 
     public Vector3f getLinearAcceleration() {

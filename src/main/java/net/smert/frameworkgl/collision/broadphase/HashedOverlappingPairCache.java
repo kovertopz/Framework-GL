@@ -25,9 +25,9 @@ public class HashedOverlappingPairCache implements OverlappingPairCache {
     private final HashMapIntGeneric<OverlappingPair> overlappingPairs;
     private final OverlappingPairFilterCallback overlappingPairFilterCallback;
 
-    public HashedOverlappingPairCache() {
+    public HashedOverlappingPairCache(OverlappingPairFilterCallback overlappingPairFilterCallback) {
+        this.overlappingPairFilterCallback = overlappingPairFilterCallback;
         overlappingPairs = new HashMapIntGeneric<>();
-        overlappingPairFilterCallback = new DefaultOverlappingPairFilterCallback();
     }
 
     private int getHashCode(BroadphaseProxy broadphaseProxy0, BroadphaseProxy broadphaseProxy1) {
