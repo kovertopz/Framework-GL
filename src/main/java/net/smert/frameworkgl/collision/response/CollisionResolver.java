@@ -12,6 +12,8 @@
  */
 package net.smert.frameworkgl.collision.response;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.smert.frameworkgl.collision.CollisionGameObject;
 import net.smert.frameworkgl.collision.narrowphase.Contact;
 import net.smert.frameworkgl.collision.narrowphase.ContactData;
@@ -25,9 +27,11 @@ import net.smert.frameworkgl.utils.ThreadLocalVars;
 public class CollisionResolver {
 
     private final CollisionResponseFilterCallback collisionResponseFilterCallback;
+    private final List<Contact> contactsToFree;
 
     public CollisionResolver(CollisionResponseFilterCallback collisionResponseFilterCallback) {
         this.collisionResponseFilterCallback = collisionResponseFilterCallback;
+        contactsToFree = new ArrayList<>();
     }
 
     private void resolveCollision(Contact contact) {
@@ -90,9 +94,25 @@ public class CollisionResolver {
                 resolveCollision(contact);
             }
 
-            // Free contact
+            // Save contact to list
+            contactsToFree.add(contact);
+        }
+
+        // Notify collision game objects that there was a collision
+        for (Contact contact : contactsToFree) {
+            CollisionGameObject collisionGameObject0 = contact.collisionGameObject0;
+            CollisionGameObject collisionGameObject1 = contact.collisionGameObject1;
+            collisionGameObject0.collidedWith(collisionGameObject1);
+            collisionGameObject1.collidedWith(collisionGameObject0);
+        }
+
+        // Free all contacts
+        for (Contact contact : contactsToFree) {
             contactData.freeContact(contact);
         }
+
+        // Clear list
+        contactsToFree.clear();
     }
 
 }

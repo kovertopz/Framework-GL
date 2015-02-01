@@ -94,6 +94,9 @@ public class CollisionGameObject extends GameObject {
         this.canSleep = canSleep;
     }
 
+    public void collidedWith(CollisionGameObject other) {
+    }
+
     public float getInverseMass() {
         return inverseMass;
     }

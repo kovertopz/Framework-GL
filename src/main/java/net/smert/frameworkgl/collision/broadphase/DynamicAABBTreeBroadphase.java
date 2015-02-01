@@ -776,6 +776,11 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
 
                 DynamicAABBTreeBroadphaseProxy proxyStack = proxies[indexStack];
 
+                // Skip self collisions
+                if (proxyStack == proxy) {
+                    continue;
+                }
+
                 // Test for intersection
                 if (AABBUtilities.DoesAabb0IntersectAabb1(proxyStack.aabb, proxy.aabb)) {
 
