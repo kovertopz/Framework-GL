@@ -484,7 +484,7 @@ public class Tessellator {
         private boolean hasTexCoordsToConvert;
         private int colorConversionCount;
         private int normalConversionCount;
-        private int primitiveMode;
+        private int primitiveMode; // Doesn't get reset
         private int texCoordConversionCount;
         private int vertexConversionCount;
         private final Color color;
@@ -511,6 +511,7 @@ public class Tessellator {
         private final Vector4f vertexConversion3;
 
         public ConversionState() {
+            primitiveMode = -1;
             color = new Color();
             colorConversion0 = new Color();
             colorConversion1 = new Color();
@@ -1036,7 +1037,6 @@ public class Tessellator {
             hasTexCoordsToConvert = false;
             colorConversionCount = 0;
             normalConversionCount = 0;
-            primitiveMode = -1;
             texCoordConversionCount = 0;
             vertexConversionCount = 0;
             color.setWhite();
