@@ -65,6 +65,10 @@ public class MathHelper {
         return (float) StrictMath.cos(radians);
     }
 
+    public static float Log(double a) {
+        return (float) StrictMath.log(a);
+    }
+
     public static float Pow(float a, float b) {
         return (float) StrictMath.pow(a, b);
     }
