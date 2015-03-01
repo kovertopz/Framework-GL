@@ -477,7 +477,7 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
         assert (indexParent < capacity);
         DynamicAABBTreeBroadphaseProxy proxyParent = proxies[indexParent];
         int indexGrandParent = proxyParent.parent;
-        assert (indexGrandParent >= 0);
+        assert (indexGrandParent >= NULL); // Grand parent could be the root
         assert (indexGrandParent < capacity);
 
         int indexSibling;
