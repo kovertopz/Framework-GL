@@ -59,6 +59,7 @@ public class ObjReader implements ModelReader {
     private final List<TexCoord> texCoords;
     private final List<Vertex> normals;
     private final List<Vertex> vertices;
+    private final Map<String, String> objectNameToMaterialName;
     private final MaterialReader materialReader;
     private String groupName;
     private String materialLibrary;
@@ -73,6 +74,7 @@ public class ObjReader implements ModelReader {
         texCoords = new ArrayList<>();
         normals = new ArrayList<>();
         vertices = new ArrayList<>();
+        objectNameToMaterialName = new HashMap<>();
         this.materialReader = materialReader;
         reset();
     }
@@ -88,7 +90,7 @@ public class ObjReader implements ModelReader {
     private void addFace(StringTokenizer tokenizer) {
 
         // Create a new Face
-        Face face = new Face(materialName);
+        Face face = new Face(objectName);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -150,32 +152,41 @@ public class ObjReader implements ModelReader {
         addNormalOrVertex(tokenizer, vertices);
     }
 
-    private SegmentMaterial convertMaterialToSegmentMaterial(Material material) {
-        int specularExponent = material.convertSpecularExponent();
-        Color ambient = material.getAmbient();
-        Color diffuse = material.getDiffuse();
-        Color specular = material.getSpecular();
+    private SegmentMaterial convertMaterialToSegmentMaterial(Material material, Map<Material, SegmentMaterial> materialToSegmentMaterial) {
 
-        SegmentMaterial segmentMaterial = GL.meshFactory.createSegmentMaterial();
+        // Get segment material from map if it exists
+        SegmentMaterial segmentMaterial = materialToSegmentMaterial.get(material);
+        if (segmentMaterial != null) {
+            return segmentMaterial;
+        }
+
+        // Create a new segment material and material light
+        segmentMaterial = GL.meshFactory.createSegmentMaterial();
         MaterialLight materialLight = GL.glFactory.createMaterialLight();
 
         // Lighting
+        Color ambient = material.getAmbient();
         if (ambient.hasBeenSet()) {
             materialLight.setAmbient(new Vector4f(ambient.getR(), ambient.getG(), ambient.getB(), 1f));
         }
+        Color diffuse = material.getDiffuse();
         if (diffuse.hasBeenSet()) {
             materialLight.setDiffuse(new Vector4f(diffuse.getR(), diffuse.getG(), diffuse.getB(), 1f));
         }
+        Color specular = material.getSpecular();
         if (specular.hasBeenSet()) {
             materialLight.setSpecular(new Vector4f(specular.getR(), specular.getG(), specular.getB(), 1f));
         }
+        int specularExponent = material.convertSpecularExponent();
         materialLight.setShininess(specularExponent);
 
-        // Save the material name and add the material to the pool
+        // Save the material light name and add the material light to the pool
         String materialLightName = "materialLight_" + materialLight.hashCode();
         segmentMaterial.setMaterialLightName(materialLightName);
         if (Renderable.materialLightPool.getUniqueID(materialLightName) == -1) {
             Renderable.materialLightPool.add(materialLightName, materialLight);
+        } else {
+            log.warn("Tried to add a duplicate material light to the pool: {}", materialLightName);
         }
 
         // Textures
@@ -197,6 +208,10 @@ public class ObjReader implements ModelReader {
             segmentMaterial.setTexture(TextureType.SPECULAR_EXPONENT, filename);
         }
 
+        // Save the created segment material to prevent duplication
+        SegmentMaterial previousEntry = materialToSegmentMaterial.put(material, segmentMaterial);
+        assert (previousEntry == null);
+
         return segmentMaterial;
     }
 
@@ -212,8 +227,7 @@ public class ObjReader implements ModelReader {
         config.setVertexSize(3);
 
         // Reset texture coordinate state
-        MeshConversion.hasThree = false;
-        MeshConversion.isLocked = false;
+        MeshConversion.reset();
 
         // Create a conversion state for each expected type
         Tessellator.ConversionState conversionStateQuads
@@ -223,15 +237,8 @@ public class ObjReader implements ModelReader {
         Tessellator.ConversionState conversionStateTriangles
                 = Tessellator.CreateConversionState(Primitives.TRIANGLES);
 
-        // Map materials to their names for easy lookup
-        List<Material> materials = materialReader.getMaterials();
-        Map<String, Material> materialNameToMaterial = new HashMap<>();
-        for (Material material : materials) {
-            materialNameToMaterial.put(material.getMaterialName(), material);
-        }
-
-        // Map one material to a tessellator
-        Map<String, Tessellator> materialNameToTessellator = new HashMap<>();
+        // Map one object name to a tessellator
+        Map<String, Tessellator> objectNameToTessellator = new HashMap<>();
 
         // Add each face to the correct tessellator
         for (Face face : faces) {
@@ -242,19 +249,17 @@ public class ObjReader implements ModelReader {
                 continue;
             }
 
-            // Get material and tessellator by the material name
-            Material material = materialNameToMaterial.get(face.getMaterialName()); // getMaterialName() is never null
-            String tessellatorKey = (material == null) ? null : face.getMaterialName();
-            // All faces which did not have a matching material get mapped to the NULL key
-            Tessellator tessellator = materialNameToTessellator.get(tessellatorKey);
+            // Get the tessellator for the object name
+            String faceObjectName = face.getObjectName();
+            Tessellator tessellator = objectNameToTessellator.get(faceObjectName);
 
-            // Create model data if it doesn't exist
+            // Create tessellator for the object name if it doesn't exist
             if (tessellator == null) {
                 tessellator = GL.meshFactory.createTessellator();
                 tessellator.setConfig(config);
                 tessellator.setConvertToTriangles(true); // Don't rely on defaults
                 tessellator.start(Primitives.TRIANGLES, true); // Force conversion
-                materialNameToTessellator.put(tessellatorKey, tessellator);
+                objectNameToTessellator.put(faceObjectName, tessellator);
             }
 
             // Face definitions for the same material can be made up of triangles, quads
@@ -338,15 +343,25 @@ public class ObjReader implements ModelReader {
             }
         }
 
+        // Map materials to their names for easy lookup
+        List<Material> materials = materialReader.getMaterials();
+        Map<String, Material> materialNameToMaterial = new HashMap<>();
+        for (Material material : materials) {
+            materialNameToMaterial.put(material.getMaterialName(), material);
+        }
+
+        // Map one material to a segment material
+        Map<Material, SegmentMaterial> materialToSegmentMaterial = new HashMap<>();
+
         // Check to see if a renderable configuration exists before adding it
         int renderableConfigID = Renderable.configPool.getOrAdd(config);
         mesh.setRenderableConfigID(renderableConfigID);
 
         // Add all the model data to the mesh
-        Iterator<Map.Entry<String, Tessellator>> tessellators = materialNameToTessellator.entrySet().iterator();
-        while (tessellators.hasNext()) {
-            Map.Entry<String, Tessellator> entry = tessellators.next();
-            String name = entry.getKey();
+        Iterator<Map.Entry<String, Tessellator>> iterator = objectNameToTessellator.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Tessellator> entry = iterator.next();
+            String objectName = entry.getKey();
             Tessellator tessellator = entry.getValue();
             assert (tessellator.getElementCount() > 0);
 
@@ -359,12 +374,13 @@ public class ObjReader implements ModelReader {
             }
 
             // Convert model data into a mesh segment
-            Segment segment = tessellator.createSegment(name);
+            Segment segment = tessellator.createSegment(objectName);
 
             // Convert the material if it exists
-            Material material = materialNameToMaterial.get(name);
+            String materialName = objectNameToMaterialName.get(objectName);
+            Material material = materialNameToMaterial.get(materialName);
             if (material != null) {
-                SegmentMaterial segmentMaterial = convertMaterialToSegmentMaterial(material);
+                SegmentMaterial segmentMaterial = convertMaterialToSegmentMaterial(material, materialToSegmentMaterial);
                 segment.setMaterial(segmentMaterial);
             }
 
@@ -472,6 +488,10 @@ public class ObjReader implements ModelReader {
                 // Blender replaces spaces with underscores. Material applies to face definitions.
                 // Ex: "usemtl Material_Name"
                 materialName = getNextTokenOnly(tokenizer);
+                String previousEntry = objectNameToMaterialName.put(objectName, materialName);
+                if (previousEntry != null) {
+                    log.warn("The material name '{}' for the object name '{}' was overwritten.", materialName, objectName);
+                }
                 break;
 
             case "v":
@@ -547,6 +567,7 @@ public class ObjReader implements ModelReader {
         texCoords.clear();
         normals.clear();
         vertices.clear();
+        objectNameToMaterialName.clear();
         groupName = "";
         materialLibrary = "";
         materialName = "";
@@ -580,14 +601,14 @@ public class ObjReader implements ModelReader {
         private final List<Integer> normalIndex;
         private final List<Integer> texIndex;
         private final List<Integer> vertexIndex;
-        private final String materialName;
+        private final String objectName;
 
-        private Face(String materialName) {
+        private Face(String objectName) {
             normalIndex = new ArrayList<>();
             texIndex = new ArrayList<>();
             vertexIndex = new ArrayList<>();
-            this.materialName = materialName;
-            assert (materialName != null);
+            this.objectName = objectName;
+            assert (objectName != null);
         }
 
         private void addIndex(List<Integer> indexes, String index) {
@@ -638,8 +659,8 @@ public class ObjReader implements ModelReader {
             return vertexIndex;
         }
 
-        public String getMaterialName() {
-            return materialName;
+        public String getObjectName() {
+            return objectName;
         }
 
         public boolean isQuad() {
@@ -668,8 +689,8 @@ public class ObjReader implements ModelReader {
 
     private static class MeshConversion {
 
-        public static boolean hasThree;
-        public static boolean isLocked;
+        private static boolean hasThree;
+        private static boolean isLocked;
 
         public static void addNormal(Tessellator.ConversionState conversionState, Vertex vertex) {
             conversionState.getNormal().set(vertex.getX(), vertex.getY(), vertex.getZ());
@@ -703,6 +724,11 @@ public class ObjReader implements ModelReader {
                     throw new RuntimeException("You cannot switch from 3 texture coords to 2");
                 }
             }
+        }
+
+        public static void reset() {
+            hasThree = false;
+            isLocked = false;
         }
 
     }
@@ -751,6 +777,11 @@ public class ObjReader implements ModelReader {
             }
         }
 
+        @Override
+        public String toString() {
+            return "(s: " + s + " t: " + t + " r: " + r + ")";
+        }
+
     }
 
     private static class Vertex {
@@ -787,6 +818,11 @@ public class ObjReader implements ModelReader {
             } else {
                 throw new IllegalArgumentException("Unknown index: " + index);
             }
+        }
+
+        @Override
+        public String toString() {
+            return "(x: " + x + " y: " + y + " z: " + z + ")";
         }
 
     }

@@ -23,7 +23,16 @@ import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
  */
 public class VBODrawElements extends AbstractRenderCall {
 
+    private int indexSize;
     private int indexType;
+
+    public int getIndexSize() {
+        return indexSize;
+    }
+
+    public void setIndexSize(int indexSize) {
+        this.indexSize = indexSize;
+    }
 
     public int getIndexType() {
         return indexType;
@@ -38,10 +47,11 @@ public class VBODrawElements extends AbstractRenderCall {
         for (int i = 0; i < segments.length; i++) {
             Segment segment = segments[i];
             int elementCount = segment.getElementCount();
+            int firstElement = segment.getMinIndex();
             int primitiveMode = segment.getPrimitiveMode();
             Renderable.textureBindState.bindTextures(segment);
             Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
-            GL.vboHelper.drawElements(primitiveMode, elementCount, indexType);
+            GL.vboHelper.drawElements(primitiveMode, elementCount, indexType, firstElement * indexSize);
         }
     }
 

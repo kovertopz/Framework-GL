@@ -114,6 +114,7 @@ public class Mesh {
     }
 
     public void setIndexes(int[] indexes) {
+        hasIndexes = (indexes != null);
         this.indexes = indexes;
     }
 

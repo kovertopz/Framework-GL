@@ -93,12 +93,12 @@ public class VertexBufferObjectHelper {
         GL11.glDrawArrays(mode, first, count);
     }
 
-    public void drawElements(int mode, int count, int type) {
-        GL11.glDrawElements(mode, count, type, 0);
+    public void drawElements(int mode, int count, int type, long byteOffset) {
+        GL11.glDrawElements(mode, count, type, byteOffset);
     }
 
-    public void drawRangeElements(int mode, int minIndex, int maxIndex, int count, int type) {
-        GL12.glDrawRangeElements(mode, minIndex, maxIndex, count, type, 0);
+    public void drawRangeElements(int mode, int minIndex, int maxIndex, int count, int type, long byteOffset) {
+        GL12.glDrawRangeElements(mode, minIndex, maxIndex, count, type, byteOffset);
     }
 
     public void enableColors() {

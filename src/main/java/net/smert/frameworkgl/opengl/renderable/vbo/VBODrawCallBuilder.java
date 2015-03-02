@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl.opengl.renderable.vbo;
 
+import net.smert.frameworkgl.opengl.constants.GLTypes;
 import net.smert.frameworkgl.opengl.mesh.Mesh;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
 import net.smert.frameworkgl.opengl.renderable.shared.AbstractRenderCall;
@@ -36,10 +37,27 @@ public class VBODrawCallBuilder extends AbstractRenderCallBuilder {
         AbstractRenderCall renderCall;
 
         if (mesh.hasIndexes()) {
+
+            // Determine the index size so the byte offset can be found during the draw call
+            int indexSize = 0;
+            switch (config.getIndexType()) {
+                case GLTypes.UNSIGNED_INT:
+                    indexSize = 4;
+                    break;
+
+                case GLTypes.UNSIGNED_SHORT:
+                    indexSize = 2;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown GL type constant for indexes: " + config.getIndexType());
+            }
+
             if (canRenderRanged) {
 
                 // Create concrete class and set specific data
                 VBODrawRangeElements drawRangedElements = vboDrawCallFactory.createDrawRangeElements();
+                drawRangedElements.setIndexSize(indexSize);
                 drawRangedElements.setIndexType(config.getIndexType());
 
                 // Make sure we set the abstract class
@@ -48,6 +66,7 @@ public class VBODrawCallBuilder extends AbstractRenderCallBuilder {
 
                 // Create concrete class and set specific data
                 VBODrawElements drawElements = vboDrawCallFactory.createDrawElements();
+                drawElements.setIndexSize(indexSize);
                 drawElements.setIndexType(config.getIndexType());
 
                 // Make sure we set the abstract class
