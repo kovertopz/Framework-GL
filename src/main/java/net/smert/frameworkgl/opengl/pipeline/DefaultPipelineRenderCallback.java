@@ -25,7 +25,7 @@ import net.smert.frameworkgl.opengl.camera.Camera;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DefaultRenderingPipelineRenderCallback implements PipelineRenderCallback {
+public class DefaultPipelineRenderCallback implements PipelineRenderCallback {
 
     private final List<PipelineRenderDebugCallback> pipelineRenderDebugCallbacks;
     private final List<GameObject> entityGameObjects;
@@ -35,7 +35,7 @@ public class DefaultRenderingPipelineRenderCallback implements PipelineRenderCal
     private final List<GameObject> worldGameObjects;
     private final List<GameObject> worldGameObjectsToRender;
 
-    public DefaultRenderingPipelineRenderCallback() {
+    public DefaultPipelineRenderCallback() {
         pipelineRenderDebugCallbacks = new ArrayList<>();
         entityGameObjects = new ArrayList<>();
         entityGameObjectsToRender = new ArrayList<>();
