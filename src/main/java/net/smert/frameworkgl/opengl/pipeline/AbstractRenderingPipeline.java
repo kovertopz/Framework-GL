@@ -109,7 +109,11 @@ public abstract class AbstractRenderingPipeline {
 
         public void addAllGameObjectsToRender();
 
+        public void addDebugRenderCallback(DebugRenderCallback debugRenderCallback);
+
         public void performFrustumCulling(Camera camera);
+
+        public void removeDebugRenderCallback(DebugRenderCallback debugRenderCallback);
 
         public void render();
 

@@ -32,6 +32,7 @@ import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.constants.GetString;
+import net.smert.frameworkgl.opengl.pipeline.DefaultRenderingPipelineRenderCallback;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
@@ -252,6 +253,10 @@ public class ForwardRenderingPipeline extends Screen {
         FrustumCullingClipSpaceSymmetrical frustumCulling = GL.cameraFactory.createFrustumCullingClipSpaceSymmetrical();
         camera.setFrustumCulling(frustumCulling);
 
+        // Create pipeline render callback
+        DefaultRenderingPipelineRenderCallback pipelineRenderCallback = new DefaultRenderingPipelineRenderCallback();
+        pipelineRenderCallback.setAllWorldGameObjects(dynamicMeshesWorld.getGameObjects());
+
         // Create pipeline
         forwardRenderingPipeline = GL.rpFactory.createForwardRenderingPipeline();
         net.smert.frameworkgl.opengl.pipeline.ForwardRenderingPipeline.Config config = forwardRenderingPipeline.getConfig();
@@ -260,7 +265,7 @@ public class ForwardRenderingPipeline extends Screen {
         config.setFrustumCulling(false);
         config.setGuiRenderer(GL.rendererFactory.createDefaultGuiRenderer());
         config.setSkyboxGameObject(skyboxGameObject);
-        config.setWorldGameObjects(dynamicMeshesWorld.getGameObjects());
+        config.setRenderCallback(pipelineRenderCallback);
         forwardRenderingPipeline.addAllGameObjectsToRender(); // Since we turned off frustum culling
 
         // Initialize GUI
