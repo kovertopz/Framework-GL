@@ -16,7 +16,7 @@ import net.smert.frameworkgl.collision.CollisionGameObject;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.pipeline.AbstractRenderingPipeline.DebugRenderCallback;
+import net.smert.frameworkgl.opengl.pipeline.PipelineRenderDebugCallback;
 import net.smert.frameworkgl.utils.ThreadLocalVars;
 
 /**
@@ -144,13 +144,13 @@ public class SimpleBroadphase implements BroadphaseAlgorithm {
     }
 
     @Override
-    public DebugRenderCallback getDebugRenderCallback() {
-        return null;
+    public OverlappingPairCache getOverlappingPairCache() {
+        return overlappingPairCache;
     }
 
     @Override
-    public OverlappingPairCache getOverlappingPairCache() {
-        return overlappingPairCache;
+    public PipelineRenderDebugCallback getPipelineRenderDebugCallback() {
+        return null;
     }
 
     @Override

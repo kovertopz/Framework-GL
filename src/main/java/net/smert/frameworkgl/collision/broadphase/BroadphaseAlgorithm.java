@@ -14,7 +14,7 @@ package net.smert.frameworkgl.collision.broadphase;
 
 import net.smert.frameworkgl.collision.CollisionGameObject;
 import net.smert.frameworkgl.math.AABB;
-import net.smert.frameworkgl.opengl.pipeline.AbstractRenderingPipeline.DebugRenderCallback;
+import net.smert.frameworkgl.opengl.pipeline.PipelineRenderDebugCallback;
 
 /**
  *
@@ -27,9 +27,9 @@ public interface BroadphaseAlgorithm {
 
     public void destroyDebugRender();
 
-    public DebugRenderCallback getDebugRenderCallback();
-
     public OverlappingPairCache getOverlappingPairCache();
+
+    public PipelineRenderDebugCallback getPipelineRenderDebugCallback();
 
     public boolean moveProxy(BroadphaseProxy broadphaseProxy, AABB worldAabb);
 

@@ -19,7 +19,7 @@ import net.smert.frameworkgl.collision.broadphase.BroadphaseAlgorithm;
 import net.smert.frameworkgl.collision.broadphase.BroadphaseProxy;
 import net.smert.frameworkgl.collision.narrowphase.NarrowphaseDispatch;
 import net.smert.frameworkgl.collision.response.CollisionResolver;
-import net.smert.frameworkgl.opengl.pipeline.AbstractRenderingPipeline.DebugRenderCallback;
+import net.smert.frameworkgl.opengl.pipeline.PipelineRenderDebugCallback;
 
 /**
  *
@@ -52,8 +52,8 @@ public class CollisionWorld {
         broadphase.destroyDebugRender();
     }
 
-    public DebugRenderCallback getBroadphaseDebugRenderCallback() {
-        return broadphase.getDebugRenderCallback();
+    public PipelineRenderDebugCallback getPipelineRenderDebugCallback() {
+        return broadphase.getPipelineRenderDebugCallback();
     }
 
     public void removeCollisionGameObject(CollisionGameObject collisionGameObject) {

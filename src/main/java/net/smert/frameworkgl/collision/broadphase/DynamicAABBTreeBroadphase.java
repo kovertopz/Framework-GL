@@ -18,7 +18,7 @@ import net.smert.frameworkgl.gameobjects.AABBGameObject;
 import net.smert.frameworkgl.math.AABB;
 import net.smert.frameworkgl.math.AABBUtilities;
 import net.smert.frameworkgl.math.Vector3f;
-import net.smert.frameworkgl.opengl.pipeline.AbstractRenderingPipeline.DebugRenderCallback;
+import net.smert.frameworkgl.opengl.pipeline.PipelineRenderDebugCallback;
 import net.smert.frameworkgl.utils.StackInt;
 import net.smert.frameworkgl.utils.ThreadLocalVars;
 
@@ -672,16 +672,16 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
     }
 
     @Override
-    public DebugRenderCallback getDebugRenderCallback() {
-        DebugRenderCallback callback = () -> {
-            Render.Render(this);
-        };
-        return callback;
+    public OverlappingPairCache getOverlappingPairCache() {
+        return overlappingPairCache;
     }
 
     @Override
-    public OverlappingPairCache getOverlappingPairCache() {
-        return overlappingPairCache;
+    public PipelineRenderDebugCallback getPipelineRenderDebugCallback() {
+        PipelineRenderDebugCallback callback = () -> {
+            Render.Render(this);
+        };
+        return callback;
     }
 
     @Override
