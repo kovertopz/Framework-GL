@@ -25,9 +25,9 @@ import net.smert.frameworkgl.opengl.camera.Camera;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class DefaultRenderingPipelineRenderCallback implements AbstractRenderingPipeline.RenderCallback {
+public class DefaultRenderingPipelineRenderCallback implements PipelineRenderCallback {
 
-    private final List<AbstractRenderingPipeline.DebugRenderCallback> debugRenderCallbacks;
+    private final List<PipelineRenderDebugCallback> pipelineRenderDebugCallbacks;
     private final List<GameObject> entityGameObjects;
     private final List<GameObject> entityGameObjectsToRender;
     private final List<GameObject> nonOpaqueGameObjects;
@@ -36,7 +36,7 @@ public class DefaultRenderingPipelineRenderCallback implements AbstractRendering
     private final List<GameObject> worldGameObjectsToRender;
 
     public DefaultRenderingPipelineRenderCallback() {
-        debugRenderCallbacks = new ArrayList<>();
+        pipelineRenderDebugCallbacks = new ArrayList<>();
         entityGameObjects = new ArrayList<>();
         entityGameObjectsToRender = new ArrayList<>();
         nonOpaqueGameObjects = new ArrayList<>();
@@ -101,6 +101,18 @@ public class DefaultRenderingPipelineRenderCallback implements AbstractRendering
         }
     }
 
+    public List<GameObject> getEntityGameObjects() {
+        return entityGameObjects;
+    }
+
+    public List<GameObject> getNonOpaqueGameObjects() {
+        return nonOpaqueGameObjects;
+    }
+
+    public List<GameObject> getWorldGameObjects() {
+        return worldGameObjects;
+    }
+
     public void removeEntityGameObject(GameObject entityGameObject) {
         this.entityGameObjects.remove(entityGameObject);
     }
@@ -157,8 +169,8 @@ public class DefaultRenderingPipelineRenderCallback implements AbstractRendering
     }
 
     @Override
-    public void addDebugRenderCallback(AbstractRenderingPipeline.DebugRenderCallback debugRenderCallback) {
-        debugRenderCallbacks.add(debugRenderCallback);
+    public void addPipelineRenderDebugCallback(PipelineRenderDebugCallback pipelineRenderDebugCallback) {
+        pipelineRenderDebugCallbacks.add(pipelineRenderDebugCallback);
     }
 
     @Override
@@ -172,8 +184,8 @@ public class DefaultRenderingPipelineRenderCallback implements AbstractRendering
     }
 
     @Override
-    public void removeDebugRenderCallback(AbstractRenderingPipeline.DebugRenderCallback debugRenderCallback) {
-        debugRenderCallbacks.remove(debugRenderCallback);
+    public void removePipelineRenderDebugCallback(PipelineRenderDebugCallback pipelineRenderDebugCallback) {
+        pipelineRenderDebugCallbacks.remove(pipelineRenderDebugCallback);
     }
 
     @Override
@@ -192,7 +204,7 @@ public class DefaultRenderingPipelineRenderCallback implements AbstractRendering
 
     @Override
     public void renderDebug() {
-        for (AbstractRenderingPipeline.DebugRenderCallback callback : debugRenderCallbacks) {
+        for (PipelineRenderDebugCallback callback : pipelineRenderDebugCallbacks) {
             callback.render();
         }
     }

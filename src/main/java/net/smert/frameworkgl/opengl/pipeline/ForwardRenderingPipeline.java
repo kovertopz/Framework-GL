@@ -30,7 +30,7 @@ import net.smert.frameworkgl.utils.Color;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
+public class ForwardRenderingPipeline extends AbstractRenderingPipeline implements AdvancedRenderingPipeline {
 
     private boolean renderAabbs;
     private boolean renderDebug;
@@ -45,7 +45,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     private final Config config;
     private DiffuseTextureShader diffuseTextureShader;
     private GuiRenderer guiRenderer;
-    private RenderCallback renderCallback;
+    private PipelineRenderCallback pipelineRenderCallback;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
     private SkyboxShader skyboxShader;
@@ -57,23 +57,28 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         reset();
     }
 
+    @Override
     public void addAllGameObjectsToRender() {
-        renderCallback.addAllGameObjectsToRender();
+        pipelineRenderCallback.addAllGameObjectsToRender();
     }
 
-    public Config getConfig() {
+    @Override
+    public AdvancedPipelineConfig getPipelineConfig() {
         return config;
     }
 
+    @Override
     public void performFrustumCulling() {
         camera.updatePlanes();
-        renderCallback.performFrustumCulling(camera);
+        pipelineRenderCallback.performFrustumCulling(camera);
     }
 
+    @Override
     public void updateAabbs() {
-        renderCallback.updateAabbs();
+        pipelineRenderCallback.updateAabbs();
     }
 
+    @Override
     public void updateCurrentShader() {
         if (shadowsEnabled) {
             currentDefaultShader = defaultShaderWithShadows;
@@ -82,6 +87,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         }
     }
 
+    @Override
     public void updateViewFrustumGameObjectWithCamera() {
         viewFrustumGameObject.getWorldTransform().getRotation().set(camera.getRotationMatrix());
         viewFrustumGameObject.setWorldPosition(camera.getPosition());
@@ -175,7 +181,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
         switchPolygonFillMode();
         Fw.graphics.switchShader(currentDefaultShader);
-        renderCallback.render();
+        pipelineRenderCallback.render();
         Fw.graphics.unbindShader();
 
         if (debug) {
@@ -188,19 +194,19 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
             // AABBs
             if (renderAabbs) {
-                renderCallback.renderAabbs(aabbGameObject);
+                pipelineRenderCallback.renderAabbs(aabbGameObject);
             }
 
             // Orientation axis
             if (renderSimpleOrientationAxis) {
                 GL.o1.disableDepthTest();
-                renderCallback.renderSimpleOrientationAxis(simpleOrientationAxisGameObject);
+                pipelineRenderCallback.renderSimpleOrientationAxis(simpleOrientationAxisGameObject);
                 GL.o1.enableDepthTest();
             }
 
             // Debug
             if (renderDebug) {
-                renderCallback.renderDebug();
+                pipelineRenderCallback.renderDebug();
             }
 
             Fw.graphics.unbindShader();
@@ -230,114 +236,141 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         skyboxColor.setWhite();
     }
 
-    public class Config extends AbstractRenderingPipeline.Config {
+    public class Config extends AbstractRenderingPipeline.Config implements AdvancedPipelineConfig {
 
+        @Override
         public AABBGameObject getAabbGameObject() {
             return aabbGameObject;
         }
 
+        @Override
         public void setAabbGameObject(AABBGameObject aabbGameObject) {
             ForwardRenderingPipeline.this.aabbGameObject = aabbGameObject;
         }
 
+        @Override
         public AbstractShader getDefaultShader() {
             return defaultShader;
         }
 
+        @Override
         public void setDefaultShader(AbstractShader defaultShader) {
             ForwardRenderingPipeline.this.defaultShader = defaultShader;
             updateCurrentShader();
         }
 
+        @Override
         public AbstractShader getDefaultShaderWithShadows() {
             return defaultShaderWithShadows;
         }
 
+        @Override
         public void setDefaultShaderWithShadows(AbstractShader defaultShaderWithShadows) {
             ForwardRenderingPipeline.this.defaultShaderWithShadows = defaultShaderWithShadows;
             updateCurrentShader();
         }
 
+        @Override
         public Color getSkyboxColor() {
             return skyboxColor;
         }
 
+        @Override
         public GuiRenderer getGuiRenderer() {
             return guiRenderer;
         }
 
+        @Override
         public void setGuiRenderer(GuiRenderer guiRenderer) {
             ForwardRenderingPipeline.this.guiRenderer = guiRenderer;
         }
 
-        public RenderCallback getRenderCallback() {
-            return renderCallback;
+        @Override
+        public PipelineRenderCallback getPipelineRenderCallback() {
+            return pipelineRenderCallback;
         }
 
-        public void setRenderCallback(RenderCallback renderCallback) {
-            ForwardRenderingPipeline.this.renderCallback = renderCallback;
+        @Override
+        public void setPipelineRenderCallback(PipelineRenderCallback renderCallback) {
+            ForwardRenderingPipeline.this.pipelineRenderCallback = renderCallback;
         }
 
+        @Override
         public SimpleOrientationAxisGameObject getSimpleOrientationAxisGameObject() {
             return simpleOrientationAxisGameObject;
         }
 
+        @Override
         public void setSimpleOrientationAxisGameObject(SimpleOrientationAxisGameObject simpleOrientationAxisGameObject) {
             ForwardRenderingPipeline.this.simpleOrientationAxisGameObject = simpleOrientationAxisGameObject;
         }
 
+        @Override
         public SkyboxGameObject getSkyboxGameObject() {
             return skyboxGameObject;
         }
 
+        @Override
         public void setSkyboxGameObject(SkyboxGameObject skyboxGameObject) {
             ForwardRenderingPipeline.this.skyboxGameObject = skyboxGameObject;
         }
 
+        @Override
         public ViewFrustumGameObject getViewFrustumGameObject() {
             return viewFrustumGameObject;
         }
 
+        @Override
         public void setViewFrustumGameObject(ViewFrustumGameObject viewFrustumGameObject) {
             ForwardRenderingPipeline.this.viewFrustumGameObject = viewFrustumGameObject;
         }
 
+        @Override
         public boolean isRenderAabbs() {
             return renderAabbs;
         }
 
+        @Override
         public void setRenderAabbs(boolean renderAabbs) {
             ForwardRenderingPipeline.this.renderAabbs = renderAabbs;
         }
 
+        @Override
         public boolean isRenderDebug() {
             return renderDebug;
         }
 
+        @Override
         public void setRenderDebug(boolean renderDebug) {
             ForwardRenderingPipeline.this.renderDebug = renderDebug;
         }
 
+        @Override
         public boolean isRenderSimpleOrientationAxis() {
             return renderSimpleOrientationAxis;
         }
 
+        @Override
         public void setRenderSimpleOrientationAxis(boolean renderSimpleOrientationAxis) {
             ForwardRenderingPipeline.this.renderSimpleOrientationAxis = renderSimpleOrientationAxis;
         }
 
+        @Override
         public boolean isRenderViewFrustum() {
             return renderViewFrustum;
         }
 
+        @Override
         public void setRenderViewFrustum(boolean renderViewFrustum) {
             ForwardRenderingPipeline.this.renderViewFrustum = renderViewFrustum;
         }
 
+        @Override
         public boolean isUpdateAabbs() {
             return updateAabbs;
         }
 
+        @Override
         public void setUpdateAabbs(boolean updateAabbs) {
             ForwardRenderingPipeline.this.updateAabbs = updateAabbs;
         }

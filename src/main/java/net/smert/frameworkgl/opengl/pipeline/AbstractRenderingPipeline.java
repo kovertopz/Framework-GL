@@ -13,8 +13,6 @@
 package net.smert.frameworkgl.opengl.pipeline;
 
 import java.io.IOException;
-import net.smert.frameworkgl.gameobjects.AABBGameObject;
-import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 
@@ -22,7 +20,7 @@ import net.smert.frameworkgl.opengl.camera.Camera;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public abstract class AbstractRenderingPipeline {
+public abstract class AbstractRenderingPipeline implements RenderingPipeline {
 
     protected boolean debug;
     protected boolean frustumCulling;
@@ -30,15 +28,19 @@ public abstract class AbstractRenderingPipeline {
     protected boolean wireframe;
     protected Camera camera;
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void init() throws IOException {
     }
 
+    @Override
     public void render() {
     }
 
+    @Override
     public void reset() {
         debug = false;
         frustumCulling = true;
@@ -46,6 +48,7 @@ public abstract class AbstractRenderingPipeline {
         wireframe = false;
     }
 
+    @Override
     public void switchPolygonFillMode() {
         if (wireframe) {
             GL.o1.setPolygonModeFrontAndBackLine();
@@ -55,75 +58,57 @@ public abstract class AbstractRenderingPipeline {
         }
     }
 
-    public class Config {
+    public class Config implements PipelineConfig {
 
-        public boolean isDebug() {
-            return debug;
-        }
-
-        public void setDebug(boolean debug) {
-            AbstractRenderingPipeline.this.debug = debug;
-        }
-
-        public boolean isFrustumCulling() {
-            return frustumCulling;
-        }
-
-        public void setFrustumCulling(boolean frustumCulling) {
-            AbstractRenderingPipeline.this.frustumCulling = frustumCulling;
-        }
-
-        public boolean isShadowsEnabled() {
-            return shadowsEnabled;
-        }
-
-        public void setShadowsEnabled(boolean shadowsEnabled) {
-            AbstractRenderingPipeline.this.shadowsEnabled = shadowsEnabled;
-        }
-
-        public boolean isWireframe() {
-            return wireframe;
-        }
-
-        public void setWireframe(boolean wireframe) {
-            AbstractRenderingPipeline.this.wireframe = wireframe;
-        }
-
+        @Override
         public Camera getCamera() {
             return AbstractRenderingPipeline.this.camera;
         }
 
+        @Override
         public void setCamera(Camera camera) {
             AbstractRenderingPipeline.this.camera = camera;
         }
 
-    }
+        @Override
+        public boolean isDebug() {
+            return debug;
+        }
 
-    public static interface DebugRenderCallback {
+        @Override
+        public void setDebug(boolean debug) {
+            AbstractRenderingPipeline.this.debug = debug;
+        }
 
-        public void render();
+        @Override
+        public boolean isFrustumCulling() {
+            return frustumCulling;
+        }
 
-    }
+        @Override
+        public void setFrustumCulling(boolean frustumCulling) {
+            AbstractRenderingPipeline.this.frustumCulling = frustumCulling;
+        }
 
-    public static interface RenderCallback {
+        @Override
+        public boolean isShadowsEnabled() {
+            return shadowsEnabled;
+        }
 
-        public void addAllGameObjectsToRender();
+        @Override
+        public void setShadowsEnabled(boolean shadowsEnabled) {
+            AbstractRenderingPipeline.this.shadowsEnabled = shadowsEnabled;
+        }
 
-        public void addDebugRenderCallback(DebugRenderCallback debugRenderCallback);
+        @Override
+        public boolean isWireframe() {
+            return wireframe;
+        }
 
-        public void performFrustumCulling(Camera camera);
-
-        public void removeDebugRenderCallback(DebugRenderCallback debugRenderCallback);
-
-        public void render();
-
-        public void renderAabbs(AABBGameObject aabbGameObject);
-
-        public void renderDebug();
-
-        public void renderSimpleOrientationAxis(SimpleOrientationAxisGameObject simpleOrientationAxisGameObject);
-
-        public void updateAabbs();
+        @Override
+        public void setWireframe(boolean wireframe) {
+            AbstractRenderingPipeline.this.wireframe = wireframe;
+        }
 
     }
 

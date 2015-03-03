@@ -27,6 +27,10 @@ public class Gui {
         initialized = false;
     }
 
+    public GuiScreen getGuiScreen() {
+        return guiScreen;
+    }
+
     public void init() {
         if (initialized) {
             return;
