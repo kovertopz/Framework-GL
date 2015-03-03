@@ -32,7 +32,8 @@ import net.smert.frameworkgl.opengl.camera.Camera;
 import net.smert.frameworkgl.opengl.camera.CameraController;
 import net.smert.frameworkgl.opengl.camera.FrustumCullingClipSpaceSymmetrical;
 import net.smert.frameworkgl.opengl.constants.GetString;
-import net.smert.frameworkgl.opengl.pipeline.DefaultRenderingPipelineRenderCallback;
+import net.smert.frameworkgl.opengl.pipeline.AdvancedPipelineConfig;
+import net.smert.frameworkgl.opengl.pipeline.DefaultPipelineRenderCallback;
 import net.smert.frameworkgl.opengl.shader.AbstractShader;
 import net.smert.frameworkgl.utils.FpsTimer;
 import net.smert.frameworkgl.utils.MemoryUsage;
@@ -67,23 +68,25 @@ public class ForwardRenderingPipeline extends Screen {
         if (Fw.input.isKeyDown(Keyboard.ESCAPE)) {
             Fw.app.stopRunning();
         }
+        AdvancedPipelineConfig config = forwardRenderingPipeline.getPipelineConfig();
         if (Fw.input.isKeyDown(Keyboard.F1) && !Fw.input.wasKeyDown(Keyboard.F1)) {
-            boolean not = !forwardRenderingPipeline.getConfig().isWireframe();
-            forwardRenderingPipeline.getConfig().setWireframe(not);
+            boolean not = !config.isWireframe();
+            config.setWireframe(not);
         }
         if (Fw.input.isKeyDown(Keyboard.B) && !Fw.input.wasKeyDown(Keyboard.B)) {
-            boolean not = !forwardRenderingPipeline.getConfig().isRenderAabbs();
-            forwardRenderingPipeline.getConfig().setRenderAabbs(not);
+            boolean not = !config.isRenderAabbs();
+            config.setRenderAabbs(not);
             if (not) {
                 forwardRenderingPipeline.updateAabbs(); // Update AABBs each time it is enabled
             }
         }
         if (Fw.input.isKeyDown(Keyboard.O) && !Fw.input.wasKeyDown(Keyboard.O)) {
-            boolean not = !forwardRenderingPipeline.getConfig().isRenderSimpleOrientationAxis();
-            forwardRenderingPipeline.getConfig().setRenderSimpleOrientationAxis(not);
+            boolean not = !config.isRenderSimpleOrientationAxis();
+            config.setRenderSimpleOrientationAxis(not);
         }
         if (Fw.input.isKeyDown(Keyboard.F)) {
-            forwardRenderingPipeline.getConfig().setRenderViewFrustum(true);
+            config.setRenderViewFrustum(true);
+            forwardRenderingPipeline.updateAabbs();
             forwardRenderingPipeline.performFrustumCulling();
             forwardRenderingPipeline.updateViewFrustumGameObjectWithCamera();
         }
@@ -179,7 +182,7 @@ public class ForwardRenderingPipeline extends Screen {
                 currentShader = diffuseAndSpecularHybridShaders.getVertexLitMultiPhongSpecularHybridShader();
                 break;
         }
-        forwardRenderingPipeline.getConfig().setDefaultShader(currentShader);
+        forwardRenderingPipeline.getPipelineConfig().setDefaultShader(currentShader);
     }
 
     @Override
@@ -254,18 +257,18 @@ public class ForwardRenderingPipeline extends Screen {
         camera.setFrustumCulling(frustumCulling);
 
         // Create pipeline render callback
-        DefaultRenderingPipelineRenderCallback pipelineRenderCallback = new DefaultRenderingPipelineRenderCallback();
+        DefaultPipelineRenderCallback pipelineRenderCallback = new DefaultPipelineRenderCallback();
         pipelineRenderCallback.setAllWorldGameObjects(dynamicMeshesWorld.getGameObjects());
 
         // Create pipeline
         forwardRenderingPipeline = GL.rpFactory.createForwardRenderingPipeline();
-        net.smert.frameworkgl.opengl.pipeline.ForwardRenderingPipeline.Config config = forwardRenderingPipeline.getConfig();
+        AdvancedPipelineConfig config = forwardRenderingPipeline.getPipelineConfig();
         config.setCamera(camera);
         config.setDebug(true);
         config.setFrustumCulling(false);
         config.setGuiRenderer(GL.rendererFactory.createDefaultGuiRenderer());
+        config.setPipelineRenderCallback(pipelineRenderCallback);
         config.setSkyboxGameObject(skyboxGameObject);
-        config.setRenderCallback(pipelineRenderCallback);
         forwardRenderingPipeline.addAllGameObjectsToRender(); // Since we turned off frustum culling
 
         // Initialize GUI
