@@ -210,7 +210,7 @@ public class Graphics implements GLRenderer {
         AwtFontRenderer awtFontRenderer = GL.rendererFactory.createAwtFontRenderer();
         awtFontRenderer.init(awtFont);
         setFontRenderer(awtFontRenderer);
-        switchOpenGLVersion(Fw.config.getOpenglMajorVersion()); // Switch to OpenGL version based on the Configuration
+        switchOpenGLVersion(1); // Switch to OpenGL 1.X
     }
 
     public void loadMesh(String filename, Mesh mesh) throws IOException {
