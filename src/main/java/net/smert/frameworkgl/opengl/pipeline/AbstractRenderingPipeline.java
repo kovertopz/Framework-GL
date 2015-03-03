@@ -13,8 +13,8 @@
 package net.smert.frameworkgl.opengl.pipeline;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import net.smert.frameworkgl.gameobjects.AABBGameObject;
+import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.camera.Camera;
 
@@ -29,24 +29,11 @@ public abstract class AbstractRenderingPipeline {
     protected boolean shadowsEnabled;
     protected boolean wireframe;
     protected Camera camera;
-    protected final List<DebugRenderCallback> debugRenderCallbacks;
-
-    public AbstractRenderingPipeline() {
-        debugRenderCallbacks = new ArrayList<>();
-    }
-
-    public void addDebugRenderCallback(DebugRenderCallback callback) {
-        debugRenderCallbacks.add(callback);
-    }
 
     public void destroy() {
     }
 
     public void init() throws IOException {
-    }
-
-    public void removeDebugRenderCallback(DebugRenderCallback callback) {
-        debugRenderCallbacks.remove(callback);
     }
 
     public void render() {
@@ -115,6 +102,24 @@ public abstract class AbstractRenderingPipeline {
     public static interface DebugRenderCallback {
 
         public void render();
+
+    }
+
+    public static interface RenderCallback {
+
+        public void addAllGameObjectsToRender();
+
+        public void performFrustumCulling(Camera camera);
+
+        public void render();
+
+        public void renderAabbs(AABBGameObject aabbGameObject);
+
+        public void renderDebug();
+
+        public void renderSimpleOrientationAxis(SimpleOrientationAxisGameObject simpleOrientationAxisGameObject);
+
+        public void updateAabbs();
 
     }
 

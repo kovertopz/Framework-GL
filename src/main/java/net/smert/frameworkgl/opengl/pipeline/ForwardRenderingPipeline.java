@@ -13,11 +13,8 @@
 package net.smert.frameworkgl.opengl.pipeline;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.gameobjects.AABBGameObject;
-import net.smert.frameworkgl.gameobjects.GameObject;
 import net.smert.frameworkgl.gameobjects.SimpleOrientationAxisGameObject;
 import net.smert.frameworkgl.gameobjects.SkyboxGameObject;
 import net.smert.frameworkgl.gameobjects.ViewFrustumGameObject;
@@ -36,9 +33,10 @@ import net.smert.frameworkgl.utils.Color;
 public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
     private boolean renderAabbs;
-    private boolean renderDebugRenderCallbacks;
-    private boolean renderViewFrustum;
+    private boolean renderDebug;
     private boolean renderSimpleOrientationAxis;
+    private boolean renderViewFrustum;
+    private boolean updateAabbs;
     private AABBGameObject aabbGameObject;
     private AbstractShader currentDefaultShader;
     private AbstractShader defaultShader;
@@ -47,12 +45,7 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     private final Config config;
     private DiffuseTextureShader diffuseTextureShader;
     private GuiRenderer guiRenderer;
-    private List<GameObject> entityGameObjects;
-    private final List<GameObject> entityGameObjectsToRender;
-    private List<GameObject> nonOpaqueGameObjects;
-    private final List<GameObject> nonOpaqueGameObjectsToRender;
-    private List<GameObject> worldGameObjects;
-    private final List<GameObject> worldGameObjectsToRender;
+    private RenderCallback renderCallback;
     private SimpleOrientationAxisGameObject simpleOrientationAxisGameObject;
     private SkyboxGameObject skyboxGameObject;
     private SkyboxShader skyboxShader;
@@ -61,48 +54,11 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     public ForwardRenderingPipeline() {
         skyboxColor = new Color();
         config = new Config();
-        entityGameObjects = new ArrayList<>();
-        entityGameObjectsToRender = new ArrayList<>();
-        nonOpaqueGameObjects = new ArrayList<>();
-        nonOpaqueGameObjectsToRender = new ArrayList<>();
-        worldGameObjects = new ArrayList<>();
-        worldGameObjectsToRender = new ArrayList<>();
         reset();
     }
 
-    protected void renderAabbs(List<GameObject> gameObjects) {
-        for (GameObject gameObject : gameObjects) {
-            AABB worldAabb = gameObject.getWorldAabb();
-            // Updating AABBs this way is costly
-            aabbGameObject.update(worldAabb);
-            // AABB is already in world coordinates so we don't translate
-            Fw.graphics.render(aabbGameObject.getRenderable(), 0f, 0f, 0f);
-        }
-    }
-
-    protected void renderSimpleOrientationAxis(List<GameObject> gameObjects) {
-        for (GameObject gameObject : gameObjects) {
-            simpleOrientationAxisGameObject.setWorldTransform(gameObject.getWorldTransform());
-            Fw.graphics.render(simpleOrientationAxisGameObject);
-        }
-    }
-
-    protected void updateGameObjectsToRender(List<GameObject> gameObjectsToRender, List<GameObject> gameObjects) {
-        gameObjectsToRender.clear();
-        for (GameObject gameObject : gameObjects) {
-            if (gameObject.getRenderableState().isInFrustum()) {
-                gameObjectsToRender.add(gameObject);
-            }
-        }
-    }
-
     public void addAllGameObjectsToRender() {
-        worldGameObjectsToRender.clear();
-        entityGameObjectsToRender.clear();
-        nonOpaqueGameObjectsToRender.clear();
-        worldGameObjectsToRender.addAll(worldGameObjects);
-        entityGameObjectsToRender.addAll(entityGameObjects);
-        nonOpaqueGameObjectsToRender.addAll(nonOpaqueGameObjects);
+        renderCallback.addAllGameObjectsToRender();
     }
 
     public Config getConfig() {
@@ -111,21 +67,11 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
     public void performFrustumCulling() {
         camera.updatePlanes();
-        Fw.graphics.updateAabb(worldGameObjects);
-        Fw.graphics.updateAabb(entityGameObjects);
-        Fw.graphics.updateAabb(nonOpaqueGameObjects);
-        Fw.graphics.performCulling(camera, worldGameObjects);
-        Fw.graphics.performCulling(camera, entityGameObjects);
-        Fw.graphics.performCulling(camera, nonOpaqueGameObjects);
-        updateGameObjectsToRender(worldGameObjectsToRender, worldGameObjects);
-        updateGameObjectsToRender(entityGameObjectsToRender, entityGameObjects);
-        updateGameObjectsToRender(nonOpaqueGameObjectsToRender, nonOpaqueGameObjects);
+        renderCallback.performFrustumCulling(camera);
     }
 
     public void updateAabbs() {
-        Fw.graphics.updateAabb(worldGameObjects);
-        Fw.graphics.updateAabb(entityGameObjects);
-        Fw.graphics.updateAabb(nonOpaqueGameObjects);
+        renderCallback.updateAabbs();
     }
 
     public void updateCurrentShader() {
@@ -203,6 +149,11 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         // Update camera
         Fw.graphics.setCamera(camera);
 
+        // Update AABBs
+        if (updateAabbs) {
+            updateAabbs();
+        }
+
         // Frustum culling
         if (frustumCulling) {
             performFrustumCulling();
@@ -220,14 +171,11 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
         Fw.graphics.unbindShader();
 
         if (shadowsEnabled) {
-
         }
 
         switchPolygonFillMode();
         Fw.graphics.switchShader(currentDefaultShader);
-        Fw.graphics.render(worldGameObjectsToRender);
-        Fw.graphics.render(entityGameObjectsToRender);
-        Fw.graphics.renderBlend(nonOpaqueGameObjectsToRender);
+        renderCallback.render();
         Fw.graphics.unbindShader();
 
         if (debug) {
@@ -240,25 +188,19 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
 
             // AABBs
             if (renderAabbs) {
-                renderAabbs(worldGameObjectsToRender);
-                renderAabbs(entityGameObjectsToRender);
-                renderAabbs(nonOpaqueGameObjectsToRender);
+                renderCallback.renderAabbs(aabbGameObject);
             }
 
             // Orientation axis
             if (renderSimpleOrientationAxis) {
                 GL.o1.disableDepthTest();
-                renderSimpleOrientationAxis(worldGameObjectsToRender);
-                renderSimpleOrientationAxis(entityGameObjectsToRender);
-                renderSimpleOrientationAxis(nonOpaqueGameObjectsToRender);
+                renderCallback.renderSimpleOrientationAxis(simpleOrientationAxisGameObject);
                 GL.o1.enableDepthTest();
             }
 
-            // Debug render callbacks
-            if (renderDebugRenderCallbacks) {
-                for (DebugRenderCallback callback : debugRenderCallbacks) {
-                    callback.render();
-                }
+            // Debug
+            if (renderDebug) {
+                renderCallback.renderDebug();
             }
 
             Fw.graphics.unbindShader();
@@ -281,10 +223,10 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
     public final void reset() {
         super.reset();
         renderAabbs = false;
+        renderDebug = false;
         renderSimpleOrientationAxis = false;
         renderViewFrustum = false;
-        shadowsEnabled = false;
-        wireframe = false;
+        updateAabbs = true;
         skyboxColor.setWhite();
     }
 
@@ -328,28 +270,12 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
             ForwardRenderingPipeline.this.guiRenderer = guiRenderer;
         }
 
-        public List<GameObject> getEntityGameObjects() {
-            return entityGameObjects;
+        public RenderCallback getRenderCallback() {
+            return renderCallback;
         }
 
-        public void setEntityGameObjects(List<GameObject> entityGameObjects) {
-            ForwardRenderingPipeline.this.entityGameObjects = entityGameObjects;
-        }
-
-        public List<GameObject> getNonOpaqueGameObjects() {
-            return nonOpaqueGameObjects;
-        }
-
-        public void setNonOpaqueGameObjects(List<GameObject> nonOpaqueGameObjects) {
-            ForwardRenderingPipeline.this.nonOpaqueGameObjects = nonOpaqueGameObjects;
-        }
-
-        public List<GameObject> getWorldGameObjects() {
-            return worldGameObjects;
-        }
-
-        public void setWorldGameObjects(List<GameObject> worldGameObjects) {
-            ForwardRenderingPipeline.this.worldGameObjects = worldGameObjects;
+        public void setRenderCallback(RenderCallback renderCallback) {
+            ForwardRenderingPipeline.this.renderCallback = renderCallback;
         }
 
         public SimpleOrientationAxisGameObject getSimpleOrientationAxisGameObject() {
@@ -384,12 +310,20 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
             ForwardRenderingPipeline.this.renderAabbs = renderAabbs;
         }
 
-        public boolean isRenderDebugRenderCallbacks() {
-            return renderDebugRenderCallbacks;
+        public boolean isRenderDebug() {
+            return renderDebug;
         }
 
-        public void setRenderDebugRenderCallbacks(boolean renderDebugRenderCallbacks) {
-            ForwardRenderingPipeline.this.renderDebugRenderCallbacks = renderDebugRenderCallbacks;
+        public void setRenderDebug(boolean renderDebug) {
+            ForwardRenderingPipeline.this.renderDebug = renderDebug;
+        }
+
+        public boolean isRenderSimpleOrientationAxis() {
+            return renderSimpleOrientationAxis;
+        }
+
+        public void setRenderSimpleOrientationAxis(boolean renderSimpleOrientationAxis) {
+            ForwardRenderingPipeline.this.renderSimpleOrientationAxis = renderSimpleOrientationAxis;
         }
 
         public boolean isRenderViewFrustum() {
@@ -400,12 +334,12 @@ public class ForwardRenderingPipeline extends AbstractRenderingPipeline {
             ForwardRenderingPipeline.this.renderViewFrustum = renderViewFrustum;
         }
 
-        public boolean isRenderSimpleOrientationAxis() {
-            return renderSimpleOrientationAxis;
+        public boolean isUpdateAabbs() {
+            return updateAabbs;
         }
 
-        public void setRenderSimpleOrientationAxis(boolean renderSimpleOrientationAxis) {
-            ForwardRenderingPipeline.this.renderSimpleOrientationAxis = renderSimpleOrientationAxis;
+        public void setUpdateAabbs(boolean updateAabbs) {
+            ForwardRenderingPipeline.this.updateAabbs = updateAabbs;
         }
 
         @Override
