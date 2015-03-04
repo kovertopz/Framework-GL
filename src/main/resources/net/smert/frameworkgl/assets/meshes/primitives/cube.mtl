@@ -1,11 +1,10 @@
-# Blender MTL File: 'None'
+# Blender MTL File
 # Material Count: 1
 
-newmtl Material
+newmtl None
 Ns 0
-Ka 0.0 0.0 0.0
+Ka 1.0 1.0 1.0
 Kd 0.8 0.8 0.8
-Ks 0.0 0.0 0.0
-Ni 1.000000
-d 1.000000
+Ks 0.3 0.3 0.3
+d 1
 illum 2
