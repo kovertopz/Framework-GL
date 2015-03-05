@@ -151,6 +151,10 @@ public class KeyboardHelper {
         org.lwjgl.input.Keyboard.destroy();
     }
 
+    public int getKeyboardSize() {
+        return KEYBOARD_SIZE;
+    }
+
     public List<KeyboardEvent> getKeyboardEvents() {
         return keyboardEvents;
     }

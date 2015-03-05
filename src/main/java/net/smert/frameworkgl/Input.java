@@ -92,6 +92,10 @@ public class Input {
         return mouseHelper.getButtonCount();
     }
 
+    public int getKeyboardSize() {
+        return keyboardHelper.getKeyboardSize();
+    }
+
     public int getMouseX() {
         return mouseHelper.getMouseX();
     }
@@ -110,18 +114,6 @@ public class Input {
 
     public List<MouseHelper.MouseEvent> getMouseEvents() {
         return mouseHelper.getMouseEvents();
-    }
-
-    public boolean isGrabbed() {
-        return mouseHelper.isGrabbed();
-    }
-
-    /**
-     * This method must be called before Input is used.
-     */
-    public void init() {
-        keyboardHelper.init();
-        mouseHelper.init();
     }
 
     /**
@@ -162,6 +154,10 @@ public class Input {
         return mouseHelper.isButtonDown(mouse);
     }
 
+    public boolean isGrabbed() {
+        return mouseHelper.isGrabbed();
+    }
+
     /**
      * Check to see if the keyboard alt key is down.
      *
@@ -178,6 +174,16 @@ public class Input {
      */
     public boolean isKeyControlDown() {
         return keyboardHelper.isKeyDown(Keyboard.LCONTROL) || keyboardHelper.isKeyDown(Keyboard.RCONTROL);
+    }
+
+    /**
+     * Check to see if the keyboard key is down.
+     *
+     * @param key
+     * @return
+     */
+    public boolean isKeyDown(int key) {
+        return keyboardHelper.isKeyDown(key);
     }
 
     /**
@@ -206,6 +212,14 @@ public class Input {
      */
     public boolean isKeyShiftDown() {
         return keyboardHelper.isKeyDown(Keyboard.LSHIFT) || keyboardHelper.isKeyDown(Keyboard.RSHIFT);
+    }
+
+    /**
+     * This method must be called before Input is used.
+     */
+    public void init() {
+        keyboardHelper.init();
+        mouseHelper.init();
     }
 
     public void releaseMouseCursor() {
@@ -362,6 +376,16 @@ public class Input {
      */
     public boolean wasKeyControlDown() {
         return keyboardHelper.wasKeyDown(Keyboard.LCONTROL) || keyboardHelper.wasKeyDown(Keyboard.RCONTROL);
+    }
+
+    /**
+     * Was the key on the keyboard down in the last frame?
+     *
+     * @param key
+     * @return
+     */
+    public boolean wasKeyDown(int key) {
+        return keyboardHelper.wasKeyDown(key);
     }
 
     /**
