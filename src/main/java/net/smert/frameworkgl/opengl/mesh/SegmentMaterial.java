@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl.mesh;
 import java.util.HashMap;
 import java.util.Map;
 import net.smert.frameworkgl.opengl.TextureType;
+import net.smert.frameworkgl.utils.Color;
 
 /**
  *
@@ -22,12 +23,22 @@ import net.smert.frameworkgl.opengl.TextureType;
  */
 public class SegmentMaterial {
 
+    private final Color color;
     private final Map<TextureType, String> textureTypeToFilename;
     private String materialLightName;
 
     public SegmentMaterial() {
+        color = new Color();
         textureTypeToFilename = new HashMap<>();
         materialLightName = "default";
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Map<TextureType, String> getTextures() {
+        return textureTypeToFilename;
     }
 
     public String getMaterialLightName() {
@@ -44,10 +55,6 @@ public class SegmentMaterial {
 
     public String setTexture(TextureType textureType, String filename) {
         return textureTypeToFilename.put(textureType, filename);
-    }
-
-    public Map<TextureType, String> getTextures() {
-        return textureTypeToFilename;
     }
 
 }

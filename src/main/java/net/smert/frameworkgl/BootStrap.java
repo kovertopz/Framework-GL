@@ -154,6 +154,7 @@ import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRender
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.factory.ImmediateModeRenderCallFactory;
 import net.smert.frameworkgl.opengl.renderable.shared.BindState;
+import net.smert.frameworkgl.opengl.renderable.shared.ColorState;
 import net.smert.frameworkgl.opengl.renderable.shared.MaterialLightPool;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableConfigurationPool;
@@ -595,6 +596,7 @@ public class BootStrap {
 
         // Renderable shared
         container.addComponent(BindState.class);
+        container.addComponent(ColorState.class);
         container.addComponent(MaterialLightPool.class);
         container.addComponent(RenderableBuilder.class);
         container.addComponent(RenderableConfigurationPool.class);
@@ -703,6 +705,7 @@ public class BootStrap {
     protected void createStaticRenderable(MutablePicoContainer container) {
         Renderable.bindState = container.getComponent(BindState.class);
         Renderable.byteBuffers = container.getComponent(ByteBuffers.class);
+        Renderable.colorState = container.getComponent(ColorState.class);
         Renderable.configPool = container.getComponent(RenderableConfigurationPool.class);
         Renderable.displayListRenderCallBuilder = container.getComponent(DisplayListRenderCallBuilder.class);
         Renderable.drawCommandsConversion = container.getComponent(DrawCommandsConversion.class);

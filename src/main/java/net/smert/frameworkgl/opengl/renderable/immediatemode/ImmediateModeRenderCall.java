@@ -38,6 +38,7 @@ public class ImmediateModeRenderCall extends AbstractRenderCall {
     public void render() {
         for (int i = 0; i < segments.length; i++) {
             Segment segment = segments[i];
+            Renderable.colorState.changeColor(segment);
             Renderable.textureBindState.bindTextures(segment);
             Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
             DrawCommands drawCommand = segment.getDrawCommands();

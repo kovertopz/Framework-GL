@@ -51,6 +51,7 @@ public class VBODrawRangeElements extends AbstractRenderCall {
             int maxIndex = segment.getMaxIndex();
             int minIndex = segment.getMinIndex();
             int primitiveMode = segment.getPrimitiveMode();
+            Renderable.colorState.changeColor(segment);
             Renderable.textureBindState.bindTextures(segment);
             Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
             GL.vboHelper.drawRangeElements(primitiveMode, minIndex, maxIndex, elementCount, indexType, firstElement * indexSize);

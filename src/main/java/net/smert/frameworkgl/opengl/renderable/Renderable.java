@@ -15,6 +15,7 @@ package net.smert.frameworkgl.opengl.renderable;
 import net.smert.frameworkgl.opengl.renderable.displaylist.DisplayListRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.immediatemode.ImmediateModeRenderCallBuilder;
 import net.smert.frameworkgl.opengl.renderable.shared.BindState;
+import net.smert.frameworkgl.opengl.renderable.shared.ColorState;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
 import net.smert.frameworkgl.opengl.renderable.shared.MaterialLightPool;
 import net.smert.frameworkgl.opengl.renderable.shared.RenderableBuilder;
@@ -36,6 +37,7 @@ public class Renderable {
 
     public static BindState bindState;
     public static ByteBuffers byteBuffers;
+    public static ColorState colorState;
     public static DisplayListRenderCallBuilder displayListRenderCallBuilder;
     public static DrawCommands drawCommandsConversion;
     public static ImmediateModeRenderCallBuilder immediateModeRenderCallBuilder;

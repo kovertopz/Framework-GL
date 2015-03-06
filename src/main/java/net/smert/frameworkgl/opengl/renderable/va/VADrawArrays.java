@@ -30,6 +30,7 @@ public class VADrawArrays extends AbstractRenderCall {
             int elementCount = segment.getElementCount();
             int firstElement = segment.getMinIndex();
             int primitiveMode = segment.getPrimitiveMode();
+            Renderable.colorState.changeColor(segment);
             Renderable.textureBindState.bindTextures(segment);
             Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
             GL.vaHelper.drawArrays(primitiveMode, firstElement, elementCount);
