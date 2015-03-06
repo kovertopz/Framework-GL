@@ -111,7 +111,7 @@ public class HashMapIntGeneric<V> {
         int hash = hash(key);
         int i = indexFor(hash, table.length);
         for (Entry<V> e = table[i]; e != null; e = e.next) {
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 return e;
             }
         }
@@ -178,7 +178,7 @@ public class HashMapIntGeneric<V> {
 
         while (e != null) {
             Entry<V> next = e.next;
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 modCount++;
                 size--;
                 if (prev == e) {
@@ -208,7 +208,7 @@ public class HashMapIntGeneric<V> {
 
         while (e != null) {
             Entry<V> next = e.next;
-            if (e.hash == hash && e.equals(entry)) {
+            if ((e.hash == hash) && e.equals(entry)) {
                 modCount++;
                 size--;
                 if (prev == e) {
@@ -289,7 +289,7 @@ public class HashMapIntGeneric<V> {
         int hash = hash(key);
         int i = indexFor(hash, table.length);
         for (Entry<V> e = table[i]; e != null; e = e.next) {
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 V oldValue = e.value;
                 e.value = value;
                 return oldValue;
@@ -396,7 +396,7 @@ public class HashMapIntGeneric<V> {
             }
             Entry<V> e = (Entry<V>) o;
             Entry<V> candidate = getEntry(e.getKey());
-            return candidate != null && candidate.equals(e);
+            return ((candidate != null) && candidate.equals(e));
         }
 
         @Override
@@ -429,7 +429,7 @@ public class HashMapIntGeneric<V> {
         public HashIterator() {
             expectedModCount = modCount;
             if (size > 0) {
-                while (index < table.length && (next = table[index++]) == null);
+                while ((index < table.length) && ((next = table[index++]) == null));
             }
         }
 
@@ -447,7 +447,7 @@ public class HashMapIntGeneric<V> {
                 throw new NoSuchElementException();
             }
             if ((next = e.next) == null) {
-                while (index < table.length && (next = table[index++]) == null);
+                while ((index < table.length) && ((next = table[index++]) == null));
             }
             current = e;
             return e;

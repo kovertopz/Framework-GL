@@ -98,7 +98,7 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
         GL.vaoHelper.bind(vao.getVaoID());
 
         // Create interleaved buffer data, VBO and send interleaved buffer data
-        if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
+        if (mesh.hasColors() || mesh.hasNormals() || mesh.hasTexCoords() || mesh.hasVertices()) {
             vboInterleaved = GL.glFactory.createVertexBufferObjectInterleaved();
             vboInterleaved.create();
             Renderable.renderableBuilder.calculateOffsetsAndStride(mesh, vboInterleaved, config);
@@ -163,7 +163,7 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
         RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
 
         // Create interleaved buffer data and send interleaved buffer data
-        if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
+        if (mesh.hasColors() || mesh.hasNormals() || mesh.hasTexCoords() || mesh.hasVertices()) {
             Renderable.renderableBuilder.calculateOffsetsAndStride(mesh, vboInterleaved, config);
             Renderable.renderableBuilder.createInterleavedBufferData(
                     mesh, vboInterleaved.getStrideBytes(), Renderable.byteBuffers, config);
@@ -176,7 +176,7 @@ public abstract class AbstractVertexArrayObjectInterleavedRenderable extends Abs
         hasVertices = mesh.hasVertices();
 
         // Create byte buffer data and send byte buffer data for indexes
-        if ((mesh.hasIndexes()) && (vboVertexIndex != null)) {
+        if (mesh.hasIndexes() && (vboVertexIndex != null)) {
             Renderable.renderableBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.updateBufferElementData(vboVertexIndex.getVboID(), 0,
                     Renderable.byteBuffers.getVertexIndex());

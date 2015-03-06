@@ -482,13 +482,13 @@ public class Graphics implements GLRenderer {
         public int compare(GameObject o1, GameObject o2) {
             boolean o1Opaque = o1.getRenderableState().isOpaque();
             boolean o2Opaque = o2.getRenderableState().isOpaque();
-            if ((o1Opaque == o2Opaque) && (o1Opaque)) {
+            if ((o1Opaque == o2Opaque) && o1Opaque) {
                 return 0;
             }
-            if ((o1Opaque != o2Opaque) && (!o1Opaque)) {
+            if ((o1Opaque != o2Opaque) && !o1Opaque) {
                 return 1;
             }
-            if ((o1Opaque != o2Opaque) && (o1Opaque)) {
+            if ((o1Opaque != o2Opaque) && o1Opaque) {
                 return -1;
             }
             // Both objects are not opaque

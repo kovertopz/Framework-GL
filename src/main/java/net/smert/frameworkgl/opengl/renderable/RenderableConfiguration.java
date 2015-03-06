@@ -55,13 +55,13 @@ public class RenderableConfiguration {
         float b = colors[offset + 2];
         float a = 1f;
 
-        assert (r >= 0f && r <= 1f);
-        assert (g >= 0f && g <= 1f);
-        assert (b >= 0f && b <= 1f);
+        assert ((r >= 0f) && (r <= 1f));
+        assert ((g >= 0f) && (g <= 1f));
+        assert ((b >= 0f) && (b <= 1f));
 
         if (colorSize == 4) {
             a = colors[offset + 3];
-            assert (a >= 0f && a <= 1f);
+            assert ((a >= 0f) && (a <= 1f));
         }
 
         // Depending on the GL type and size convert the data and put it into the byte buffer
@@ -132,9 +132,9 @@ public class RenderableConfiguration {
         float y = normals[offset + 1];
         float z = normals[offset + 2];
 
-        assert (x >= -1f && x <= 1f);
-        assert (y >= -1f && y <= 1f);
-        assert (z >= -1f && z <= 1f);
+        assert ((x >= -1f) && (x <= 1f));
+        assert ((y >= -1f) && (y <= 1f));
+        assert ((z >= -1f) && (z <= 1f));
 
         // Depending on the GL type put it into the byte buffer
         switch (NORMAL_TYPE) {
@@ -158,12 +158,12 @@ public class RenderableConfiguration {
         float t = texCoords[offset + 1];
         float r = 0f;
 
-        assert (s >= -1f && s <= 1f);
-        assert (t >= -1f && t <= 1f);
+        assert ((s >= -1f) && (s <= 1f));
+        assert ((t >= -1f) && (t <= 1f));
 
         if (texCoordSize == 3) {
             r = texCoords[offset + 2];
-            assert (r >= -1f && r <= 1f);
+            assert ((r >= -1f) && (r <= 1f));
         }
 
         // Depending on the GL type and size put it into the byte buffer

@@ -88,12 +88,12 @@ public class ClipPlanes {
         float tpXMinX = tpX * aabbMin.x;
         float tpYMinY = tpY * aabbMin.y;
         float tpZMinZ = tpZ * aabbMin.z;
-        if ((npXMinX + npYMinY + npZMinZ + npW > npThreshold)
-                && (fpXMinX + fpYMinY + fpZMinZ + fpW > fpThreshold)
-                && (lpXMinX + lpYMinY + lpZMinZ + lpW > lpThreshold)
-                && (rpXMinX + rpYMinY + rpZMinZ + rpW > rpThreshold)
-                && (bpXMinX + bpYMinY + bpZMinZ + bpW > bpThreshold)
-                && (tpXMinX + tpYMinY + tpZMinZ + tpW > tpThreshold)) {
+        if (((npXMinX + npYMinY + npZMinZ + npW) > npThreshold)
+                && ((fpXMinX + fpYMinY + fpZMinZ + fpW) > fpThreshold)
+                && ((lpXMinX + lpYMinY + lpZMinZ + lpW) > lpThreshold)
+                && ((rpXMinX + rpYMinY + rpZMinZ + rpW) > rpThreshold)
+                && ((bpXMinX + bpYMinY + bpZMinZ + bpW) > bpThreshold)
+                && ((tpXMinX + tpYMinY + tpZMinZ + tpW) > tpThreshold)) {
             return true;
         }
 
@@ -104,12 +104,12 @@ public class ClipPlanes {
         float rpZMaxZ = rpZ * aabbMax.z;
         float bpZMaxZ = bpZ * aabbMax.z;
         float tpZMaxZ = tpZ * aabbMax.z;
-        if ((npXMinX + npYMinY + npZMaxZ + npW > npThreshold)
-                && (fpXMinX + fpYMinY + fpZMaxZ + fpW > fpThreshold)
-                && (lpXMinX + lpYMinY + lpZMaxZ + lpW > lpThreshold)
-                && (rpXMinX + rpYMinY + rpZMaxZ + rpW > rpThreshold)
-                && (bpXMinX + bpYMinY + bpZMaxZ + bpW > bpThreshold)
-                && (tpXMinX + tpYMinY + tpZMaxZ + tpW > tpThreshold)) {
+        if (((npXMinX + npYMinY + npZMaxZ + npW) > npThreshold)
+                && ((fpXMinX + fpYMinY + fpZMaxZ + fpW) > fpThreshold)
+                && ((lpXMinX + lpYMinY + lpZMaxZ + lpW) > lpThreshold)
+                && ((rpXMinX + rpYMinY + rpZMaxZ + rpW) > rpThreshold)
+                && ((bpXMinX + bpYMinY + bpZMaxZ + bpW) > bpThreshold)
+                && ((tpXMinX + tpYMinY + tpZMaxZ + tpW) > tpThreshold)) {
             return true;
         }
 
@@ -120,22 +120,22 @@ public class ClipPlanes {
         float rpYMaxY = rpY * aabbMax.y;
         float bpYMaxY = bpY * aabbMax.y;
         float tpYMaxY = tpY * aabbMax.y;
-        if ((npXMinX + npYMaxY + npZMinZ + npW > npThreshold)
-                && (fpXMinX + fpYMaxY + fpZMinZ + fpW > fpThreshold)
-                && (lpXMinX + lpYMaxY + lpZMinZ + lpW > lpThreshold)
-                && (rpXMinX + rpYMaxY + rpZMinZ + rpW > rpThreshold)
-                && (bpXMinX + bpYMaxY + bpZMinZ + bpW > bpThreshold)
-                && (tpXMinX + tpYMaxY + tpZMinZ + tpW > tpThreshold)) {
+        if (((npXMinX + npYMaxY + npZMinZ + npW) > npThreshold)
+                && ((fpXMinX + fpYMaxY + fpZMinZ + fpW) > fpThreshold)
+                && ((lpXMinX + lpYMaxY + lpZMinZ + lpW) > lpThreshold)
+                && ((rpXMinX + rpYMaxY + rpZMinZ + rpW) > rpThreshold)
+                && ((bpXMinX + bpYMaxY + bpZMinZ + bpW) > bpThreshold)
+                && ((tpXMinX + tpYMaxY + tpZMinZ + tpW) > tpThreshold)) {
             return true;
         }
 
         // Vertex minX maxY maxZ (3)
-        if ((npXMinX + npYMaxY + npZMaxZ + npW > npThreshold)
-                && (fpXMinX + fpYMaxY + fpZMaxZ + fpW > fpThreshold)
-                && (lpXMinX + lpYMaxY + lpZMaxZ + lpW > lpThreshold)
-                && (rpXMinX + rpYMaxY + rpZMaxZ + rpW > rpThreshold)
-                && (bpXMinX + bpYMaxY + bpZMaxZ + bpW > bpThreshold)
-                && (tpXMinX + tpYMaxY + tpZMaxZ + tpW > tpThreshold)) {
+        if (((npXMinX + npYMaxY + npZMaxZ + npW) > npThreshold)
+                && ((fpXMinX + fpYMaxY + fpZMaxZ + fpW) > fpThreshold)
+                && ((lpXMinX + lpYMaxY + lpZMaxZ + lpW) > lpThreshold)
+                && ((rpXMinX + rpYMaxY + rpZMaxZ + rpW) > rpThreshold)
+                && ((bpXMinX + bpYMaxY + bpZMaxZ + bpW) > bpThreshold)
+                && ((tpXMinX + tpYMaxY + tpZMaxZ + tpW) > tpThreshold)) {
             return true;
         }
 
@@ -146,42 +146,42 @@ public class ClipPlanes {
         float rpXMaxX = rpX * aabbMax.x;
         float bpXMaxX = bpX * aabbMax.x;
         float tpXMaxX = tpX * aabbMax.x;
-        if ((npXMaxX + npYMinY + npZMinZ + npW > npThreshold)
-                && (fpXMaxX + fpYMinY + fpZMinZ + fpW > fpThreshold)
-                && (lpXMaxX + lpYMinY + lpZMinZ + lpW > lpThreshold)
-                && (rpXMaxX + rpYMinY + rpZMinZ + rpW > rpThreshold)
-                && (bpXMaxX + bpYMinY + bpZMinZ + bpW > bpThreshold)
-                && (tpXMaxX + tpYMinY + tpZMinZ + tpW > tpThreshold)) {
+        if (((npXMaxX + npYMinY + npZMinZ + npW) > npThreshold)
+                && ((fpXMaxX + fpYMinY + fpZMinZ + fpW) > fpThreshold)
+                && ((lpXMaxX + lpYMinY + lpZMinZ + lpW) > lpThreshold)
+                && ((rpXMaxX + rpYMinY + rpZMinZ + rpW) > rpThreshold)
+                && ((bpXMaxX + bpYMinY + bpZMinZ + bpW) > bpThreshold)
+                && ((tpXMaxX + tpYMinY + tpZMinZ + tpW) > tpThreshold)) {
             return true;
         }
 
         // Vertex maxX minY maxZ (5)
-        if ((npXMaxX + npYMinY + npZMaxZ + npW > npThreshold)
-                && (fpXMaxX + fpYMinY + fpZMaxZ + fpW > fpThreshold)
-                && (lpXMaxX + lpYMinY + lpZMaxZ + lpW > lpThreshold)
-                && (rpXMaxX + rpYMinY + rpZMaxZ + rpW > rpThreshold)
-                && (bpXMaxX + bpYMinY + bpZMaxZ + bpW > bpThreshold)
-                && (tpXMaxX + tpYMinY + tpZMaxZ + tpW > tpThreshold)) {
+        if (((npXMaxX + npYMinY + npZMaxZ + npW) > npThreshold)
+                && ((fpXMaxX + fpYMinY + fpZMaxZ + fpW) > fpThreshold)
+                && ((lpXMaxX + lpYMinY + lpZMaxZ + lpW) > lpThreshold)
+                && ((rpXMaxX + rpYMinY + rpZMaxZ + rpW) > rpThreshold)
+                && ((bpXMaxX + bpYMinY + bpZMaxZ + bpW) > bpThreshold)
+                && ((tpXMaxX + tpYMinY + tpZMaxZ + tpW) > tpThreshold)) {
             return true;
         }
 
         // Vertex maxX maxY minZ (6)
-        if ((npXMaxX + npYMaxY + npZMinZ + npW > npThreshold)
-                && (fpXMaxX + fpYMaxY + fpZMinZ + fpW > fpThreshold)
-                && (lpXMaxX + lpYMaxY + lpZMinZ + lpW > lpThreshold)
-                && (rpXMaxX + rpYMaxY + rpZMinZ + rpW > rpThreshold)
-                && (bpXMaxX + bpYMaxY + bpZMinZ + bpW > bpThreshold)
-                && (tpXMaxX + tpYMaxY + tpZMinZ + tpW > tpThreshold)) {
+        if (((npXMaxX + npYMaxY + npZMinZ + npW) > npThreshold)
+                && ((fpXMaxX + fpYMaxY + fpZMinZ + fpW) > fpThreshold)
+                && ((lpXMaxX + lpYMaxY + lpZMinZ + lpW) > lpThreshold)
+                && ((rpXMaxX + rpYMaxY + rpZMinZ + rpW) > rpThreshold)
+                && ((bpXMaxX + bpYMaxY + bpZMinZ + bpW) > bpThreshold)
+                && ((tpXMaxX + tpYMaxY + tpZMinZ + tpW) > tpThreshold)) {
             return true;
         }
 
         // Vertex maxX maxY maxZ
-        if ((npXMaxX + npYMaxY + npZMaxZ + npW > npThreshold)
-                && (fpXMaxX + fpYMaxY + fpZMaxZ + fpW > fpThreshold)
-                && (lpXMaxX + lpYMaxY + lpZMaxZ + lpW > lpThreshold)
-                && (rpXMaxX + rpYMaxY + rpZMaxZ + rpW > rpThreshold)
-                && (bpXMaxX + bpYMaxY + bpZMaxZ + bpW > bpThreshold)
-                && (tpXMaxX + tpYMaxY + tpZMaxZ + tpW > tpThreshold)) {
+        if (((npXMaxX + npYMaxY + npZMaxZ + npW) > npThreshold)
+                && ((fpXMaxX + fpYMaxY + fpZMaxZ + fpW) > fpThreshold)
+                && ((lpXMaxX + lpYMaxY + lpZMaxZ + lpW) > lpThreshold)
+                && ((rpXMaxX + rpYMaxY + rpZMaxZ + rpW) > rpThreshold)
+                && ((bpXMaxX + bpYMaxY + bpZMaxZ + bpW) > bpThreshold)
+                && ((tpXMaxX + tpYMaxY + tpZMaxZ + tpW) > tpThreshold)) {
             return true;
         }
 
@@ -196,27 +196,27 @@ public class ClipPlanes {
 
     public boolean planePointEquation(float x, float y, float z, float threshold) {
         boolean result;
-        result = (npX * x + npY * y + npZ * z + npW > -threshold + npThreshold);
+        result = ((npX * x + npY * y + npZ * z + npW) > (-threshold + npThreshold));
         if (!result) {
             return result;
         }
-        result = (fpX * x + fpY * y + fpZ * z + fpW > -threshold + fpThreshold);
+        result = ((fpX * x + fpY * y + fpZ * z + fpW) > (-threshold + fpThreshold));
         if (!result) {
             return result;
         }
-        result = (lpX * x + lpY * y + lpZ * z + lpW > -threshold + lpThreshold);
+        result = ((lpX * x + lpY * y + lpZ * z + lpW) > (-threshold + lpThreshold));
         if (!result) {
             return result;
         }
-        result = (rpX * x + rpY * y + rpZ * z + rpW > -threshold + rpThreshold);
+        result = ((rpX * x + rpY * y + rpZ * z + rpW) > (-threshold + rpThreshold));
         if (!result) {
             return result;
         }
-        result = (bpX * x + bpY * y + bpZ * z + bpW > -threshold + bpThreshold);
+        result = ((bpX * x + bpY * y + bpZ * z + bpW) > (-threshold + bpThreshold));
         if (!result) {
             return result;
         }
-        result = (tpX * x + tpY * y + tpZ * z + tpW > -threshold + tpThreshold);
+        result = ((tpX * x + tpY * y + tpZ * z + tpW) > (-threshold + tpThreshold));
         return result;
     }
 

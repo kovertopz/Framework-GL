@@ -97,7 +97,7 @@ public class CustomClassLoader extends SecureClassLoader {
         tmpDir.setReadable(true, false);
         tmpDir.setWritable(true, false);
         tmpDir.setExecutable(true, false);
-        if ((!tmpDir.exists()) || (!tmpDir.isDirectory())) {
+        if (!tmpDir.exists() || !tmpDir.isDirectory()) {
             throw new RuntimeException("Unable to create a temporary directory: " + tmpDirName);
         }
         // File
@@ -107,7 +107,7 @@ public class CustomClassLoader extends SecureClassLoader {
         tmpFile.setReadable(true, false);
         tmpFile.setWritable(true, false);
         tmpFile.setExecutable(true, false);
-        if ((!tmpFile.exists()) || (tmpFile.isDirectory())) {
+        if (!tmpFile.exists() || tmpFile.isDirectory()) {
             throw new RuntimeException("Unable to create a temporary file: " + tmpFile.getAbsolutePath());
         }
         return tmpFile;

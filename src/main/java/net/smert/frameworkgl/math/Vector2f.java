@@ -57,7 +57,7 @@ public class Vector2f {
 
     public boolean trimSquared(float length) {
         float magnitudeSquared = magnitudeSquared();
-        if (magnitudeSquared <= length * length) {
+        if (magnitudeSquared <= (length * length)) {
             return false;
         }
         multiply(1f / MathHelper.Sqrt(magnitudeSquared));

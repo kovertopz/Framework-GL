@@ -264,7 +264,7 @@ public class ObjReader implements ModelReader {
 
             // Face definitions for the same material can be made up of triangles, quads
             // and triangle fans so we must convert back into triangles.
-            if ((face.isTriangle()) || (face.isQuad())) {
+            if (face.isTriangle() || face.isQuad()) {
 
                 // Determine what type of conversion state is needed
                 Tessellator.ConversionState conversionState;

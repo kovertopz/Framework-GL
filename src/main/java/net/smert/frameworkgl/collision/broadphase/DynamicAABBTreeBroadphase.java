@@ -124,7 +124,7 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
         // ProxyLeftLeft  ProxyLeftRight   ProxyRightLeft  ProxyRightRight
         DynamicAABBTreeBroadphaseProxy proxy = proxies[index];
 
-        if (proxy.isLeaf() || proxy.height < 2) {
+        if (proxy.isLeaf() || (proxy.height < 2)) {
             return index;
         }
 
@@ -412,7 +412,7 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
             }
 
             // Combined cost of leaf and current proxy might be cheaper
-            if (combinedCost < leftCost && combinedCost < rightCost) {
+            if ((combinedCost < leftCost) && (combinedCost < rightCost)) {
                 break;
             }
 
@@ -756,7 +756,7 @@ public class DynamicAABBTreeBroadphase implements BroadphaseAlgorithm {
             DynamicAABBTreeBroadphaseProxy proxy = proxies[i];
 
             // Skip free and non leaf proxies
-            if ((proxy.index == NULL) || (!proxy.isLeaf())) {
+            if ((proxy.index == NULL) || !proxy.isLeaf()) {
                 continue;
             }
 

@@ -110,7 +110,7 @@ public class HashMapIntString {
         int hash = hash(key);
         int i = indexFor(hash, table.length);
         for (Entry e = table[i]; e != null; e = e.next) {
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 return e;
             }
         }
@@ -177,7 +177,7 @@ public class HashMapIntString {
 
         while (e != null) {
             Entry next = e.next;
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 modCount++;
                 size--;
                 if (prev == e) {
@@ -207,7 +207,7 @@ public class HashMapIntString {
 
         while (e != null) {
             Entry next = e.next;
-            if (e.hash == hash && e.equals(entry)) {
+            if ((e.hash == hash) && e.equals(entry)) {
                 modCount++;
                 size--;
                 if (prev == e) {
@@ -288,7 +288,7 @@ public class HashMapIntString {
         int hash = hash(key);
         int i = indexFor(hash, table.length);
         for (Entry e = table[i]; e != null; e = e.next) {
-            if (e.hash == hash && e.key == key) {
+            if ((e.hash == hash) && (e.key == key)) {
                 String oldValue = e.value;
                 e.value = value;
                 return oldValue;
@@ -395,7 +395,7 @@ public class HashMapIntString {
             }
             Entry e = (Entry) o;
             Entry candidate = getEntry(e.getKey());
-            return candidate != null && candidate.equals(e);
+            return ((candidate != null) && candidate.equals(e));
         }
 
         @Override
@@ -428,7 +428,7 @@ public class HashMapIntString {
         public HashIterator() {
             expectedModCount = modCount;
             if (size > 0) {
-                while (index < table.length && (next = table[index++]) == null);
+                while ((index < table.length) && ((next = table[index++]) == null));
             }
         }
 
@@ -446,7 +446,7 @@ public class HashMapIntString {
                 throw new NoSuchElementException();
             }
             if ((next = e.next) == null) {
-                while (index < table.length && (next = table[index++]) == null);
+                while ((index < table.length) && ((next = table[index++]) == null));
             }
             current = e;
             return e;

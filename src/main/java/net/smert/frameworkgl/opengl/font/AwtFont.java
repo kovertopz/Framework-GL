@@ -503,7 +503,7 @@ public class AwtFont implements GLFont {
             glyphGraphics.dispose();
 
             // Form a new row if the current image will be past the bounds in the X direction
-            if (imageX + glyphImage.getWidth() + builder.getFontPaddingX() >= image.getWidth()) {
+            if ((imageX + glyphImage.getWidth() + builder.getFontPaddingX()) >= image.getWidth()) {
                 imageX = 0;
                 imageY += glyph.h + builder.getFontPaddingY();
             }

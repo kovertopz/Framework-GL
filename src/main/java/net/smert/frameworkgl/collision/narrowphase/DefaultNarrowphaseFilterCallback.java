@@ -23,7 +23,7 @@ public class DefaultNarrowphaseFilterCallback implements NarrowphaseFilterCallba
     @Override
     public boolean needsNarrowphaseCollision(CollisionGameObject collisionGameObject0,
             CollisionGameObject collisionGameObject1) {
-        return ((collisionGameObject0.isEnabled()) && (collisionGameObject1.isEnabled()));
+        return (collisionGameObject0.isEnabled() && collisionGameObject1.isEnabled());
     }
 
 }

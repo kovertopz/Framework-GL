@@ -129,7 +129,7 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
         destroy();
 
         // Create non interleaved buffer data
-        if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
+        if (mesh.hasColors() || mesh.hasNormals() || mesh.hasTexCoords() || mesh.hasVertices()) {
             Renderable.renderableBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers, config);
         }
 
@@ -193,32 +193,32 @@ public abstract class AbstractVertexBufferObjectNonInterleavedRenderable extends
         RenderableConfiguration config = Renderable.configPool.get(renderableConfigID);
 
         // Create non interleaved buffer data
-        if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
+        if (mesh.hasColors() || mesh.hasNormals() || mesh.hasTexCoords() || mesh.hasVertices()) {
             Renderable.renderableBuilder.createNonInterleavedBufferData(mesh, Renderable.byteBuffers, config);
         }
 
         // Send byte buffer data for colors
-        if ((mesh.hasColors()) && (vboColor != null)) {
+        if (mesh.hasColors() && (vboColor != null)) {
             GL.vboHelper.updateBufferData(vboColor.getVboID(), 0, Renderable.byteBuffers.getColor());
         }
 
         // Send byte buffer data for normals
-        if ((mesh.hasNormals()) && (vboNormal != null)) {
+        if (mesh.hasNormals() && (vboNormal != null)) {
             GL.vboHelper.updateBufferData(vboNormal.getVboID(), 0, Renderable.byteBuffers.getNormal());
         }
 
         // Send byte buffer data for texture coordinates
-        if ((mesh.hasTexCoords()) && (vboTexCoord != null)) {
+        if (mesh.hasTexCoords() && (vboTexCoord != null)) {
             GL.vboHelper.updateBufferData(vboTexCoord.getVboID(), 0, Renderable.byteBuffers.getTexCoord());
         }
 
         // Send byte buffer data for vertices
-        if ((mesh.hasVertices()) && (vboVertex != null)) {
+        if (mesh.hasVertices() && (vboVertex != null)) {
             GL.vboHelper.updateBufferData(vboVertex.getVboID(), 0, Renderable.byteBuffers.getVertex());
         }
 
         // Create byte buffer data and send byte buffer data for indexes
-        if ((mesh.hasIndexes()) && (vboVertexIndex != null)) {
+        if (mesh.hasIndexes() && (vboVertexIndex != null)) {
             Renderable.renderableBuilder.createIndexBufferData(mesh, Renderable.byteBuffers, config);
             GL.vboHelper.updateBufferElementData(vboVertexIndex.getVboID(), 0,
                     Renderable.byteBuffers.getVertexIndex());

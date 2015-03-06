@@ -55,27 +55,27 @@ public class Vector4f {
         float xMinX = x * aabbMin.x;
         float yMinY = y * aabbMin.y;
         float zMinZ = z * aabbMin.z;
-        if (xMinX + yMinY + zMinZ + w < threshold) {
+        if ((xMinX + yMinY + zMinZ + w) < threshold) {
             return false;
         }
         float zMaxZ = z * aabbMax.z;
-        if (xMinX + yMinY + zMaxZ + w < threshold) {
+        if ((xMinX + yMinY + zMaxZ + w) < threshold) {
             return false;
         }
         float yMaxY = y * aabbMax.y;
-        if (xMinX + yMaxY + zMinZ + w < threshold) {
+        if ((xMinX + yMaxY + zMinZ + w) < threshold) {
             return false;
         }
         float xMaxX = x * aabbMax.x;
-        return (xMinX + yMaxY + zMaxZ + w < threshold)
-                || (xMaxX + yMinY + zMinZ + w < threshold)
-                || (xMaxX + yMinY + zMaxZ + w < threshold)
-                || (xMaxX + yMaxY + zMinZ + w < threshold)
-                || (xMaxX + yMaxY + zMaxZ + w < threshold);
+        return ((xMinX + yMaxY + zMaxZ + w) < threshold)
+                || ((xMaxX + yMinY + zMinZ + w) < threshold)
+                || ((xMaxX + yMinY + zMaxZ + w) < threshold)
+                || ((xMaxX + yMaxY + zMinZ + w) < threshold)
+                || ((xMaxX + yMaxY + zMaxZ + w) < threshold);
     }
 
     public boolean planePointEquation(float x, float y, float z, float threshold) {
-        return this.x * x + this.y * y + this.z * z + w > -threshold;
+        return ((this.x * x + this.y * y + this.z * z + w) > -threshold);
     }
 
     public boolean planePointEquation(Vector3f v, float threshold) {

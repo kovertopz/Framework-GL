@@ -23,7 +23,7 @@ public class DefaultCollisionResponseFilterCallback implements CollisionResponse
     @Override
     public boolean needsCollisionResponse(CollisionGameObject collisionGameObject0,
             CollisionGameObject collisionGameObject1) {
-        return ((collisionGameObject0.hasContactResponse()) && (collisionGameObject1.hasContactResponse()));
+        return (collisionGameObject0.hasContactResponse() && collisionGameObject1.hasContactResponse());
     }
 
 }

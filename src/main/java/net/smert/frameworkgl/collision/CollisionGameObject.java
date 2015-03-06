@@ -199,7 +199,7 @@ public class CollisionGameObject extends GameObject {
     }
 
     public void integrateExplicitEuler(float delta) {
-        if (!awake || inverseMass == 0) {
+        if (!awake || (inverseMass == 0)) {
             return;
         }
 
@@ -222,7 +222,7 @@ public class CollisionGameObject extends GameObject {
     }
 
     public void integrateSemiExplicitEuler(float delta) {
-        if (!awake || inverseMass == 0) {
+        if (!awake || (inverseMass == 0)) {
             return;
         }
 

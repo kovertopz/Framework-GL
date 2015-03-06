@@ -130,7 +130,7 @@ public abstract class AbstractVertexArrayRenderable extends AbstractRenderable {
         destroy();
 
         // Create vertex arrays
-        if ((mesh.hasColors()) || (mesh.hasNormals()) || (mesh.hasTexCoords()) || (mesh.hasVertices())) {
+        if (mesh.hasColors() || mesh.hasNormals() || mesh.hasTexCoords() || mesh.hasVertices()) {
             Renderable.renderableBuilder.createNonInterleavedBufferData(mesh, Renderable.vertexArrays, config);
         }
 

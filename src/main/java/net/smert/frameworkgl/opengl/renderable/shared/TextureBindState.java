@@ -65,7 +65,7 @@ public class TextureBindState {
         boolean flagChanged = false;
         textureUnitToTextureID.put(activeTextureUnit, textureID);
         if ((activeTextureUnit >= TextureUnit.TEXTURE0)
-                && (activeTextureUnit < TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag)) {
+                && (activeTextureUnit < (TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag))) {
             flagChanged = true;
         }
 
@@ -176,7 +176,7 @@ public class TextureBindState {
 
     public void bindTextures(Segment segment) {
         SegmentMaterial material = segment.getMaterial();
-        if ((material == null) || (material.getTextures().isEmpty())) {
+        if ((material == null) || material.getTextures().isEmpty()) {
             unbindModel();
             return;
         }
@@ -247,7 +247,7 @@ public class TextureBindState {
         // Active texture ID has changed
         textureUnitToTextureID.put(activeTextureUnit, 0);
         if ((activeTextureUnit >= TextureUnit.TEXTURE0)
-                && (activeTextureUnit < TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag)) {
+                && (activeTextureUnit < (TextureUnit.TEXTURE0 + maxModelTextureUnitsWithTextureFlag))) {
             Renderable.shaderBindState.sendUniformTextureFlag(0f);
         }
 

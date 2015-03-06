@@ -72,7 +72,7 @@ public class WAVCodec implements Codec {
         byte[] byteArray = new byte[available];
         int read;
         int total = 0;
-        while ((read = ais.read(byteArray, total, byteArray.length - total)) != -1 && (total < byteArray.length)) {
+        while (((read = ais.read(byteArray, total, byteArray.length - total)) != -1) && (total < byteArray.length)) {
             total += read;
         }
 

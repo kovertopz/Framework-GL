@@ -64,25 +64,25 @@ public class Mesh {
         if ((elementCount == 0) && !segment.hasDrawCommands()) {
             throw new IllegalArgumentException("The segment must contain at least 1 vertex or have draw commands");
         }
-        if ((colors != null) && (colors.length != elementCount * config.getColorSize())) {
+        if ((colors != null) && (colors.length != (elementCount * config.getColorSize()))) {
             throw new IllegalArgumentException(
                     "There needs to be one color for every element in the segment. Colors: "
-                    + colors.length + " Expected: " + elementCount * config.getColorSize());
+                    + colors.length + " Expected: " + (elementCount * config.getColorSize()));
         }
-        if ((normals != null) && (normals.length != elementCount * config.getNormalSize())) {
+        if ((normals != null) && (normals.length != (elementCount * config.getNormalSize()))) {
             throw new IllegalArgumentException(
                     "There needs to be one normal for every element in the segment. Normals: "
-                    + normals.length + " Expected: " + elementCount * config.getNormalSize());
+                    + normals.length + " Expected: " + (elementCount * config.getNormalSize()));
         }
-        if ((texCoords != null) && (texCoords.length != elementCount * config.getTexCoordSize())) {
+        if ((texCoords != null) && (texCoords.length != (elementCount * config.getTexCoordSize()))) {
             throw new IllegalArgumentException(
                     "There needs to be one texture coord for every element in the segment. Texture Coords: "
-                    + texCoords.length + " Expected: " + elementCount * config.getTexCoordSize());
+                    + texCoords.length + " Expected: " + (elementCount * config.getTexCoordSize()));
         }
-        if ((vertices != null) && (vertices.length != elementCount * config.getVertexSize())) {
+        if ((vertices != null) && (vertices.length != (elementCount * config.getVertexSize()))) {
             throw new IllegalArgumentException(
                     "There needs to be one vertex for every element in the segment. Vertices: "
-                    + vertices.length + " Expected: " + elementCount * config.getVertexSize());
+                    + vertices.length + " Expected: " + (elementCount * config.getVertexSize()));
         }
 
         // Add segment and update totals
