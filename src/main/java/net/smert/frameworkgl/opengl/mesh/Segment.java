@@ -12,10 +12,9 @@
  */
 package net.smert.frameworkgl.opengl.mesh;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.shared.DrawCommands;
+import net.smert.frameworkgl.utils.HashMapIntGeneric;
 
 /**
  *
@@ -28,7 +27,7 @@ public class Segment {
     private int minIndex;
     private int primitiveMode;
     private DrawCommands drawCommands;
-    private Map<Integer, float[]> segmentDataTypeToFloatArray;
+    private HashMapIntGeneric<float[]> segmentDataTypeToFloatArray;
     private SegmentMaterial material;
     private String name;
 
@@ -38,7 +37,7 @@ public class Segment {
         minIndex = 0;
         primitiveMode = -1; // GL_POINTS = 0 :(
         drawCommands = null;
-        segmentDataTypeToFloatArray = new HashMap<>();
+        segmentDataTypeToFloatArray = new HashMapIntGeneric<>();
         material = null;
         name = "";
     }
@@ -105,6 +104,10 @@ public class Segment {
             throw new IllegalArgumentException("Draw commands cannot be null");
         }
         this.drawCommands = drawCommands;
+    }
+
+    public HashMapIntGeneric<float[]> getData() {
+        return segmentDataTypeToFloatArray;
     }
 
     public SegmentMaterial getMaterial() {
