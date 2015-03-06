@@ -21,6 +21,7 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.utils.HashMapIntGeneric;
 
 /**
  *
@@ -91,6 +92,73 @@ public class Mesh {
 
         // Update booleans
         updateHasBooleansFromSegment();
+    }
+
+    public Mesh cloneWithSharedSegmentData() {
+        Mesh newMesh = GL.meshFactory.createMesh();
+        Mesh oldMesh = this;
+
+        // Copy mesh data
+        newMesh.setRenderableConfigID(oldMesh.getRenderableConfigID());
+        newMesh.setIndexes(oldMesh.getIndexes());
+        newMesh.getAabb().set(oldMesh.getAabb());
+        newMesh.getMaterial().setShaderName(oldMesh.getMaterial().getShaderName());
+
+        for (int i = 0; i < oldMesh.getTotalSegments(); i++) {
+            Segment newSegment = GL.meshFactory.createSegment();
+            Segment oldSegment = oldMesh.getSegment(i);
+
+            // Copy segment data
+            newSegment.setElementCount(oldSegment.getElementCount());
+            newSegment.setMaxIndex(oldSegment.getMaxIndex());
+            newSegment.setMinIndex(oldSegment.getMinIndex());
+            newSegment.setPrimitiveMode(oldSegment.getPrimitiveMode());
+            if (oldSegment.hasDrawCommands()) {
+                newSegment.setDrawCommands(oldSegment.getDrawCommands());
+            }
+            newSegment.setName(oldSegment.getName());
+
+            // Copy segment data
+            if (oldSegment.getData().size() > 0) {
+                Iterator<HashMapIntGeneric.Entry<float[]>> iterator = oldSegment.getData().entrySet().iterator();
+
+                while (iterator.hasNext()) {
+                    HashMapIntGeneric.Entry<float[]> entry = iterator.next();
+                    int segmentDataType = entry.getKey();
+                    float[] data = entry.getValue();
+                    newSegment.setData(segmentDataType, data);
+                }
+            }
+
+            // Copy segment material
+            if (oldSegment.getMaterial() != null) {
+                SegmentMaterial newMaterial = GL.meshFactory.createSegmentMaterial();
+                SegmentMaterial oldMaterial = oldSegment.getMaterial();
+
+                newMaterial.getColor().set(oldMaterial.getColor());
+                newMaterial.setMaterialLightName(oldMaterial.getMaterialLightName());
+
+                // Copy segment material textures
+                if (oldMaterial.getTextures().size() > 0) {
+                    Iterator<Map.Entry<TextureType, String>> iterator = oldMaterial.getTextures().entrySet().iterator();
+
+                    while (iterator.hasNext()) {
+                        Map.Entry<TextureType, String> entry = iterator.next();
+                        TextureType textureType = entry.getKey();
+                        String filename = entry.getValue();
+                        newMaterial.setTexture(textureType, filename);
+                    }
+                }
+
+                // Add segment material to segment
+                newSegment.setMaterial(newMaterial);
+            }
+
+            // Add segment to mesh
+            newMesh.addSegment(newSegment);
+        }
+
+        return newMesh;
     }
 
     public int getRenderableConfigID() {
@@ -247,6 +315,28 @@ public class Mesh {
 
         // Set color data
         segment.setData(SegmentDataType.COLOR, colors);
+    }
+
+    public void setAllMaterialColors(float r, float g, float b, float a) {
+        for (int i = 0; i < segments.size(); i++) {
+            setAllMaterialColors(i, r, g, b, a);
+        }
+    }
+
+    public void setAllMaterialColors(int segmentIndex, float r, float g, float b, float a) {
+
+        // Check arguments
+        if ((segmentIndex < 0) || (segmentIndex >= segments.size())) {
+            throw new IllegalArgumentException("Invalid segment index: " + segmentIndex);
+        }
+
+        // Change colors for the segment material
+        Segment segment = segments.get(segmentIndex);
+        SegmentMaterial segmentMaterial = segment.getMaterial();
+
+        if (segmentMaterial != null) {
+            segmentMaterial.getColor().set(r, g, b, a);
+        }
     }
 
     public void updateHasBooleansFromSegment() {
