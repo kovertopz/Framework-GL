@@ -32,6 +32,10 @@ import org.lwjgl.util.glu.GLU;
 public class OpenGL1 {
 
     private float defaultLineWidth = 1f;
+    private float viewportHeight = 0f;
+    private float viewportWidth = 0f;
+    private float viewportX = 0f;
+    private float viewportY = 0f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
 
     public OpenGL1 begin(int primitive) {
@@ -339,6 +343,22 @@ public class OpenGL1 {
         return GL11.glGetString(getString);
     }
 
+    public float getViewportHeight() {
+        return viewportHeight;
+    }
+
+    public float getViewportWidth() {
+        return viewportWidth;
+    }
+
+    public float getViewportX() {
+        return viewportX;
+    }
+
+    public float getViewportY() {
+        return viewportY;
+    }
+
     public void getModelViewMatrix(FloatBuffer matrix) {
         GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
     }
@@ -349,6 +369,10 @@ public class OpenGL1 {
 
     public void getViewportDimensions(IntBuffer viewportBuffer) {
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+        viewportX = viewportBuffer.get(viewportBuffer.position() + 0);
+        viewportY = viewportBuffer.get(viewportBuffer.position() + 1);
+        viewportWidth = viewportBuffer.get(viewportBuffer.position() + 2);
+        viewportHeight = viewportBuffer.get(viewportBuffer.position() + 3);
     }
 
     public OpenGL1 light(int lightNumber, int light, float value) {
@@ -696,6 +720,10 @@ public class OpenGL1 {
     }
 
     public OpenGL1 setViewport(int x, int y, int width, int height) {
+        viewportX = x;
+        viewportY = y;
+        viewportWidth = width;
+        viewportHeight = height;
         GL11.glViewport(x, y, width, height);
         return this;
     }

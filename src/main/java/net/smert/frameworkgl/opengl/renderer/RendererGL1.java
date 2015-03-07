@@ -241,7 +241,7 @@ public class RendererGL1 extends AbstractRendererGL {
 
     @Override
     public void setCamera(Camera camera) {
-        camera.updateViewMatrix();
+        camera.update();
         camera.getProjectionMatrix().toFloatBuffer(projectionMatrixFloatBuffer);
         camera.getViewMatrix().toFloatBuffer(viewMatrixFloatBuffer);
         projectionMatrixFloatBuffer.flip();

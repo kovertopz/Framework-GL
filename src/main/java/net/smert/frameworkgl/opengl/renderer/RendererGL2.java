@@ -236,7 +236,7 @@ public class RendererGL2 extends AbstractRendererGL {
 
     @Override
     public void setCamera(Camera camera) {
-        camera.updateViewMatrix();
+        camera.update();
         GL.matrixHelper.setModeProjection();
         GL.matrixHelper.load(camera.getProjectionMatrix());
         GL.matrixHelper.setModeView();

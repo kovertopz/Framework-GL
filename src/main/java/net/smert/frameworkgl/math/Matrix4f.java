@@ -277,6 +277,18 @@ public class Matrix4f {
     }
 
     // Scalar Operations
+    public float dotColumn3(int row, Vector3f vector) {
+        switch (row) {
+            case 0:
+                return d0 * vector.x + d1 * vector.y + d2 * vector.z;
+            case 1:
+                return d4 * vector.x + d5 * vector.y + d6 * vector.z;
+            case 2:
+                return d8 * vector.x + d9 * vector.y + d10 * vector.z;
+        }
+        throw new IllegalArgumentException("Invalid row: " + row);
+    }
+
     public float dotRow(int row, float c0, float c1, float c2, float c3) {
         switch (row) {
             case 0:
@@ -803,6 +815,17 @@ public class Matrix4f {
                 dotRow3(0, vector),
                 dotRow3(1, vector),
                 dotRow3(2, vector));
+        return out;
+    }
+
+    public Vector3f multiplyProjectionOut(Vector3f vector, Vector3f out) {
+        float w = 1f / (vector.x * d12 + vector.y * d13 + vector.z * d14 + d15);
+        out.set(
+                dotColumn3(0, vector),
+                dotColumn3(1, vector),
+                dotColumn3(2, vector));
+        out.add(d3, d7, d11);
+        out.multiply(w);
         return out;
     }
 

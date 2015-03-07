@@ -12,9 +12,11 @@
  */
 package net.smert.frameworkgl.opengl.camera;
 
+import net.smert.frameworkgl.Fw;
 import net.smert.frameworkgl.math.MathHelper;
 import net.smert.frameworkgl.math.Matrix3f;
 import net.smert.frameworkgl.math.Matrix4f;
+import net.smert.frameworkgl.math.Ray;
 import net.smert.frameworkgl.math.Vector3f;
 
 /**
@@ -34,12 +36,13 @@ public class Camera {
     private float totalRoll;
     private float zFar;
     private float zNear;
-
     private AbstractFrustumCulling frustumCulling;
     private final Matrix3f movementMatrix;
     private final Matrix3f rotationMatrix;
     private final Matrix3f tempMatrix;
+    private final Matrix4f inverseProjectionViewMatrix;
     private final Matrix4f projectionMatrix;
+    private final Matrix4f projectionViewMatrix;
     private final Matrix4f viewMatrix;
     private final Vector3f position;
     private final Vector3f viewDirection;
@@ -56,7 +59,9 @@ public class Camera {
         movementMatrix = new Matrix3f();
         rotationMatrix = new Matrix3f();
         tempMatrix = new Matrix3f();
+        inverseProjectionViewMatrix = new Matrix4f();
         projectionMatrix = new Matrix4f();
+        projectionViewMatrix = new Matrix4f();
         viewMatrix = new Matrix4f();
         position = new Vector3f();
         viewDirection = new Vector3f();
@@ -114,8 +119,16 @@ public class Camera {
         return rotationMatrix;
     }
 
+    public Matrix4f getInverseProjectionViewMatrix() {
+        return inverseProjectionViewMatrix;
+    }
+
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
+    }
+
+    public Matrix4f getProjectionViewMatrix() {
+        return projectionViewMatrix;
     }
 
     public Matrix4f getViewMatrix() {
@@ -124,6 +137,16 @@ public class Camera {
 
     public Vector3f getPosition() {
         return position;
+    }
+
+    public Ray getPickRay(Ray ray, float screenX, float screenY, float viewportX, float viewportY, float viewportWidth,
+            float viewportHeight) {
+        ray.setOrigin(screenX, screenY, 0f);
+        ray.setDirection(screenX, screenY, 1f);
+        unproject(ray.getOrigin(), viewportX, viewportY, viewportWidth, viewportHeight);
+        unproject(ray.getDirection(), viewportX, viewportY, viewportWidth, viewportHeight);
+        ray.getDirection().subtract(ray.getOrigin()).normalize();
+        return ray;
     }
 
     public Vector3f getViewDirection() {
@@ -245,12 +268,33 @@ public class Camera {
         projectionMatrix.setPerspective(fieldOfViewY, aspectRatio, zNear, zFar);
     }
 
-    public void updatePlanes() {
-        frustumCulling.updatePlanes(projectionMatrix, viewMatrix);
+    public Vector3f unproject(Vector3f windowCoords, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
+
+        // Map x and y from window coordinates
+        float x = (windowCoords.getX() - viewportX) / viewportWidth;
+        float y = ((Fw.config.getCurrentHeight() - windowCoords.getY()) - viewportY) / viewportHeight;
+        float z = windowCoords.getZ();
+
+        // Map to range -1 to 1
+        x = x * 2f - 1f;
+        y = y * 2f - 1f;
+        z = z * 2f - 1f;
+        windowCoords.set(x, y, z);
+
+        // Translate back into world coordinates
+        inverseProjectionViewMatrix.multiplyProjectionOut(windowCoords, windowCoords);
+
+        return windowCoords;
     }
 
-    public void updateViewMatrix() {
+    public void update() {
         viewMatrix.setInverse(rotationMatrix, position);
+        projectionMatrix.projectionMultiplyViewOut(viewMatrix, projectionViewMatrix);
+        inverseProjectionViewMatrix.setInverse(projectionViewMatrix);
+    }
+
+    public void updatePlanes() {
+        frustumCulling.updatePlanes(projectionMatrix, viewMatrix);
     }
 
 }

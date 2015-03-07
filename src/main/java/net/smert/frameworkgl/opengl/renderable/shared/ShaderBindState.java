@@ -77,7 +77,7 @@ public class ShaderBindState {
     }
 
     public void setCamera(Camera camera) {
-        camera.updateViewMatrix();
+        camera.update();
         GL.matrixHelper.setModeProjection();
         GL.matrixHelper.load(camera.getProjectionMatrix());
         GL.matrixHelper.setModeView();
