@@ -54,6 +54,7 @@ public class Graphics implements GLRenderer {
 
     private static RenderableComparison renderableComparison = new RenderableComparison();
 
+    private int openglMajorVersion;
     private AbstractRendererGL renderer;
     private FontRenderer fontRenderer;
     private RenderableFactory renderableFactory;
@@ -160,6 +161,10 @@ public class Graphics implements GLRenderer {
         Renderable.materialLightPool.destroy();
         Renderable.shaderPool.destroy();
         Renderable.texturePool.destroy();
+    }
+
+    public int getOpenglMajorVersion() {
+        return openglMajorVersion;
     }
 
     public AbstractRendererGL getRenderer() {
@@ -284,7 +289,8 @@ public class Graphics implements GLRenderer {
     }
 
     public void switchOpenGLVersion(int openglMajorVersion) {
-        switch (openglMajorVersion) {
+        this.openglMajorVersion = openglMajorVersion;
+        switch (this.openglMajorVersion) {
             case 1:
                 renderableFactory = GL.rf1;
                 renderer = GL.renderer1;
