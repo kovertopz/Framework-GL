@@ -303,6 +303,19 @@ public class Matrix4f {
         throw new IllegalArgumentException("Invalid row: " + row);
     }
 
+    public float getDeterminant() {
+        float a1b1 = d10 * d15 - d14 * d11;
+        float a2c1 = d6 * d15 - d14 * d7;
+        float a3d1 = d6 * d11 - d10 * d7;
+        float b2c2 = d2 * d15 - d14 * d3;
+        float b3d2 = d2 * d11 - d10 * d3;
+        float c3d3 = d2 * d7 - d6 * d3;
+        return d0 * (d5 * a1b1 - d9 * a2c1 + d13 * a3d1)
+                - d4 * (d1 * a1b1 - d9 * b2c2 + d13 * b3d2)
+                + d8 * (d1 * a2c1 - d5 * b2c2 + d13 * c3d3)
+                - d12 * (d1 * a3d1 - d5 * b3d2 + d9 * c3d3);
+    }
+
     public float getPositionX() {
         return d12;
     }
@@ -380,6 +393,26 @@ public class Matrix4f {
         d13 = 0f;
         d14 = 0f;
         d15 = 1f;
+        return this;
+    }
+
+    public Matrix4f multiply(float value) {
+        d0 *= value;
+        d1 *= value;
+        d2 *= value;
+        d3 *= value;
+        d4 *= value;
+        d5 *= value;
+        d6 *= value;
+        d7 *= value;
+        d8 *= value;
+        d9 *= value;
+        d10 *= value;
+        d11 *= value;
+        d12 *= value;
+        d13 *= value;
+        d14 *= value;
+        d15 *= value;
         return this;
     }
 
@@ -506,26 +539,6 @@ public class Matrix4f {
         return this;
     }
 
-    public Matrix4f setInverse(Matrix3f rotation, Vector3f position) {
-        d0 = rotation.xAxis.x;
-        d1 = rotation.yAxis.x;
-        d2 = rotation.zAxis.x;
-        d3 = 0f;
-        d4 = rotation.xAxis.y;
-        d5 = rotation.yAxis.y;
-        d6 = rotation.zAxis.y;
-        d7 = 0f;
-        d8 = rotation.xAxis.z;
-        d9 = rotation.yAxis.z;
-        d10 = rotation.zAxis.z;
-        d11 = 0f;
-        d12 = -rotation.xAxis.dot(position);
-        d13 = -rotation.yAxis.dot(position);
-        d14 = -rotation.zAxis.dot(position);
-        d15 = 1f;
-        return this;
-    }
-
     public final Matrix4f set(Matrix4f matrix) {
         d0 = matrix.d0;
         d1 = matrix.d1;
@@ -590,6 +603,87 @@ public class Matrix4f {
         setRow(2, 0f, 0f, -(zFar + zNear) * invDeltaZ, -2f * zFar * zNear * invDeltaZ);
         setRow(3, 0f, 0f, -1f, 0f);
         return this;
+    }
+
+    public Matrix4f setInverse(Matrix3f rotation, Vector3f position) {
+        d0 = rotation.xAxis.x;
+        d1 = rotation.yAxis.x;
+        d2 = rotation.zAxis.x;
+        d3 = 0f;
+        d4 = rotation.xAxis.y;
+        d5 = rotation.yAxis.y;
+        d6 = rotation.zAxis.y;
+        d7 = 0f;
+        d8 = rotation.xAxis.z;
+        d9 = rotation.yAxis.z;
+        d10 = rotation.zAxis.z;
+        d11 = 0f;
+        d12 = -rotation.xAxis.dot(position);
+        d13 = -rotation.yAxis.dot(position);
+        d14 = -rotation.zAxis.dot(position);
+        d15 = 1f;
+        return this;
+    }
+
+    public Matrix4f setInverse(Matrix4f matrix) {
+        assert (this != matrix);
+
+        float a1b1 = matrix.d10 * matrix.d15 - matrix.d14 * matrix.d11;
+        float a2c1 = matrix.d6 * matrix.d15 - matrix.d14 * matrix.d7;
+        float a3d1 = matrix.d6 * matrix.d11 - matrix.d10 * matrix.d7;
+        float b2c2 = matrix.d2 * matrix.d15 - matrix.d14 * matrix.d3;
+        float b3d2 = matrix.d2 * matrix.d11 - matrix.d10 * matrix.d3;
+        float c3d3 = matrix.d2 * matrix.d7 - matrix.d6 * matrix.d3;
+
+        float t0 = matrix.d5 * a1b1 - matrix.d9 * a2c1 + matrix.d13 * a3d1;
+        float t4 = matrix.d1 * a1b1 - matrix.d9 * b2c2 + matrix.d13 * b3d2;
+        float t8 = matrix.d1 * a2c1 - matrix.d5 * b2c2 + matrix.d13 * c3d3;
+        float t12 = matrix.d1 * a3d1 - matrix.d5 * b3d2 + matrix.d9 * c3d3;
+
+        float determinant = matrix.d0 * t0 - matrix.d4 * t4 + matrix.d8 * t8 - matrix.d12 * t12;
+        if ((determinant < MathHelper.ZERO_EPSILON) && (determinant > -MathHelper.ZERO_EPSILON)) {
+            throw new RuntimeException("Unable to invert matrix");
+        }
+
+        // Row 1
+        d0 = t0;
+        d4 = -t4;
+        d8 = t8;
+        d12 = -t12;
+        // Row 2
+        a1b1 = matrix.d10 * matrix.d15 - matrix.d14 * matrix.d11;
+        a2c1 = matrix.d6 * matrix.d15 - matrix.d14 * matrix.d7;
+        a3d1 = matrix.d6 * matrix.d11 - matrix.d10 * matrix.d7;
+        b2c2 = matrix.d2 * matrix.d15 - matrix.d14 * matrix.d3;
+        b3d2 = matrix.d2 * matrix.d11 - matrix.d10 * matrix.d3;
+        c3d3 = matrix.d2 * matrix.d7 - matrix.d6 * matrix.d3;
+        d1 = -(matrix.d4 * a1b1 - matrix.d8 * a2c1 + matrix.d12 * a3d1);
+        d5 = matrix.d0 * a1b1 - matrix.d8 * b2c2 + matrix.d12 * b3d2;
+        d9 = -(matrix.d0 * a2c1 - matrix.d4 * b2c2 + matrix.d12 * c3d3);
+        d13 = matrix.d0 * a3d1 - matrix.d4 * b3d2 + matrix.d8 * c3d3;
+        // Row 3
+        a1b1 = matrix.d9 * matrix.d15 - matrix.d13 * matrix.d11;
+        a2c1 = matrix.d5 * matrix.d15 - matrix.d13 * matrix.d7;
+        a3d1 = matrix.d5 * matrix.d11 - matrix.d9 * matrix.d7;
+        b2c2 = matrix.d1 * matrix.d15 - matrix.d13 * matrix.d3;
+        b3d2 = matrix.d1 * matrix.d11 - matrix.d9 * matrix.d3;
+        c3d3 = matrix.d1 * matrix.d7 - matrix.d5 * matrix.d3;
+        d2 = matrix.d4 * a1b1 - matrix.d8 * a2c1 + matrix.d12 * a3d1;
+        d6 = -(matrix.d0 * a1b1 - matrix.d8 * b2c2 + matrix.d12 * b3d2);
+        d10 = matrix.d0 * a2c1 - matrix.d4 * b2c2 + matrix.d12 * c3d3;
+        d14 = -(matrix.d0 * a3d1 - matrix.d4 * b3d2 + matrix.d8 * c3d3);
+        // Row 4
+        a1b1 = matrix.d9 * matrix.d14 - matrix.d13 * matrix.d10;
+        a2c1 = matrix.d5 * matrix.d14 - matrix.d13 * matrix.d6;
+        a3d1 = matrix.d5 * matrix.d10 - matrix.d9 * matrix.d6;
+        b2c2 = matrix.d1 * matrix.d14 - matrix.d13 * matrix.d2;
+        b3d2 = matrix.d1 * matrix.d10 - matrix.d9 * matrix.d2;
+        c3d3 = matrix.d1 * matrix.d6 - matrix.d5 * matrix.d2;
+        d3 = -(matrix.d4 * a1b1 - matrix.d8 * a2c1 + matrix.d12 * a3d1);
+        d7 = matrix.d0 * a1b1 - matrix.d8 * b2c2 + matrix.d12 * b3d2;
+        d11 = -(matrix.d0 * a2c1 - matrix.d4 * b2c2 + matrix.d12 * c3d3);
+        d15 = matrix.d0 * a3d1 - matrix.d4 * b3d2 + matrix.d8 * c3d3;
+        return multiply(1f / determinant);
     }
 
     public Matrix4f setOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) {

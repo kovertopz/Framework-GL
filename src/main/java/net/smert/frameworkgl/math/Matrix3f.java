@@ -313,8 +313,8 @@ public class Matrix3f {
     public Matrix3f setInverse(Matrix3f matrix) {
         assert (this != matrix);
         float determinant = matrix.getDeterminant();
-        if (determinant < MathHelper.ZERO_EPSILON) {
-            return null;
+        if ((determinant < MathHelper.ZERO_EPSILON) && (determinant > -MathHelper.ZERO_EPSILON)) {
+            throw new RuntimeException("Unable to invert matrix");
         }
         xAxis.x = (matrix.yAxis.y * matrix.zAxis.z - matrix.zAxis.y * matrix.yAxis.z);
         xAxis.y = -(matrix.xAxis.y * matrix.zAxis.z - matrix.zAxis.y * matrix.xAxis.z);
