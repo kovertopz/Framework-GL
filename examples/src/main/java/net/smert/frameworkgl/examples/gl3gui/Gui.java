@@ -55,15 +55,15 @@ public class Gui extends Screen {
         // Switch renderer and factory to OpenGL 3
         Fw.graphics.switchOpenGLVersion(3);
 
-        // Initialize GUI
-        Fw.gui.init();
-
         // Create timer
         fpsTimer = new FpsTimer();
 
         // Create GUI screen
         guiScreen = new SimpleDebugGuiScreen();
         guiScreen.init(Fw.graphics.getRenderer());
+
+        // Initialize GUI
+        Fw.gui.init();
 
         // Switch GUI screen
         Fw.gui.setScreen(guiScreen);
