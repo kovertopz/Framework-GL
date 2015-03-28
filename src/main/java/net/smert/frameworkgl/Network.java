@@ -12,6 +12,7 @@
  */
 package net.smert.frameworkgl;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
@@ -21,6 +22,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.util.function.Supplier;
@@ -33,35 +35,73 @@ public class Network {
 
     private boolean debug;
     private boolean keepAlive;
-    private boolean running;
+    private boolean serverRunning;
     private boolean tcpNoDelay;
     private int backlog;
-    private int port;
-    private EventLoopGroup socketAcceptGroup;
-    private EventLoopGroup workerGroup;
+    private int serverPort;
+    private Bootstrap client;
+    private EventLoopGroup clientWorkerGroup;
+    private EventLoopGroup serverAcceptGroup;
+    private EventLoopGroup serverWorkerGroup;
     private LogLevel logLevel;
     private ServerBootstrap server;
 
     public Network() {
         debug = false;
         keepAlive = true;
+        serverRunning = false;
         tcpNoDelay = true;
         backlog = 128;
+        serverPort = 0;
         logLevel = LogLevel.INFO;
+    }
+
+    private void createClient(String host, int port, Supplier<ChannelHandler> channelHandlerSupplier) {
+
+        // Create event loops
+        clientWorkerGroup = new NioEventLoopGroup();
+
+        // Create channel initializer
+        ChannelInitializer<SocketChannel> channelInit = new ChannelInitializer<SocketChannel>() {
+
+            @Override
+            public void initChannel(SocketChannel ch) throws Exception {
+                ChannelPipeline p = ch.pipeline();
+                if (debug) {
+                    p.addLast(new LoggingHandler(logLevel));
+                }
+                p.addLast(channelHandlerSupplier.get());
+            }
+
+        };
+
+        // Bootstrap the client
+        client = new Bootstrap();
+        if (debug) {
+            client.handler(new LoggingHandler(logLevel));
+        }
+        client.group(clientWorkerGroup)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.SO_KEEPALIVE, keepAlive)
+                .option(ChannelOption.TCP_NODELAY, tcpNoDelay)
+                .handler(channelInit);
+
+        // Connect to the host and port
+        client.connect(host, port);
     }
 
     private void createServer(int port, Supplier<ChannelHandler> channelHandlerSupplier) {
 
         // Are we already running?
-        if (running) {
+        if (serverRunning) {
             return;
         }
 
-        this.port = port;
+        serverPort = port;
 
         // Create event loops
-        socketAcceptGroup = new NioEventLoopGroup(1);
-        workerGroup = new NioEventLoopGroup();
+        serverAcceptGroup = new NioEventLoopGroup(1);
+        serverWorkerGroup = new NioEventLoopGroup();
 
         // Create channel initializer
         ChannelInitializer<SocketChannel> channelInit = new ChannelInitializer<SocketChannel>() {
@@ -82,7 +122,7 @@ public class Network {
         if (debug) {
             server.handler(new LoggingHandler(logLevel));
         }
-        server.group(socketAcceptGroup, workerGroup)
+        server.group(serverAcceptGroup, serverWorkerGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, backlog)
                 .childHandler(channelInit)
@@ -93,20 +133,25 @@ public class Network {
         server.bind(port);
 
         // The server is now running
-        running = true;
+        serverRunning = true;
     }
 
     public void destroy() {
-        if (socketAcceptGroup != null) {
-            socketAcceptGroup.shutdownGracefully();
-            socketAcceptGroup = null;
+        if (clientWorkerGroup != null) {
+            clientWorkerGroup.shutdownGracefully();
+            clientWorkerGroup = null;
         }
-        if (workerGroup != null) {
-            workerGroup.shutdownGracefully();
-            workerGroup = null;
+        client = null;
+        if (serverAcceptGroup != null) {
+            serverAcceptGroup.shutdownGracefully();
+            serverAcceptGroup = null;
+        }
+        if (serverWorkerGroup != null) {
+            serverWorkerGroup.shutdownGracefully();
+            serverWorkerGroup = null;
         }
         server = null;
-        running = false;
+        serverRunning = false;
     }
 
     public int getBacklog() {
@@ -117,8 +162,8 @@ public class Network {
         this.backlog = backlog;
     }
 
-    public int getPort() {
-        return port;
+    public int getServerPort() {
+        return serverPort;
     }
 
     public boolean isDebug() {
@@ -171,6 +216,17 @@ public class Network {
 
     public void setTcpNoDelay(boolean tcpNoDelay) {
         this.tcpNoDelay = tcpNoDelay;
+    }
+
+    public void startClient(String host, int port, ChannelHandler sharedChannelHandler) {
+        Supplier<ChannelHandler> channelHandlerSupplier = () -> {
+            return sharedChannelHandler;
+        };
+        createClient(host, port, channelHandlerSupplier);
+    }
+
+    public void startClient(String host, int port, Supplier<ChannelHandler> channelHandlerSupplier) {
+        createClient(host, port, channelHandlerSupplier);
     }
 
     public void startServer(int port, ChannelHandler sharedChannelHandler) {
