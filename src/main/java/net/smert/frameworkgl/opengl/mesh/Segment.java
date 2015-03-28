@@ -110,6 +110,10 @@ public class Segment {
         return segmentDataTypeToFloatArray;
     }
 
+    public void setData(HashMapIntGeneric<float[]> data) {
+        this.segmentDataTypeToFloatArray = data;
+    }
+
     public SegmentMaterial getMaterial() {
         return material;
     }
