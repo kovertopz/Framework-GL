@@ -12,7 +12,7 @@
  */
 package net.smert.frameworkgl.examples.gl3singlepasspixellit;
 
-import net.smert.frameworkgl.BootStrap;
+import net.smert.frameworkgl.Bootstrap;
 
 /**
  *
@@ -24,7 +24,7 @@ public class Demo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BootStrap boot = new BootStrap();
+        Bootstrap boot = new Bootstrap();
         boot.start(Configuration.class, SinglePassPixelLit.class, args);
     }
 

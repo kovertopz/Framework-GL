@@ -194,7 +194,7 @@ import org.picocontainer.parameters.ConstantParameter;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class BootStrap {
+public class Bootstrap {
 
     protected MutablePicoContainer alFactoryContainer;
     protected MutablePicoContainer cameraFactoryContainer;
