@@ -72,6 +72,16 @@ public class ObjectPool<T> {
         nameToObject.clear();
     }
 
+    public boolean exists(int uniqueID) {
+        T object = uniqueIDToObject.get(uniqueID);
+        return (object != null);
+    }
+
+    public boolean exists(String name) {
+        T object = nameToObject.get(name);
+        return (object != null);
+    }
+
     public T get(int uniqueID) {
         T object = uniqueIDToObject.get(uniqueID);
         if (object == null) {
