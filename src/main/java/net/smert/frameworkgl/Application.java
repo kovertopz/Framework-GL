@@ -53,6 +53,7 @@ public class Application {
                     Application.this.handleThrowable(t);
                 } finally {
                     Fw.audio.destroy();
+                    Fw.net.destroy();
                     Fw.input.destroy(); // Shutdown in reverse order
                     Fw.graphics.destroy();
                     Fw.window.destroy();
