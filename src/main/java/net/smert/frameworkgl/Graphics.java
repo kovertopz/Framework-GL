@@ -248,11 +248,28 @@ public class Graphics implements GLRenderer {
                 .setClampingWrapRClampToEdge().setClampingWrapSClampToEdge().setClampingWrapTClampToEdge()
                 .setFilterMagLinear().setFilterMinLinear().setTextureTargetCubeMap().buildTexture();
         Texture texture = GL.textureBuilder.createTexture(true);
-        Renderable.texturePool.add(folderName + "/cubemap." + fileExtension, texture);
+
+        // Remove texture from pool
+        String textureFilename = folderName + "/cubemap." + fileExtension;
+        Texture existingTexture = Renderable.texturePool.remove(textureFilename);
+        if (existingTexture != null) {
+            existingTexture.destroy();
+        }
+
+        // Add texture to pool
+        Renderable.texturePool.add(textureFilename, texture);
     }
 
     public void loadTexture(String filename) throws IOException {
         Texture texture = GL.textureReader.load(filename);
+
+        // Remove texture from pool
+        Texture existingTexture = Renderable.texturePool.remove(filename);
+        if (existingTexture != null) {
+            existingTexture.destroy();
+        }
+
+        // Add texture to pool
         Renderable.texturePool.add(filename, texture);
     }
 
@@ -260,6 +277,14 @@ public class Graphics implements GLRenderer {
         List<String> textures = mesh.getTextures();
         for (String filename : textures) {
             Texture texture = GL.textureReader.load(filename);
+
+            // Remove texture from pool
+            Texture existingTexture = Renderable.texturePool.remove(filename);
+            if (existingTexture != null) {
+                existingTexture.destroy();
+            }
+
+            // Add texture to pool
             Renderable.texturePool.add(filename, texture);
         }
     }
