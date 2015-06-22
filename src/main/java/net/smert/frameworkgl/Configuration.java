@@ -56,8 +56,11 @@ public class Configuration {
     protected String logFilename;
     protected String logProperties;
     protected String windowTitle;
+    protected String[] commandLineArgs;
 
     public Configuration(String[] args) {
+        commandLineArgs = args;
+
         desktopResizable = true;
         fullscreenEnabled = false;
         fullscreenRequested = false;
