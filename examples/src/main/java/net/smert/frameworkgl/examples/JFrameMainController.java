@@ -34,7 +34,6 @@ public class JFrameMainController {
 
     public void actionRunExample(String exampleClass) {
         jFrameMainModel.runDemo(exampleClass, mainArgs);
-
     }
 
     public void actionDefault() {
