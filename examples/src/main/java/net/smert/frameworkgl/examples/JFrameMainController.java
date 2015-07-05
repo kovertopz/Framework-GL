@@ -43,10 +43,10 @@ public class JFrameMainController {
     public void displayWindow(int x, int y, int width, int height, String title) {
         jFrameMainView.setBounds(x, y, width, height);
         jFrameMainView.setTitle(title);
-        jFrameMainView.setVisible(true);
         if ((x == -1) && (y == -1)) {
             jFrameMainView.setLocationRelativeTo(null);
         }
+        jFrameMainView.setVisible(true);
     }
 
 }
