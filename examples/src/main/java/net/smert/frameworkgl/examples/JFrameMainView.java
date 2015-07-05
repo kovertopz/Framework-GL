@@ -24,7 +24,7 @@ public class JFrameMainView extends javax.swing.JFrame {
     private final JFrameMainController jFrameMainController;
 
     /**
-     * Creates new form JFrameMain
+     * Creates new form JFrameMainView
      *
      * @param jFrameMainController
      */
