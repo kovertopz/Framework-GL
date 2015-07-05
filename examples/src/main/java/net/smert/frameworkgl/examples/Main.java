@@ -53,22 +53,11 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                int x = (GetScreenWorkingWidth() - WIDTH) / 2;
-                int y = (GetScreenWorkingHeight() - HEIGHT) / 2;
-
                 JFrameMainController jFrameMainController = new JFrameMainController(args);
-                jFrameMainController.displayWindow(x, y, WIDTH, HEIGHT, TITLE);
+                jFrameMainController.displayWindow(-1, -1, WIDTH, HEIGHT, TITLE);
                 jFrameMainController.actionDefault();
             }
         });
-    }
-
-    public static int GetScreenWorkingHeight() {
-        return java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
-    }
-
-    public static int GetScreenWorkingWidth() {
-        return java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
     }
 
 }

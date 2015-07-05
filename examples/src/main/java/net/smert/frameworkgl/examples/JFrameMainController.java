@@ -44,6 +44,9 @@ public class JFrameMainController {
         jFrameMainView.setBounds(x, y, width, height);
         jFrameMainView.setTitle(title);
         jFrameMainView.setVisible(true);
+        if ((x == -1) && (y == -1)) {
+            jFrameMainView.setLocationRelativeTo(null);
+        }
     }
 
 }
