@@ -25,6 +25,19 @@
         </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <scm>
         <connection>scm:git:git://github.com/kovertopz/Framework-GL.git</connection>
         <developerConnection>scm:git:git@github.com:kovertopz/Framework-GL.git</developerConnection>
@@ -35,7 +48,8 @@
         <junit.version>4.11</junit.version>
         <libgdx.version>1.5.4</libgdx.version>
         <licensemaven.version>2.6</licensemaven.version>
-        <lwjgl.version>2.9.3</lwjgl.version>
+        <lwjgl.version>3.0.0a</lwjgl.version>
+        <lwjgl-snapshot.version>3.0.0a-SNAPSHOT</lwjgl-snapshot.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
         <mavendependency.version>2.8</mavendependency.version>
         <mavenjar.version>2.5</mavenjar.version>
@@ -65,14 +79,27 @@
             <classifier>natives-desktop</classifier>
         </dependency>
         <dependency>
-            <groupId>org.lwjgl.lwjgl</groupId>
+            <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
             <version>${lwjgl.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.lwjgl.lwjgl</groupId>
-            <artifactId>lwjgl_util</artifactId>
-            <version>${lwjgl.version}</version>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-natives-linux</artifactId>
+            <version>${lwjgl-snapshot.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-natives-macosx</artifactId>
+            <version>${lwjgl-snapshot.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-natives-windows</artifactId>
+            <version>${lwjgl-snapshot.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
