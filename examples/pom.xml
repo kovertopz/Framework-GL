@@ -49,7 +49,6 @@
         <libgdx.version>1.5.4</libgdx.version>
         <licensemaven.version>2.6</licensemaven.version>
         <lwjgl.version>3.0.0a</lwjgl.version>
-        <lwjgl-snapshot.version>3.0.0a-SNAPSHOT</lwjgl-snapshot.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
         <mavendependency.version>2.8</mavendependency.version>
         <mavenjar.version>2.5</mavenjar.version>
@@ -85,21 +84,21 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-natives-linux</artifactId>
-            <version>${lwjgl-snapshot.version}</version>
-            <scope>runtime</scope>
+            <artifactId>lwjgl-platform</artifactId>
+            <version>${lwjgl.version}</version>
+            <classifier>natives-windows</classifier>
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-natives-macosx</artifactId>
-            <version>${lwjgl-snapshot.version}</version>
-            <scope>runtime</scope>
+            <artifactId>lwjgl-platform</artifactId>
+            <version>${lwjgl.version}</version>
+            <classifier>natives-osx</classifier>
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-natives-windows</artifactId>
-            <version>${lwjgl-snapshot.version}</version>
-            <scope>runtime</scope>
+            <artifactId>lwjgl-platform</artifactId>
+            <version>${lwjgl.version}</version>
+            <classifier>natives-linux</classifier>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
