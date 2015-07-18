@@ -766,6 +766,20 @@ public class Bootstrap {
         textureReader.registerExtension("tga", container.getComponent(TGAReader.class));
         textureReader.registerExtension("tif", container.getComponent(TIFFReader.class));
         textureReader.registerExtension("tiff", container.getComponent(TIFFReader.class));
+
+        // Timer accuracy thread
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Win")) {
+            Thread timerAccuracyThread = new Thread(() -> {
+                try {
+                    Thread.sleep(Long.MAX_VALUE);
+                } catch (Exception ex) {
+                }
+            });
+            timerAccuracyThread.setName("Timer Accuracy");
+            timerAccuracyThread.setDaemon(true);
+            timerAccuracyThread.start();
+        }
     }
 
     protected void modifyDependencies(MutablePicoContainer container) {
