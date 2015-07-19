@@ -13,8 +13,6 @@
 package net.smert.frameworkgl;
 
 import java.util.logging.Level;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.PixelFormat;
 
 /**
  *
@@ -24,11 +22,13 @@ public class Configuration {
 
     boolean fullscreenEnabled;
     boolean vSyncEnabled;
-    ContextAttribs contextAttribs;
-    PixelFormat pixelFormat;
+    protected boolean coreProfile;
     protected boolean desktopResizable;
-    protected boolean inFocus;
+    protected boolean forwardCompatible;
+    protected boolean framebufferSrgb;
+    protected boolean framebufferStereo;
     protected boolean fullscreenRequested;
+    protected boolean inFocus;
     protected boolean logConsole;
     protected boolean logFile;
     protected boolean pauseNotInFocus;
@@ -44,14 +44,21 @@ public class Configuration {
     protected int desktopLocationY;
     protected int desktopWidth;
     protected int foregroundFrameRate;
-    protected int fullscreenDepth;
-    protected int fullscreenFreq;
+    protected int framebufferBlueBits;
+    protected int framebufferDepthBits;
+    protected int framebufferGreenBits;
+    protected int framebufferRedBits;
+    protected int framebufferSamples;
+    protected int framebufferStencilBits;
     protected int fullscreenHeight;
+    protected int fullscreenRefreshRate;
     protected int fullscreenWidth;
-    protected int glslVersion;
     protected int gameTicksPerSecond;
+    protected int glslVersion;
     protected int openglMajorVersion;
     protected int openglMinorVersion;
+    protected int requestedOpenglMajorVersion;
+    protected int requestedOpenglMinorVersion;
     protected Level logLevel;
     protected String logFilename;
     protected String logProperties;
@@ -61,7 +68,11 @@ public class Configuration {
     public Configuration(String[] args) {
         commandLineArgs = args;
 
+        coreProfile = true;
         desktopResizable = true;
+        forwardCompatible = false;
+        framebufferSrgb = false;
+        framebufferStereo = false;
         fullscreenEnabled = false;
         fullscreenRequested = false;
         inFocus = false;
@@ -81,18 +92,36 @@ public class Configuration {
         desktopLocationY = -1;
         desktopWidth = 854;
         foregroundFrameRate = 3000;
-        fullscreenDepth = 32;
-        fullscreenFreq = 60;
+        framebufferBlueBits = 8;
+        framebufferDepthBits = 24;
+        framebufferGreenBits = 8;
+        framebufferRedBits = 8;
+        framebufferSamples = 0;
+        framebufferStencilBits = 8;
         fullscreenHeight = 720;
+        fullscreenRefreshRate = 60;
         fullscreenWidth = 1280;
         gameTicksPerSecond = 60;
+        glslVersion = -1;
+        openglMajorVersion = -1;
+        openglMinorVersion = -1;
+        requestedOpenglMajorVersion = -1;
+        requestedOpenglMinorVersion = -1;
 
-        withOpenGL33ProfileCore();
         logLevel = Level.INFO;
-        withDefaultPixelFormat();
         logFilename = "framework.log";
         logProperties = null;
         windowTitle = "OpenGL Framework";
+    }
+
+    /**
+     * This is an initial configuration parameter to request a OpenGL core profile. If set to false a compatibility
+     * profile will be requested.
+     *
+     * @return
+     */
+    public boolean isCoreProfile() {
+        return coreProfile;
     }
 
     /**
@@ -103,6 +132,33 @@ public class Configuration {
      */
     public boolean isDesktopResizable() {
         return desktopResizable;
+    }
+
+    /**
+     * This is an initial configuration parameter to request a OpenGL profile that is forward compatible.
+     *
+     * @return
+     */
+    public boolean isForwardCompatible() {
+        return forwardCompatible;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer to be sRGB capable.
+     *
+     * @return
+     */
+    public boolean isFramebufferSrgb() {
+        return framebufferSrgb;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer to use stereoscopic rendering.
+     *
+     * @return
+     */
+    public boolean isFramebufferStereo() {
+        return framebufferStereo;
     }
 
     /**
@@ -186,15 +242,6 @@ public class Configuration {
      */
     public boolean isVSyncRequested() {
         return vSyncRequested;
-    }
-
-    /**
-     * Gets the expected GLSL version (shaders) associated with the context selected.
-     *
-     * @return
-     */
-    public int getGlslVersion() {
-        return glslVersion;
     }
 
     /**
@@ -300,24 +347,58 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the full screen window depth. This does not reflect the current
-     * setting of the Display. This should be either 16 or 32 bit color.
+     * This is an initial configuration parameter to set the framebuffer blue bits.
      *
      * @return
      */
-    public int getFullscreenDepth() {
-        return fullscreenDepth;
+    public int getFramebufferBlueBits() {
+        return framebufferBlueBits;
     }
 
     /**
-     * This is an initial configuration parameter to set the full screen window refresh rate. This does not reflect the
-     * current setting of the Display. This should be set to match the current monitors refresh rate. 60 should be a
-     * safe default.
+     * This is an initial configuration parameter to set the framebuffer depth bits.
      *
      * @return
      */
-    public int getFullscreenFreq() {
-        return fullscreenFreq;
+    public int getFramebufferDepthBits() {
+        return framebufferDepthBits;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer green bits.
+     *
+     * @return
+     */
+    public int getFramebufferGreenBits() {
+        return framebufferGreenBits;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer red bits.
+     *
+     * @return
+     */
+    public int getFramebufferRedBits() {
+        return framebufferRedBits;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer samples used in multisampling. Zero disables
+     * multisampling.
+     *
+     * @return
+     */
+    public int getFramebufferSamples() {
+        return framebufferSamples;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the framebuffer stencil bits.
+     *
+     * @return
+     */
+    public int getFramebufferStencilBits() {
+        return framebufferStencilBits;
     }
 
     /**
@@ -328,6 +409,17 @@ public class Configuration {
      */
     public int getFullscreenHeight() {
         return fullscreenHeight;
+    }
+
+    /**
+     * This is an initial configuration parameter to set the full screen window refresh rate. This does not reflect the
+     * current setting of the Display. This should be set to match the current monitors refresh rate. 60 should be a
+     * safe default.
+     *
+     * @return
+     */
+    public int getFullscreenRefreshRate() {
+        return fullscreenRefreshRate;
     }
 
     /**
@@ -347,6 +439,15 @@ public class Configuration {
      */
     public int getGameTicksPerSecond() {
         return gameTicksPerSecond;
+    }
+
+    /**
+     * Gets the expected GLSL version (shaders) associated with the context selected.
+     *
+     * @return
+     */
+    public int getGlslVersion() {
+        return glslVersion;
     }
 
     /**
@@ -448,197 +549,101 @@ public class Configuration {
     }
 
     /**
-     * Sets the default pixel format which requests a 24 bit depth buffer and a 8 bit stencil buffer.
+     * Gets the command line arguments passed to the application.
+     *
+     * @return
      */
-    public final void withDefaultPixelFormat() {
-        pixelFormat = new PixelFormat()
-                .withDepthBits(24)
-                .withStencilBits(8);
+    public String[] getCommandLineArgs() {
+        return commandLineArgs;
+    }
+
+    public final void withOpenGL32ProfileCompatibility() {
+        coreProfile = false;
+        forwardCompatible = false;
+        glslVersion = 150;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 2;
+    }
+
+    public final void withOpenGL32ProfileCore() {
+        coreProfile = true;
+        forwardCompatible = false;
+        glslVersion = 150;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 2;
     }
 
     /**
-     * Sets the OpenGL context to request version 3.2 with a core profile. All fixed-function pipeline features have
-     * been removed. It is recommended that you pick a 3.3 core profile. This is only useful if you must support Mac OSX
-     * 10.7 or 10.8.
+     * Sets the OpenGL context to request version 3.2 with a core profile and forward compatible set. All fixed-function
+     * pipeline features have been removed. It is recommended that you pick a 3.3 core profile. This will get the
+     * highest OpenGL version supported for Mac OSX 10.7 and later. OpenGL major/minor version will not be set correctly
+     * of Mac OSX 10.9+ which supports OpenGL 3.3/4.1.
      */
-    public final void withOpenGL32ProfileCore() {
+    public final void withOpenGL32ProfileCoreForwardCompatible() {
+        coreProfile = true;
+        forwardCompatible = true;
         glslVersion = 150;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 2;
+    }
+
+    public final void withOpenGL33ProfileCompatibility() {
+        coreProfile = false;
+        forwardCompatible = false;
+        glslVersion = 330;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 3;
+    }
+
+    /**
+     * Sets the OpenGL context to request version 3.3 with a core profile. All fixed-function pipeline features have
+     * been removed. This is the recommended profile for the framework. Use withOpenGL33ProfileCoreMac() to get the
+     * correct context for Mac OSX 10.9.
+     */
+    public final void withOpenGL33ProfileCore() {
+        if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
+            withOpenGL33ProfileCoreMac();
+            return;
+        }
+        coreProfile = true;
+        forwardCompatible = false;
+        glslVersion = 330;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 3;
+    }
+
+    /**
+     * Sets the OpenGL context to request version 3.2 with a core profile and forward compatible set. All fixed-function
+     * pipeline features have been removed. This is intended to be called for Mac OSX 10.9 in order to get a OpenGL 3.3
+     * context. Since Mac OSX 10.9 supports both OpenGL 3.3 and 4.1 you may still end up with a higher OpenGL version
+     * than requested. If you are one of those people I would be nice to know if this actually works in a 4.1 context.
+     */
+    public final void withOpenGL33ProfileCoreMac() {
+        withOpenGL32ProfileCoreForwardCompatible();
+        glslVersion = 330;
         openglMajorVersion = 3;
-        openglMinorVersion = 2;
-        contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
-                .withForwardCompatible(true)
-                .withProfileCompatibility(false)
-                .withProfileCore(true);
+        openglMinorVersion = 3;
+        // Not sure why the shaders have errors validating, yet the info log shows nothing specific.
+        validateShaders = false;
+    }
+
+    public final void withOpenGL33ProfileCoreForwardCompatible() {
+        coreProfile = true;
+        forwardCompatible = true;
+        glslVersion = 330;
+        openglMajorVersion = requestedOpenglMajorVersion = 3;
+        openglMinorVersion = requestedOpenglMinorVersion = 3;
     }
 
     /**
      * This gives us a compatibility context and you should only stick to OpenGL 1.X and 2.X features.
      */
-    public final void withOpenGL33ProfileCompatibility() {
+    public final void withOpenGLProfileAny() {
+        coreProfile = false;
+        forwardCompatible = false;
         glslVersion = 120;
-        openglMajorVersion = 2;
-        openglMinorVersion = 1;
-        contextAttribs = new ContextAttribs(3, 3)
-                .withProfileCompatibility(true)
-                .withProfileCore(false);
-    }
-
-    /**
-     * Sets the OpenGL context to request version 3.3 with a core profile. All fixed-function pipeline features have
-     * been removed. This is the recommended profile for the framework. This supports Mac OSX 10.9 and later.
-     */
-    public final void withOpenGL33ProfileCore() {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            // Because on Mac OSX you have to request a 3.2 core profile to get a 3.3 core profile...DUH
-            withOpenGL32ProfileCore();
-            // Not sure why the shaders have errors validating, yet the info log shows nothing specific.
-            validateShaders = false;
-            glslVersion = 330;
-            openglMajorVersion = 3;
-            openglMinorVersion = 3;
-            return;
-        }
-        glslVersion = 330;
-        openglMajorVersion = 3;
-        openglMinorVersion = 3;
-        contextAttribs = new ContextAttribs(openglMajorVersion, openglMinorVersion)
-                .withProfileCompatibility(false)
-                .withProfileCore(true);
-    }
-
-    /**
-     * Creates a new pixel format object.
-     */
-    public void withNewPixelFormat() {
-        pixelFormat = new PixelFormat();
-    }
-
-    /**
-     * Sets the alpha bits on the pixel format. The default is 0.
-     *
-     * @param alpha
-     */
-    public void withPixelFormatAlphaBits(int alpha) {
-        pixelFormat = pixelFormat.withAlphaBits(alpha);
-    }
-
-    /**
-     * I'm not sure what this setting does.
-     *
-     * @param accum_alpha
-     */
-    public void withPixelFormatAccumulationAlpha(int accum_alpha) {
-        pixelFormat = pixelFormat.withAccumulationAlpha(accum_alpha);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param accum_bpp
-     */
-    public void withPixelFormatAccumulationBitsPerPixel(int accum_bpp) {
-        pixelFormat = pixelFormat.withAccumulationBitsPerPixel(accum_bpp);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param num_aux_buffers
-     */
-    public void withPixelFormatAuxBuffers(int num_aux_buffers) {
-        pixelFormat = pixelFormat.withAuxBuffers(num_aux_buffers);
-    }
-
-    /**
-     * Changes the bit per pixel excluding alpha of the pixel format. This parameter is ignored in Display.create().
-     *
-     * @param bpp
-     */
-    public void withPixelFormatBitsPerPixel(int bpp) {
-        pixelFormat = pixelFormat.withBitsPerPixel(bpp);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject. Coverage Sample Anti-aliasing (CSAA)
-     *
-     * @param colorSamples
-     */
-    public void withPixelFormatCoverageSamples(int colorSamples) {
-        pixelFormat = pixelFormat.withCoverageSamples(colorSamples);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject. Coverage Sample Anti-aliasing (CSAA)
-     *
-     * @param colorSamples
-     * @param coverageSamples
-     */
-    public void withPixelFormatCoverageSamples(int colorSamples, int coverageSamples) {
-        pixelFormat = pixelFormat.withCoverageSamples(colorSamples, coverageSamples);
-    }
-
-    /**
-     * This sets the requested number of depth bits for the depth buffer. More bits the higher the precision. All
-     * hardware should support a 24 bit depth buffer.
-     *
-     * @param depth
-     */
-    public void withPixelFormatDepthBits(int depth) {
-        pixelFormat = pixelFormat.withDepthBits(depth);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param floating_point
-     */
-    public void withPixelFormatFloatingPoint(boolean floating_point) {
-        pixelFormat = pixelFormat.withFloatingPoint(floating_point);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param floating_point_packed
-     */
-    public void withPixelFormatFloatingPointPacked(boolean floating_point_packed) {
-        pixelFormat = pixelFormat.withFloatingPointPacked(floating_point_packed);
-    }
-
-    /**
-     * This is the number of samples to use for Multi Sample Anti-aliasing (MSAA).
-     *
-     * @param samples
-     */
-    public void withPixelFormatSamples(int samples) {
-        pixelFormat = pixelFormat.withSamples(samples);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param sRGB
-     */
-    public void withPixelFormatSRGB(boolean sRGB) {
-        pixelFormat = pixelFormat.withSRGB(sRGB);
-    }
-
-    /**
-     * This requests the number of bits to be used with the stencil buffer.
-     *
-     * @param stencil
-     */
-    public void withPixelFormatStencilBits(int stencil) {
-        pixelFormat = pixelFormat.withStencilBits(stencil);
-    }
-
-    /**
-     * I'm not sure what this setting does. Please school me on the subject.
-     *
-     * @param stereo
-     */
-    public void withPixelFormatStereo(boolean stereo) {
-        pixelFormat = pixelFormat.withStereo(stereo);
+        openglMajorVersion = requestedOpenglMajorVersion = 2;
+        openglMinorVersion = requestedOpenglMinorVersion = 1;
     }
 
 }

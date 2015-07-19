@@ -18,7 +18,7 @@ package net.smert.frameworkgl.helpers;
  */
 public enum Mouse {
 
-    MOVE,
+    NONE,
     LEFT,
     RIGHT,
     MIDDLE,
@@ -26,6 +26,7 @@ public enum Mouse {
     FORWARD,
     WHEEL_UP,
     WHEEL_DOWN,
+    MOVE,
     // Max enum value
     MAX_MOUSE;
 

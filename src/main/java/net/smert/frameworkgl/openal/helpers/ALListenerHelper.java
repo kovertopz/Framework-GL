@@ -39,15 +39,15 @@ public class ALListenerHelper {
     }
 
     public void getOrientation(FloatBuffer orientation) {
-        AL10.alGetListener(AL10.AL_ORIENTATION, orientation);
+        AL10.alGetListenerfv(AL10.AL_ORIENTATION, orientation);
     }
 
     public void getPosition(FloatBuffer position) {
-        AL10.alGetListener(AL10.AL_POSITION, position);
+        AL10.alGetListenerfv(AL10.AL_POSITION, position);
     }
 
     public void getVelocity(FloatBuffer velocity) {
-        AL10.alGetListener(AL10.AL_VELOCITY, velocity);
+        AL10.alGetListenerfv(AL10.AL_VELOCITY, velocity);
     }
 
     public void setGain(float gain) {
@@ -55,7 +55,7 @@ public class ALListenerHelper {
     }
 
     public void setOrientation(FloatBuffer orientation) {
-        AL10.alListener(AL10.AL_ORIENTATION, orientation);
+        AL10.alListenerfv(AL10.AL_ORIENTATION, orientation);
     }
 
     public void setPosition(float x, float y, float z) {
@@ -63,7 +63,7 @@ public class ALListenerHelper {
     }
 
     public void setPosition(FloatBuffer position) {
-        AL10.alListener(AL10.AL_POSITION, position);
+        AL10.alListenerfv(AL10.AL_POSITION, position);
     }
 
     public void setVelocity(float x, float y, float z) {
@@ -71,7 +71,7 @@ public class ALListenerHelper {
     }
 
     public void setVelocity(FloatBuffer velocity) {
-        AL10.alListener(AL10.AL_VELOCITY, velocity);
+        AL10.alListenerfv(AL10.AL_VELOCITY, velocity);
     }
 
 }

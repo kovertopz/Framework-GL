@@ -59,10 +59,6 @@ public class ALBufferHelper {
         return AL10.AL_FORMAT_STEREO16;
     }
 
-    public int getConstFormatVorbisExt() {
-        return AL10.AL_FORMAT_VORBIS_EXT;
-    }
-
     public int getConstNoError() {
         return AL10.AL_NO_ERROR;
     }

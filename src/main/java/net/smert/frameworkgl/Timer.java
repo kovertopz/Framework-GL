@@ -21,7 +21,7 @@ import net.smert.frameworkgl.utils.TimeSpan;
 public class Timer {
 
     private final static int FRAME_SLOTS = 100;
-    private final static long ONE_NANO_SECOND = 1000000000L;
+    public final static long ONE_NANO_SECOND = 1000000000L;
 
     private boolean isGameTick;
     private boolean isRenderTick;
@@ -101,8 +101,8 @@ public class Timer {
         lostRenderTicks = 0;
         remainingGameTicks = 0;
         remainingRenderTicks = 0;
-        delta = 0f;
-        totalTime = 0f;
+        delta = 0;
+        totalTime = 0;
         frameCounter = 0;
         gameTicksPerSecond = 0;
         renderTicksPerSecond = 0;

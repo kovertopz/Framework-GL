@@ -67,7 +67,7 @@ public class ALSourceHelper {
     }
 
     public void getDirection(int sourceID, FloatBuffer direction) {
-        AL10.alGetSource(sourceID, AL10.AL_DIRECTION, direction);
+        AL10.alGetSourcefv(sourceID, AL10.AL_DIRECTION, direction);
     }
 
     /**
@@ -104,7 +104,7 @@ public class ALSourceHelper {
     }
 
     public void getPosition(int sourceID, FloatBuffer position) {
-        AL10.alGetSource(sourceID, AL10.AL_POSITION, position);
+        AL10.alGetSourcefv(sourceID, AL10.AL_POSITION, position);
     }
 
     public float getReferenceDistance(int sourceID) {
@@ -128,7 +128,7 @@ public class ALSourceHelper {
     }
 
     public void getVelocity(int sourceID, FloatBuffer velocity) {
-        AL10.alGetSource(sourceID, AL10.AL_VELOCITY, velocity);
+        AL10.alGetSourcefv(sourceID, AL10.AL_VELOCITY, velocity);
     }
 
     public boolean isValid(int sourceID) {
@@ -176,7 +176,7 @@ public class ALSourceHelper {
     }
 
     public void setDirection(int sourceID, FloatBuffer direction) {
-        AL10.alSource(sourceID, AL10.AL_DIRECTION, direction);
+        AL10.alSourcefv(sourceID, AL10.AL_DIRECTION, direction);
     }
 
     public void setGain(int sourceID, float gain) {
@@ -208,7 +208,7 @@ public class ALSourceHelper {
     }
 
     public void setPosition(int sourceID, FloatBuffer position) {
-        AL10.alSource(sourceID, AL10.AL_POSITION, position);
+        AL10.alSourcefv(sourceID, AL10.AL_POSITION, position);
     }
 
     public void setReferenceDistance(int sourceID, float referenceDistance) {
@@ -244,7 +244,7 @@ public class ALSourceHelper {
     }
 
     public void setVelocity(int sourceID, FloatBuffer velocity) {
-        AL10.alSource(sourceID, AL10.AL_VELOCITY, velocity);
+        AL10.alSourcefv(sourceID, AL10.AL_VELOCITY, velocity);
     }
 
     public void stop(int sourceID) {

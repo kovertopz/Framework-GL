@@ -99,9 +99,6 @@ public class TextureBuilder {
         // Generate mipmaps
         switch (texturePrimitive) {
             case TextureTypes.UNSIGNED_BYTE:
-                GL.textureHelper.setMipmapData(textureInternalFormat, textureWidth, textureHeight, textureFormat, pixelByteBuffer);
-                break;
-
             case TextureTypes.FLOAT:
             case TextureTypes.UNSIGNED_INT_10_10_10_2:
             case TextureTypes.UNSIGNED_INT:
@@ -633,7 +630,7 @@ public class TextureBuilder {
         nullData = false;
         useMipmap = false;
         pixelByteArray = null;
-        lodBias = 0f;
+        lodBias = 0;
         maxLod = 1000f;
         minLod = -1000f;
         setCompareFunctionLessEqual();

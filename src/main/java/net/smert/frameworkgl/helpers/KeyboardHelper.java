@@ -14,6 +14,7 @@ package net.smert.frameworkgl.helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.glfw.GLFW;
 
 /**
  *
@@ -21,201 +22,203 @@ import java.util.List;
  */
 public class KeyboardHelper {
 
-    private final static int KEYBOARD_SIZE = org.lwjgl.input.Keyboard.KEYBOARD_SIZE;
-    private boolean[] isDown;
-    private boolean[] nextState;
-    private boolean[] wasDown;
-    private int[] lwjglToKeyboard;
+    private final static int KEYBOARD_SIZE = GLFW.GLFW_KEY_LAST + 1;
+
+    private final boolean[] isDown;
+    private final boolean[] nextState;
+    private final boolean[] wasDown;
+    private final int[] lwjglToKeyboard;
     private final List<KeyboardEvent> keyboardEvents;
 
     public KeyboardHelper() {
+        isDown = new boolean[Keyboard.MAX_KEYBOARD.ordinal()];
+        nextState = new boolean[Keyboard.MAX_KEYBOARD.ordinal()];
+        wasDown = new boolean[Keyboard.MAX_KEYBOARD.ordinal()];
+        lwjglToKeyboard = new int[KEYBOARD_SIZE];
         keyboardEvents = new ArrayList<>();
     }
 
     private void mapLwglToKeyboard() {
 
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NONE] = Keyboard.NONE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_ESCAPE] = Keyboard.ESCAPE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F1] = Keyboard.F1.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F2] = Keyboard.F2.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F3] = Keyboard.F3.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F4] = Keyboard.F4.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F5] = Keyboard.F5.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F6] = Keyboard.F6.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F7] = Keyboard.F7.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F8] = Keyboard.F8.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F9] = Keyboard.F9.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F10] = Keyboard.F10.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F11] = Keyboard.F11.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F12] = Keyboard.F12.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SYSRQ] = Keyboard.PRINT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SCROLL] = Keyboard.SCROLL.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_PAUSE] = Keyboard.PAUSE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_GRAVE] = Keyboard.GRAVE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_1] = Keyboard.NUM1.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_2] = Keyboard.NUM2.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_3] = Keyboard.NUM3.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_4] = Keyboard.NUM4.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_5] = Keyboard.NUM5.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_6] = Keyboard.NUM6.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_7] = Keyboard.NUM7.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_8] = Keyboard.NUM8.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_9] = Keyboard.NUM9.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_0] = Keyboard.NUM0.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_MINUS] = Keyboard.DASH.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_EQUALS] = Keyboard.EQUALS.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_BACK] = Keyboard.BACK.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_A] = Keyboard.A.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_B] = Keyboard.B.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_C] = Keyboard.C.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_D] = Keyboard.D.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_E] = Keyboard.E.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_F] = Keyboard.F.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_G] = Keyboard.G.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_H] = Keyboard.H.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_I] = Keyboard.I.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_J] = Keyboard.J.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_K] = Keyboard.K.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_L] = Keyboard.L.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_M] = Keyboard.M.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_N] = Keyboard.N.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_O] = Keyboard.O.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_P] = Keyboard.P.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_Q] = Keyboard.Q.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_R] = Keyboard.R.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_S] = Keyboard.S.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_T] = Keyboard.T.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_U] = Keyboard.U.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_V] = Keyboard.V.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_W] = Keyboard.W.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_X] = Keyboard.X.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_Y] = Keyboard.Y.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_Z] = Keyboard.Z.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_TAB] = Keyboard.TAB.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LBRACKET] = Keyboard.LBRACKET.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RBRACKET] = Keyboard.RBRACKET.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_BACKSLASH] = Keyboard.BACKSLASH.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_CAPITAL] = Keyboard.CAPS.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SEMICOLON] = Keyboard.SEMICOLON.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_APOSTROPHE] = Keyboard.APOSTROPHE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RETURN] = Keyboard.RETURN.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RSHIFT] = Keyboard.RSHIFT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_COMMA] = Keyboard.COMMA.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_PERIOD] = Keyboard.PERIOD.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SLASH] = Keyboard.SLASH.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LSHIFT] = Keyboard.LSHIFT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LCONTROL] = Keyboard.LCONTROL.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LMETA] = Keyboard.LMETA.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LMENU] = Keyboard.LALT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SPACE] = Keyboard.SPACE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RMENU] = Keyboard.RALT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RMETA] = Keyboard.RMETA.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RCONTROL] = Keyboard.RCONTROL.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_INSERT] = Keyboard.INSERT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_HOME] = Keyboard.HOME.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_PRIOR] = Keyboard.PAGE_UP.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_DELETE] = Keyboard.DELETE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_END] = Keyboard.END.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NEXT] = Keyboard.PAGE_DOWN.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_DOWN] = Keyboard.DOWN.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_LEFT] = Keyboard.LEFT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RIGHT] = Keyboard.RIGHT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_UP] = Keyboard.UP.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMLOCK] = Keyboard.NUMPAD_NUMLOCK.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_DIVIDE] = Keyboard.NUMPAD_DIVIDE.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_MULTIPLY] = Keyboard.NUMPAD_MULTIPLY.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_SUBTRACT] = Keyboard.NUMPAD_SUBTRACT.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_ADD] = Keyboard.NUMPAD_ADD.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD0] = Keyboard.NUMPAD_NUM0.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD1] = Keyboard.NUMPAD_NUM1.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD2] = Keyboard.NUMPAD_NUM2.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD3] = Keyboard.NUMPAD_NUM3.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD4] = Keyboard.NUMPAD_NUM4.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD5] = Keyboard.NUMPAD_NUM5.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD6] = Keyboard.NUMPAD_NUM6.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD7] = Keyboard.NUMPAD_NUM7.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD8] = Keyboard.NUMPAD_NUM8.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_NUMPAD9] = Keyboard.NUMPAD_NUM9.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_DECIMAL] = Keyboard.NUMPAD_DECIMAL.ordinal();
-        lwjglToKeyboard[org.lwjgl.input.Keyboard.KEY_RETURN] = Keyboard.NUMPAD_ENTER.ordinal();
-    }
-
-    private void updateButtonState() {
+        // Map to none
         for (int i = 0; i < KEYBOARD_SIZE; i++) {
-            wasDown[i] = isDown[i]; // Save last frame
-            isDown[i] = nextState[i]; // Set current frame
+            lwjglToKeyboard[i] = Keyboard.NONE.ordinal();
         }
+
+        lwjglToKeyboard[GLFW.GLFW_KEY_ESCAPE] = Keyboard.ESCAPE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F1] = Keyboard.F1.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F2] = Keyboard.F2.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F3] = Keyboard.F3.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F4] = Keyboard.F4.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F5] = Keyboard.F5.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F6] = Keyboard.F6.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F7] = Keyboard.F7.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F8] = Keyboard.F8.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F9] = Keyboard.F9.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F10] = Keyboard.F10.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F11] = Keyboard.F11.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F12] = Keyboard.F12.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_PRINT_SCREEN] = Keyboard.PRINT_SCREEN.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_SCROLL_LOCK] = Keyboard.SCROLL_LOCK.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_PAUSE] = Keyboard.PAUSE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_GRAVE_ACCENT] = Keyboard.GRAVE_ACCENT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_1] = Keyboard.NUM1.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_2] = Keyboard.NUM2.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_3] = Keyboard.NUM3.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_4] = Keyboard.NUM4.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_5] = Keyboard.NUM5.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_6] = Keyboard.NUM6.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_7] = Keyboard.NUM7.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_8] = Keyboard.NUM8.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_9] = Keyboard.NUM9.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_0] = Keyboard.NUM0.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_MINUS] = Keyboard.DASH.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_EQUAL] = Keyboard.EQUALS.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_BACKSPACE] = Keyboard.BACKSPACE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_A] = Keyboard.A.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_B] = Keyboard.B.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_C] = Keyboard.C.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_D] = Keyboard.D.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_E] = Keyboard.E.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_F] = Keyboard.F.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_G] = Keyboard.G.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_H] = Keyboard.H.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_I] = Keyboard.I.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_J] = Keyboard.J.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_K] = Keyboard.K.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_L] = Keyboard.L.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_M] = Keyboard.M.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_N] = Keyboard.N.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_O] = Keyboard.O.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_P] = Keyboard.P.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_Q] = Keyboard.Q.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_R] = Keyboard.R.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_S] = Keyboard.S.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_T] = Keyboard.T.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_U] = Keyboard.U.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_V] = Keyboard.V.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_W] = Keyboard.W.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_X] = Keyboard.X.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_Y] = Keyboard.Y.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_Z] = Keyboard.Z.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_TAB] = Keyboard.TAB.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT_BRACKET] = Keyboard.LEFT_BRACKET.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT_BRACKET] = Keyboard.RIGHT_BRACKET.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_BACKSLASH] = Keyboard.BACKSLASH.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_CAPS_LOCK] = Keyboard.CAPS_LOCK.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_SEMICOLON] = Keyboard.SEMICOLON.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_APOSTROPHE] = Keyboard.APOSTROPHE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_ENTER] = Keyboard.ENTER.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT_SHIFT] = Keyboard.RIGHT_SHIFT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_COMMA] = Keyboard.COMMA.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_PERIOD] = Keyboard.PERIOD.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_SLASH] = Keyboard.SLASH.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT_SHIFT] = Keyboard.LEFT_SHIFT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT_CONTROL] = Keyboard.LEFT_CONTROL.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT_SUPER] = Keyboard.LEFT_SUPER.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT_ALT] = Keyboard.LEFT_ALT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_SPACE] = Keyboard.SPACE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT_ALT] = Keyboard.RIGHT_ALT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT_SUPER] = Keyboard.RIGHT_SUPER.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT_CONTROL] = Keyboard.RIGHT_CONTROL.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_INSERT] = Keyboard.INSERT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_HOME] = Keyboard.HOME.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_PAGE_UP] = Keyboard.PAGE_UP.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_DELETE] = Keyboard.DELETE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_END] = Keyboard.END.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_PAGE_DOWN] = Keyboard.PAGE_DOWN.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_DOWN] = Keyboard.DOWN.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_LEFT] = Keyboard.LEFT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_RIGHT] = Keyboard.RIGHT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_UP] = Keyboard.UP.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_NUM_LOCK] = Keyboard.NUM_LOCK.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_DIVIDE] = Keyboard.KP_DIVIDE.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_MULTIPLY] = Keyboard.KP_MULTIPLY.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_SUBTRACT] = Keyboard.KP_SUBTRACT.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_ADD] = Keyboard.KP_ADD.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_0] = Keyboard.KP_0.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_1] = Keyboard.KP_1.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_2] = Keyboard.KP_2.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_3] = Keyboard.KP_3.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_4] = Keyboard.KP_4.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_5] = Keyboard.KP_5.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_6] = Keyboard.KP_6.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_7] = Keyboard.KP_7.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_8] = Keyboard.KP_8.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_9] = Keyboard.KP_9.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_DECIMAL] = Keyboard.KP_DECIMAL.ordinal();
+        lwjglToKeyboard[GLFW.GLFW_KEY_KP_ENTER] = Keyboard.KP_ENTER.ordinal();
     }
 
-    public void destroy() {
-        org.lwjgl.input.Keyboard.destroy();
+    public void addEvent(int key, int modifiers, int scancode, boolean state) {
+        if (key < 0) {
+            return;
+        }
+        KeyboardEvent event = new KeyboardEvent();
+        event.character = Character.toChars(key)[0];
+        event.key = key;
+        event.mappedKey = lwjglToKeyboard[event.key];
+        event.modifiers = modifiers;
+        event.scancode = scancode;
+        event.state = state;
+        keyboardEvents.add(event);
+        nextState[event.mappedKey] = event.state;
     }
 
-    public int getKeyboardSize() {
-        return KEYBOARD_SIZE;
+    public void clearEvents() {
+        keyboardEvents.clear();
+    }
+
+    public void clearNextState() {
+        for (int i = 0; i < Keyboard.MAX_KEYBOARD.ordinal(); i++) {
+            nextState[i] = false;
+        }
     }
 
     public List<KeyboardEvent> getKeyboardEvents() {
         return keyboardEvents;
     }
 
-    public void init() {
-        isDown = new boolean[KEYBOARD_SIZE];
-        nextState = new boolean[KEYBOARD_SIZE];
-        wasDown = new boolean[KEYBOARD_SIZE];
-        lwjglToKeyboard = new int[KEYBOARD_SIZE];
-
-        // Set defaults
-        for (int i = 0; i < KEYBOARD_SIZE; i++) {
-            isDown[i] = false;
-            nextState[i] = false;
-            wasDown[i] = false;
-            lwjglToKeyboard[i] = 0;
-        }
-
-        mapLwglToKeyboard();
-    }
-
     public boolean isKeyDown(int key) {
         if ((key < 0) || (key >= isDown.length)) {
-            throw new IllegalArgumentException("Invalid key");
+            throw new IllegalArgumentException("Invalid key: " + key);
         }
         return isDown[key];
+    }
+
+    public boolean wasKeyDown(int key) {
+        if ((key < 0) || (key >= wasDown.length)) {
+            throw new IllegalArgumentException("Invalid key: " + key);
+        }
+        return wasDown[key];
     }
 
     public boolean isKeyDown(Keyboard keyboard) {
         return isDown[keyboard.ordinal()];
     }
 
-    public void update() {
-
-        // Clear last frames events
-        keyboardEvents.clear();
-
-        // Handle queued events
-        while (org.lwjgl.input.Keyboard.next()) {
-            KeyboardEvent event = new KeyboardEvent();
-            event.character = org.lwjgl.input.Keyboard.getEventCharacter();
-            event.key = org.lwjgl.input.Keyboard.getEventKey();
-            event.mappedKey = lwjglToKeyboard[event.key];
-            event.state = org.lwjgl.input.Keyboard.getEventKeyState();
-            keyboardEvents.add(event);
-            nextState[event.mappedKey] = event.state;
-        }
-
-        // Update states
-        updateButtonState();
-    }
-
-    public boolean wasKeyDown(int key) {
-        if ((key < 0) || (key >= wasDown.length)) {
-            throw new IllegalArgumentException("Invalid key");
-        }
-        return wasDown[key];
-    }
-
     public boolean wasKeyDown(Keyboard keyboard) {
         return wasDown[keyboard.ordinal()];
+    }
+
+    public void init() {
+        mapLwglToKeyboard();
+        reset();
+    }
+
+    public void reset() {
+        for (int i = 0; i < Keyboard.MAX_KEYBOARD.ordinal(); i++) {
+            isDown[i] = false;
+            nextState[i] = false;
+            wasDown[i] = false;
+        }
+    }
+
+    public void update() {
+        for (int i = 0; i < Keyboard.MAX_KEYBOARD.ordinal(); i++) {
+            wasDown[i] = isDown[i]; // Save last frame
+            isDown[i] = nextState[i]; // Set current frame
+        }
     }
 
     public static class KeyboardEvent {
@@ -231,7 +234,7 @@ public class KeyboardHelper {
         public char character;
 
         /**
-         * The raw key from LWJGL
+         * The keyboard key that was pressed or released
          */
         public int key;
 
@@ -239,6 +242,16 @@ public class KeyboardHelper {
          * The mapped key to the framework's keyboard
          */
         public int mappedKey;
+
+        /**
+         * Bitfield describing which modifiers keys were held down
+         */
+        public int modifiers;
+
+        /**
+         * The system-specific scancode of the key
+         */
+        public int scancode;
 
     }
 

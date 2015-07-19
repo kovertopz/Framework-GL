@@ -33,11 +33,11 @@ public enum Keyboard {
     F10,
     F11,
     F12,
-    PRINT,
-    SCROLL,
+    PRINT_SCREEN,
+    SCROLL_LOCK,
     PAUSE,
     // Row 2
-    GRAVE,
+    GRAVE_ACCENT,
     NUM1,
     NUM2,
     NUM3,
@@ -50,7 +50,7 @@ public enum Keyboard {
     NUM0,
     DASH,
     EQUALS,
-    BACK,
+    BACKSPACE,
     // Alphabet
     A,
     B,
@@ -80,28 +80,28 @@ public enum Keyboard {
     Z,
     // Row 3
     TAB,
-    LBRACKET,
-    RBRACKET,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
     BACKSLASH,
     // Row 4
-    CAPS,
+    CAPS_LOCK,
     SEMICOLON,
     APOSTROPHE,
-    RETURN,
+    ENTER,
     // Row 5
-    RSHIFT,
+    RIGHT_SHIFT,
     COMMA,
     PERIOD,
     SLASH,
-    LSHIFT,
+    LEFT_SHIFT,
     // Row 6
-    LCONTROL,
-    LMETA, // Windows key
-    LALT,
+    LEFT_CONTROL,
+    LEFT_SUPER, // Windows key
+    LEFT_ALT,
     SPACE,
-    RALT,
-    RMETA, // Windows key
-    RCONTROL,
+    RIGHT_ALT,
+    RIGHT_SUPER, // Windows key
+    RIGHT_CONTROL,
     // 6 Keys
     INSERT,
     HOME,
@@ -115,26 +115,26 @@ public enum Keyboard {
     RIGHT,
     UP,
     // Numberpad Row 1
-    NUMPAD_NUMLOCK,
-    NUMPAD_DIVIDE,
-    NUMPAD_MULTIPLY,
-    NUMPAD_SUBTRACT,
+    NUM_LOCK,
+    KP_DIVIDE,
+    KP_MULTIPLY,
+    KP_SUBTRACT,
     // Numberpad Row 2
-    NUMPAD_ADD,
+    KP_ADD,
     // Numberpad Numbers
-    NUMPAD_NUM0,
-    NUMPAD_NUM1,
-    NUMPAD_NUM2,
-    NUMPAD_NUM3,
-    NUMPAD_NUM4,
-    NUMPAD_NUM5,
-    NUMPAD_NUM6,
-    NUMPAD_NUM7,
-    NUMPAD_NUM8,
-    NUMPAD_NUM9,
+    KP_0,
+    KP_1,
+    KP_2,
+    KP_3,
+    KP_4,
+    KP_5,
+    KP_6,
+    KP_7,
+    KP_8,
+    KP_9,
     // Numberpad Row 3
-    NUMPAD_DECIMAL,
-    NUMPAD_ENTER,
+    KP_DECIMAL,
+    KP_ENTER,
     // Max enum value
     MAX_KEYBOARD;
 

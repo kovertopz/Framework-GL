@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.smert.frameworkgl.openal.codecs.Codec;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.ALContext;
+import org.lwjgl.openal.ALDevice;
 import org.lwjgl.openal.Util;
 
 /**
@@ -29,7 +30,6 @@ import org.lwjgl.openal.Util;
 public class OpenAL {
 
     private boolean contextSynchronized;
-    private boolean openDevice;
     private float defaultSourceMaxDistance;
     private float defaultSourceMusicVolume;
     private float defaultSourceReferenceDistance;
@@ -48,8 +48,9 @@ public class OpenAL {
     private final Map<String, OpenALBuffer> nameToOpenALBuffer;
     private final Map<String, OpenALBuffer> nameToTempOpenALBuffer;
     private final Map<String, Codec> extensionToCodec;
+    private ALContext alContext;
     private OpenALListener listener;
-    private String deviceArguments;
+    private String device;
 
     public OpenAL() {
         config = new Config();
@@ -114,7 +115,7 @@ public class OpenAL {
     }
 
     public void destroy() {
-        org.lwjgl.openal.AL.destroy();
+        org.lwjgl.openal.AL.destroy(alContext);
     }
 
     public float getDopplerFactor() {
@@ -123,10 +124,6 @@ public class OpenAL {
 
     public void setDopplerFactor(float factor) {
         AL10.alDopplerFactor(factor);
-    }
-
-    public float getDopplerVelocity() {
-        return AL10.alGetFloat(AL10.AL_DOPPLER_VELOCITY);
     }
 
     public void setDopplerVelocity(float velocity) {
@@ -231,17 +228,13 @@ public class OpenAL {
     }
 
     public void init() {
-        if (org.lwjgl.openal.AL.isCreated()) {
+        if (alContext != null) {
             return;
         }
 
         // Initialize OpenAL
-        try {
-            org.lwjgl.openal.AL.create(deviceArguments, contextFrequency, contextRefresh, contextSynchronized,
-                    openDevice);
-        } catch (LWJGLException ex) {
-            throw new RuntimeException(ex);
-        }
+        ALDevice alDevice = ALDevice.create(device);
+        alContext = ALContext.create(alDevice, contextFrequency, contextRefresh, contextSynchronized);
 
         // Check for errors
         checkForError("initializing OpenAL");
@@ -372,7 +365,6 @@ public class OpenAL {
 
     public final void reset() {
         contextSynchronized = false;
-        openDevice = true;
         defaultSourceMaxDistance = Float.MAX_VALUE;
         defaultSourceMusicVolume = 1f;
         defaultSourceReferenceDistance = 1f;
@@ -390,7 +382,7 @@ public class OpenAL {
         tempSources.clear();
         nameToOpenALBuffer.clear();
         listener = null;
-        deviceArguments = null;
+        device = null;
         assert ((numberOfMusicChannels + numberOfSoundChannels) == maxChannels);
     }
 
@@ -518,12 +510,12 @@ public class OpenAL {
             OpenAL.this.numberOfSoundChannels = numberOfSoundChannels;
         }
 
-        public String getDeviceArguments() {
-            return deviceArguments;
+        public String getDevice() {
+            return device;
         }
 
-        public void setDeviceArguments(String deviceArguments) {
-            OpenAL.this.deviceArguments = deviceArguments;
+        public void setDevice(String device) {
+            OpenAL.this.device = device;
         }
 
         public boolean isContextSynchronized() {
@@ -532,14 +524,6 @@ public class OpenAL {
 
         public void setContextSynchronized(boolean contextSynchronized) {
             OpenAL.this.contextSynchronized = contextSynchronized;
-        }
-
-        public boolean isOpenDevice() {
-            return openDevice;
-        }
-
-        public void setOpenDevice(boolean openDevice) {
-            OpenAL.this.openDevice = openDevice;
         }
 
     }

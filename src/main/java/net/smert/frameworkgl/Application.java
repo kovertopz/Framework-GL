@@ -24,7 +24,7 @@ public class Application {
 
     private final static Logger log = LoggerFactory.getLogger(Application.class);
 
-    private boolean isRunning;
+    private volatile boolean isRunning;
     private final Configuration config;
     private final Logging logging;
     private Screen screen;
@@ -43,19 +43,19 @@ public class Application {
             public void run() {
                 boolean exceptionCaught = false;
                 try {
+                    Fw.window.init();
                     Fw.window.create();
                     Fw.graphics.init();
                     Fw.input.init();
                     Application.this.mainLoop();
                 } catch (Throwable t) {
                     exceptionCaught = true;
-                    log.error("Main Loop Exception", t);
+                    log.error("Main Loop Thread Exception", t);
                     Application.this.handleThrowable(t);
                 } finally {
                     Fw.audio.destroy();
                     Fw.net.destroy();
-                    Fw.input.destroy(); // Shutdown in reverse order
-                    Fw.graphics.destroy();
+                    Fw.graphics.destroy(); // Shutdown in reverse order
                     Fw.window.destroy();
                     if (exceptionCaught) {
                         System.exit(-1);
@@ -79,16 +79,16 @@ public class Application {
         // Reset timer so delta is correct
         Fw.timer.reset();
 
-        // Set the window previously active and created
+        // Set the window previously active
         boolean wasActive = true;
-        boolean wasCreated = true;
 
         while (isRunning()) {
 
             // Process operating system events
+            Fw.input.clearEvents();
             Fw.window.processMessages();
 
-            config.inFocus = Fw.window.isActive();
+            config.inFocus = Fw.window.isFocused();
 
             // Lost focus
             if (wasActive && !config.inFocus && config.pauseNotInFocus) {
@@ -108,13 +108,9 @@ public class Application {
             }
 
             // Was the window resized?
-            if (Fw.window.wasResized() || wasCreated) {
-                wasCreated = false;
-                int x = Fw.window.getWidth();
-                int y = Fw.window.getHeight();
-                config.currentHeight = y;
-                config.currentWidth = x;
-                screen.resize(x, y);
+            if (Fw.window.wasResized()) {
+                Fw.window.setWasResized(false);
+                screen.resize(config.currentWidth, config.currentHeight);
             }
 
             // Update and render

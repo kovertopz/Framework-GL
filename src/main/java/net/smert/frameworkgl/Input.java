@@ -20,7 +20,6 @@ import net.smert.frameworkgl.helpers.KeyboardHelper;
 import net.smert.frameworkgl.helpers.Mouse;
 import net.smert.frameworkgl.helpers.MouseHelper;
 import net.smert.frameworkgl.utils.HashMapStringInt;
-import org.lwjgl.input.Cursor;
 
 /**
  *
@@ -28,19 +27,20 @@ import org.lwjgl.input.Cursor;
  */
 public class Input {
 
-    private final KeyboardHelper keyboardHelper;
+    public final static float MOUSE_POLL = 1f / 125f;
+
     private final HashMapStringInt actionToKey;
     private final HashMapStringInt actionToMouse;
+    private final KeyboardHelper keyboardHelper;
     private final List<InputProcessor> inputProcessors;
     private final MouseHelper mouseHelper;
-    public final float MOUSE_POLL = 1f / 125f;
 
     public Input(KeyboardHelper keyboardHelper, MouseHelper mouseHelper) {
         this.keyboardHelper = keyboardHelper;
+        this.mouseHelper = mouseHelper;
         actionToKey = new HashMapStringInt();
         actionToMouse = new HashMapStringInt();
         inputProcessors = new ArrayList<>();
-        this.mouseHelper = mouseHelper;
     }
 
     /**
@@ -58,42 +58,131 @@ public class Input {
         inputProcessors.add(inputProcessor);
     }
 
+    /**
+     * Adds a keyboard event to the queue until clearEvents or clearKeyboardEvents is called.
+     *
+     * @param key
+     * @param modifiers
+     * @param scancode
+     * @param state
+     */
+    public void addKeyboardEvent(int key, int modifiers, int scancode, boolean state) {
+        keyboardHelper.addEvent(key, modifiers, scancode, state);
+    }
+
+    /**
+     * Adds a mouse event to the queue until clearEvents or clearMouseEvents is called.
+     *
+     * @param button
+     * @param modifiers
+     * @param state
+     */
+    public void addMouseEvent(int button, int modifiers, boolean state) {
+        mouseHelper.addEvent(button, modifiers, state);
+    }
+
+    /**
+     * Center the mouse cursor
+     */
+    public void centerMouseCursor() {
+        mouseHelper.centerCursor();
+    }
+
+    /**
+     * Clear key and mouse actions.
+     */
     public void clearActions() {
         actionToKey.clear();
         actionToMouse.clear();
     }
 
+    /**
+     * Clear keyboard and mouse events.
+     */
+    public void clearEvents() {
+        keyboardHelper.clearEvents();
+        mouseHelper.clearEvents();
+    }
+
+    /**
+     * Clear keyboard and mouse next state.
+     */
+    public void clearNextState() {
+        keyboardHelper.clearNextState();
+        mouseHelper.clearNextState();
+    }
+
+    /**
+     * Clear registered key actions.
+     */
     public void clearKeyActions() {
         actionToKey.clear();
     }
 
+    /**
+     * Clear keyboard events.
+     */
+    public void clearKeyboardEvents() {
+        keyboardHelper.clearEvents();
+    }
+
+    /**
+     * Clear keyboard next state.
+     */
+    public void clearKeyboardNextState() {
+        keyboardHelper.clearNextState();
+    }
+
+    /**
+     * Clear registered mouse actions.
+     */
     public void clearMouseActions() {
         actionToMouse.clear();
     }
 
-    public void destroy() {
-        keyboardHelper.destroy();
-        mouseHelper.destroy();
+    /**
+     * Clear mouse delta.
+     */
+    public void clearMouseDelta() {
+        mouseHelper.clearDelta();
     }
 
-    public float getDeltaWheel() {
+    /**
+     * Clear mouse events.
+     */
+    public void clearMouseEvents() {
+        mouseHelper.clearEvents();
+    }
+
+    /**
+     * Clear mouse next state.
+     */
+    public void clearMouseNextState() {
+        mouseHelper.clearNextState();
+    }
+
+    public int getDeltaWheel() {
         return mouseHelper.getDeltaWheel();
     }
 
-    public float getDeltaX() {
+    public float getDeltaWheelWithSensitivity() {
+        return mouseHelper.getDeltaWheelWithSensitivity();
+    }
+
+    public int getDeltaX() {
         return mouseHelper.getDeltaX();
     }
 
-    public float getDeltaY() {
+    public float getDeltaXWithSensitivity() {
+        return mouseHelper.getDeltaXWithSensitivity();
+    }
+
+    public int getDeltaY() {
         return mouseHelper.getDeltaY();
     }
 
-    public int getButtonCount() {
-        return mouseHelper.getButtonCount();
-    }
-
-    public int getKeyboardSize() {
-        return keyboardHelper.getKeyboardSize();
+    public float getDeltaYWithSensitivity() {
+        return mouseHelper.getDeltaYWithSensitivity();
     }
 
     public int getMouseX() {
@@ -104,8 +193,14 @@ public class Input {
         return mouseHelper.getMouseY();
     }
 
-    public void grabMouseCursor() {
-        mouseHelper.grabMouseCursor();
+    /**
+     * Sets the mouse cursor position.
+     *
+     * @param x
+     * @param y
+     */
+    public void setMouseCursorPosition(int x, int y) {
+        mouseHelper.setCursorPosition(x, y);
     }
 
     public List<KeyboardHelper.KeyboardEvent> getKeyboardEvents() {
@@ -131,6 +226,20 @@ public class Input {
     }
 
     /**
+     * Was the action associated with the mouse button down in the last frame?
+     *
+     * @param action
+     * @return
+     */
+    public boolean wasActionButtonDown(String action) {
+        int button = actionToMouse.get(action);
+        if (button == HashMapStringInt.NOT_FOUND) {
+            throw new IllegalArgumentException("Action was not found: " + action);
+        }
+        return mouseHelper.wasButtonDown(button);
+    }
+
+    /**
      * Check to see if the action associated with a key on the keyboard is down.
      *
      * @param action
@@ -145,6 +254,20 @@ public class Input {
     }
 
     /**
+     * Was the action associated with a key on the keyboard down in the last frame?
+     *
+     * @param action
+     * @return
+     */
+    public boolean wasActionKeyDown(String action) {
+        int key = actionToKey.get(action);
+        if (key == HashMapStringInt.NOT_FOUND) {
+            throw new IllegalArgumentException("Action was not found: " + action);
+        }
+        return keyboardHelper.wasKeyDown(key);
+    }
+
+    /**
      * Check to see if the mouse button is down.
      *
      * @param mouse
@@ -154,6 +277,21 @@ public class Input {
         return mouseHelper.isButtonDown(mouse);
     }
 
+    /**
+     * Was the mouse button down in the last frame?
+     *
+     * @param mouse
+     * @return
+     */
+    public boolean wasButtonDown(Mouse mouse) {
+        return mouseHelper.wasButtonDown(mouse);
+    }
+
+    /**
+     * Is the mouse cursor grabbed by the window?
+     *
+     * @return
+     */
     public boolean isGrabbed() {
         return mouseHelper.isGrabbed();
     }
@@ -164,7 +302,16 @@ public class Input {
      * @return
      */
     public boolean isKeyAltDown() {
-        return keyboardHelper.isKeyDown(Keyboard.LALT) || keyboardHelper.isKeyDown(Keyboard.RALT);
+        return keyboardHelper.isKeyDown(Keyboard.LEFT_ALT) || keyboardHelper.isKeyDown(Keyboard.RIGHT_ALT);
+    }
+
+    /**
+     * Was an alt key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyAltDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LEFT_ALT) || keyboardHelper.wasKeyDown(Keyboard.RIGHT_ALT);
     }
 
     /**
@@ -173,7 +320,16 @@ public class Input {
      * @return
      */
     public boolean isKeyControlDown() {
-        return keyboardHelper.isKeyDown(Keyboard.LCONTROL) || keyboardHelper.isKeyDown(Keyboard.RCONTROL);
+        return keyboardHelper.isKeyDown(Keyboard.LEFT_CONTROL) || keyboardHelper.isKeyDown(Keyboard.RIGHT_CONTROL);
+    }
+
+    /**
+     * Was a control key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyControlDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LEFT_CONTROL) || keyboardHelper.wasKeyDown(Keyboard.RIGHT_CONTROL);
     }
 
     /**
@@ -187,6 +343,16 @@ public class Input {
     }
 
     /**
+     * Was the key on the keyboard down in the last frame?
+     *
+     * @param key
+     * @return
+     */
+    public boolean wasKeyDown(int key) {
+        return keyboardHelper.wasKeyDown(key);
+    }
+
+    /**
      * Check to see if the keyboard key is down.
      *
      * @param keyboard
@@ -197,12 +363,13 @@ public class Input {
     }
 
     /**
-     * Check to see if the keyboard meta (Windows) key is down.
+     * Was the key on the keyboard down in the last frame?
      *
+     * @param keyboard
      * @return
      */
-    public boolean isKeyMetaDown() {
-        return keyboardHelper.isKeyDown(Keyboard.LMETA) || keyboardHelper.isKeyDown(Keyboard.RMETA);
+    public boolean wasKeyDown(Keyboard keyboard) {
+        return keyboardHelper.wasKeyDown(keyboard);
     }
 
     /**
@@ -211,7 +378,61 @@ public class Input {
      * @return
      */
     public boolean isKeyShiftDown() {
-        return keyboardHelper.isKeyDown(Keyboard.LSHIFT) || keyboardHelper.isKeyDown(Keyboard.RSHIFT);
+        return keyboardHelper.isKeyDown(Keyboard.LEFT_SHIFT) || keyboardHelper.isKeyDown(Keyboard.RIGHT_SHIFT);
+    }
+
+    /**
+     * Was a shift key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeyShiftDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LEFT_SHIFT) || keyboardHelper.wasKeyDown(Keyboard.RIGHT_SHIFT);
+    }
+
+    /**
+     * Check to see if the keyboard super (Windows) key is down.
+     *
+     * @return
+     */
+    public boolean isKeySuperDown() {
+        return keyboardHelper.isKeyDown(Keyboard.LEFT_SUPER) || keyboardHelper.isKeyDown(Keyboard.RIGHT_SUPER);
+    }
+
+    /**
+     * Was a super (Windows) key on the keyboard down in the last frame?
+     *
+     * @return
+     */
+    public boolean wasKeySuperDown() {
+        return keyboardHelper.wasKeyDown(Keyboard.LEFT_SUPER) || keyboardHelper.wasKeyDown(Keyboard.RIGHT_SUPER);
+    }
+
+    /**
+     * Grab mouse cursor and hide it preventing the cursor from going outside the window bounds.
+     */
+    public void grabMouseCursor() {
+        mouseHelper.grabMouseCursor();
+    }
+
+    /**
+     * Handle a move event which updates mouse X and Y position.
+     *
+     * @param x
+     * @param y
+     */
+    public void handleMouseMoveEvent(double x, double y) {
+        mouseHelper.handleMoveEvent(x, y);
+    }
+
+    /**
+     * Handle a scroll event which updates delta wheel.
+     *
+     * @param xoffset is currently ignored.
+     * @param yoffset
+     */
+    public void handleMouseScrollEvent(double xoffset, double yoffset) {
+        mouseHelper.handleScrollEvent(xoffset, yoffset);
     }
 
     /**
@@ -222,6 +443,9 @@ public class Input {
         mouseHelper.init();
     }
 
+    /**
+     * Unhides the cursor and centers it inside the window.
+     */
     public void releaseMouseCursor() {
         mouseHelper.releaseMouseCursor();
     }
@@ -270,6 +494,28 @@ public class Input {
     }
 
     /**
+     * Reset keyboard and mouse button state
+     */
+    public void reset() {
+        keyboardHelper.reset();
+        mouseHelper.reset();
+    }
+
+    /**
+     * Reset keyboard button state.
+     */
+    public void resetKeyboard() {
+        keyboardHelper.reset();
+    }
+
+    /**
+     * Reset mouse button state.
+     */
+    public void resetMouse() {
+        mouseHelper.reset();
+    }
+
+    /**
      * Associates a key press with an action.
      *
      * @param action
@@ -296,25 +542,6 @@ public class Input {
     }
 
     /**
-     * Sets the mouse cursor position
-     *
-     * @param x
-     * @param y
-     */
-    public void setCursorPosition(int x, int y) {
-        mouseHelper.setCursorPosition(x, y);
-    }
-
-    /**
-     * Set the native cursor image
-     *
-     * @param cursor
-     */
-    public void setNativeCursor(Cursor cursor) {
-        mouseHelper.setNativeCursor(cursor);
-    }
-
-    /**
      * This method must be called once per frame.
      */
     public void update() {
@@ -323,97 +550,10 @@ public class Input {
     }
 
     /**
-     * Was the action associated with the mouse button down in the last frame?
-     *
-     * @param action
-     * @return
+     * Updates the input mode which will hide/unhide the cursor depending on the state.
      */
-    public boolean wasActionButtonDown(String action) {
-        int button = actionToMouse.get(action);
-        if (button == HashMapStringInt.NOT_FOUND) {
-            throw new IllegalArgumentException("Action was not found: " + action);
-        }
-        return mouseHelper.wasButtonDown(button);
-    }
-
-    /**
-     * Was the action associated with a key on the keyboard down in the last frame?
-     *
-     * @param action
-     * @return
-     */
-    public boolean wasActionKeyDown(String action) {
-        int key = actionToKey.get(action);
-        if (key == HashMapStringInt.NOT_FOUND) {
-            throw new IllegalArgumentException("Action was not found: " + action);
-        }
-        return keyboardHelper.wasKeyDown(key);
-    }
-
-    /**
-     * Was the mouse button down in the last frame?
-     *
-     * @param mouse
-     * @return
-     */
-    public boolean wasButtonDown(Mouse mouse) {
-        return mouseHelper.wasButtonDown(mouse);
-    }
-
-    /**
-     * Was an alt key on the keyboard down in the last frame?
-     *
-     * @return
-     */
-    public boolean wasKeyAltDown() {
-        return keyboardHelper.wasKeyDown(Keyboard.LALT) || keyboardHelper.wasKeyDown(Keyboard.RALT);
-    }
-
-    /**
-     * Was a control key on the keyboard down in the last frame?
-     *
-     * @return
-     */
-    public boolean wasKeyControlDown() {
-        return keyboardHelper.wasKeyDown(Keyboard.LCONTROL) || keyboardHelper.wasKeyDown(Keyboard.RCONTROL);
-    }
-
-    /**
-     * Was the key on the keyboard down in the last frame?
-     *
-     * @param key
-     * @return
-     */
-    public boolean wasKeyDown(int key) {
-        return keyboardHelper.wasKeyDown(key);
-    }
-
-    /**
-     * Was the key on the keyboard down in the last frame?
-     *
-     * @param keyboard
-     * @return
-     */
-    public boolean wasKeyDown(Keyboard keyboard) {
-        return keyboardHelper.wasKeyDown(keyboard);
-    }
-
-    /**
-     * Was a meta key on the keyboard down in the last frame?
-     *
-     * @return
-     */
-    public boolean wasKeyMetaDown() {
-        return keyboardHelper.wasKeyDown(Keyboard.LMETA) || keyboardHelper.wasKeyDown(Keyboard.RMETA);
-    }
-
-    /**
-     * Was a shift key on the keyboard down in the last frame?
-     *
-     * @return
-     */
-    public boolean wasKeyShiftDown() {
-        return keyboardHelper.wasKeyDown(Keyboard.LSHIFT) || keyboardHelper.wasKeyDown(Keyboard.RSHIFT);
+    public void updateInputMode() {
+        mouseHelper.updateInputMode();
     }
 
 }

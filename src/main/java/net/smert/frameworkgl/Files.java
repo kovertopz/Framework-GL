@@ -55,8 +55,6 @@ public class Files {
     private final Map<String, FileAsset> filenameToFileAsset;
 
     public Files() {
-        foundAsset = false;
-        isInternal = false;
         useGlslPrefix = true;
         filenameToFileAsset = new HashMap<>();
         try {

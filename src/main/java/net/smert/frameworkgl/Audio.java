@@ -26,11 +26,6 @@ public class Audio {
     private boolean initialized;
     private OpenAL openal;
 
-    public Audio() {
-        initialized = false;
-        openal = null;
-    }
-
     public void createMusic() {
     }
 
@@ -38,7 +33,7 @@ public class Audio {
     }
 
     public void destroy() {
-        if (openal == null) {
+        if (!initialized) {
             return;
         }
         openal.destroy();
@@ -52,10 +47,6 @@ public class Audio {
 
     public void setDopplerFactor(float factor) {
         openal.setDopplerFactor(factor);
-    }
-
-    public float getDopplerVelocity() {
-        return openal.getDopplerVelocity();
     }
 
     public void setDopplerVelocity(float velocity) {
@@ -98,6 +89,10 @@ public class Audio {
         return openal.getConfig();
     }
 
+    public boolean isPlaying(int soundID) {
+        return openal.isPlaying(soundID);
+    }
+
     public void init() {
         if (initialized) {
             return;
@@ -105,10 +100,6 @@ public class Audio {
         openal = AL.openal;
         openal.init();
         initialized = true;
-    }
-
-    public boolean isPlaying(int soundID) {
-        return openal.isPlaying(soundID);
     }
 
     public void pause(int soundID) {

@@ -12,8 +12,11 @@
  */
 package net.smert.frameworkgl.opengl;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import net.smert.frameworkgl.math.Matrix4f;
 import net.smert.frameworkgl.opengl.constants.BlendEquations;
 import net.smert.frameworkgl.opengl.constants.BlendFunctions;
 import net.smert.frameworkgl.opengl.constants.ClearBits;
@@ -23,7 +26,6 @@ import net.smert.frameworkgl.opengl.constants.TextureTargets;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.util.glu.GLU;
 
 /**
  *
@@ -37,6 +39,8 @@ public class OpenGL1 {
     private float viewportX = 0f;
     private float viewportY = 0f;
     private int clearBits = ClearBits.COLOR_BUFFER_BIT | ClearBits.DEPTH_BUFFER_BIT;
+    private final FloatBuffer matrixBuffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+    private final Matrix4f matrix = new Matrix4f();
 
     public OpenGL1 begin(int primitive) {
         GL.renderHelper.begin(primitive);
@@ -360,15 +364,15 @@ public class OpenGL1 {
     }
 
     public void getModelViewMatrix(FloatBuffer matrix) {
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrix);
+        GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, matrix);
     }
 
     public void getProjectionMatrix(FloatBuffer matrix) {
-        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, matrix);
+        GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, matrix);
     }
 
     public void getViewportDimensions(IntBuffer viewportBuffer) {
-        GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+        GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewportBuffer);
         viewportX = viewportBuffer.get(viewportBuffer.position() + 0);
         viewportY = viewportBuffer.get(viewportBuffer.position() + 1);
         viewportWidth = viewportBuffer.get(viewportBuffer.position() + 2);
@@ -386,7 +390,7 @@ public class OpenGL1 {
     }
 
     public OpenGL1 light(int lightNumber, int light, FloatBuffer vector) {
-        GL11.glLight(lightNumber, light, vector);
+        GL11.glLightfv(lightNumber, light, vector);
         return this;
     }
 
@@ -401,12 +405,12 @@ public class OpenGL1 {
     }
 
     public OpenGL1 lightModel(int lightModel, FloatBuffer vector) {
-        GL11.glLightModel(lightModel, vector);
+        GL11.glLightModelfv(lightModel, vector);
         return this;
     }
 
     public OpenGL1 loadMatrix(FloatBuffer matrix) {
-        GL11.glLoadMatrix(matrix);
+        GL11.glLoadMatrixf(matrix);
         return this;
     }
 
@@ -421,12 +425,12 @@ public class OpenGL1 {
     }
 
     public OpenGL1 material(int face, int material, FloatBuffer vector) {
-        GL11.glMaterial(face, material, vector);
+        GL11.glMaterialfv(face, material, vector);
         return this;
     }
 
     public OpenGL1 multiplyMatrix(FloatBuffer matrix) {
-        GL11.glMultMatrix(matrix);
+        GL11.glMultMatrixf(matrix);
         return this;
     }
 
@@ -660,12 +664,9 @@ public class OpenGL1 {
 
     public OpenGL1 setProjectionPerspective(float fovy, float aspectratio, float zNear, float zFar) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity(); // gluPerspective sadly doesn't set all rows and columns
-        GLU.gluPerspective(
-                fovy,
-                aspectratio,
-                zNear,
-                zFar);
+        matrix.setPerspective(fovy, aspectratio, zNear, zFar).toFloatBuffer(matrixBuffer);
+        matrixBuffer.flip();
+        loadMatrix(matrixBuffer);
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
         return this;
     }

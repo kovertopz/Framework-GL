@@ -47,9 +47,7 @@ public class Network {
     private ServerBootstrap server;
 
     public Network() {
-        debug = false;
         keepAlive = true;
-        serverRunning = false;
         tcpNoDelay = true;
         backlog = 128;
         serverPort = 0;

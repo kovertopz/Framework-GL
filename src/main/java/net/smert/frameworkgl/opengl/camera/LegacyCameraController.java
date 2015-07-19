@@ -144,8 +144,8 @@ public class LegacyCameraController implements InputProcessor {
             rotationDelta.addY(-1.0f);
         }
 
-        rotationDelta.addX(Fw.input.getDeltaY());
-        rotationDelta.addY(-Fw.input.getDeltaX());
+        rotationDelta.addX(Fw.input.getDeltaYWithSensitivity());
+        rotationDelta.addY(-Fw.input.getDeltaXWithSensitivity());
 
         // LWJGL will return 0 for mouse movement if the frame rate is higher than 125fps. If we just used the delta
         // amount then the mouse speed would be reduced. MOUSE_POLL is set for 125fps to compensate for this issue.
@@ -165,7 +165,7 @@ public class LegacyCameraController implements InputProcessor {
         Fw.input.setAction(KEY_ACTION_LOOK_DOWN, Keyboard.DOWN);
         Fw.input.setAction(KEY_ACTION_LOOK_UP, Keyboard.UP);
         Fw.input.setAction(KEY_ACTION_MOVE_BACK, Keyboard.S);
-        Fw.input.setAction(KEY_ACTION_MOVE_DOWN, Keyboard.LSHIFT);
+        Fw.input.setAction(KEY_ACTION_MOVE_DOWN, Keyboard.LEFT_SHIFT);
         Fw.input.setAction(KEY_ACTION_MOVE_FORWARD, Keyboard.W);
         Fw.input.setAction(KEY_ACTION_MOVE_LEFT, Keyboard.A);
         Fw.input.setAction(KEY_ACTION_MOVE_RIGHT, Keyboard.D);

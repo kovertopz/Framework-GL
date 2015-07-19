@@ -23,18 +23,21 @@ import net.smert.frameworkgl.utils.Color;
  */
 public class SegmentMaterial {
 
-    private final Color color;
+    private Color color;
     private final Map<TextureType, String> textureTypeToFilename;
     private String materialLightName;
 
     public SegmentMaterial() {
-        color = new Color();
         textureTypeToFilename = new HashMap<>();
         materialLightName = "default";
     }
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Map<TextureType, String> getTextures() {

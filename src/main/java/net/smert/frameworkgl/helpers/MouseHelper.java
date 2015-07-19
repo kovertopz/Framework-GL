@@ -12,12 +12,10 @@
  */
 package net.smert.frameworkgl.helpers;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import net.smert.frameworkgl.Fw;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
+import org.lwjgl.glfw.GLFW;
 
 /**
  *
@@ -25,110 +23,129 @@ import org.lwjgl.input.Cursor;
  */
 public class MouseHelper {
 
-    private final static int LWJGL_MOUSE_MOVE = -1;
-    private final static int LWJGL_MOUSE_LEFT = 0;
-    private final static int LWJGL_MOUSE_RIGHT = 1;
-    private final static int LWJGL_MOUSE_MIDDLE = 2;
-    private final static int LWJGL_MOUSE_BACK = 3;
-    private final static int LWJGL_MOUSE_FORWARD = 4;
-    private final static int LWJGL_MOUSE_WHEEL_UP = 5;
-    private final static int LWJGL_MOUSE_WHEEL_DOWN = 6;
+    private final static int GLFW_MOUSE_BUTTON_MOVE = GLFW.GLFW_MOUSE_BUTTON_LAST + 1;
+    private final static int MOUSE_SIZE = GLFW.GLFW_MOUSE_BUTTON_LAST + 2; // Extra for mouse move
 
     private boolean isGrabbed;
-    private boolean[] isDown;
-    private boolean[] nextState;
-    private boolean[] wasDown;
-    private float deltaWheel;
-    private float deltaX;
-    private float deltaY;
-    private int buttonCount;
+    private final boolean[] isDown;
+    private final boolean[] nextState;
+    private final boolean[] wasDown;
+    private float deltaWheelWithSensitivity;
+    private float deltaXWithSensitivity;
+    private float deltaYWithSensitivity;
+    private int deltaWheel;
+    private int deltaX;
+    private int deltaY;
+    private int mouseRawX;
+    private int mouseRawY;
     private int mouseX;
     private int mouseY;
-    private int[] lwjglToMouse;
+    private final int[] lwjglToMouse;
     private final List<MouseEvent> mouseEvents;
 
     public MouseHelper() {
-        isGrabbed = false;
+        isDown = new boolean[Mouse.MAX_MOUSE.ordinal()];
+        nextState = new boolean[Mouse.MAX_MOUSE.ordinal()];
+        wasDown = new boolean[Mouse.MAX_MOUSE.ordinal()];
+        lwjglToMouse = new int[MOUSE_SIZE];
         mouseEvents = new ArrayList<>();
-        clearDelta();
     }
 
-    private void centerCursor() {
-        org.lwjgl.input.Mouse.setCursorPosition(Fw.config.getCurrentWidth() / 2, Fw.config.getCurrentHeight() / 2);
-        org.lwjgl.input.Mouse.setGrabbed(isGrabbed);
-    }
-
-    private void clearDelta() {
-        deltaWheel = 0f;
-        deltaX = 0f;
-        deltaY = 0f;
-    }
-
-    private int mapLwglToArray(int button) {
-        return button + 1;
+    private void clampMouseXY() {
+        if (mouseX < 0) {
+            mouseX = 0;
+        } else if (mouseX > Fw.config.getCurrentWidth()) {
+            mouseX = Fw.config.getCurrentWidth();
+        }
+        if (mouseY < 0) {
+            mouseY = 0;
+        } else if (mouseY > Fw.config.getCurrentHeight()) {
+            mouseY = Fw.config.getCurrentHeight();
+        }
     }
 
     private void mapLwglToMouse() {
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_MOVE)] = Mouse.MOVE.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_LEFT)] = Mouse.LEFT.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_RIGHT)] = Mouse.RIGHT.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_MIDDLE)] = Mouse.MIDDLE.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_BACK)] = Mouse.BACK.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_FORWARD)] = Mouse.FORWARD.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = Mouse.WHEEL_UP.ordinal();
-        lwjglToMouse[mapLwglToArray(LWJGL_MOUSE_WHEEL_DOWN)] = Mouse.WHEEL_DOWN.ordinal();
+
+        // Map to none
+        for (int i = 0; i < MOUSE_SIZE; i++) {
+            lwjglToMouse[i] = Mouse.NONE.ordinal();
+        }
+
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_1] = Mouse.LEFT.ordinal();
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_2] = Mouse.RIGHT.ordinal();
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_3] = Mouse.MIDDLE.ordinal();
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_4] = Mouse.BACK.ordinal();
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_5] = Mouse.FORWARD.ordinal();
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_6] = Mouse.NONE.ordinal(); // Unknown
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_7] = Mouse.NONE.ordinal(); // Unknown
+        lwjglToMouse[GLFW.GLFW_MOUSE_BUTTON_8] = Mouse.NONE.ordinal(); // Unknown
+        lwjglToMouse[GLFW_MOUSE_BUTTON_MOVE] = Mouse.MOVE.ordinal();
     }
 
-    private void updateButtonState() {
-        for (int i = 0; i < buttonCount; i++) {
-            wasDown[i] = isDown[i]; // Save last frame
-            isDown[i] = nextState[i]; // Set current frame
+    public void addEvent(int button, int modifiers, boolean state) {
+        MouseEvent event = new MouseEvent();
+        event.button = button;
+        event.deltaWheel = deltaWheel;
+        event.deltaX = deltaX;
+        event.deltaY = deltaY;
+        event.mappedButton = lwjglToMouse[event.button];
+        event.modifiers = modifiers;
+        event.mouseX = mouseX;
+        event.mouseY = mouseY;
+        event.state = state;
+        mouseEvents.add(event);
+        nextState[event.mappedButton] = event.state;
+    }
+
+    public void centerCursor() {
+        setCursorPosition(Fw.config.getCurrentWidth() / 2, Fw.config.getCurrentHeight() / 2);
+    }
+
+    public void clearDelta() {
+        deltaWheelWithSensitivity = 0;
+        deltaXWithSensitivity = 0;
+        deltaYWithSensitivity = 0;
+        deltaWheel = 0;
+        deltaX = 0;
+        deltaY = 0;
+    }
+
+    public void clearEvents() {
+        nextState[Mouse.MOVE.ordinal()] = false;
+        nextState[Mouse.WHEEL_DOWN.ordinal()] = false;
+        nextState[Mouse.WHEEL_UP.ordinal()] = false;
+        clearDelta();
+        mouseEvents.clear();
+    }
+
+    public void clearNextState() {
+        for (int i = 0; i < Mouse.MAX_MOUSE.ordinal(); i++) {
+            nextState[i] = false;
         }
     }
 
-    private void updateWheelChange() {
-        deltaWheel = org.lwjgl.input.Mouse.getDWheel();
-        deltaWheel *= Fw.config.getMouseWheelSensitivity();
-
-        if (deltaWheel == 0f) {
-            nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = false;
-            nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_DOWN)] = false;
-        } else if (deltaWheel > 0f) {
-            nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_UP)] = true;
-        } else {
-            nextState[mapLwglToArray(LWJGL_MOUSE_WHEEL_DOWN)] = true;
-        }
-    }
-
-    private void updateXYChange() {
-        deltaX = org.lwjgl.input.Mouse.getDX();
-        deltaY = org.lwjgl.input.Mouse.getDY();
-        deltaX *= Fw.config.getMouseMoveSensitivity();
-        deltaY *= Fw.config.getMouseMoveSensitivity();
-        float totalDelta = deltaX + deltaY;
-        nextState[mapLwglToArray(LWJGL_MOUSE_MOVE)] = (totalDelta != 0f);
-        mouseX = org.lwjgl.input.Mouse.getX();
-        mouseY = org.lwjgl.input.Mouse.getY();
-    }
-
-    public void destroy() {
-        org.lwjgl.input.Mouse.destroy();
-    }
-
-    public float getDeltaWheel() {
+    public int getDeltaWheel() {
         return deltaWheel;
     }
 
-    public float getDeltaX() {
+    public float getDeltaWheelWithSensitivity() {
+        return deltaWheelWithSensitivity;
+    }
+
+    public int getDeltaX() {
         return deltaX;
     }
 
-    public float getDeltaY() {
+    public float getDeltaXWithSensitivity() {
+        return deltaXWithSensitivity;
+    }
+
+    public int getDeltaY() {
         return deltaY;
     }
 
-    public int getButtonCount() {
-        return buttonCount;
+    public float getDeltaYWithSensitivity() {
+        return deltaYWithSensitivity;
     }
 
     public int getMouseX() {
@@ -139,126 +156,109 @@ public class MouseHelper {
         return mouseY;
     }
 
-    public void grabMouseCursor() {
-        clearDelta();
-        isGrabbed = true;
-        centerCursor();
+    public void setCursorPosition(int x, int y) {
+        mouseRawX = mouseX = x;
+        mouseRawY = mouseY = y;
+        clampMouseXY();
+        GLFW.glfwSetCursorPos(Fw.window.getWindow(), mouseX, mouseY);
     }
 
     public List<MouseEvent> getMouseEvents() {
         return mouseEvents;
     }
 
-    public void init() {
-        buttonCount = org.lwjgl.input.Mouse.getButtonCount();
-        int maxButtons = Mouse.MAX_MOUSE.ordinal();
-        isDown = new boolean[maxButtons];
-        nextState = new boolean[maxButtons];
-        wasDown = new boolean[maxButtons];
-        lwjglToMouse = new int[maxButtons];
-
-        // Set defaults
-        for (int i = 0; i < maxButtons; i++) {
-            isDown[i] = false;
-            nextState[i] = false;
-            wasDown[i] = false;
-            lwjglToMouse[i] = 0;
-        }
-
-        mapLwglToMouse();
-    }
-
     public boolean isButtonDown(int button) {
         if ((button < 0) || (button >= isDown.length)) {
-            throw new IllegalArgumentException("Invalid button");
+            throw new IllegalArgumentException("Invalid button: " + button);
         }
         return isDown[button];
+    }
+
+    public boolean wasButtonDown(int button) {
+        if ((button < 0) || (button >= wasDown.length)) {
+            throw new IllegalArgumentException("Invalid button: " + button);
+        }
+        return wasDown[button];
     }
 
     public boolean isButtonDown(Mouse mouse) {
         return isDown[mouse.ordinal()];
     }
 
-    public boolean isGrabbed() {
-        return isGrabbed;
-    }
-
-    public void releaseMouseCursor() {
-        clearDelta();
-        isGrabbed = false;
-        centerCursor();
-    }
-
-    public void setCursorPosition(int x, int y) {
-        org.lwjgl.input.Mouse.setCursorPosition(x, y);
-    }
-
-    public void setNativeCursor(Cursor cursor) {
-        try {
-            org.lwjgl.input.Mouse.setNativeCursor(cursor);
-        } catch (LWJGLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public void update() {
-
-        // Clear last frames events
-        mouseEvents.clear();
-
-        // Handle queued events
-        while (org.lwjgl.input.Mouse.next()) {
-            MouseEvent event = new MouseEvent();
-            event.button = org.lwjgl.input.Mouse.getEventButton();
-            event.deltaWheel = org.lwjgl.input.Mouse.getEventDWheel();
-            event.deltaX = org.lwjgl.input.Mouse.getEventDX();
-            event.deltaY = org.lwjgl.input.Mouse.getEventDY();
-            event.mappedButton = lwjglToMouse[mapLwglToArray(event.button)];
-            event.mouseX = org.lwjgl.input.Mouse.getEventX();
-            event.mouseY = org.lwjgl.input.Mouse.getEventY();
-            event.state = org.lwjgl.input.Mouse.getEventButtonState();
-            mouseEvents.add(event);
-
-            // LWJGL_MOUSE_MOVE is handled in updateXYChange()
-            if (event.button != LWJGL_MOUSE_MOVE) {
-                nextState[event.mappedButton] = event.state;
-            }
-        }
-
-        // Update states
-        updateWheelChange();
-        updateXYChange();
-        updateButtonState();
-    }
-
-    public boolean wasButtonDown(int button) {
-        if ((button < 0) || (button >= wasDown.length)) {
-            throw new IllegalArgumentException("Invalid button");
-        }
-        return wasDown[button];
-    }
-
     public boolean wasButtonDown(Mouse mouse) {
         return wasDown[mouse.ordinal()];
     }
 
-    public static class MouseCursor {
+    public boolean isGrabbed() {
+        return isGrabbed;
+    }
 
-        private Cursor cursor;
+    public void grabMouseCursor() {
+        isGrabbed = true;
+        centerCursor();
+        updateInputMode();
+    }
 
-        public void create(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images,
-                IntBuffer delays) {
-            try {
-                cursor = new Cursor(width, height, xHotspot, yHotspot, numImages, images, delays);
-            } catch (LWJGLException ex) {
-                throw new RuntimeException(ex);
-            }
+    public void handleMoveEvent(double x, double y) {
+        int newX = (int) x;
+        int newY = (int) y;
+        deltaX = (newX - mouseRawX);
+        deltaY = -(newY - mouseRawY);
+        deltaXWithSensitivity = deltaX * Fw.config.getMouseMoveSensitivity();
+        deltaYWithSensitivity = deltaY * Fw.config.getMouseMoveSensitivity();
+        mouseRawX = newX;
+        mouseRawY = newY;
+        mouseX += deltaX;
+        mouseY += deltaY;
+        clampMouseXY();
+        float totalDelta = deltaX + deltaY;
+        nextState[Mouse.MOVE.ordinal()] = (totalDelta != 0);
+    }
+
+    public void handleScrollEvent(double xoffset, double yoffset) {
+        deltaWheel = (int) yoffset;
+        deltaWheelWithSensitivity = deltaWheel * Fw.config.getMouseWheelSensitivity();
+        if (deltaWheel < 0) {
+            nextState[Mouse.WHEEL_DOWN.ordinal()] = true;
+        } else if (deltaWheel > 0) {
+            nextState[Mouse.WHEEL_UP.ordinal()] = true;
         }
+    }
 
-        public Cursor getCursor() {
-            return cursor;
+    public void init() {
+        mapLwglToMouse();
+        reset();
+    }
+
+    public void releaseMouseCursor() {
+        isGrabbed = false;
+        centerCursor();
+        updateInputMode();
+    }
+
+    public void reset() {
+        for (int i = 0; i < Mouse.MAX_MOUSE.ordinal(); i++) {
+            isDown[i] = false;
+            nextState[i] = false;
+            wasDown[i] = false;
         }
+    }
 
+    public void update() {
+        for (int i = 0; i < MOUSE_SIZE; i++) {
+            wasDown[i] = isDown[i]; // Save last frame
+            isDown[i] = nextState[i]; // Set current frame
+        }
+    }
+
+    public void updateInputMode() {
+        int value;
+        if (isGrabbed) {
+            value = GLFW.GLFW_CURSOR_DISABLED;
+        } else {
+            value = GLFW.GLFW_CURSOR_NORMAL;
+        }
+        GLFW.glfwSetInputMode(Fw.window.getWindow(), GLFW.GLFW_CURSOR, value);
     }
 
     public static class MouseEvent {
@@ -292,6 +292,11 @@ public class MouseHelper {
          * The mapped button to the framework's mouse
          */
         public int mappedButton;
+
+        /**
+         * Bitfield describing which modifiers keys were held down
+         */
+        public int modifiers;
 
         /**
          * The mouse X position associated with the event

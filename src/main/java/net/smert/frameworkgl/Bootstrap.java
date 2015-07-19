@@ -768,8 +768,7 @@ public class Bootstrap {
         textureReader.registerExtension("tiff", container.getComponent(TIFFReader.class));
 
         // Timer accuracy thread
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("Win")) {
+        if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
             Thread timerAccuracyThread = new Thread(() -> {
                 try {
                     Thread.sleep(Long.MAX_VALUE);

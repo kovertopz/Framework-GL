@@ -23,11 +23,11 @@ import org.lwjgl.opengl.GL20;
 public class ShaderUniformHelper {
 
     public void getUniform(int programID, int uniformID, FloatBuffer values) {
-        GL20.glGetUniform(programID, uniformID, values);
+        GL20.glGetUniformfv(programID, uniformID, values);
     }
 
     public void getUniform(int programID, int uniformID, IntBuffer values) {
-        GL20.glGetUniform(programID, uniformID, values);
+        GL20.glGetUniformiv(programID, uniformID, values);
     }
 
     public int getUniformLocation(int programID, String uniformName) {
@@ -67,23 +67,23 @@ public class ShaderUniformHelper {
     }
 
     public void setUniform(int uniformID, FloatBuffer values) {
-        GL20.glUniform1(uniformID, values);
+        GL20.glUniform1fv(uniformID, values);
     }
 
     public void setUniform(int uniformID, IntBuffer values) {
-        GL20.glUniform1(uniformID, values);
+        GL20.glUniform1iv(uniformID, values);
     }
 
     public void setUniformMatrix2(int uniformID, boolean transpose, FloatBuffer matrix) {
-        GL20.glUniformMatrix2(uniformID, transpose, matrix);
+        GL20.glUniformMatrix2fv(uniformID, transpose, matrix);
     }
 
     public void setUniformMatrix3(int uniformID, boolean transpose, FloatBuffer matrix) {
-        GL20.glUniformMatrix3(uniformID, transpose, matrix);
+        GL20.glUniformMatrix3fv(uniformID, transpose, matrix);
     }
 
     public void setUniformMatrix4(int uniformID, boolean transpose, FloatBuffer matrix) {
-        GL20.glUniformMatrix4(uniformID, transpose, matrix);
+        GL20.glUniformMatrix4fv(uniformID, transpose, matrix);
     }
 
 }

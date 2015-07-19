@@ -52,12 +52,17 @@ import net.smert.frameworkgl.opengl.shader.AbstractShader;
  */
 public class Graphics implements GLRenderer {
 
-    private static RenderableComparison renderableComparison = new RenderableComparison();
+    private static RenderableComparison renderableComparison;
 
     private int openglMajorVersion;
     private AbstractRendererGL renderer;
     private FontRenderer fontRenderer;
     private RenderableFactory renderableFactory;
+
+    public Graphics() {
+        renderableComparison = new RenderableComparison();
+        openglMajorVersion = 1;
+    }
 
     public Shader buildShader(String fragmentShaderFilename, String vertexShaderFilename, String shaderName)
             throws IOException {

@@ -29,6 +29,9 @@ public class ColorState {
             return;
         }
         Color color = material.getColor();
+        if (color == null) {
+            return;
+        }
         Fw.graphics.color(color.getR(), color.getG(), color.getB(), color.getA());
     }
 

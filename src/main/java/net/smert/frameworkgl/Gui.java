@@ -23,10 +23,6 @@ public class Gui {
     private boolean initialized;
     private GuiScreen guiScreen;
 
-    public Gui() {
-        initialized = false;
-    }
-
     public GuiScreen getGuiScreen() {
         return guiScreen;
     }
