@@ -166,17 +166,17 @@ public class Window {
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW.GLFW_ALPHA_BITS, videoMode.getBlueBits());
         GLFW.glfwWindowHint(GLFW.GLFW_BLUE_BITS, videoMode.getBlueBits());
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, config.openglMajorVersion);
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, config.openglMinorVersion);
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, config.requestedOpenglMajorVersion);
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, config.requestedOpenglMinorVersion);
         GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, config.framebufferDepthBits);
         GLFW.glfwWindowHint(GLFW.GLFW_GREEN_BITS, videoMode.getGreenBits());
         GLFW.glfwWindowHint(GLFW.GLFW_RED_BITS, videoMode.getRedBits());
         GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.getRefreshRate());
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, (fullscreen) ? GL11.GL_FALSE : ((config.desktopResizable) ? GL11.GL_TRUE : GL11.GL_FALSE));
-        if ((config.openglMajorVersion >= 3) && (config.openglMinorVersion >= 0)) {
+        if ((config.requestedOpenglMajorVersion >= 3) && (config.requestedOpenglMinorVersion >= 0)) {
             GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, (config.forwardCompatible) ? GL11.GL_TRUE : GL11.GL_FALSE);
         }
-        if (((config.openglMajorVersion == 3) && (config.openglMinorVersion >= 2)) || (config.openglMajorVersion >= 4)) {
+        if (((config.requestedOpenglMajorVersion == 3) && (config.requestedOpenglMinorVersion >= 2)) || (config.requestedOpenglMajorVersion >= 4)) {
             GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, (config.coreProfile) ? GLFW.GLFW_OPENGL_CORE_PROFILE : GLFW.GLFW_OPENGL_COMPAT_PROFILE);
         } else {
             GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_ANY_PROFILE);
