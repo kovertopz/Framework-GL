@@ -21,6 +21,7 @@ import net.smert.frameworkgl.opengl.GL;
 import net.smert.frameworkgl.opengl.TextureType;
 import net.smert.frameworkgl.opengl.renderable.Renderable;
 import net.smert.frameworkgl.opengl.renderable.RenderableConfiguration;
+import net.smert.frameworkgl.utils.Color;
 import net.smert.frameworkgl.utils.HashMapIntGeneric;
 
 /**
@@ -135,7 +136,7 @@ public class Mesh {
                 SegmentMaterial newMaterial = GL.meshFactory.createSegmentMaterial();
                 SegmentMaterial oldMaterial = oldSegment.getMaterial();
 
-                newMaterial.getColor().set(oldMaterial.getColor());
+                newMaterial.setColor(oldMaterial.getColor());
                 newMaterial.setMaterialLightName(oldMaterial.getMaterialLightName());
 
                 // Copy segment material textures
@@ -335,7 +336,11 @@ public class Mesh {
         SegmentMaterial segmentMaterial = segment.getMaterial();
 
         if (segmentMaterial != null) {
-            segmentMaterial.getColor().set(r, g, b, a);
+            if (segmentMaterial.getColor() == null) {
+                segmentMaterial.setColor(new Color(r, g, b, a));
+            } else {
+                segmentMaterial.getColor().set(r, g, b, a);
+            }
         }
     }
 
