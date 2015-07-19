@@ -144,11 +144,11 @@ public class VertexLit extends Screen {
             }
             glLightSpot.setSpotOuterCutoff(spotOuterCutoff);
         }
-        if (Fw.input.isKeyDown(Keyboard.LBRACKET) && !Fw.input.wasKeyDown(Keyboard.LBRACKET)) {
+        if (Fw.input.isKeyDown(Keyboard.LEFT_BRACKET) && !Fw.input.wasKeyDown(Keyboard.LEFT_BRACKET)) {
             vertexLitGuiScreen.decrementShaderIndex();
             updateCurrentShader();
         }
-        if (Fw.input.isKeyDown(Keyboard.RBRACKET) && !Fw.input.wasKeyDown(Keyboard.RBRACKET)) {
+        if (Fw.input.isKeyDown(Keyboard.RIGHT_BRACKET) && !Fw.input.wasKeyDown(Keyboard.RIGHT_BRACKET)) {
             vertexLitGuiScreen.incrementShaderIndex();
             updateCurrentShader();
         }

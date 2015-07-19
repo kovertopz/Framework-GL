@@ -20,6 +20,7 @@ public class Configuration extends net.smert.frameworkgl.Configuration {
 
     public Configuration(String[] args) {
         super(args);
+        withOpenGLProfileAny();
         setWindowTitle("Audio Wav");
     }
 

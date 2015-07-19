@@ -20,7 +20,7 @@ public class Configuration extends net.smert.frameworkgl.Configuration {
 
     public Configuration(String[] args) {
         super(args);
-        withOpenGL33ProfileCompatibility();
+        withOpenGLProfileAny();
         setWindowTitle("OpenGL 2.1 Single Pass Pixel Lit");
     }
 
