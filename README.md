@@ -1,8 +1,8 @@
 Framework-GL
 ===============
 
-Simple OpenGL framework for Java which uses LWJGL as the backend. While the
-framework has support for compatibility mode the emphasis is on targeting
+Simple OpenGL framework for Java which uses LWJGL 3.0 as the backend. While
+the framework has support for compatibility mode the emphasis is on targeting
 modern practices using OpenGL 3.3.
 
 Framework-GL has the following features :
