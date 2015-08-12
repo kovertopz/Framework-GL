@@ -111,7 +111,7 @@ public class Conversion {
                 pixelDataFlipped[offsetNew + 3] = pixelData[offset + 3];
             }
         }
-        return pixelData;
+        return pixelDataFlipped;
     }
 
     public static BufferedImage FlipHorizontally(BufferedImage image) {
