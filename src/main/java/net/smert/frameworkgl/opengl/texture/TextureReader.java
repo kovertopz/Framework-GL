@@ -34,6 +34,17 @@ public class TextureReader {
         extensionToImageReader = new HashMap<>();
     }
 
+    public BufferedImage convertBufferedImage(BufferedImage bufferedImage) {
+        if (bufferedImage.getType() == BufferedImage.TYPE_INT_ARGB) {
+            return bufferedImage;
+        }
+        int ARGB[] = new int[bufferedImage.getHeight() * bufferedImage.getWidth()];
+        bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), ARGB, 0, bufferedImage.getWidth());
+        BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        newBufferedImage.setRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), ARGB, 0, bufferedImage.getWidth());
+        return newBufferedImage;
+    }
+
     public BufferedImage getBufferedImage(String filename) throws IOException {
 
         // Get image reader and load the image
@@ -45,6 +56,9 @@ public class TextureReader {
             GL.textureBuilder.setLoadFlipHorizontally(imageReader.defaultFlipHorizontally());
             GL.textureBuilder.setLoadFlipVertically(imageReader.defaultFlipVertically());
         }
+
+        // Convert BufferedImage to TYPE_INT_ARGB
+        bufferedImage = convertBufferedImage(bufferedImage);
 
         return bufferedImage;
     }
