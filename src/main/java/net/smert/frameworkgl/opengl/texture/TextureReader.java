@@ -35,9 +35,6 @@ public class TextureReader {
     }
 
     public BufferedImage convertBufferedImage(BufferedImage bufferedImage) {
-        if (bufferedImage.getType() == BufferedImage.TYPE_INT_ARGB) {
-            return bufferedImage;
-        }
         int ARGB[] = new int[bufferedImage.getHeight() * bufferedImage.getWidth()];
         bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), ARGB, 0, bufferedImage.getWidth());
         BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
