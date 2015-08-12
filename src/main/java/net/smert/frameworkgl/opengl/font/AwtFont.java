@@ -245,6 +245,7 @@ public class AwtFont implements GLFont {
             frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         }
     }
