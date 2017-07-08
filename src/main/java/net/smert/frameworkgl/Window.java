@@ -12,20 +12,18 @@
  */
 package net.smert.frameworkgl;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 import org.lwjgl.system.MemoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +40,12 @@ public class Window {
     private boolean initialized;
     private boolean vSync;
     private boolean wasResized;
+    private int createHeight;
+    private int createWidth;
     private long lastSyncTime;
     private long variableYieldTime;
     private long window;
     private GLFWCursorPosCallback cursorPosCallback;
-    private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
     private GLFWScrollCallback scrollCallback;
@@ -61,62 +60,27 @@ public class Window {
         widthBuffer = BufferUtils.createIntBuffer(1);
     }
 
-    private GLFWvidmode findVideoMode(long monitor, int width, int height, int refreshRate,
+    private GLFWVidMode findVideoMode(long monitor, int width, int height, int refreshRate,
             int redBits, int greenBits, int blueBits) {
-        GLFWvidmode glfwVidMode = null;
-        GLFWvidmode[] modes = getVideoModes(monitor);
-        for (GLFWvidmode mode : modes) {
+        GLFWVidMode videoMode = null;
+        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(monitor);
+        while (modes.hasRemaining()) {
+            GLFWVidMode mode = modes.get();
 
             // If the display mode matches save it
-            if ((mode.getWidth() == width) && (mode.getHeight() == height)
-                    && (mode.getRefreshRate() == refreshRate)
-                    && (mode.getRedBits() == redBits) && (mode.getGreenBits() == greenBits) && (mode.getBlueBits() == blueBits)) {
-                glfwVidMode = mode; // Don't break in case of logging
+            if ((mode.width() == width) && (mode.height() == height)
+                    && (mode.refreshRate() == refreshRate)
+                    && (mode.redBits() == redBits) && (mode.greenBits() == greenBits) && (mode.blueBits() == blueBits)) {
+                videoMode = mode; // Don't break in case of logging
             }
 
             log.debug("Found fullscreen compatible mode: "
                     + "Width: {}px Height: {}px Refresh Rate: {}hz Red Bits: {} Green Bits: {} Blue Bits: {}",
-                    mode.getWidth(), mode.getHeight(), mode.getRefreshRate(),
-                    mode.getRedBits(), mode.getGreenBits(), mode.getBlueBits());
+                    mode.width(), mode.height(), mode.refreshRate(),
+                    mode.redBits(), mode.greenBits(), mode.blueBits());
         }
 
-        return glfwVidMode;
-    }
-
-    private GLFWvidmode getDesktopVideoMode(long monitor) {
-        ByteBuffer mode = GLFW.glfwGetVideoMode(monitor);
-        GLFWvidmode glfwVidMode = new GLFWvidmode();
-        glfwVidMode.setBlueBits(GLFWvidmode.blueBits(mode));
-        glfwVidMode.setGreenBits(GLFWvidmode.greenBits(mode));
-        glfwVidMode.setHeight(GLFWvidmode.height(mode));
-        glfwVidMode.setRedBits(GLFWvidmode.redBits(mode));
-        glfwVidMode.setRefreshRate(GLFWvidmode.refreshRate(mode));
-        glfwVidMode.setWidth(GLFWvidmode.width(mode));
-        return glfwVidMode;
-    }
-
-    private GLFWvidmode[] getVideoModes(long monitor) {
-        IntBuffer count = BufferUtils.createIntBuffer(1);
-        ByteBuffer modes = GLFW.glfwGetVideoModes(monitor, count);
-        GLFWvidmode[] videoModes = new GLFWvidmode[count.get(0)];
-        for (int i = 0, max = count.get(0); i < max; i++) {
-
-            // Advance position
-            modes.position(i * GLFWvidmode.SIZEOF);
-
-            // Create new video mode and extract data
-            GLFWvidmode glfwVidMode = new GLFWvidmode();
-            glfwVidMode.setBlueBits(GLFWvidmode.blueBits(modes));
-            glfwVidMode.setGreenBits(GLFWvidmode.greenBits(modes));
-            glfwVidMode.setHeight(GLFWvidmode.height(modes));
-            glfwVidMode.setRedBits(GLFWvidmode.redBits(modes));
-            glfwVidMode.setRefreshRate(GLFWvidmode.refreshRate(modes));
-            glfwVidMode.setWidth(GLFWvidmode.width(modes));
-
-            // Save video mode to array
-            videoModes[i] = glfwVidMode;
-        }
-        return videoModes;
+        return videoMode;
     }
 
     private void resize(int width, int height) {
@@ -134,7 +98,7 @@ public class Window {
 
         // Setup variables
         long monitor = GLFW.glfwGetPrimaryMonitor();
-        GLFWvidmode videoMode = null;
+        GLFWVidMode videoMode = null;
 
         if (fullscreen) {
 
@@ -147,31 +111,29 @@ public class Window {
                         + "Width: {}px Height: {}px Refresh Rate: {}hz Red Bits: {} Green Bits: {} Blue Bits: {}",
                         config.fullscreenWidth, config.fullscreenHeight, config.fullscreenRefreshRate,
                         config.framebufferRedBits, config.framebufferGreenBits, config.framebufferBlueBits);
+            } else {
+                createHeight = videoMode.height();
+                createWidth = videoMode.width();
             }
         }
 
         // Either a full screen mode wasn't requested or we couldn't find one that matched our settings
         if (videoMode == null) {
-            GLFWvidmode desktopVideoMode = getDesktopVideoMode(monitor);
-            videoMode = new GLFWvidmode();
-            videoMode.setBlueBits(desktopVideoMode.getBlueBits());
-            videoMode.setGreenBits(desktopVideoMode.getGreenBits());
-            videoMode.setHeight(config.desktopHeight);
-            videoMode.setRedBits(desktopVideoMode.getRedBits());
-            videoMode.setRefreshRate(desktopVideoMode.getRefreshRate());
-            videoMode.setWidth(config.desktopWidth);
+            videoMode = GLFW.glfwGetVideoMode(monitor);
+            createHeight = config.desktopHeight;
+            createWidth = config.desktopWidth;
         }
 
         // Reset window hints to defaults before setting them
         GLFW.glfwDefaultWindowHints();
-        GLFW.glfwWindowHint(GLFW.GLFW_ALPHA_BITS, videoMode.getBlueBits());
-        GLFW.glfwWindowHint(GLFW.GLFW_BLUE_BITS, videoMode.getBlueBits());
+        GLFW.glfwWindowHint(GLFW.GLFW_ALPHA_BITS, GLFW.GLFW_DONT_CARE);
+        GLFW.glfwWindowHint(GLFW.GLFW_BLUE_BITS, videoMode.blueBits());
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, config.requestedOpenglMajorVersion);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, config.requestedOpenglMinorVersion);
         GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, config.framebufferDepthBits);
-        GLFW.glfwWindowHint(GLFW.GLFW_GREEN_BITS, videoMode.getGreenBits());
-        GLFW.glfwWindowHint(GLFW.GLFW_RED_BITS, videoMode.getRedBits());
-        GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.getRefreshRate());
+        GLFW.glfwWindowHint(GLFW.GLFW_GREEN_BITS, videoMode.greenBits());
+        GLFW.glfwWindowHint(GLFW.GLFW_RED_BITS, videoMode.redBits());
+        GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, (fullscreen) ? GL11.GL_FALSE : ((config.desktopResizable) ? GL11.GL_TRUE : GL11.GL_FALSE));
         if ((config.requestedOpenglMajorVersion >= 3) && (config.requestedOpenglMinorVersion >= 0)) {
             GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, (config.forwardCompatible) ? GL11.GL_TRUE : GL11.GL_FALSE);
@@ -189,33 +151,33 @@ public class Window {
 
         // Create new window
         long fullscreenMonitor = (fullscreen) ? monitor : MemoryUtil.NULL;
-        long newWindow = GLFW.glfwCreateWindow(videoMode.getWidth(), videoMode.getHeight(), config.windowTitle, fullscreenMonitor, window);
+        long newWindow = GLFW.glfwCreateWindow(createWidth, createHeight, config.windowTitle, fullscreenMonitor, window);
         if (newWindow == MemoryUtil.NULL) {
             throw new WindowException("Failed to create the GLFW window");
         }
 
         log.info("Created window with display mode: "
                 + "Width: {}px Height: {}px Refresh Rate: {}hz Red Bits: {} Green Bits: {} Blue Bits: {}",
-                videoMode.getWidth(), videoMode.getHeight(), videoMode.getRefreshRate(),
-                videoMode.getRedBits(), videoMode.getGreenBits(), videoMode.getBlueBits());
+                createWidth, createHeight, videoMode.refreshRate(),
+                videoMode.redBits(), videoMode.greenBits(), videoMode.blueBits());
 
         // Destroy old window and callback
         if (window != MemoryUtil.NULL) {
             GLFW.glfwDestroyWindow(window);
-            cursorPosCallback.release();
-            keyCallback.release();
-            mouseButtonCallback.release();
-            scrollCallback.release();
-            windowSizeCallback.release();
+            cursorPosCallback.free();
+            keyCallback.free();
+            mouseButtonCallback.free();
+            scrollCallback.free();
+            windowSizeCallback.free();
             Fw.input.clearNextState();
         }
 
         // Resize
-        resize(videoMode.getWidth(), videoMode.getHeight());
+        resize(createWidth, createHeight);
 
         // Create GL context
         GLFW.glfwMakeContextCurrent(newWindow);
-        GLContext.createFromCurrent();
+        GL.createCapabilities();
 
         // Set the window location
         if (!fullscreen) {
@@ -225,9 +187,9 @@ public class Window {
                 // We can't reuse desktopVideoMode from above since after
                 // we switch out of full screen it would be the full screen
                 // video mode and not the current desktop.
-                GLFWvidmode desktopVideoMode = getDesktopVideoMode(monitor);
-                int x = (desktopVideoMode.getWidth() - config.desktopWidth) / 2;
-                int y = (desktopVideoMode.getHeight() - config.desktopHeight) / 2;
+                GLFWVidMode desktopVideoMode = GLFW.glfwGetVideoMode(monitor);
+                int x = (desktopVideoMode.width() - config.desktopWidth) / 2;
+                int y = (desktopVideoMode.height() - config.desktopHeight) / 2;
                 GLFW.glfwSetWindowPos(newWindow, x, y);
             }
         }
@@ -287,12 +249,11 @@ public class Window {
         }
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
-        cursorPosCallback.release();
-        errorCallback.release();
-        keyCallback.release();
-        mouseButtonCallback.release();
-        scrollCallback.release();
-        windowSizeCallback.release();
+        cursorPosCallback.free();
+        keyCallback.free();
+        mouseButtonCallback.free();
+        scrollCallback.free();
+        windowSizeCallback.free();
         window = MemoryUtil.NULL;
         initialized = false;
     }
@@ -320,7 +281,7 @@ public class Window {
     }
 
     public boolean isCloseRequested() {
-        return (GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE);
+        return GLFW.glfwWindowShouldClose(window);
     }
 
     public boolean isFocused() {
@@ -339,8 +300,8 @@ public class Window {
         if (initialized) {
             return;
         }
-        GLFW.glfwSetErrorCallback(errorCallback = Callbacks.errorCallbackThrow());
-        if (GLFW.glfwInit() != GL11.GL_TRUE) {
+        GLFWErrorCallback.createThrow();
+        if (!GLFW.glfwInit()) {
             GLFW.glfwTerminate();
             throw new WindowException("Unable to initialize GLFW");
         }
@@ -351,13 +312,13 @@ public class Window {
 
         // These modes should always be fullscreen compatible
         long monitor = GLFW.glfwGetPrimaryMonitor();
-        GLFWvidmode[] videoModes = getVideoModes(monitor);
-
-        for (GLFWvidmode videoMode : videoModes) {
+        GLFWVidMode.Buffer modes = GLFW.glfwGetVideoModes(monitor);
+        while (modes.hasRemaining()) {
+            GLFWVidMode mode = modes.get();
             System.out.println("Found fullscreen compatible mode: "
-                    + "Width: " + videoMode.getWidth() + "px Height: " + videoMode.getHeight()
-                    + "px Refresh Rate: " + videoMode.getRefreshRate() + "hz Red Bits: " + videoMode.getRedBits()
-                    + " Green Bits: " + videoMode.getGreenBits() + " Blue Bits: " + videoMode.getBlueBits());
+                    + "Width: " + mode.width() + "px Height: " + mode.height()
+                    + "px Refresh Rate: " + mode.refreshRate() + "hz Red Bits: " + mode.redBits()
+                    + " Green Bits: " + mode.greenBits() + " Blue Bits: " + mode.blueBits());
         }
     }
 

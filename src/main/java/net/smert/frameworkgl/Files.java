@@ -71,13 +71,13 @@ public class Files {
         String filename = path.substring(firstForwardSlash + 1);
 
         if (directory.isEmpty()) {
-            throw new RuntimeException("The directory length was not greater than zero: " + path);
+            throw new FilesException("The directory length was not greater than zero: " + path);
         }
         if (filename.isEmpty()) {
-            throw new RuntimeException("The filename length was not greater than zero: " + path);
+            throw new FilesException("The filename length was not greater than zero: " + path);
         }
         if (isInternal && (fileType == FileType.ZIP)) {
-            throw new RuntimeException("The full path cannot be a zip file for internal assets: " + fullPath);
+            throw new FilesException("The full path cannot be a zip file for internal assets: " + fullPath);
         }
 
         log.debug("Registering asset: File Type: {} Type: {} Filename: {} Full Path: {}",
@@ -150,7 +150,7 @@ public class Files {
         URL url = this.getClass().getResource(fullPath);
 
         if (url == null) {
-            throw new IllegalArgumentException("The file or path could not be found: " + fullPath);
+            throw new FileNotFoundException("The file or path could not be found: " + fullPath);
         }
 
         switch (url.getProtocol()) {
@@ -172,7 +172,7 @@ public class Files {
                 break;
 
             default:
-                throw new RuntimeException("Unknown protocol: " + url.getProtocol());
+                throw new FilesException("Unknown protocol: " + url.getProtocol());
         }
     }
 
@@ -208,7 +208,7 @@ public class Files {
                     // If the first entry is not a directory then we have a problem and won't be able to
                     // register assets
                     if (!entry.isDirectory()) {
-                        throw new RuntimeException(
+                        throw new FilesException(
                                 "The full path was found inside a JAR file and must be a directory: "
                                 + fullPath);
                     }
@@ -334,7 +334,7 @@ public class Files {
         }
 
         if (!foundAsset) {
-            throw new RuntimeException("No assets were found for the given file or path: " + fullPath);
+            throw new FileNotFoundException("Unable to find asset for the given file or path: " + fullPath);
         }
     }
 
@@ -460,15 +460,11 @@ public class Files {
             }
         }
 
-        public URL toURL() {
+        public URL toURL() throws MalformedURLException {
             switch (fileType) {
                 case FILE:
-                    try {
-                        File file = new File(fullPathToFile);
-                        return file.toURI().toURL();
-                    } catch (MalformedURLException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    File file = new File(fullPathToFile);
+                    return file.toURI().toURL();
 
                 case JAR:
                     return this.getClass().getResource(fullPathToFile);

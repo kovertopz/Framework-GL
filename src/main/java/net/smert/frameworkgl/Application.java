@@ -150,8 +150,9 @@ public class Application {
     }
 
     /**
-     * Switches to a new screen. This method calls pause() and destroy() on the existing screen. With this in mind you
-     * should only call this method from inside the current screen's render() method. The new screen's init() and
+     * Switches to a new screen. This method calls pause() and destroy() on the
+     * existing screen. With this in mind you should only call this method from
+     * inside the current screen's render() method. The new screen's init() and
      * resize() methods will be called.
      *
      * @param screen The new screen which will be switched to.

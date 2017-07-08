@@ -52,7 +52,7 @@ public class VADrawElements extends AbstractRenderCall {
             Renderable.colorState.changeColor(segment);
             Renderable.textureBindState.bindTextures(segment);
             Renderable.shaderBindState.sendUniformsOncePerRenderCall(segment);
-            GL.vaHelper.drawElements(primitiveMode, elementCount, indexType, vertexIndexBuffer);
+            GL.vaHelper.drawElements(primitiveMode, elementCount, vertexIndexBuffer);
         }
     }
 

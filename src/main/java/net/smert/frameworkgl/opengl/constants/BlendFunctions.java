@@ -13,6 +13,7 @@
 package net.smert.frameworkgl.opengl.constants;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 /**
  *
@@ -20,13 +21,13 @@ import org.lwjgl.opengl.GL11;
  */
 public class BlendFunctions {
 
-    public final static int CONSTANT_ALPHA = GL11.GL_CONSTANT_ALPHA;
-    public final static int CONSTANT_COLOR = GL11.GL_CONSTANT_COLOR;
+    public final static int CONSTANT_ALPHA = GL14.GL_CONSTANT_ALPHA;
+    public final static int CONSTANT_COLOR = GL14.GL_CONSTANT_COLOR;
     public final static int DST_ALPHA = GL11.GL_DST_ALPHA;
     public final static int DST_COLOR = GL11.GL_DST_COLOR;
     public final static int ONE = GL11.GL_ONE;
-    public final static int ONE_MINUS_CONSTANT_ALPHA = GL11.GL_ONE_MINUS_CONSTANT_ALPHA;
-    public final static int ONE_MINUS_CONSTANT_COLOR = GL11.GL_ONE_MINUS_CONSTANT_COLOR;
+    public final static int ONE_MINUS_CONSTANT_ALPHA = GL14.GL_ONE_MINUS_CONSTANT_ALPHA;
+    public final static int ONE_MINUS_CONSTANT_COLOR = GL14.GL_ONE_MINUS_CONSTANT_COLOR;
     public final static int ONE_MINUS_DST_ALPHA = GL11.GL_ONE_MINUS_DST_ALPHA;
     public final static int ONE_MINUS_DST_COLOR = GL11.GL_ONE_MINUS_DST_COLOR;
     public final static int ONE_MINUS_SRC_ALPHA = GL11.GL_ONE_MINUS_SRC_ALPHA;

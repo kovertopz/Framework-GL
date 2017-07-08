@@ -802,7 +802,7 @@ public class Bootstrap {
         try {
             Fw.app.run(container.getComponent(Screen.class));
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new BootstrapException(ex);
         }
     }
 

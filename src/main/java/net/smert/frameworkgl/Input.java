@@ -44,8 +44,8 @@ public class Input {
     }
 
     /**
-     * The purpose of an InputProcessor is to provide a managed way to register actions and to remove those actions when
-     * we remove the input processor.
+     * The purpose of an InputProcessor is to provide a managed way to register
+     * actions and to remove those actions when we remove the input processor.
      *
      * @param inputProcessor
      */
@@ -59,7 +59,8 @@ public class Input {
     }
 
     /**
-     * Adds a keyboard event to the queue until clearEvents or clearKeyboardEvents is called.
+     * Adds a keyboard event to the queue until clearEvents or
+     * clearKeyboardEvents is called.
      *
      * @param key
      * @param modifiers
@@ -71,7 +72,8 @@ public class Input {
     }
 
     /**
-     * Adds a mouse event to the queue until clearEvents or clearMouseEvents is called.
+     * Adds a mouse event to the queue until clearEvents or clearMouseEvents is
+     * called.
      *
      * @param button
      * @param modifiers
@@ -254,7 +256,8 @@ public class Input {
     }
 
     /**
-     * Was the action associated with a key on the keyboard down in the last frame?
+     * Was the action associated with a key on the keyboard down in the last
+     * frame?
      *
      * @param action
      * @return
@@ -409,7 +412,8 @@ public class Input {
     }
 
     /**
-     * Grab mouse cursor and hide it preventing the cursor from going outside the window bounds.
+     * Grab mouse cursor and hide it preventing the cursor from going outside
+     * the window bounds.
      */
     public void grabMouseCursor() {
         mouseHelper.grabMouseCursor();
@@ -481,7 +485,8 @@ public class Input {
     }
 
     /**
-     * Removes an input processor and unregisters the actions associated with it.
+     * Removes an input processor and unregisters the actions associated with
+     * it.
      *
      * @param inputProcessor
      */
@@ -550,7 +555,8 @@ public class Input {
     }
 
     /**
-     * Updates the input mode which will hide/unhide the cursor depending on the state.
+     * Updates the input mode which will hide/unhide the cursor depending on the
+     * state.
      */
     public void updateInputMode() {
         mouseHelper.updateInputMode();

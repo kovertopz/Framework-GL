@@ -13,6 +13,8 @@
 package net.smert.frameworkgl.opengl.helpers;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -70,8 +72,24 @@ public class VertexArrayHelper {
         GL11.glDrawArrays(mode, first, count);
     }
 
-    public void drawElements(int mode, int count, int type, ByteBuffer byteBuffer) {
-        GL11.glDrawElements(mode, count, type, byteBuffer);
+    public void drawElements(int mode, int count, int type, long offsetBytes) {
+        GL11.glDrawElements(mode, count, type, offsetBytes);
+    }
+
+    public void drawElements(int mode, int count, ByteBuffer buffer) {
+        GL11.glDrawElements(mode, count, buffer);
+    }
+
+    public void drawElements(int mode, ByteBuffer buffer) {
+        GL11.glDrawElements(mode, buffer);
+    }
+
+    public void drawElements(int mode, ShortBuffer buffer) {
+        GL11.glDrawElements(mode, buffer);
+    }
+
+    public void drawElements(int mode, IntBuffer buffer) {
+        GL11.glDrawElements(mode, buffer);
     }
 
     public void enableColors() {

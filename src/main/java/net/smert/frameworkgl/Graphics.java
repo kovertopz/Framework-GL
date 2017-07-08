@@ -149,8 +149,9 @@ public class Graphics implements GLRenderer {
     }
 
     /**
-     * This method should be called just before the Display is destroyed. This is automatically called in Application
-     * during the normal shutdown process.
+     * This method should be called just before the Display is destroyed. This
+     * is automatically called in Application during the normal shutdown
+     * process.
      */
     public void destroy() {
         GL.renderer1.destroy();
@@ -334,7 +335,7 @@ public class Graphics implements GLRenderer {
                 renderer = GL.renderer3;
                 break;
             default:
-                throw new RuntimeException("Unknown OpenGL version: " + openglMajorVersion);
+                throw new IllegalArgumentException("Unknown OpenGL version: " + openglMajorVersion);
         }
         setDefaultFontRenderer(fontRenderer);
     }

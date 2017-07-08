@@ -5,7 +5,7 @@
 
     <groupId>net.smert</groupId>
     <artifactId>Framework-GL</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <inceptionYear>2012</inceptionYear>
     <packaging>jar</packaging>
 
@@ -36,7 +36,7 @@
         <jorbis.version>0.0.17</jorbis.version>
         <junit.version>4.11</junit.version>
         <licensemaven.version>2.6</licensemaven.version>
-        <lwjgl.version>3.0.0a</lwjgl.version>
+        <lwjgl.version>3.1.2</lwjgl.version>
         <mavencompiler.version>2.5.1</mavencompiler.version>
         <mavenjavadoc.version>2.10.1</mavenjavadoc.version>
         <mavennatives.version>0.0.7</mavennatives.version>
@@ -83,6 +83,26 @@
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-glfw</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-nfd</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-openal</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-opengl</artifactId>
             <version>${lwjgl.version}</version>
         </dependency>
         <dependency>

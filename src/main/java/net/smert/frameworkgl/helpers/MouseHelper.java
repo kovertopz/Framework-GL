@@ -274,17 +274,20 @@ public class MouseHelper {
         public int button;
 
         /**
-         * The raw delta mouse wheel change without getMouseWheelSensitivity applied.
+         * The raw delta mouse wheel change without getMouseWheelSensitivity
+         * applied.
          */
         public int deltaWheel;
 
         /**
-         * The raw delta X position change without getMouseMoveSensitivity applied.
+         * The raw delta X position change without getMouseMoveSensitivity
+         * applied.
          */
         public int deltaX;
 
         /**
-         * The raw delta Y position change without getMouseMoveSensitivity applied.
+         * The raw delta Y position change without getMouseMoveSensitivity
+         * applied.
          */
         public int deltaY;
 

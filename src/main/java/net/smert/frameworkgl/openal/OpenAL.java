@@ -13,15 +13,24 @@
 package net.smert.frameworkgl.openal;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.smert.frameworkgl.openal.codecs.Codec;
+import net.smert.frameworkgl.opengl.GL;
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALContext;
-import org.lwjgl.openal.ALDevice;
-import org.lwjgl.openal.Util;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALCapabilities;
+import org.lwjgl.openal.EXTEfx;
+import org.lwjgl.openal.EXTThreadLocalContext;
+import org.lwjgl.system.MemoryUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,7 +38,8 @@ import org.lwjgl.openal.Util;
  */
 public class OpenAL {
 
-    private boolean contextSynchronized;
+    private final static Logger log = LoggerFactory.getLogger(OpenAL.class);
+
     private float defaultSourceMaxDistance;
     private float defaultSourceMusicVolume;
     private float defaultSourceReferenceDistance;
@@ -38,9 +48,12 @@ public class OpenAL {
     private float masterVolume;
     private int contextFrequency;
     private int contextRefresh;
+    private int contextSynchronized;
     private int maxChannels;
     private int numberOfMusicChannels;
     private int numberOfSoundChannels;
+    private long alContext;
+    private long alDevice;
     private final Config config;
     private final List<Integer> musicSourcesPlaying;
     private final List<Integer> soundSourcesPlaying;
@@ -48,9 +61,10 @@ public class OpenAL {
     private final Map<String, OpenALBuffer> nameToOpenALBuffer;
     private final Map<String, OpenALBuffer> nameToTempOpenALBuffer;
     private final Map<String, Codec> extensionToCodec;
-    private ALContext alContext;
+    private ALCapabilities alCapabilities;
+    private ALCCapabilities alcCapabilities;
+    private ByteBuffer deviceSpecifier;
     private OpenALListener listener;
-    private String device;
 
     public OpenAL() {
         config = new Config();
@@ -115,7 +129,13 @@ public class OpenAL {
     }
 
     public void destroy() {
-        org.lwjgl.openal.AL.destroy(alContext);
+        ALC10.alcMakeContextCurrent(MemoryUtil.NULL); // Process wide
+        ALC10.alcDestroyContext(alContext);
+        ALC10.alcCloseDevice(alDevice);
+        alContext = MemoryUtil.NULL;
+        alDevice = MemoryUtil.NULL;
+        alCapabilities = null;
+        alcCapabilities = null;
     }
 
     public float getDopplerFactor() {
@@ -139,7 +159,7 @@ public class OpenAL {
     }
 
     public float getVolume(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return 0;
         }
         float volume = AL.sourceHelper.getGain(soundID);
@@ -148,7 +168,7 @@ public class OpenAL {
     }
 
     public void setVolume(int soundID, float volume) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return;
         }
         AL.sourceHelper.setGain(soundID, volume);
@@ -228,15 +248,52 @@ public class OpenAL {
     }
 
     public void init() {
-        if (alContext != null) {
+        if (alContext != MemoryUtil.NULL) {
             return;
         }
 
-        // Initialize OpenAL
-        ALDevice alDevice = ALDevice.create(device);
-        alContext = ALContext.create(alDevice, contextFrequency, contextRefresh, contextSynchronized);
+        // Open device
+        alDevice = ALC10.alcOpenDevice((ByteBuffer) deviceSpecifier);
+        if (alDevice == MemoryUtil.NULL) {
+            throw new OpenALException("Unable to open device");
+        }
+        log.debug("AL Device: {}", alDevice);
 
-        // Check for errors
+        // Create ALC capabilities
+        alcCapabilities = ALC.createCapabilities(alDevice);
+        if (!alcCapabilities.OpenALC10) {
+            throw new OpenALException("Unable to create alc capabilities for device: " + alDevice);
+        }
+        log.debug("OpenALC10: {}", alcCapabilities.OpenALC10);
+        log.debug("OpenALC11: {}", alcCapabilities.OpenALC11);
+        log.debug("alcCapabilities.ALC_EXT_EFX: {}", alcCapabilities.ALC_EXT_EFX);
+
+        // Attrib list
+        IntBuffer contextAttribList = GL.bufferHelper.createIntBuffer(9);
+        contextAttribList.put(ALC10.ALC_FREQUENCY);
+        contextAttribList.put(contextFrequency);
+        contextAttribList.put(ALC10.ALC_REFRESH);
+        contextAttribList.put(contextRefresh);
+        contextAttribList.put(ALC10.ALC_SYNC);
+        contextAttribList.put(contextSynchronized);
+        contextAttribList.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
+        contextAttribList.put(2);
+        contextAttribList.put(0);
+        contextAttribList.flip();
+        log.debug("ALC10.ALC_FREQUENCY: {}", contextFrequency);
+        log.debug("ALC10.ALC_REFRESH: {}", contextRefresh);
+        log.debug("ALC10.ALC_SYNC: {}", contextSynchronized);
+
+        // Create context
+        alContext = ALC10.alcCreateContext(alDevice, contextAttribList);
+        if (!EXTThreadLocalContext.alcSetThreadContext(alContext)) { // Current thread
+            throw new OpenALException("Unable to set current thread context");
+        }
+
+        // Create AL capabilities
+        alCapabilities = org.lwjgl.openal.AL.createCapabilities(alcCapabilities);
+
+        // Check for error
         checkForError("initializing OpenAL");
 
         // Set a default distance model
@@ -245,7 +302,7 @@ public class OpenAL {
     }
 
     public boolean isPlaying(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return false;
         }
         boolean isPlaying = (AL.sourceHelper.getSourceState(soundID) == AL10.AL_PLAYING);
@@ -254,7 +311,7 @@ public class OpenAL {
     }
 
     public void pause(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return;
         }
         AL.sourceHelper.pause(soundID);
@@ -364,7 +421,6 @@ public class OpenAL {
     }
 
     public final void reset() {
-        contextSynchronized = false;
         defaultSourceMaxDistance = Float.MAX_VALUE;
         defaultSourceMusicVolume = 1f;
         defaultSourceReferenceDistance = 1f;
@@ -373,6 +429,7 @@ public class OpenAL {
         masterVolume = .8f;
         contextFrequency = 44100;
         contextRefresh = 60;
+        contextSynchronized = ALC10.ALC_FALSE;
         maxChannels = 32;
         numberOfMusicChannels = 4;
         numberOfSoundChannels = 28;
@@ -382,12 +439,12 @@ public class OpenAL {
         tempSources.clear();
         nameToOpenALBuffer.clear();
         listener = null;
-        device = null;
+        deviceSpecifier = null;
         assert ((numberOfMusicChannels + numberOfSoundChannels) == maxChannels);
     }
 
     public void resume(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return;
         }
         AL.sourceHelper.play(soundID);
@@ -395,7 +452,7 @@ public class OpenAL {
     }
 
     public void rewind(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return;
         }
         AL.sourceHelper.rewind(soundID);
@@ -403,7 +460,7 @@ public class OpenAL {
     }
 
     public void stop(int soundID) {
-        if (soundID == 0) {
+        if (soundID == MemoryUtil.NULL) {
             return;
         }
         AL.sourceHelper.stop(soundID);
@@ -424,8 +481,6 @@ public class OpenAL {
         listener.setGain(masterVolume);
         listener.update();
         checkForError("updating listener");
-
-        Util.checkALError();
     }
 
     public class Config {
@@ -510,20 +565,20 @@ public class OpenAL {
             OpenAL.this.numberOfSoundChannels = numberOfSoundChannels;
         }
 
-        public String getDevice() {
-            return device;
+        public ByteBuffer getDeviceSpecifier() {
+            return deviceSpecifier;
         }
 
-        public void setDevice(String device) {
-            OpenAL.this.device = device;
+        public void setDeviceSpecifier(ByteBuffer deviceSpecifier) {
+            OpenAL.this.deviceSpecifier = deviceSpecifier;
         }
 
         public boolean isContextSynchronized() {
-            return contextSynchronized;
+            return (contextSynchronized == ALC10.ALC_TRUE);
         }
 
         public void setContextSynchronized(boolean contextSynchronized) {
-            OpenAL.this.contextSynchronized = contextSynchronized;
+            OpenAL.this.contextSynchronized = (contextSynchronized) ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
         }
 
     }

@@ -115,8 +115,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to request a OpenGL core profile. If set to false a compatibility
-     * profile will be requested.
+     * This is an initial configuration parameter to request a OpenGL core
+     * profile. If set to false a compatibility profile will be requested.
      *
      * @return
      */
@@ -125,8 +125,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to make the desktop window resizable. This does not reflect the
-     * current setting of the Display.
+     * This is an initial configuration parameter to make the desktop window
+     * resizable. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -135,7 +135,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to request a OpenGL profile that is forward compatible.
+     * This is an initial configuration parameter to request a OpenGL profile
+     * that is forward compatible.
      *
      * @return
      */
@@ -144,7 +145,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer to be sRGB capable.
+     * This is an initial configuration parameter to set the framebuffer to be
+     * sRGB capable.
      *
      * @return
      */
@@ -153,7 +155,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer to use stereoscopic rendering.
+     * This is an initial configuration parameter to set the framebuffer to use
+     * stereoscopic rendering.
      *
      * @return
      */
@@ -171,8 +174,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to make the window enter full screen mode. This does not reflect the
-     * current setting of the Display.
+     * This is an initial configuration parameter to make the window enter full
+     * screen mode. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -190,7 +193,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to enable console logging (stderr).
+     * This is an initial configuration parameter to enable console logging
+     * (stderr).
      *
      * @return
      */
@@ -208,7 +212,8 @@ public class Configuration {
     }
 
     /**
-     * Should we call the pause method on the screen when the window is no longer in the foreground?
+     * Should we call the pause method on the screen when the window is no
+     * longer in the foreground?
      *
      * @return
      */
@@ -235,8 +240,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to make the window enter full screen mode. This does not reflect the
-     * current setting of the Display.
+     * This is an initial configuration parameter to make the window enter full
+     * screen mode. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -245,8 +250,9 @@ public class Configuration {
     }
 
     /**
-     * Get the mouse sensitivity when the mouse is moved. This value is multiplied with the current value and the result
-     * is used by the application. This should be in the range > 0 and <= 1.0.
+     * Get the mouse sensitivity when the mouse is moved. This value is
+     * multiplied with the current value and the result is used by the
+     * application. This should be in the range > 0 and <= 1.0.
      *
      * @return
      */
@@ -255,8 +261,9 @@ public class Configuration {
     }
 
     /**
-     * Get the mouse wheel sensitivity when the scroll wheel is rotated. This value is multiplied with the current value
-     * and the result is used by the application. This should be in the range > 0 and <= 1.0.
+     * Get the mouse wheel sensitivity when the scroll wheel is rotated. This
+     * value is multiplied with the current value and the result is used by the
+     * application. This should be in the range > 0 and <= 1.0.
      *
      * @return
      */
@@ -265,8 +272,8 @@ public class Configuration {
     }
 
     /**
-     * This is the maximum frame rate when the window is currently in the background. If this is set to zero then the
-     * feature will be disabled.
+     * This is the maximum frame rate when the window is currently in the
+     * background. If this is set to zero then the feature will be disabled.
      *
      * @return
      */
@@ -293,8 +300,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the desktop window height. This does not reflect the current
-     * setting of the Display.
+     * This is an initial configuration parameter to set the desktop window
+     * height. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -303,10 +310,12 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the desktop window's horizontal location. This does not reflect
-     * the current setting of the Display. Zero is in the left side of the screen and increased until the desktop
-     * resolution is met. The window's left most side will be moved to this position. Setting this to -1 will cause the
-     * window to be centered horizontally.
+     * This is an initial configuration parameter to set the desktop window's
+     * horizontal location. This does not reflect the current setting of the
+     * Display. Zero is in the left side of the screen and increased until the
+     * desktop resolution is met. The window's left most side will be moved to
+     * this position. Setting this to -1 will cause the window to be centered
+     * horizontally.
      *
      * @return
      */
@@ -315,10 +324,12 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the desktop window's vertical location. This does not reflect
-     * the current setting of the Display. Zero is in the top side of the screen and increased until the desktop
-     * resolution is met. The window's top most side will be moved to this position. Setting this to -1 will cause the
-     * window to be centered vertically.
+     * This is an initial configuration parameter to set the desktop window's
+     * vertical location. This does not reflect the current setting of the
+     * Display. Zero is in the top side of the screen and increased until the
+     * desktop resolution is met. The window's top most side will be moved to
+     * this position. Setting this to -1 will cause the window to be centered
+     * vertically.
      *
      * @return
      */
@@ -327,8 +338,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the desktop window width. This does not reflect the current
-     * setting of the Display.
+     * This is an initial configuration parameter to set the desktop window
+     * width. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -337,8 +348,8 @@ public class Configuration {
     }
 
     /**
-     * This is the maximum frame rate when the window is currently in the foreground. If this is set to zero then the
-     * feature will be disabled.
+     * This is the maximum frame rate when the window is currently in the
+     * foreground. If this is set to zero then the feature will be disabled.
      *
      * @return
      */
@@ -347,7 +358,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer blue bits.
+     * This is an initial configuration parameter to set the framebuffer blue
+     * bits.
      *
      * @return
      */
@@ -356,7 +368,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer depth bits.
+     * This is an initial configuration parameter to set the framebuffer depth
+     * bits.
      *
      * @return
      */
@@ -365,7 +378,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer green bits.
+     * This is an initial configuration parameter to set the framebuffer green
+     * bits.
      *
      * @return
      */
@@ -374,7 +388,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer red bits.
+     * This is an initial configuration parameter to set the framebuffer red
+     * bits.
      *
      * @return
      */
@@ -383,8 +398,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer samples used in multisampling. Zero disables
-     * multisampling.
+     * This is an initial configuration parameter to set the framebuffer samples
+     * used in multisampling. Zero disables multisampling.
      *
      * @return
      */
@@ -393,7 +408,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the framebuffer stencil bits.
+     * This is an initial configuration parameter to set the framebuffer stencil
+     * bits.
      *
      * @return
      */
@@ -402,8 +418,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the full screen window height. This does not reflect the
-     * current setting of the Display.
+     * This is an initial configuration parameter to set the full screen window
+     * height. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -412,9 +428,10 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the full screen window refresh rate. This does not reflect the
-     * current setting of the Display. This should be set to match the current monitors refresh rate. 60 should be a
-     * safe default.
+     * This is an initial configuration parameter to set the full screen window
+     * refresh rate. This does not reflect the current setting of the Display.
+     * This should be set to match the current monitors refresh rate. 60 should
+     * be a safe default.
      *
      * @return
      */
@@ -423,8 +440,8 @@ public class Configuration {
     }
 
     /**
-     * This is an initial configuration parameter to set the full screen window width. This does not reflect the current
-     * setting of the Display.
+     * This is an initial configuration parameter to set the full screen window
+     * width. This does not reflect the current setting of the Display.
      *
      * @return
      */
@@ -442,7 +459,8 @@ public class Configuration {
     }
 
     /**
-     * Gets the expected GLSL version (shaders) associated with the context selected.
+     * Gets the expected GLSL version (shaders) associated with the context
+     * selected.
      *
      * @return
      */
@@ -451,8 +469,9 @@ public class Configuration {
     }
 
     /**
-     * This is the requested OpenGL version associated with the requested context. The format of the numbers is
-     * MAJOR.MINOR when requesting a specific version.
+     * This is the requested OpenGL version associated with the requested
+     * context. The format of the numbers is MAJOR.MINOR when requesting a
+     * specific version.
      *
      * @return
      */
@@ -461,8 +480,9 @@ public class Configuration {
     }
 
     /**
-     * This is the requested OpenGL version associated with the requested context. The format of the numbers is
-     * MAJOR.MINOR when requesting a specific version.
+     * This is the requested OpenGL version associated with the requested
+     * context. The format of the numbers is MAJOR.MINOR when requesting a
+     * specific version.
      *
      * @return
      */
@@ -480,8 +500,9 @@ public class Configuration {
     }
 
     /**
-     * This will change the default logging level. This value should be set before logging is initialized which happens
-     * when Application.run() is called.
+     * This will change the default logging level. This value should be set
+     * before logging is initialized which happens when Application.run() is
+     * called.
      *
      * @param logLevel
      */
@@ -490,8 +511,9 @@ public class Configuration {
     }
 
     /**
-     * This is the name of the filename for file based logging. This file will appear in the current working directory
-     * where the Java application was ran from.
+     * This is the name of the filename for file based logging. This file will
+     * appear in the current working directory where the Java application was
+     * ran from.
      *
      * @return
      */
@@ -500,8 +522,9 @@ public class Configuration {
     }
 
     /**
-     * This sets the name of the filename for file based logging. This file will appear in the current working directory
-     * where the Java application was ran from. Must be set before logging is initialized in Application.run().
+     * This sets the name of the filename for file based logging. This file will
+     * appear in the current working directory where the Java application was
+     * ran from. Must be set before logging is initialized in Application.run().
      *
      * @param logFilename
      */
@@ -510,8 +533,8 @@ public class Configuration {
     }
 
     /**
-     * This is the requested file that contains the logging properties. This will be used during initialization of
-     * logging to set granular parameters.
+     * This is the requested file that contains the logging properties. This
+     * will be used during initialization of logging to set granular parameters.
      *
      * @return
      */
@@ -520,8 +543,9 @@ public class Configuration {
     }
 
     /**
-     * This sets the requested file that contains the logging properties. This will be used during initialization of
-     * logging to set granular parameters. Must be set before logging is initialized in Application.run().
+     * This sets the requested file that contains the logging properties. This
+     * will be used during initialization of logging to set granular parameters.
+     * Must be set before logging is initialized in Application.run().
      *
      * @param logProperties
      */
@@ -530,7 +554,8 @@ public class Configuration {
     }
 
     /**
-     * This is the requested window title which will be set when the window is first created.
+     * This is the requested window title which will be set when the window is
+     * first created.
      *
      * @return
      */
@@ -539,8 +564,8 @@ public class Configuration {
     }
 
     /**
-     * This sets the requested window title which will be set when the window is first created. This should only be
-     * changed before the window is created.
+     * This sets the requested window title which will be set when the window is
+     * first created. This should only be changed before the window is created.
      *
      * @param windowTitle
      */
@@ -574,10 +599,12 @@ public class Configuration {
     }
 
     /**
-     * Sets the OpenGL context to request version 3.2 with a core profile and forward compatible set. All fixed-function
-     * pipeline features have been removed. It is recommended that you pick a 3.3 core profile. This will get the
-     * highest OpenGL version supported for Mac OSX 10.7 and later. OpenGL major/minor version will not be set correctly
-     * of Mac OSX 10.9+ which supports OpenGL 3.3/4.1.
+     * Sets the OpenGL context to request version 3.2 with a core profile and
+     * forward compatible set. All fixed-function pipeline features have been
+     * removed. It is recommended that you pick a 3.3 core profile. This will
+     * get the highest OpenGL version supported for Mac OSX 10.7 and later.
+     * OpenGL major/minor version will not be set correctly of Mac OSX 10.9+
+     * which supports OpenGL 3.3/4.1.
      */
     public final void withOpenGL32ProfileCoreForwardCompatible() {
         coreProfile = true;
@@ -596,9 +623,10 @@ public class Configuration {
     }
 
     /**
-     * Sets the OpenGL context to request version 3.3 with a core profile. All fixed-function pipeline features have
-     * been removed. This is the recommended profile for the framework. Use withOpenGL33ProfileCoreMac() to get the
-     * correct context for Mac OSX 10.9.
+     * Sets the OpenGL context to request version 3.3 with a core profile. All
+     * fixed-function pipeline features have been removed. This is the
+     * recommended profile for the framework. Use withOpenGL33ProfileCoreMac()
+     * to get the correct context for Mac OSX 10.9.
      */
     public final void withOpenGL33ProfileCore() {
         if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
@@ -613,10 +641,13 @@ public class Configuration {
     }
 
     /**
-     * Sets the OpenGL context to request version 3.2 with a core profile and forward compatible set. All fixed-function
-     * pipeline features have been removed. This is intended to be called for Mac OSX 10.9 in order to get a OpenGL 3.3
-     * context. Since Mac OSX 10.9 supports both OpenGL 3.3 and 4.1 you may still end up with a higher OpenGL version
-     * than requested. If you are one of those people I would be nice to know if this actually works in a 4.1 context.
+     * Sets the OpenGL context to request version 3.2 with a core profile and
+     * forward compatible set. All fixed-function pipeline features have been
+     * removed. This is intended to be called for Mac OSX 10.9 in order to get a
+     * OpenGL 3.3 context. Since Mac OSX 10.9 supports both OpenGL 3.3 and 4.1
+     * you may still end up with a higher OpenGL version than requested. If you
+     * are one of those people I would be nice to know if this actually works in
+     * a 4.1 context.
      */
     public final void withOpenGL33ProfileCoreMac() {
         withOpenGL32ProfileCoreForwardCompatible();
@@ -636,7 +667,8 @@ public class Configuration {
     }
 
     /**
-     * This gives us a compatibility context and you should only stick to OpenGL 1.X and 2.X features.
+     * This gives us a compatibility context and you should only stick to OpenGL
+     * 1.X and 2.X features.
      */
     public final void withOpenGLProfileAny() {
         coreProfile = false;
